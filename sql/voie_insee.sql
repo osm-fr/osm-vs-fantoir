@@ -14,4 +14,4 @@ WHERE	f.code_insee = '__com__'	AND
 		f.type_voie = '1'			AND
 		f.date_annul = '0000000'	AND
 		j.voie_osm IS __null__clause__
-ORDER BY 3,2;
+ORDER BY 3,2,1;
