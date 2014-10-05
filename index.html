@@ -1,0 +1,124 @@
+<html>
+<head>
+<title>Correspondance entre FANTOIR et voies OSM</title>
+<script src="jquery-2.1.1.min.js"></script>
+<style>
+	body{
+	    font-family: monospace;
+	}
+	#rubriques{
+		position:absolute;
+		top:100px;
+	}
+	#reponse{
+		position:absolute;
+		top:160px;
+	}
+	.rubrique{
+		width:150px;
+		height:50px;
+		position:relative;
+		float:left;
+		//margin:3px;
+		color:black;
+		font-weight: bold;
+		background:white;
+		margin:1px solid grey;
+	}
+	.rubrique.active{
+		border:3px solid black;
+	}
+	.table_liste{
+		display:none;
+	}
+	#table_voies_non_match .cell_fantoir,#rub_voies_non_match.active{
+		background:lightgrey;
+	}
+	#table_voies_match .cell_fantoir,#rub_voies_match.active{
+		background:lightgreen;
+	}
+</style>
+<script>
+	function requete_fantoir(){
+		$('#table_voies_non_match').empty()
+		$('#table_voies_match').empty()
+		$.ajax({
+			url: "requete_fantoir.py?insee="+$('#input_insee')[0].value
+		})
+		.done(function( data ) {
+			$('#rub_voies_non_match').empty().text(data[0].length+" voies FANTOIR sans rapprochement OSM")
+			$('#rub_voies_match').empty().text(data[1].length+" voies FANTOIR avec rapprochement OSM")
+			$('#table_voies_non_match').append($('<tr>').append($('<th>').append('Code FANTOIR')))
+			$('#table_voies_non_match tr').append($('<th>').append('Voie FANTOIR'))
+			$('#table_voies_non_match tr').append($('<th>').append('Voie OSM'))
+			$('#table_voies_match').append($('<tr>').append($('<th>').append('Code FANTOIR')))
+			$('#table_voies_match tr').append($('<th>').append('Voie FANTOIR'))
+			$('#table_voies_match tr').append($('<th>').append('Voie OSM'))
+
+			for (l=0;l<data[0].length;l++){
+				$('#table_voies_non_match').append($('<tr>').append($('<td>').addClass('cell_fantoir').text(data[0][l][0])))
+				$('#table_voies_non_match tr:last').append($('<td>').text(data[0][l][1]))
+				$('#table_voies_non_match tr:last').append($('<td>').text(data[0][l][2]))
+			}
+			for (l=0;l<data[1].length;l++){
+				$('#table_voies_match').append($('<tr>').append($('<td>').addClass('cell_fantoir').text(data[1][l][0])))
+				$('#table_voies_match tr:last').append($('<td>').text(data[1][l][1]))
+				$('#table_voies_match tr:last').append($('<td>').text(data[1][l][2]))
+			}
+			var e = jQuery.Event( "mouseenter");
+			jQuery($('#rub_voies_non_match').trigger(e))
+			window.location.hash="#insee="+$('#input_insee')[0].value
+		})
+	};
+	function start(){
+		$('.rubrique').mouseenter(function() {
+			$('.rubrique').removeClass('active');
+			$(this).addClass('active');
+			$('.table_liste').css({display:'none'})
+			$('#'+$(this).attr('cible')).css({display:'block'})
+		})
+		insee = check_url_for_insee()
+		if (insee){
+			$('#input_insee').empty()
+			$('#input_insee')[0].value = insee
+			requete_fantoir()
+		}
+	};
+	function check_url_for_insee(){
+		pattern_insee = new RegExp('^[0-9][0-9abAB][0-9]{3}$')
+		var res
+		if (window.location.hash){
+			if (window.location.hash.split('insee=')[1]){
+				if (pattern_insee.test(window.location.hash.split('insee=')[1].split('&')[0])){
+					res = window.location.hash.split('insee=')[1].split('&')[0]
+				} else {
+					alert(window.location.hash.split('insee=')[1].split('&')[0]+' n\'est pas un code INSEE de commune\n\nAbandon')
+				}
+			}
+		}
+		return res
+	}
+
+</script>
+</head>
+<body onload="start()">
+<form action="javascript:requete_fantoir()">
+<input id="input_insee" placeholder="Code INSEE"></input>
+<input type="submit" value="Lister">
+</form>
+
+<br/>
+<div id="rubriques">
+<div class="rubrique" id="rub_voies_non_match" cible="table_voies_non_match"></div>
+<div class="rubrique" id="rub_voies_match" cible="table_voies_match"></div>
+<!--div id="rub_places_non_match" class="rubrique"></div-->
+<!--div id="rub_places_match" class="rubrique"></div-->
+</div>
+<div id="reponse">
+<table id="table_voies_non_match" class="table_liste">
+</table>
+<table id="table_voies_match" class="table_liste">
+</table>
+</div>
+</body>
+</html>
