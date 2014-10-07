@@ -8,11 +8,11 @@
 	}
 	#rubriques{
 		position:absolute;
-		top:100px;
+		top:110px;
 	}
 	#reponse{
 		position:absolute;
-		top:160px;
+		top:170px;
 	}
 	.rubrique{
 		width:150px;
@@ -45,24 +45,30 @@
 			url: "requete_fantoir.py?insee="+$('#input_insee')[0].value
 		})
 		.done(function( data ) {
-			$('#rub_voies_non_match').empty().text(data[0].length+" voies FANTOIR sans rapprochement OSM")
-			$('#rub_voies_match').empty().text(data[1].length+" voies FANTOIR avec rapprochement OSM")
+			nom_commune = data[0][0]
+			voies_fantoir_adresses_non_match = data[1]
+			voies_fantoir_adresses_match = data[2]
+			document.title = nom_commune+' - Correspondance entre FANTOIR et voies OSM'
+			$('#bandeau_commune').empty().append(nom_commune)
+			
+			$('#rub_voies_non_match').empty().text(voies_fantoir_adresses_non_match.length+" voies FANTOIR avec adresses sans rapprochement OSM")
+			$('#rub_voies_match').empty().text(voies_fantoir_adresses_match.length+" voies FANTOIR avec adresses et rapprochement OSM")
 			$('#table_voies_non_match').append($('<tr>').append($('<th>').append('Code FANTOIR')))
 			$('#table_voies_non_match tr').append($('<th>').append('Voie FANTOIR'))
 			$('#table_voies_non_match tr').append($('<th>').append('Voie OSM'))
 			$('#table_voies_match').append($('<tr>').append($('<th>').append('Code FANTOIR')))
 			$('#table_voies_match tr').append($('<th>').append('Voie FANTOIR'))
 			$('#table_voies_match tr').append($('<th>').append('Voie OSM'))
-
-			for (l=0;l<data[0].length;l++){
-				$('#table_voies_non_match').append($('<tr>').append($('<td>').addClass('cell_fantoir').text(data[0][l][0])))
-				$('#table_voies_non_match tr:last').append($('<td>').text(data[0][l][1]))
-				$('#table_voies_non_match tr:last').append($('<td>').text(data[0][l][2]))
+			
+			for (l=0;l<voies_fantoir_adresses_non_match.length;l++){
+				$('#table_voies_non_match').append($('<tr>').append($('<td>').addClass('cell_fantoir').text(voies_fantoir_adresses_non_match[l][0])))
+				$('#table_voies_non_match tr:last').append($('<td>').text(voies_fantoir_adresses_non_match[l][1]))
+				$('#table_voies_non_match tr:last').append($('<td>').text(voies_fantoir_adresses_non_match[l][2]))
 			}
-			for (l=0;l<data[1].length;l++){
-				$('#table_voies_match').append($('<tr>').append($('<td>').addClass('cell_fantoir').text(data[1][l][0])))
-				$('#table_voies_match tr:last').append($('<td>').text(data[1][l][1]))
-				$('#table_voies_match tr:last').append($('<td>').text(data[1][l][2]))
+			for (l=0;l<voies_fantoir_adresses_match.length;l++){
+				$('#table_voies_match').append($('<tr>').append($('<td>').addClass('cell_fantoir').text(voies_fantoir_adresses_match[l][0])))
+				$('#table_voies_match tr:last').append($('<td>').text(voies_fantoir_adresses_match[l][1]))
+				$('#table_voies_match tr:last').append($('<td>').text(voies_fantoir_adresses_match[l][2]))
 			}
 			var e = jQuery.Event( "mouseenter");
 			jQuery($('#rub_voies_non_match').trigger(e))
@@ -106,13 +112,13 @@
 <input type="submit" value="Lister">
 </form>
 
-<br/>
 <div id="rubriques">
 <div class="rubrique" id="rub_voies_non_match" cible="table_voies_non_match"></div>
 <div class="rubrique" id="rub_voies_match" cible="table_voies_match"></div>
 <!--div id="rub_places_non_match" class="rubrique"></div-->
 <!--div id="rub_places_match" class="rubrique"></div-->
 </div>
+<h1 id='bandeau_commune'></h1>
 <div id="reponse">
 <table id="table_voies_non_match" class="table_liste">
 </table>

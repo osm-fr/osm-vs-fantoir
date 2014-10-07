@@ -24,7 +24,7 @@ print ""
 
 pgc = get_pgc()
 params = cgi.FieldStorage()
-data = [get_data_from_pg('voies_adresses_non_rapprochees_insee',params['insee'].value),get_data_from_pg('voies_adresses_rapprochees_insee',params['insee'].value)]
+data = [get_data_from_pg('nom_commune_insee',params['insee'].value),get_data_from_pg('voies_adresses_non_rapprochees_insee',params['insee'].value),get_data_from_pg('voies_adresses_rapprochees_insee',params['insee'].value)]
 
 a = json.JSONEncoder().encode(data)
 print(a)
