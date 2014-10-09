@@ -1,5 +1,6 @@
 <html>
 <head>
+<meta charset="UTF-8">
 <title>Correspondance entre FANTOIR et voies OSM</title>
 <script src="jquery-2.1.1.min.js"></script>
 <style>
@@ -30,6 +31,15 @@
 	.table_liste{
 		display:none;
 	}
+	.zone_click{
+		cursor:pointer;
+		color:blue;
+		text-decoration: underline;
+	}
+	.zone_click.clicked{
+		background-color:green;
+		color:white;
+	}
 	#table_voies_non_match .cell_fantoir,#rub_voies_non_match.active{
 		background:lightgrey;
 	}
@@ -56,6 +66,7 @@
 			$('#table_voies_non_match').append($('<tr>').append($('<th>').append('Code FANTOIR')))
 			$('#table_voies_non_match tr').append($('<th>').append('Voie FANTOIR'))
 			$('#table_voies_non_match tr').append($('<th>').append('Voie OSM'))
+			$('#table_voies_non_match tr').append($('<th>').attr('colspan','2').append('Édition'))
 			$('#table_voies_match').append($('<tr>').append($('<th>').append('Code FANTOIR')))
 			$('#table_voies_match tr').append($('<th>').append('Voie FANTOIR'))
 			$('#table_voies_match tr').append($('<th>').append('Voie OSM'))
@@ -64,6 +75,28 @@
 				$('#table_voies_non_match').append($('<tr>').append($('<td>').addClass('cell_fantoir').text(voies_fantoir_adresses_non_match[l][0])))
 				$('#table_voies_non_match tr:last').append($('<td>').text(voies_fantoir_adresses_non_match[l][1]))
 				$('#table_voies_non_match tr:last').append($('<td>').text(voies_fantoir_adresses_non_match[l][2]))
+				delta = 0.0005
+				xleft  = voies_fantoir_adresses_non_match[l][3]-delta
+				xright = voies_fantoir_adresses_non_match[l][3]+delta
+				ybottom = voies_fantoir_adresses_non_match[l][4]-delta
+				ytop = voies_fantoir_adresses_non_match[l][4]+delta
+				$('#table_voies_non_match tr:last').append($('<td>')
+													.addClass('zone_click')
+													.attr('xleft',xleft)
+													.attr('xright',xright)
+													.attr('ybottom',ybottom)
+													.attr('ytop',ytop)
+													.text('JOSM')
+													.click(function(){
+					srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+$(this).attr('xleft')+'&right='+$(this).attr('xright')+'&top='+$(this).attr('ytop')+'&bottom='+$(this).attr('ybottom');
+					$('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
+					$(this).addClass('clicked');
+				}))
+				$('#table_voies_non_match tr:last').append($('<td>')
+													.append($('<a>')
+													.attr('href','http://www.openstreetmap.org/edit?editor=id#map=18/'+voies_fantoir_adresses_non_match[l][4]+'/'+voies_fantoir_adresses_non_match[l][3])
+													.attr('target','blank')
+													.text('ID')))
 			}
 			for (l=0;l<voies_fantoir_adresses_match.length;l++){
 				$('#table_voies_match').append($('<tr>').append($('<td>').addClass('cell_fantoir').text(voies_fantoir_adresses_match[l][0])))
@@ -125,5 +158,6 @@
 <table id="table_voies_match" class="table_liste">
 </table>
 </div>
+<div id="josm_target" style="visibility : hidden"></div>
 </body>
 </html>
