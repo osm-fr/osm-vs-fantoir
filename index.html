@@ -50,6 +50,7 @@
 </style>
 <script>
 	function requete_fantoir(){
+		$('#input_insee')[0].value = $('#input_insee')[0].value.toUpperCase()
 		$('#table_voies_non_match').empty()
 		$('#table_voies_match').empty()
 		$.ajax({
@@ -114,13 +115,17 @@
 													.attr('xleft',xleft).attr('xright',xright).attr('ybottom',ybottom).attr('ytop',ytop)
 													.text('JOSM')
 													.click(function(){
-					srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+$(this).attr('xleft')+'&right='+$(this).attr('xright')+'&top='+$(this).attr('ytop')+'&bottom='+$(this).attr('ybottom');
-					$('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
-					$(this).addClass('clicked');
-				}))
+														srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+$(this).attr('xleft')+'&right='+$(this).attr('xright')+'&top='+$(this).attr('ytop')+'&bottom='+$(this).attr('ybottom');
+														$('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
+														$(this).addClass('clicked');
+														})
+													)
 			//ID
 				$('#table_voies_non_match tr:last').append($('<td>')
 													.append($('<a>')
+													.click(function(){
+														$(this).addClass('clicked')
+													})
 													.attr('href',url_edit_part1+'id#map='+url_hash_coords)
 													.attr('target','blank')
 													.text('ID')))
