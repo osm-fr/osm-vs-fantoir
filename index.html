@@ -7,13 +7,35 @@
 	body{
 	    font-family: monospace;
 	}
+	#bandeau{
+		top:0px;
+		height:200px;
+		z-index:2;
+		position:fixed;
+		background-color:white;
+	}
+	#input_insee{
+		top:10px;
+	}
+	#bandeau_commune{
+		border-bottom-style: outset;
+	}
+	.titre_commune{
+		margin-left:30px;
+	}
+	.cellule_intitule{
+		text-align: right;
+	}
+	.cellule_data{
+		font-weight: bold;
+	}
 	#rubriques{
 		position:absolute;
-		top:110px;
+		top:130px;
 	}
 	#reponse{
 		position:absolute;
-		top:170px;
+		top:200px;
 	}
 	.rubrique{
 		cursor:pointer;
@@ -25,6 +47,7 @@
 		font-weight: bold;
 		background:white;
 		margin:1px solid grey;
+		margin-right:10px;
 	}
 	.rubrique.active{
 		border:3px solid black;
@@ -58,10 +81,22 @@
 		})
 		.done(function( data ) {
 			nom_commune = data[0][0]
+			import_cadastre = data[0][1]
+			rappr_cadastre = data[0][2]
+			rappr_osm = data[0][3]
+			cache_hsnr = data[0][4]
+			cache_ways = data[0][5]
+			
+			$('#table_infos_commune').empty()
+			//$('#table_infos_commune').append($('<tr>').append($('<th>').attr('rowspan','4').append($('<h1>').append((nom_commune)))))
+			$('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append('Cadastre récupéré le')).append($('<td>').addClass('cellule_data').append(import_cadastre[2])).append($('<th>').attr('rowspan','4').append($('<h1>').addClass('titre_commune').append((nom_commune)))))
+			$('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append('Dernier rapprochement le')).append($('<td>').addClass('cellule_data').append(rappr_osm[2])))
+			$('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append('Données OSM en date du')).append($('<td>').addClass('cellule_data').append(cache_hsnr[2])))
+			//$('#table_infos_commune').append($('<tr>').append($('<th>').attr('rowspan','4').append($('<h1>').append((nom_commune)))))
 			voies_fantoir_adresses_non_match = data[1]
 			voies_fantoir_adresses_match = data[2]
 			document.title = nom_commune+' - Correspondance entre FANTOIR et voies OSM'
-			$('#bandeau_commune').empty().append(nom_commune)
+			//$('#bandeau_commune').empty().append(nom_commune)
 			
 			$('#rub_voies_non_match').empty().text(voies_fantoir_adresses_non_match.length+" voies FANTOIR avec adresses sans rapprochement OSM")
 			$('#rub_voies_match').empty().text(voies_fantoir_adresses_match.length+" voies FANTOIR avec adresses et rapprochement OSM")
@@ -180,18 +215,22 @@
 </script>
 </head>
 <body onload="start()">
+<div id="bandeau">
 <form action="javascript:requete_fantoir()">
 <input id="input_insee" placeholder="Code INSEE"></input>
 <input type="submit" value="Lister">
 </form>
-
+<div id='bandeau_commune'>
+<table id="table_infos_commune"></table>
+</div>
 <div id="rubriques">
 <div class="rubrique" id="rub_voies_non_match" cible="table_voies_non_match"></div>
 <div class="rubrique" id="rub_voies_match" cible="table_voies_match"></div>
 <!--div id="rub_places_non_match" class="rubrique"></div-->
 <!--div id="rub_places_match" class="rubrique"></div-->
 </div>
-<h1 id='bandeau_commune'></h1>
+</div>
+
 <div id="reponse">
 <table id="table_voies_non_match" class="table_liste">
 </table>
