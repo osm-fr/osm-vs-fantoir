@@ -89,7 +89,14 @@
 			
 			$('#table_infos_commune').empty()
 			//$('#table_infos_commune').append($('<tr>').append($('<th>').attr('rowspan','4').append($('<h1>').append((nom_commune)))))
-			$('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append('Cadastre récupéré le')).append($('<td>').addClass('cellule_data').append(import_cadastre[2])).append($('<th>').attr('rowspan','4').append($('<h1>').addClass('titre_commune').append((nom_commune)))))
+			if (import_cadastre[0]){
+				intitule = 'Cadastre récupéré le'
+				date_import_cadastre = import_cadastre[0][2]
+			} else {
+				intitule = 'Cadastre'
+				date_import_cadastre = 'en format image'
+			}
+			$('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append(intitule)).append($('<td>').addClass('cellule_data').append(date_import_cadastre)).append($('<th>').attr('rowspan','4').append($('<h1>').addClass('titre_commune').append((nom_commune)))))
 			$('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append('Dernier rapprochement le')).append($('<td>').addClass('cellule_data').append(rappr_osm[2])))
 			$('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append('Données OSM en date du')).append($('<td>').addClass('cellule_data').append(cache_hsnr[2])))
 			//$('#table_infos_commune').append($('<tr>').append($('<th>').attr('rowspan','4').append($('<h1>').append((nom_commune)))))

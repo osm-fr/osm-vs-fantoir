@@ -50,8 +50,12 @@ cadastre_com = get_code_cadastre_from_insee(insee_com)
 dept = get_code_dept_from_insee(insee_com)
 
 nom_commune = get_data_from_pg('nom_commune_insee',insee_com)[0][0]
-date_import_cadastre = get_fin_etape('recupCadastre',cadastre_com)[0]
+date_import_cadastre = get_fin_etape('recupCadastre',cadastre_com)
+if len(date_import_cadastre) > 1:
+	date_import_cadastre = date_import_cadastre[0]
 date_fin_cumul = get_fin_etape('loadCumul',cadastre_com)
+if len(date_fin_cumul) == 1:
+	date_fin_cumul = [[],date_fin_cumul[0]]
 date_cache_hsnr = get_fin_etape_dept('cache_dept_hsnr_insee',dept)[0]
 date_cache_highway = get_fin_etape_dept('cache_dept_highway_insee',dept)[0]
 date_cache_highway_relation = get_fin_etape_dept('cache_dept_highway_relation_insee',dept)[0]
