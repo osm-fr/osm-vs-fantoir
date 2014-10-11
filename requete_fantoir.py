@@ -8,7 +8,6 @@ import sys
 sys.path.append('/data/project/cadastre.openstreetmap.fr/bin/cadastre-housenumber/bano')
 from pg_connexion import get_pgc
 from addr_2_db import get_code_cadastre_from_insee
-from addr_2_db import get_code_cadastre_from_insee
 
 cgitb.enable()
 def get_code_dept_from_insee(insee_com):
@@ -49,13 +48,22 @@ insee_com = params['insee'].value
 cadastre_com = get_code_cadastre_from_insee(insee_com)
 dept = get_code_dept_from_insee(insee_com)
 
-nom_commune = get_data_from_pg('nom_commune_insee',insee_com)[0][0]
-date_import_cadastre = get_fin_etape('recupCadastre',cadastre_com)
-if len(date_import_cadastre) > 1:
-	date_import_cadastre = date_import_cadastre[0]
-date_fin_cumul = get_fin_etape('loadCumul',cadastre_com)
-if len(date_fin_cumul) == 1:
-	date_fin_cumul = [[],date_fin_cumul[0]]
+nom_commune = get_data_from_pg('nom_commune_insee',insee_com)
+if nom_commune:
+	nom_commune = nom_commune[0][0]
+else:
+	nom_commune = []
+date_import_cadastre = ''
+date_fin_cumul = ['','']
+if cadastre_com:
+	fin_etape = get_fin_etape('recupCadastre',cadastre_com)
+	if fin_etape:
+		date_import_cadastre = fin_etape
+	fin_etape = get_fin_etape('loadCumul',cadastre_com)
+	if len(fin_etape) == 1:
+		date_fin_cumul = [[],fin_etape[0]]
+	else:
+		date_fin_cumul = fin_etape
 date_cache_hsnr = get_fin_etape_dept('cache_dept_hsnr_insee',dept)[0]
 date_cache_highway = get_fin_etape_dept('cache_dept_highway_insee',dept)[0]
 date_cache_highway_relation = get_fin_etape_dept('cache_dept_highway_relation_insee',dept)[0]

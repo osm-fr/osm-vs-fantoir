@@ -47,7 +47,7 @@
 		color:black;
 		font-weight: bold;
 		background:white;
-		margin:1px solid grey;
+	//	margin:1px solid grey;
 		margin-right:10px;
 	}
 	.rubrique.active{
@@ -74,6 +74,7 @@
 </style>
 <script>
 	function requete_fantoir(){
+		$('body').css('cursor','progress');
 		$('#input_insee')[0].value = $('#input_insee')[0].value.toUpperCase()
 		$('#table_voies_non_match').empty()
 		$('#table_voies_match').empty()
@@ -89,7 +90,13 @@
 			cache_ways = data[0][5]
 			
 			$('#table_infos_commune').empty()
-			//$('#table_infos_commune').append($('<tr>').append($('<th>').attr('rowspan','4').append($('<h1>').append((nom_commune)))))
+			$('.rubrique').empty()
+			
+			if (nom_commune.length == 0){
+				$('#table_infos_commune').append($('<h2>').append('INSEE '+$('#input_insee')[0].value+' : commune inconnue'))
+				$('body').css('cursor','default');
+				return 0;
+			}
 			if (import_cadastre[0]){
 				intitule = 'Cadastre récupéré le'
 				date_import_cadastre = import_cadastre[0][2]
@@ -184,14 +191,13 @@
 				$('#table_voies_match tr:last').append($('<td>').text(voies_fantoir_adresses_match[l][1]))
 				$('#table_voies_match tr:last').append($('<td>').text(voies_fantoir_adresses_match[l][2]))
 			}
-		//	var e = jQuery.Event( "mouseenter");
 			var e = jQuery.Event( "click");
 			jQuery($('#rub_voies_non_match').trigger(e))
 			window.location.hash="#insee="+$('#input_insee')[0].value
+			$('body').css('cursor','default');
 		})
 	};
 	function start(){
-//		$('.rubrique').mouseenter(function() {
 		$('.rubrique').click(function() {
 			$('.rubrique').removeClass('active');
 			$(this).addClass('active');
