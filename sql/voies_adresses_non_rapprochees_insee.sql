@@ -9,11 +9,11 @@ JOIN	(SELECT	fantoir
 		WHERE	insee_com = '__com__'	AND
 				source = 'CADASTRE'		AND
 				voie_osm = ''
-EXCEPT
-SELECT	fantoir
-FROM	cumul_adresses
-WHERE	insee_com = '__com__'	AND
-		source = 'OSM') j
+		EXCEPT
+		SELECT	fantoir
+		FROM	cumul_adresses
+		WHERE	insee_com = '__com__'	AND
+				source = 'OSM') j
 ON		f.code_insee||f.id_voie||f.cle_rivoli = j.fantoir
 JOIN	(SELECT DISTINCT fantoir,
 				FIRST_VALUE(geometrie) OVER(PARTITION BY fantoir) geometrie

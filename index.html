@@ -34,6 +34,10 @@
 		position:absolute;
 		top:130px;
 	}
+	#rubriques th{
+		background-color:black;
+		color:white;
+	}
 	#reponse{
 		position:absolute;
 		top:200px;
@@ -65,10 +69,10 @@
 		background-color:green;
 		color:white;
 	}
-	#table_voies_non_match .cell_fantoir,#rub_voies_non_match.active{
+	#table_adresses_non_match .cell_fantoir,#table_voies_fantoir_non_match .cell_fantoir,#rub_adresses_non_match.active,#rub_voies_fantoir_non_match.active{
 		background:lightgrey;
 	}
-	#table_voies_match .cell_fantoir,#rub_voies_match.active{
+	#table_adresses_match .cell_fantoir,#table_voies_match .cell_fantoir,#rub_adresses_match.active,#rub_voies_match.active{
 		background:lightgreen;
 	}
 </style>
@@ -76,7 +80,9 @@
 	function requete_fantoir(){
 		$('body').css('cursor','progress');
 		$('#input_insee')[0].value = $('#input_insee')[0].value.toUpperCase()
-		$('#table_voies_non_match').empty()
+		$('#table_adresses_non_match').empty()
+		$('#table_adresses_match').empty()
+		$('#table_voies_fantoir_non_match').empty()
 		$('#table_voies_match').empty()
 		$.ajax({
 			url: "requete_fantoir.py?insee="+$('#input_insee')[0].value
@@ -110,16 +116,25 @@
 			//$('#table_infos_commune').append($('<tr>').append($('<th>').attr('rowspan','4').append($('<h1>').append((nom_commune)))))
 			voies_fantoir_adresses_non_match = data[1]
 			voies_fantoir_adresses_match = data[2]
+			voies_fantoir_seules_non_match = data[3]
+			voies_fantoir_seules_match = data[4]
 			document.title = nom_commune+' - Correspondance entre FANTOIR et voies OSM'
 			//$('#bandeau_commune').empty().append(nom_commune)
 			
-			$('#rub_voies_non_match').empty().text(voies_fantoir_adresses_non_match.length+" voies FANTOIR avec adresses sans rapprochement OSM")
-			$('#rub_voies_match').empty().text(voies_fantoir_adresses_match.length+" voies FANTOIR avec adresses et rapprochement OSM")
-			$('#table_voies_non_match').append($('<tr>').append($('<th>').append('Code FANTOIR')))
-			$('#table_voies_non_match tr').append($('<th>').append('Voie FANTOIR'))
-//			$('#table_voies_non_match tr').append($('<th>').append('Voie OSM'))
-			$('#table_voies_non_match tr').append($('<th>').attr('colspan','3').append('Cartes'))
-			$('#table_voies_non_match tr').append($('<th>').attr('colspan','3').append('Édition'))
+			$('#rub_adresses_non_match').empty().text(voies_fantoir_adresses_non_match.length+" voies FANTOIR sans rapprochement OSM")
+			$('#rub_adresses_match').empty().text(voies_fantoir_adresses_match.length+" voies FANTOIR avec  rapprochement OSM")
+			$('#rub_voies_fantoir_non_match').empty().text(voies_fantoir_seules_non_match.length+" voies FANTOIR sans rapprochement OSM")
+			$('#rub_voies_match').empty().text(voies_fantoir_seules_match.length+" voies FANTOIR avec rapprochement OSM")
+			$('#table_adresses_non_match').append($('<tr>').append($('<th>').append('Code FANTOIR')))
+			$('#table_adresses_non_match tr').append($('<th>').append('Voie FANTOIR'))
+			$('#table_adresses_non_match tr').append($('<th>').attr('colspan','3').append('Cartes'))
+			$('#table_adresses_non_match tr').append($('<th>').attr('colspan','3').append('Édition'))
+			$('#table_adresses_match').append($('<tr>').append($('<th>').append('Code FANTOIR')))
+			$('#table_adresses_match tr').append($('<th>').append('Voie FANTOIR'))
+			$('#table_adresses_match tr').append($('<th>').append('Voie OSM'))
+			$('#table_voies_fantoir_non_match').append($('<tr>').append($('<th>').append('Code FANTOIR')))
+			$('#table_voies_fantoir_non_match tr').append($('<th>').append('Voie FANTOIR'))
+			$('#table_voies_fantoir_non_match tr').append($('<th>').append('Voie OSM'))
 			$('#table_voies_match').append($('<tr>').append($('<th>').append('Code FANTOIR')))
 			$('#table_voies_match tr').append($('<th>').append('Voie FANTOIR'))
 			$('#table_voies_match tr').append($('<th>').append('Voie OSM'))
@@ -137,30 +152,30 @@
 				ybottom = voies_fantoir_adresses_non_match[l][4]-delta
 				ytop = voies_fantoir_adresses_non_match[l][4]+delta
 			//Fantoir
-				$('#table_voies_non_match').append($('<tr>').append($('<td>').addClass('cell_fantoir').text(voies_fantoir_adresses_non_match[l][0])))
+				$('#table_adresses_non_match').append($('<tr>').append($('<td>').addClass('cell_fantoir').text(voies_fantoir_adresses_non_match[l][0])))
 			//Nom
-				$('#table_voies_non_match tr:last').append($('<td>').text(voies_fantoir_adresses_non_match[l][1]))
-//Vide				$('#table_voies_non_match tr:last').append($('<td>').text(voies_fantoir_adresses_non_match[l][2]))
+				$('#table_adresses_non_match tr:last').append($('<td>').text(voies_fantoir_adresses_non_match[l][1]))
+//Vide				$('#table_adresses_non_match tr:last').append($('<td>').text(voies_fantoir_adresses_non_match[l][2]))
 			//.org
-				$('#table_voies_non_match tr:last').append($('<td>')
+				$('#table_adresses_non_match tr:last').append($('<td>')
 													.append($('<a>')
 													.attr('href',url_map_org_part1+'#map='+url_hash_coords)
 													.attr('target','blank')
 													.text('ORG')))
 			//.fr
-				$('#table_voies_non_match tr:last').append($('<td>')
+				$('#table_adresses_non_match tr:last').append($('<td>')
 													.append($('<a>')
 													.attr('href',url_map_fr_part1+url_ol_part2)
 													.attr('target','blank')
 													.text('FR')))
 			//bano
-				$('#table_voies_non_match tr:last').append($('<td>')
+				$('#table_adresses_non_match tr:last').append($('<td>')
 													.append($('<a>')
 													.attr('href',url_bano_part1+'#'+url_hash_coords)
 													.attr('target','blank')
 													.text('BANO')))
 			//JOSM
-				$('#table_voies_non_match tr:last').append($('<td>')
+				$('#table_adresses_non_match tr:last').append($('<td>')
 													.addClass('zone_click')
 													.attr('xleft',xleft).attr('xright',xright).attr('ybottom',ybottom).attr('ytop',ytop)
 													.text('JOSM')
@@ -171,7 +186,7 @@
 														})
 													)
 			//ID
-				$('#table_voies_non_match tr:last').append($('<td>')
+				$('#table_adresses_non_match tr:last').append($('<td>')
 													.append($('<a>')
 													.click(function(){
 														$(this).addClass('clicked')
@@ -180,19 +195,29 @@
 													.attr('target','blank')
 													.text('ID')))
 			//Potlatch
-				$('#table_voies_non_match tr:last').append($('<td>')
+				$('#table_adresses_non_match tr:last').append($('<td>')
 													.append($('<a>')
 													.attr('href',url_edit_part1+'potlatch2#map='+url_hash_coords)
 													.attr('target','blank')
 													.text('P2')))
 			}
 			for (l=0;l<voies_fantoir_adresses_match.length;l++){
-				$('#table_voies_match').append($('<tr>').append($('<td>').addClass('cell_fantoir').text(voies_fantoir_adresses_match[l][0])))
-				$('#table_voies_match tr:last').append($('<td>').text(voies_fantoir_adresses_match[l][1]))
-				$('#table_voies_match tr:last').append($('<td>').text(voies_fantoir_adresses_match[l][2]))
+				$('#table_adresses_match').append($('<tr>').append($('<td>').addClass('cell_fantoir').text(voies_fantoir_adresses_match[l][0])))
+				$('#table_adresses_match tr:last').append($('<td>').text(voies_fantoir_adresses_match[l][1]))
+				$('#table_adresses_match tr:last').append($('<td>').text(voies_fantoir_adresses_match[l][2]))
+			}
+			for (l=0;l<voies_fantoir_seules_non_match.length;l++){
+				$('#table_voies_fantoir_non_match').append($('<tr>').append($('<td>').addClass('cell_fantoir').text(voies_fantoir_seules_non_match[l][0])))
+				$('#table_voies_fantoir_non_match tr:last').append($('<td>').text(voies_fantoir_seules_non_match[l][1]))
+				$('#table_voies_fantoir_non_match tr:last').append($('<td>').text(voies_fantoir_seules_non_match[l][2]))
+			}
+			for (l=0;l<voies_fantoir_seules_match.length;l++){
+				$('#table_voies_match').append($('<tr>').append($('<td>').addClass('cell_fantoir').text(voies_fantoir_seules_match[l][0])))
+				$('#table_voies_match tr:last').append($('<td>').text(voies_fantoir_seules_match[l][1]))
+				$('#table_voies_match tr:last').append($('<td>').text(voies_fantoir_seules_match[l][2]))
 			}
 			var e = jQuery.Event( "click");
-			jQuery($('#rub_voies_non_match').trigger(e))
+			jQuery($('#rub_adresses_non_match').trigger(e))
 			window.location.hash="#insee="+$('#input_insee')[0].value
 			$('body').css('cursor','default');
 		})
@@ -230,27 +255,36 @@
 </head>
 <body onload="start()">
 <div id="bandeau">
-<form action="javascript:requete_fantoir()">
-<input id="input_insee" placeholder="Code INSEE"></input>
+<form action="javascript:requete_fantoir()" autocomplete="on">
+<input type="text" id="input_insee" placeholder="Code INSEE"></input>
 <input type="submit" value="Lister">
 </form>
 <div id='bandeau_commune'>
 <table id="table_infos_commune"></table>
 </div>
-<div id="rubriques">
-<div class="rubrique" id="rub_voies_non_match" cible="table_voies_non_match"></div>
+<table id="rubriques">
+	<tr><th colspan="2">Voies avec adresses</th><th colspan="2">Voies sans adresses</th></tr>
+	<tr><td class="rubrique" id="rub_adresses_non_match" cible="table_adresses_non_match"></td>
+		<td class="rubrique" id="rub_adresses_match" cible="table_adresses_match"></td>
+		<td class="rubrique" id="rub_voies_fantoir_non_match" cible="table_voies_fantoir_non_match"></td>
+		<td class="rubrique" id="rub_voies_match" cible="table_voies_match"></td>
+	</tr>
+</table>
+<!--div id="rubriques">
+<div class="rubrique" id="rub_adresses_non_match" cible="table_adresses_non_match"></div>
+<div class="rubrique" id="rub_adresses_match" cible="table_adresses_match"></div>
+<div class="rubrique" id="rub_voies_fantoir_non_match" cible="table_voies_fantoir_non_match"></div>
 <div class="rubrique" id="rub_voies_match" cible="table_voies_match"></div>
-<!--div id="rub_places_non_match" class="rubrique"></div-->
-<!--div id="rub_places_match" class="rubrique"></div-->
-</div>
+</div-->
 </div>
 
 <div id="reponse">
-<table id="table_voies_non_match" class="table_liste">
-</table>
-<table id="table_voies_match" class="table_liste">
-</table>
+<table id="table_adresses_non_match" class="table_liste"></table>
+<table id="table_adresses_match" class="table_liste"></table>
+<table id="table_voies_fantoir_non_match" class="table_liste"></table>
+<table id="table_voies_match" class="table_liste"></table>
 </div>
+
 <div id="josm_target" style="visibility : hidden"></div>
 </body>
 </html>
