@@ -1,6 +1,8 @@
 SELECT	f.code_insee||f.id_voie||f.cle_rivoli fantoir,
 		nature_voie||' '||libelle_voie voie,
-		c.voie_osm
+		c.voie_osm,
+		ST_X(c.geometrie),
+		ST_Y(c.geometrie)
 FROM	fantoir_voie f
 JOIN	(SELECT fantoir FROM cumul_voies WHERE insee_com = '__com__'
 		EXCEPT
