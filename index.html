@@ -94,7 +94,18 @@
 			rappr_osm = data[0][3]
 			cache_hsnr = data[0][4]
 			cache_ways = data[0][5]
-			
+			voies_fantoir_adresses_non_match = data[1]
+			voies_fantoir_adresses_match = data[2]
+			voies_fantoir_seules_non_match = data[3]
+			voies_fantoir_seules_match = data[4]
+
+			url_map_org_part1 = 'http://www.openstreetmap.org/'
+			url_map_fr_part1 = 'http://tile.openstreetmap.fr/'
+			url_bano_part1 = 'http://tile.openstreetmap.fr/~cquest/leaflet/bano.html'
+			url_edit_part1 = 'http://www.openstreetmap.org/edit?editor='
+			delta = 0.0008
+
+			document.title = nom_commune+' - Correspondance entre FANTOIR et voies OSM'
 			$('#table_infos_commune').empty()
 			$('.rubrique').empty()
 			
@@ -113,93 +124,39 @@
 			$('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append(intitule)).append($('<td>').addClass('cellule_data').append(date_import_cadastre)).append($('<th>').attr('rowspan','4').append($('<h1>').addClass('titre_commune').append((nom_commune)))))
 			$('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append('Dernier rapprochement le')).append($('<td>').addClass('cellule_data').append(rappr_osm[2])))
 			$('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append('Données OSM en date du')).append($('<td>').addClass('cellule_data').append(cache_hsnr[2])))
-			//$('#table_infos_commune').append($('<tr>').append($('<th>').attr('rowspan','4').append($('<h1>').append((nom_commune)))))
-			voies_fantoir_adresses_non_match = data[1]
-			voies_fantoir_adresses_match = data[2]
-			voies_fantoir_seules_non_match = data[3]
-			voies_fantoir_seules_match = data[4]
-			document.title = nom_commune+' - Correspondance entre FANTOIR et voies OSM'
-			//$('#bandeau_commune').empty().append(nom_commune)
-			
+
 			$('#rub_adresses_non_match').empty().text(voies_fantoir_adresses_non_match.length+" voies FANTOIR sans rapprochement OSM")
 			$('#rub_adresses_match').empty().text(voies_fantoir_adresses_match.length+" voies FANTOIR avec  rapprochement OSM")
 			$('#rub_voies_fantoir_non_match').empty().text(voies_fantoir_seules_non_match.length+" voies FANTOIR sans rapprochement OSM")
 			$('#rub_voies_match').empty().text(voies_fantoir_seules_match.length+" voies FANTOIR avec rapprochement OSM")
-			$('#table_adresses_non_match').append($('<tr>').append($('<th>').append('Code FANTOIR')))
-			$('#table_adresses_non_match tr').append($('<th>').append('Voie FANTOIR'))
-			$('#table_adresses_non_match tr').append($('<th>').attr('colspan','3').append('Cartes'))
-			$('#table_adresses_non_match tr').append($('<th>').attr('colspan','3').append('Édition'))
-			$('#table_adresses_match').append($('<tr>').append($('<th>').append('Code FANTOIR')))
-			$('#table_adresses_match tr').append($('<th>').append('Voie FANTOIR'))
-			$('#table_adresses_match tr').append($('<th>').append('Voie OSM'))
-			$('#table_voies_fantoir_non_match').append($('<tr>').append($('<th>').append('Code FANTOIR')))
-			$('#table_voies_fantoir_non_match tr').append($('<th>').append('Voie FANTOIR'))
-			$('#table_voies_fantoir_non_match tr').append($('<th>').append('Voie OSM'))
-			$('#table_voies_match').append($('<tr>').append($('<th>').append('Code FANTOIR')))
-			$('#table_voies_match tr').append($('<th>').append('Voie FANTOIR'))
-			$('#table_voies_match tr').append($('<th>').append('Voie OSM'))
-			
+			add_header('table_adresses_non_match',true)
+			add_header('table_adresses_match',false)
+			add_header('table_voies_fantoir_non_match',true)
+			add_header('table_voies_match',false)
+
 			for (l=0;l<voies_fantoir_adresses_non_match.length;l++){
-				url_map_org_part1 = 'http://www.openstreetmap.org/'
-				url_map_fr_part1 = 'http://tile.openstreetmap.fr/'
-				url_bano_part1 = 'http://tile.openstreetmap.fr/~cquest/leaflet/bano.html'
-				url_edit_part1 = 'http://www.openstreetmap.org/edit?editor='
-				url_ol_part2 = '?zoom=18&lat='+voies_fantoir_adresses_non_match[l][4]+'&lon='+voies_fantoir_adresses_non_match[l][3]
-				url_hash_coords = '18/'+voies_fantoir_adresses_non_match[l][4]+'/'+voies_fantoir_adresses_non_match[l][3]
-				delta = 0.0005
-				xleft  = voies_fantoir_adresses_non_match[l][3]-delta
-				xright = voies_fantoir_adresses_non_match[l][3]+delta
-				ybottom = voies_fantoir_adresses_non_match[l][4]-delta
-				ytop = voies_fantoir_adresses_non_match[l][4]+delta
+				lon = voies_fantoir_adresses_non_match[l][3]
+				lat = voies_fantoir_adresses_non_match[l][4]
+				url_ol_part2 = '?zoom=18&lat='+lat+'&lon='+lon
+				url_hash_coords = '18/'+lat+'/'+lon
+				xleft	= lon-delta
+				xright	= lon+delta
+				ybottom	= lat-delta
+				ytop	= lat+delta
 			//Fantoir
 				$('#table_adresses_non_match').append($('<tr>').append($('<td>').addClass('cell_fantoir').text(voies_fantoir_adresses_non_match[l][0])))
 			//Nom
 				$('#table_adresses_non_match tr:last').append($('<td>').text(voies_fantoir_adresses_non_match[l][1]))
-//Vide				$('#table_adresses_non_match tr:last').append($('<td>').text(voies_fantoir_adresses_non_match[l][2]))
-			//.org
-				$('#table_adresses_non_match tr:last').append($('<td>')
-													.append($('<a>')
-													.attr('href',url_map_org_part1+'#map='+url_hash_coords)
-													.attr('target','blank')
-													.text('ORG')))
-			//.fr
-				$('#table_adresses_non_match tr:last').append($('<td>')
-													.append($('<a>')
-													.attr('href',url_map_fr_part1+url_ol_part2)
-													.attr('target','blank')
-													.text('FR')))
-			//bano
-				$('#table_adresses_non_match tr:last').append($('<td>')
-													.append($('<a>')
-													.attr('href',url_bano_part1+'#'+url_hash_coords)
-													.attr('target','blank')
-													.text('BANO')))
+			//visu
+				add_map_link('table_adresses_non_match',url_map_org_part1+'#map='+url_hash_coords,'ORG')
+				add_map_link('table_adresses_non_match',url_map_fr_part1+url_ol_part2,'FR')
+				add_map_link('table_adresses_non_match',url_bano_part1+'#'+url_hash_coords,'BANO')
 			//JOSM
-				$('#table_adresses_non_match tr:last').append($('<td>')
-													.addClass('zone_click')
-													.attr('xleft',xleft).attr('xright',xright).attr('ybottom',ybottom).attr('ytop',ytop)
-													.text('JOSM')
-													.click(function(){
-														srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+$(this).attr('xleft')+'&right='+$(this).attr('xright')+'&top='+$(this).attr('ytop')+'&bottom='+$(this).attr('ybottom');
-														$('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
-														$(this).addClass('clicked');
-														})
-													)
+				add_josm_link('table_adresses_non_match',xleft,xright,ybottom,ytop)
 			//ID
-				$('#table_adresses_non_match tr:last').append($('<td>')
-													.append($('<a>')
-													.click(function(){
-														$(this).addClass('clicked')
-													})
-													.attr('href',url_edit_part1+'id#map='+url_hash_coords)
-													.attr('target','blank')
-													.text('ID')))
+				add_map_link('table_adresses_non_match',url_edit_part1+'id#map='+url_hash_coords,'ID')
 			//Potlatch
-				$('#table_adresses_non_match tr:last').append($('<td>')
-													.append($('<a>')
-													.attr('href',url_edit_part1+'potlatch2#map='+url_hash_coords)
-													.attr('target','blank')
-													.text('P2')))
+				add_map_link('table_adresses_non_match',url_edit_part1+'potlatch2#map='+url_hash_coords,'P2')
 			}
 			for (l=0;l<voies_fantoir_adresses_match.length;l++){
 				$('#table_adresses_match').append($('<tr>').append($('<td>').addClass('cell_fantoir').text(voies_fantoir_adresses_match[l][0])))
@@ -207,9 +164,30 @@
 				$('#table_adresses_match tr:last').append($('<td>').text(voies_fantoir_adresses_match[l][2]))
 			}
 			for (l=0;l<voies_fantoir_seules_non_match.length;l++){
+			//Fantoir
 				$('#table_voies_fantoir_non_match').append($('<tr>').append($('<td>').addClass('cell_fantoir').text(voies_fantoir_seules_non_match[l][0])))
+			//Nom
 				$('#table_voies_fantoir_non_match tr:last').append($('<td>').text(voies_fantoir_seules_non_match[l][1]))
-				$('#table_voies_fantoir_non_match tr:last').append($('<td>').text(voies_fantoir_seules_non_match[l][2]))
+				if (voies_fantoir_seules_non_match[l][3] && voies_fantoir_seules_non_match[l][4]){
+					lon = voies_fantoir_seules_non_match[l][3]
+					lat = voies_fantoir_seules_non_match[l][4]
+					url_ol_part2 = '?zoom=18&lat='+lat+'&lon='+lon
+					url_hash_coords = '18/'+lat+'/'+lon
+					xleft	= lon-delta
+					xright	= lon+delta
+					ybottom	= lat-delta
+					ytop	= lat+delta
+				//visu
+					add_map_link('table_voies_fantoir_non_match',url_map_org_part1+'#map='+url_hash_coords,'ORG')
+					add_map_link('table_voies_fantoir_non_match',url_map_fr_part1+url_ol_part2,'FR')
+					add_map_link('table_voies_fantoir_non_match',url_bano_part1+'#'+url_hash_coords,'BANO')
+				//JOSM
+					add_josm_link('table_voies_fantoir_non_match',xleft,xright,ybottom,ytop)
+				//ID
+					add_map_link('table_voies_fantoir_non_match',url_edit_part1+'id#map='+url_hash_coords,'ID')
+				//Potlatch
+					add_map_link('table_voies_fantoir_non_match',url_edit_part1+'potlatch2#map='+url_hash_coords,'P2')
+				}
 			}
 			for (l=0;l<voies_fantoir_seules_match.length;l++){
 				$('#table_voies_match').append($('<tr>').append($('<td>').addClass('cell_fantoir').text(voies_fantoir_seules_match[l][0])))
@@ -250,7 +228,35 @@
 		}
 		return res
 	}
-
+	function add_map_link(table,href,text){
+		$('#'+table+' tr:last').append($('<td>')
+									.append($('<a>')
+									.attr('href',href)
+									.attr('target','blank')
+									.text(text)))	
+	}
+	function add_josm_link(table,left,right,bottom,top){
+		$('#'+table+' tr:last').append($('<td>')
+									.addClass('zone_click')
+									.attr('xleft',xleft).attr('xright',xright).attr('ybottom',ybottom).attr('ytop',ytop)
+									.text('JOSM')
+									.click(function(){
+										srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xleft+'&right='+xright+'&top='+ytop+'&bottom='+ybottom;
+										$('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
+										$(this).addClass('clicked');
+									})
+								)
+	}
+	function add_header(table,with_edit_and_map_links){
+		$('#'+table).append($('<tr>').append($('<th>').append('Code FANTOIR')))
+			$('#'+table+' tr').append($('<th>').append('Voie FANTOIR'))
+			if (with_edit_and_map_links){
+				$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Cartes'))
+				$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Édition'))
+			} else {
+				$('#'+table+' tr').append($('<th>').append('Voie OSM'))
+			}
+	}
 </script>
 </head>
 <body onload="start()">
