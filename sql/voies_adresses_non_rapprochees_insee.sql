@@ -22,6 +22,6 @@ JOIN	(SELECT DISTINCT fantoir,
 				source = 'CADASTRE') g
 ON		g.fantoir = j.fantoir
 WHERE	f.code_insee = '__com__'	AND
-		f.type_voie = '1'			AND
+		f.type_voie in ('1','2')	AND
 		f.date_annul = '0000000'
 ORDER BY 2; 

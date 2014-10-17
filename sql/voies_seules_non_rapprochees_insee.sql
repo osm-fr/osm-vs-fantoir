@@ -21,7 +21,7 @@ LEFT OUTER JOIN	(SELECT	voie_cadastre,
 				GROUP BY	1)g
 ON		f.nature_voie||' '||f.libelle_voie = g.voie_cadastre
 WHERE	f.code_insee = '__com__'	AND
-		f.type_voie = '1'			AND
+		f.type_voie in ('1','2')	AND
 		f.date_annul = '0000000'	AND
 		o.fantoir IS NULL
 ORDER BY 2; 
