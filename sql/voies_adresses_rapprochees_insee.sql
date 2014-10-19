@@ -15,7 +15,7 @@ JOIN	(SELECT DISTINCT fantoir,
 		WHERE	insee_com = '__com__') g
 ON		f.code_insee||f.id_voie||f.cle_rivoli = g.fantoir
 WHERE	f.code_insee = '__com__'	AND
-		f.type_voie = '1'			AND
+		f.type_voie in ('1','2')	AND
 		f.date_annul = '0000000'	AND
 		j.voie_osm != ''
 ORDER BY 3;

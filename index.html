@@ -98,6 +98,8 @@
 			rappr_osm = data[0][3]
 			cache_hsnr = data[0][4]
 			cache_ways = data[0][5]
+			lon_commune = data[0][7]
+			lat_commune = data[0][8]
 			voies_fantoir_adresses_non_match = data[1]
 			voies_fantoir_adresses_match = data[2]
 			voies_fantoir_seules_non_match = data[3]
@@ -127,6 +129,11 @@
 			}
 			$('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append(intitule)).append($('<td>').addClass('cellule_data').append(date_import_cadastre)).append($('<th>').attr('rowspan','4').append($('<h1>').addClass('titre_commune').append((nom_commune)))))
 			$('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append('Dernier rapprochement le')).append($('<td>').addClass('cellule_data').append(rappr_osm[2])))
+			url_hash_coords = '15/'+lat_commune+'/'+lon_commune
+			url_ol_part2 = '?zoom=15&lat='+lat_commune+'&lon='+lon_commune
+			add_map_link('table_infos_commune',url_map_org_part1+'#map='+url_hash_coords,'ORG')
+			add_map_link('table_infos_commune',url_map_fr_part1+url_ol_part2,'FR')
+			add_map_link('table_infos_commune',url_bano_part1+'#'+url_hash_coords,'BANO')
 			$('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append('Données OSM en date du')).append($('<td>').addClass('cellule_data').append(cache_hsnr[2])))
 
 			$('#rub_adresses_non_match').empty().text(voies_fantoir_adresses_non_match.length+" voies FANTOIR sans rapprochement OSM")
