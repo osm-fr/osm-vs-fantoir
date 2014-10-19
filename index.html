@@ -221,13 +221,13 @@
 									.attr('target','blank')
 									.text(text)))	
 	}
-	function add_josm_link(table,left,right,bottom,top){
+	function add_josm_link(table,xl,xr,yb,yt){
 		$('#'+table+' tr:last').append($('<td>')
 									.addClass('zone_click')
-									.attr('xleft',xleft).attr('xright',xright).attr('ybottom',ybottom).attr('ytop',ytop)
+									.attr('xleft',xl).attr('xright',xr).attr('ybottom',yb).attr('ytop',yt)
 									.text('JOSM')
 									.click(function(){
-										srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xleft+'&right='+xright+'&top='+ytop+'&bottom='+ybottom;
+										srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xl+'&right='+xr+'&top='+yt+'&bottom='+yb;
 										$('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
 										$(this).addClass('clicked');
 									})
