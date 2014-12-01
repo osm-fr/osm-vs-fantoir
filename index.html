@@ -71,6 +71,51 @@
 		background-color:green;
 		color:white;
 	}
+	#infobulle_aide{
+		position: fixed;
+		color: red;
+		background: #dddddd;
+		width: 40px;
+		height: 40px;
+		border-radius: 40px;
+		top: 10px;
+		right: 10px;
+		vertical-align: bottom;
+		text-align: center;
+		font-weight: bolder;
+		font-size: 35px;
+	}
+	#aide{
+		position:fixed;
+		top:5px;
+		right:5px;
+		width:400px;
+		height:100%;
+		background-color:lavender;
+		overflow-y:scroll;
+		visibility:hidden;
+		z-index: 10;
+	}
+	.fermer{
+		color: red;
+		float: right;
+		border: 1px black solid;
+		width: 20px;
+		text-align: center;
+		background: black;
+		font-weight: bolder;
+	}
+	#aide h3{
+		text-align: center;
+	}
+	#aide li{
+		font-weight:bolder;
+		background-color:ivory;
+	}
+	#aide p{
+		margin-bottom: 3px;
+		margin-left: 3px;
+	}
 	#rub_adresses_non_match.active,#rub_voies_fantoir_non_match.active{
 		background:lightgrey;
 	}
@@ -141,6 +186,12 @@
 			$('#input_insee')[0].value = insee
 			requete_fantoir()
 		}
+		$('#infobulle_aide').click(function(){
+			$('#aide').css('visibility','visible');
+		})
+		$('#aide > .fermer').click(function(){
+			$('#aide').css('visibility','hidden');
+		})
 	};
 	function requete_fantoir(){
 		$('body').css('cursor','progress');
@@ -291,7 +342,7 @@
 		if (with_edit_and_map_links){
 			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Cartes'))
 			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Édition'))
-			$('#'+table+' tr').append($('<th>').append('Statut FANTOIR ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/WikiProject_France/WikiProject_Base_Adresses_Nationale_Ouverte_(BANO)#Typologie_des_anomalies_FANTOIR').append('(?)')))
+			$('#'+table+' tr').append($('<th>').append('Statut FANTOIR ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/WikiProject_France/WikiProject_Base_Adresses_Nationale_Ouverte_(BANO)#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
 		} 
 	}
 	function add_statut_fantoir(id_statut){
@@ -322,6 +373,22 @@
 </form>
 <div id='bandeau_commune'>
 <table id="table_infos_commune"></table>
+</div>
+<div id="infobulle_aide">?</div>
+<div id="aide">
+<div class="fermer">X</div>
+<h3>Statuts FANTOIR</h3>
+<li>Erreur d'orthographe</li><p>Erreur d'orthographe de FANTOIR vérifié sur le terrain ou de source officielle (documents)</p>
+<li>Divergence d'orthographe</li><p>Pas la même orthographe dans Fantoir et sur le terrain, sans qu'il soit évident de trancher.
+<li>Nom différent</li><p>Existence d'adresse dans une même rue avec des nom de rues différents, coté FANTOIR. Ce n'est ni une erreur d'orthographe, ni un doublon, mais un nom *vraiment* différent. À marquer si ce nom n'est volontairement pas retenu pour les rapprochements.
+<li>Type de voie différent</li><p>Par ex. :'Impasse XXX' dans Fantoir, et 'Ruelle XXX' sur le terrain, sans qu'il existe ailleurs dans la commune une 'Impasse XXX'
+<li>Voie doublon et type de voie différent</li><p>Par ex. : 2 entrées 'Impasse XXX' ET 'Ruelle XXX' dans Fantoir, et uniquement une 'Ruelle XXX' sur le terrain, sans qu'il existe ailleurs dans la commune d' 'Impasse XXX'. => 'Impasse XXX' à marquer en doublon.
+<li>Voie doublon avec orthographe différente</li><p>2 graphies pour un même nom dans Fantoir.
+<li>Répétition du type de voie</li><p>Type de voie (rue, petite rue...) en double avec de possibles variantes dans les abréviations. Ex: Gde Rue Grande Rue
+<li>Nom introuvable sur le terrain</li><p>Pour un nom n'entrant pas dans les autres situations (doublon...) et sans aucune trace sur le terrain
+<li>Ancien nom supprimé sur le terrain</li><p>Normalement Fantoir indique une date de fin pour un nom obsolète, et tous les enregistrements avec une date passée sont ignorés dans BANO. Si un nom Fantoir apparaît dans les listes alors qu'il a été remplacé sur le terrain, il faut le marquer.
+<li>Adresses hors périmètre</li><p>C'est plus un souci de géométrie dans le Cadastre, que dans les listes Fantoir en tant que tel : lorsque certains points d'adresse sont situés à plusieurs rues du reste des adresses de la voie, sans aucune justification.
+<li>Erreurs combinées</li><p>À utiliser quand plusieurs choix sont possibles dans la liste des anomalies.
 </div>
 <table id="rubriques">
 	<tr><th colspan="2">Voies <span class="emphase">avec</span> adresses</th><th colspan="2">Voies <span class="emphase">sans</span> adresses</th></tr>
