@@ -2,7 +2,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Correspondance entre FANTOIR et voies OSM</title>
-<script src="jquery-2.1.1.min.js"></script>
+<script src="js/jquery-2.1.1.min.js"></script>
+<script src="js/jquery.tablesorter.min.js"></script>
 <style>
 	body{
 	    font-family: monospace;
@@ -138,6 +139,14 @@
 		color:black;
 		font-weight: normal;
 	}
+	#table_voies_match tr.statut0 td.clicked,
+	#table_adresses_match tr.statut0 td.clicked,
+	#table_adresses_non_match tr.statut0 td.clicked,
+	#table_voies_fantoir_non_match tr.statut0 td.clicked{
+		background-color:green;
+		color:white;
+		font-weight: normal;
+	}
 	#table_adresses_match tr.statut0 td.cell_fantoir,
 	#table_voies_match tr.statut0 td.cell_fantoir{
 		background:lightgreen;
@@ -243,9 +252,11 @@
 			$('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append('Dernier rapprochement le')).append($('<td>').addClass('cellule_data').append(rappr_osm[2])))
 			url_hash_coords = '15/'+lat_commune+'/'+lon_commune
 			url_ol_part2 = '?zoom=15&lat='+lat_commune+'&lon='+lon_commune
+			url_listing_fantoir = './liste_brute_fantoir.html#insee='+$('#input_insee')[0].value
 			add_map_link('table_infos_commune',url_map_org_part1+'#map='+url_hash_coords,'ORG')
 			add_map_link('table_infos_commune',url_map_fr_part1+url_ol_part2,'FR')
 			add_map_link('table_infos_commune',url_bano_part1+'#'+url_hash_coords,'BANO')
+			add_map_link('table_infos_commune',url_listing_fantoir,'FANTOIR')
 			$('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append('Données OSM en date du')).append($('<td>').addClass('cellule_data').append(cache_hsnr[2])))
 
 			$('#rub_adresses_non_match').empty().text(voies_fantoir_adresses_non_match.length+" voies FANTOIR sans rapprochement OSM")
