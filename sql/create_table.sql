@@ -25,5 +25,8 @@ VALUES (0,0,'Ok'),
 (8,8,'Nom introuvable sur le terrain'),
 (9,9,'Ancien nom supprimé sur le terrain'),
 (10,99,'Erreurs combinées'),
-(11,10,'Adresses hors périmètre')
+(11,15,'Adresses hors périmètre'),
+(12,10,'Voie détruite'),
+(13,11,'Voie incorporée à une autre'),
+(14,12,'Voie inexistante')
 ;
