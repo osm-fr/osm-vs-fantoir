@@ -218,6 +218,7 @@
 </style>
 <script>
 	var menu_labels
+	var commune_valide = false
 	function start(){
 		$('.rubrique').click(function() {
 			$('.rubrique').removeClass('active');
@@ -260,20 +261,11 @@
 		$('#aide > .fermer').click(function(){
 			$('#aide').css('visibility','hidden');
 		})
-		
- /*   $('#infos_refresh').ajaxStart(function () {
-        $(this).fadeIn('fast').append($('<p>').append("Mise à jour en cours"));
-    }).ajaxStop(function () {
-        $(this).stop().fadeOut('fast');
-    });*/
-//	$(document).ajaxStart(function(){
-//			$('body').css('cursor','progress');
-//			$('#infos_refresh').fadeIn('fast')
-//							.empty()
-//							.append($('<p>').append("Mise à jour en cours"))
-//		});
 	};
 	function refresh(){
+		if (commune_valide == false){
+			return 0;
+		}
 		$('body').css('cursor','progress');
 		$('#wait_ajax').empty()
 						.css('z-index','20')
@@ -294,6 +286,7 @@
 		})
 	}
 	function requete_fantoir(){
+		commune_valide = false;
 		$('body').css('cursor','progress');
 		$('#input_insee')[0].value = $('#input_insee')[0].value.toUpperCase()
 		$('#table_adresses_non_match').empty()
@@ -332,6 +325,7 @@
 				$('body').css('cursor','default');
 				return 0;
 			}
+			commune_valide = true;
 			if (import_cadastre[0]){
 				intitule = 'Cadastre récupéré le'
 				date_import_cadastre = import_cadastre[0][2]
