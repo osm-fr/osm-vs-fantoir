@@ -42,6 +42,7 @@
 	#reponse{
 		position:absolute;
 		top:210px;
+		z-index:2;
 	}
 	.emphase{
 		color:red;
@@ -71,6 +72,45 @@
 	.zone_click.clicked{
 		background-color:green;
 		color:white;
+	}
+	#bouton_refresh{
+		position: fixed;
+		background-image: url("img/72176-600.png");
+		background-size: 49px 56px;
+		background-repeat: no-repeat;
+		width: 49px;
+		height: 56px;
+		top: 6px;
+		right: 60px;
+	}
+	#infos_refresh{
+		width:100%;
+		height:200px;
+		top:0px;
+		left:0px;
+		background-color:lightgrey;
+		opacity:0.8;
+		position:fixed;
+		//visibility:hidden;
+		display:none;
+		z-index: 15;
+	}
+	#wait_ajax{
+		position:fixed;
+		z-index:1;
+		width:100%;
+		height:100%;
+		background-color:lightgray;
+		opacity:0;
+		text-align:center;
+	}
+	#wait_ajax span{
+		background-color:black;
+		vertical-align:middle;
+		font-size:30px;
+		line-height:500px;
+		color:white;
+		border:50px solid black;
 	}
 	#infobulle_aide{
 		position: fixed;
@@ -211,13 +251,48 @@
 			$('#input_insee')[0].value = insee
 			requete_fantoir()
 		}
+		$('#bouton_refresh').click(function(){
+			refresh();
+		})
 		$('#infobulle_aide').click(function(){
 			$('#aide').css('visibility','visible');
 		})
 		$('#aide > .fermer').click(function(){
 			$('#aide').css('visibility','hidden');
 		})
+		
+ /*   $('#infos_refresh').ajaxStart(function () {
+        $(this).fadeIn('fast').append($('<p>').append("Mise à jour en cours"));
+    }).ajaxStop(function () {
+        $(this).stop().fadeOut('fast');
+    });*/
+//	$(document).ajaxStart(function(){
+//			$('body').css('cursor','progress');
+//			$('#infos_refresh').fadeIn('fast')
+//							.empty()
+//							.append($('<p>').append("Mise à jour en cours"))
+//		});
 	};
+	function refresh(){
+		$('body').css('cursor','progress');
+		$('#wait_ajax').empty()
+						.css('z-index','20')
+						.css('opacity','0.8')
+						.append($('<span>').append('Mise à jour BANO en cours...'));
+		$.ajax({
+			url: "refresh.py?insee="+$('#input_insee')[0].value,
+		})
+		.done(function( data ){
+			if (data == '1'){
+				$('#wait_ajax').append($('<span>').append("Ok"));
+				requete_fantoir();
+			} else {
+				alert('Problème lors de la mise à jour')
+			}
+			$('body').css('cursor','default');
+			$('#wait_ajax').css('z-index','1').css('opacity','0');
+		})
+	}
 	function requete_fantoir(){
 		$('body').css('cursor','progress');
 		$('#input_insee')[0].value = $('#input_insee')[0].value.toUpperCase()
@@ -401,7 +476,9 @@
 <div id='bandeau_commune'>
 <table id="table_infos_commune"></table>
 </div>
-<div id="infobulle_aide">?</div>
+<div id="bouton_refresh" title="Mettre à jour les données BANO"></div>
+<div id="infobulle_aide" title="Aide">?</div>
+<div id="infos_refresh"></div>
 <div id="aide">
 <div class="fermer">X</div>
 <h3>Statuts FANTOIR</h3>
@@ -440,8 +517,9 @@
 </div>
 <div id="credits">
 Données FANTOIR : © 2014 Ministère de l'Économie et des Finances (DGFiP) - <a href="http://wiki.data.gouv.fr/wiki/Licence_Ouverte_/_Open_Licence">Licence LO/OL</a> |||| 
-Données OpenStreetMap : © les Contributeurs d'OpenStreetMap  <a href="http://opendatacommons.org/licenses/odbl/">Licence ODbL</a>
+Données OpenStreetMap : © les Contributeurs d'OpenStreetMap  <a href="http://opendatacommons.org/licenses/odbl/">Licence ODbL</a> |||| Icône "refresh" par iconsmind.com (the Noun project)
 </div>
 <div id="josm_target" style="visibility : hidden"></div>
+<div id="wait_ajax"></div>
 </body>
 </html>
