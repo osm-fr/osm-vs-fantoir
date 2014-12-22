@@ -73,6 +73,17 @@
 		background-color:green;
 		color:white;
 	}
+	#refresh_infos{
+		position: fixed;
+		width: 250px;
+		height: 56px;
+		top: 6px;
+		right: 109px;
+		display:none;
+	}
+	#refresh_infos span{
+		font-weight: bold;
+	}
 	#bouton_refresh{
 		position: fixed;
 		background-image: url("img/72176-600.png");
@@ -219,6 +230,7 @@
 <script>
 	var menu_labels
 	var commune_valide = false
+	var osm_state
 	function start(){
 		$('.rubrique').click(function() {
 			$('.rubrique').removeClass('active');
@@ -253,8 +265,15 @@
 			requete_fantoir()
 		}
 		$('#bouton_refresh').click(function(){
-			refresh();
-		})
+								refresh();
+							})
+							.mouseover(function(){
+								get_osm_state();
+								refresh_infos();
+							})
+							.mouseout(function(){
+								$('#refresh_infos').hide()
+							})
 		$('#infobulle_aide').click(function(){
 			$('#aide').css('visibility','visible');
 		})
@@ -262,6 +281,12 @@
 			$('#aide').css('visibility','hidden');
 		})
 	};
+	function refresh_infos(){
+		$('#refresh_infos').empty()
+							.append('Mettre à jour avec les données OSM du ')
+							.append($('<span>').append(osm_state))
+							.show()
+	}
 	function refresh(){
 		if (commune_valide == false){
 			return 0;
@@ -283,6 +308,15 @@
 			}
 			$('body').css('cursor','default');
 			$('#wait_ajax').css('z-index','1').css('opacity','0');
+		})
+	}
+	function get_osm_state(){
+		$.ajax({
+			url: "osm_state.py",
+			async:false
+		})
+		.done(function( data ){
+			osm_state = data;
 		})
 	}
 	function requete_fantoir(){
@@ -470,6 +504,7 @@
 <div id='bandeau_commune'>
 <table id="table_infos_commune"></table>
 </div>
+<div id="refresh_infos"></div>
 <div id="bouton_refresh" title="Mettre à jour les données BANO"></div>
 <div id="infobulle_aide" title="Aide">?</div>
 <div id="infos_refresh"></div>
