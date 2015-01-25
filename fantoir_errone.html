@@ -217,7 +217,8 @@
 				//Potlatch
 					add_map_link(table,url_edit_part1+'potlatch2#map='+url_hash_coords,'P2')
 				//Fantoir
-					add_map_link(table,'./liste_brute_fantoir.html#insee='+insee,'Liste Fantoir '+insee)
+					add_map_link(table,'./index.html#insee='+insee,'Fantoir-OSM '+insee)
+					add_map_link(table,'./liste_brute_fantoir.html#insee='+insee,'Fantoir brut '+insee)
 				}
 			}
 		})
@@ -261,7 +262,7 @@
 		if (with_edit_and_map_links){
 			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Cartes'))
 			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Édition'))
-			$('#'+table+' tr').append($('<th>').append('Liste FANTOIR'))
+			$('#'+table+' tr').append($('<th>').attr('colspan','2').append('FANTOIR'))
 		} 
 	}
 
