@@ -174,6 +174,11 @@
 			url: "fantoir_errone.py",
 		})
 		.done(function( data ){
+			titre_bandeau = ' codes FANTOIR erronés'
+			if (data.length == 1){
+				titre_bandeau = ' code FANTOIR erroné'
+			}
+			$('#bandeau h1').append(data.length+titre_bandeau)
 			$('#wait_ajax').append($('<span>').append("Ok"));
 
 			$('body').css('cursor','default');
@@ -270,7 +275,7 @@
 </head>
 <body onload="start()">
 <div id="bandeau">
-<h1>Codes FANTOIR erronés</h1>
+<h1></h1>
 <div id="pied_de_page"></div>
 </div>
 <table id="rubriques">
@@ -284,8 +289,7 @@
 <div id="pied_de_page"></div>
 </div>
 <div id="credits">
-Données FANTOIR : © 2014 Ministère de l'Économie et des Finances (DGFiP) - <a href="http://wiki.data.gouv.fr/wiki/Licence_Ouverte_/_Open_Licence">Licence LO/OL</a> |||| 
-Données OpenStreetMap : © les Contributeurs d'OpenStreetMap  <a href="http://opendatacommons.org/licenses/odbl/">Licence ODbL</a> |||| Icône "refresh" par iconsmind.com (the Noun project)
+Données OpenStreetMap : © les Contributeurs d'OpenStreetMap  <a href="http://opendatacommons.org/licenses/odbl/">Licence ODbL</a>
 </div>
 <div id="josm_target" style="visibility : hidden"></div>
 <div id="wait_ajax"></div>
