@@ -27,26 +27,28 @@ f AS (	SELECT 	code_insee,
 		FROM 	fantoir_voie
 		WHERE	code_insee like '__dept__'	AND
 				type_voie in ('1','2','3')
-		GROUP BY code_insee)
-SELECT 	r.format_cadastre,
-		c.insee, --Code INSEE
-		c.nom, --Commune
-		coalesce(a.voies_avec_adresses_rapprochees::integer,0), --Voies avec adresses rapprochées
-		coalesce(v.voies_rapprochees::integer,0), --Toutes voies rapprochées
-		t.voies_fantoir, --Voies FANTOIR
-		f.voies_fantoir, --Voies FANTOIR + lieux-dits
-		coalesce(((a.voies_avec_adresses_rapprochees*100/t.voies_fantoir))::integer,0), --Pourcentage de rapprochement avec adresses
-		coalesce(((v.voies_rapprochees*100/t.voies_fantoir))::integer,0), --Pourcentage de rapprochement sur voies
-		coalesce(((v.voies_rapprochees*100/f.voies_fantoir))::integer,0) --Pourcentage de rapprochement sur voies+lieux-dits
-FROM	communes c
-LEFT OUTER JOIN	v
-ON 		c.insee = v.insee_com
-LEFT OUTER JOIN a
-ON 		c.insee = a.insee_com
-JOIN 	t
-ON 		c.insee = t.code_insee
-JOIN 	f
-ON 		c.insee = f.code_insee
-JOIN 	r
-ON 		c.insee = r.insee_com
+		GROUP BY code_insee),
+i AS (	SELECT 	r.format_cadastre,
+				c.insee, --Code INSEE
+				c.nom, --Commune
+				coalesce(a.voies_avec_adresses_rapprochees::integer,0) a, --Voies avec adresses rapprochées 	(a)
+				coalesce(v.voies_rapprochees::integer,0) b, --Toutes voies rapprochées						(b)
+				t.voies_fantoir c, --Voies FANTOIR 															(c)
+				f.voies_fantoir d, --Voies FANTOIR + lieux-dits												(d)
+				coalesce(((a.voies_avec_adresses_rapprochees*100/t.voies_fantoir))::integer,0), --Pourcentage de rapprochement avec adresses
+				coalesce(((v.voies_rapprochees*100/t.voies_fantoir))::integer,0), --Pourcentage de rapprochement sur voies
+				coalesce(((v.voies_rapprochees*100/f.voies_fantoir))::integer,0) --Pourcentage de rapprochement sur voies+lieux-dits
+		FROM	communes c
+		LEFT OUTER JOIN	v
+		ON 		c.insee = v.insee_com
+		LEFT OUTER JOIN a
+		ON 		c.insee = a.insee_com
+		JOIN 	t
+		ON 		c.insee = t.code_insee
+		JOIN 	f
+		ON 		c.insee = f.code_insee
+		JOIN 	r
+		ON 		c.insee = r.insee_com)
+SELECT	i.*,(((a/c::double precision)*(c-a)) + ((b/c::double precision)*(c-b)) + ((b/d::double precision)* (d-b)))::integer
+FROM	i
 ORDER  BY 2
