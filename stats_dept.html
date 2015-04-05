@@ -108,22 +108,32 @@
 		margin-left: 3px;
 	}
 	table.tablesorter thead tr .header{
-		width:150px;
+		//width:150px;
 		height:60px;
 	}
+	table.tablesorter tbody tr td.Raster{
+		color:#ffffff;
+		text-align: center;
+		font-weight:bolder;
+		background: #000000;
+	}
+	table.tablesorter tbody tr td.Vecteur{
+		text-align: center;
+		font-weight:bolder;
+		background: #ffbb00;
+	}
+
 </style>
 <script>
 
 	var menu_labels
-	var a_champs_stats = ['Code INSEE','Commune','Voies avec adresses rapprochées (a)','Toutes voies rapprochées (b)','Voies FANTOIR (c)','Voies et lieux-dits FANTOIR (d)','Pct adresses / voies FANTOIR (a/c)','Pct voies / voies FANTOIR (b/c)','Pct voies / voies et lieux-dits FANTOIR (b/d)']
+	var a_champs_stats = ['Format','Code INSEE','Commune','Voies avec adresses<br/>rapprochées (a)','Toutes voies<br/>rapprochées (b)','Voies FANTOIR (c)','Voies et lieux-dits<br/>FANTOIR (d)','Pct adresses /<br/>voies FANTOIR (a/c)','Pct voies /<br/>voies FANTOIR (b/c)','Pct voies /<br/>voies et lieux-dits FANTOIR (b/d)']
 	function is_valid_dept(d){
-	//	pattern_dept = new RegExp('^[0-9][0-9abAB][1-4]?$')
 		pattern_dept = new RegExp('^([01]|[3-8])([0-9])$|^2([aAbB]|[1-9])$|^9([0-5]|7[1-4])$')
 		var res
 		if (pattern_dept.test(d)){
 			res = d
 		}
-//		console.log(res)
 		return res
 	}
 	function check_url_for_dept(){
@@ -137,7 +147,6 @@
 				}
 			}
 		}
-//		console.log(res)
 		return res
 	}
 	function start(){
@@ -184,21 +193,17 @@
 			$('#stats_dept').append($('<tbody>'))
 			for (c=0;c<stats.length;c++){
 				$('#stats_dept').append($('<tr>'))
-					//.append($('<td>').append($('a').attr('href','http://cadastre.openstreetmap.fr/fantoir/#insee='+stats[c][0]).text(stats[c][0]))))
-				//console.log(stats[c][0])
-				//$('tr:last').append($('<td>').append($('a').attr('href','http://cadastre.openstreetmap.fr/fantoir/#insee='+stats[c][0]).text(stats[c][0])))
-				//$('tr:last').append($('<td>').append(stats[c][0]).append($('a').attr('href','http://cadastre.openstreetmap.fr/fantoir/#insee='+stats[c][0])))
 				for (d=0;d<stats[c].length;d++){
-					if (d==0){
-						//$('#stats_dept tr:last').append($('<td>').attr('href','http://cadastre.openstreetmap.fr/fantoir/#insee='+stats[c][0]).text(stats[c][0]))
+					if (d==1){
 						$('#stats_dept tr:last').append($('<td>')
 												.append($('<a>')
-												.attr('href','http://cadastre.openstreetmap.fr/fantoir/#insee='+stats[c][0])
-						//						.attr('target','blank')
-												.text(stats[c][0])))	
+												.attr('href','http://cadastre.openstreetmap.fr/fantoir/#insee='+stats[c][1])
+												.text(stats[c][1])))	
 					} else {
 						$('#stats_dept tr:last').append($('<td>').append(stats[c][d]))
 					}
+					// style des cellules de format
+					$('#stats_dept tr:last td:first').addClass(stats[c][0])
 				}
 			}
 			$('#stats_dept').tablesorter();
@@ -228,11 +233,13 @@
 <div class="fermer">X</div>
 <h2>Read The F(ANTOIR) Manual</h2>
 <h3>Tableau</h3>
-<p>Les en-têtes de colonnes sont cliquables pour trier le tableau.
-<p>Les liens dans la colonne "Code INSEE" amène à la page http://cadastre.openstreetmap.fr/fantoir/ de la commune et s'ouvrent dans le même onglet.
+<p>Les en-têtes de colonnes sont cliquables pour trier le tableau.</p>
+<p>Les liens dans la colonne "Code INSEE" amène à la page http://cadastre.openstreetmap.fr/fantoir/ de la commune et s'ouvrent dans le même onglet.</p>
+<p>Pour chaque commune, les chiffres sont issus des données BANO au moment du chargement de la page.</p>
 <h3>Description des colonnes</h3>
+<li>Format</li><p>Format du cadastre de la commune. Information mise à jour chaque jour à minuit.</p>
 <li>Voies avec adresses rapprochées (a)</li><p>Nombre de voies dont le nom existe dans OSM, dont on connaît le code Fantoir, et pour lesquelles on trouve des adresses, dans OSM ou le Cadastre</p>
-<li>Toutes voies rapprochées (b)</li><p>Nombre de voies dont le nom existe dans OSM et dont on connaît le code Fantoir. Le décompte inclut les voies sans adresses.
+<li>Toutes voies rapprochées (b)</li><p>Nombre de voies dont le nom existe dans OSM et dont on connaît le code Fantoir. Le décompte inclut les voies sans adresses.</p>
 <li>Voies FANTOIR (c)</li><p>Nombre de voies non annulées, de type 1 ou 2 sur la commune, dans le Fantoir 2015.</p>
 <li>Voies et lieux-dits FANTOIR (d)</li><p>Nombre de voies non annulées, de type 1, 2 ou 3 (lieux-dits) sur la commune, dans le Fantoir 2015.</p>
 <li>Pct adresses / voies FANTOIR (a/c)</li><p>Pourcentage de voies OSM dont on connaît le code Fantoir, et ayant des adresses, par rapport au nombre de voies de type 1 et 2 au Fantoir</p>
