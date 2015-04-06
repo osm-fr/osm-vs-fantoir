@@ -49,6 +49,7 @@ i AS (	SELECT 	r.format_cadastre,
 		ON 		c.insee = f.code_insee
 		JOIN 	r
 		ON 		c.insee = r.insee_com)
-SELECT	i.*,(((a/c::double precision)*(c-a)) + ((b/c::double precision)*(c-b)) + ((b/d::double precision)* (d-b)))::integer
+SELECT	i.*,--(((a/c::double precision)*(c-a)) + ((b/c::double precision)*(c-b)) + ((b/d::double precision)* (d-b)))::integer
+		((power(c-a,2)/c) + (power(b-c,2)/c) + (power(d-b,2)/d))::integer
 FROM	i
 ORDER  BY 2
