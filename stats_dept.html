@@ -129,7 +129,7 @@
 	var menu_labels
 	var a_champs_stats = ['Format','Code INSEE','Commune','Voies avec adresses<br/>rapprochées (a)','Toutes voies<br/>rapprochées (b)...','...dont voies rapprochées sur<br/>lieux-dits FANTOIR','Voies FANTOIR (c)','Voies et lieux-dits<br/>FANTOIR (d)','Pct adresses /<br/>voies FANTOIR (a/c)','Pct voies /<br/>voies FANTOIR (b/c)','Pct voies /<br/>voies et lieux-dits FANTOIR (b/d)','Indice 2020']
 	function is_valid_dept(d){
-		pattern_dept = new RegExp('^([01]|[3-8])([0-9])$|^2([aAbB]|[1-9])$|^9([0-5]|7[1-4])$')
+		pattern_dept = new RegExp('^([01]|[3-8])([0-9])$|^2([aAbB]|[1-9])$|^9([0-5]|7[1-4]|76)$')
 		var res
 		if (pattern_dept.test(d)){
 			res = d
