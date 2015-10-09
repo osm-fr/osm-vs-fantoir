@@ -237,6 +237,7 @@
 			$(this).addClass('active');
 			$('.table_liste').css({display:'none'})
 			$('#'+$(this).attr('cible')).css({display:'block'})
+			update_url_tab($(this).parent().children().index($(this)))
 		})
 		$.ajax({
 			url: "labels_statut_fantoir.py"
@@ -426,9 +427,12 @@
 					add_statut_fantoir(data[l][5])
 				}
 			}
-			var e = jQuery.Event( "click");
-			jQuery($('#rub_adresses_non_match').trigger(e))
-			window.location.hash="#insee="+$('#input_insee')[0].value
+
+			tab = check_url_for_tab()
+//			var e = jQuery.Event( "click");
+//			jQuery($('#rub_adresses_non_match').trigger(e))
+			$('#rubriques tr td')[tab].click()
+			window.location.hash="#insee="+$('#input_insee')[0].value+"&tab="+tab
 			$('body').css('cursor','default');
 		})
 	};
@@ -436,7 +440,7 @@
 		pattern_insee = new RegExp('^[0-9][0-9abAB][0-9]{3}$')
 		var res
 		if (window.location.hash){
-			if (window.location.hash.split('insee=')[1]){
+			if (window.location.hash.split('insee=')[1].split('&')[0]){
 				if (pattern_insee.test(window.location.hash.split('insee=')[1].split('&')[0])){
 					res = window.location.hash.split('insee=')[1].split('&')[0]
 				} else {
@@ -445,6 +449,32 @@
 			}
 		}
 		return res
+	}
+	function check_url_for_tab(){
+		pattern_tab = new RegExp('^[0-3]$')
+		var res
+		res = 0
+		if (window.location.hash){
+			if (window.location.hash.split('&tab=')[1]){
+				if (window.location.hash.split('tab=')[1].split('&')[0]){
+					if (pattern_tab.test(window.location.hash.split('tab=')[1].split('&')[0])) {
+						res = window.location.hash.split('tab=')[1].split('&')[0]
+					}
+				}
+			}
+		}
+		return res
+	}
+	function update_url_tab(t){
+		p1 = window.location.hash.split('&tab=')[0]
+		p2=''
+		if (window.location.hash.split('&tab=')[1]){
+			if (window.location.hash.split('&tab=')[1].split('&')[1]){
+				p2 = window.location.hash.split('&tab=')[1].split('&')[1]
+			}
+		}
+		window.location.hash = p1+"&tab="+t+p2
+		console.log(window.location.hash)
 	}
 	function add_map_link(table,href,text){
 		$('#'+table+' tr:last').append($('<td>')
@@ -545,7 +575,7 @@
 <div id="pied_de_page"></div>
 </div>
 <div id="credits">
-Données FANTOIR : © 2014 Ministère de l'Économie et des Finances (DGFiP) - <a href="http://wiki.data.gouv.fr/wiki/Licence_Ouverte_/_Open_Licence">Licence LO/OL</a> |||| 
+Données FANTOIR : © 2015 Ministère de l'Économie et des Finances (DGFiP) - <a href="http://wiki.data.gouv.fr/wiki/Licence_Ouverte_/_Open_Licence">Licence LO/OL</a> |||| 
 Données OpenStreetMap : © les Contributeurs d'OpenStreetMap  <a href="http://opendatacommons.org/licenses/odbl/">Licence ODbL</a> |||| Icône "refresh" par iconsmind.com (the Noun project)
 </div>
 <div id="josm_target" style="visibility : hidden"></div>
