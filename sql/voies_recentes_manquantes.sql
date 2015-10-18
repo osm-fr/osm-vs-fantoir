@@ -1,4 +1,13 @@
 WITH
+aa AS
+(SELECT *,
+		RANK() OVER(PARTITION BY fantoir ORDER BY timestamp_statut DESC,id_statut DESC) rang
+FROM 	statut_fantoir),
+a AS
+(SELECT 	SUBSTR(fantoir,1,9) fantoir
+FROM 	aa
+WHERE rang = 1 AND
+	id_statut != 0),
 b AS
 (SELECT	f.fantoir
 FROM	fantoir_voie f
@@ -19,12 +28,15 @@ d AS
 FROM	fantoir_voie f
 LEFT OUTER JOIN b
 USING	(fantoir)
+LEFT OUTER JOIN a
+ON		f.fantoir = a.fantoir
 JOIN	c
-ON	c.fantoir = f.fantoir
+ON		f.fantoir = c.fantoir
 JOIN	communes co
-ON	co.insee = f.code_insee
-WHERE	b.fantoir IS NULL	AND
-	f.type_voie IN ('1','2')),
+ON		co.insee = f.code_insee
+WHERE	a.fantoir IS NULL	AND
+		b.fantoir IS NULL	AND
+		f.type_voie IN ('1','2')),
 e AS
 (SELECT	*
 FROM	d
