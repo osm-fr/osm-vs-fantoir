@@ -21,6 +21,5 @@ def get_data(data_type):
 data = get_data('voies_recentes_manquantes')
 a = json.JSONEncoder().encode(data)
 f = open('./json/voies_recentes_manquantes.json','wb')
-# f.write("Content-Type: application/json\n\n")
 f.write(a)
 f.close()

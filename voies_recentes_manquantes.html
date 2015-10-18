@@ -194,6 +194,8 @@
 				$('#'+table+' tr:last').append($('<td>').text(data[l][4]))
 				//Voie
 				$('#'+table+' tr:last').append($('<td>').text(data[l][3]))
+				//Date de création
+				$('#'+table+' tr:last').append($('<td>').text(data[l][7]))
 				lon = data[l][5]
 				lat = data[l][6]
 				if (lon && lat){
@@ -244,6 +246,7 @@
 		$('#'+table+' tr').append($('<th>').append('Commune(INSEE)'))
 		$('#'+table+' tr').append($('<th>').append('Fantoir'))
 		$('#'+table+' tr').append($('<th>').append('Voie'))
+		$('#'+table+' tr').append($('<th>').append('Date de création'))
 		if (with_edit_and_map_links){
 			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Cartes'))
 			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Édition'))
@@ -255,7 +258,7 @@
 </head>
 <body onload="start()">
 <div id="bandeau">
-<h1>Voies récentes (selon FANTOIR) pas encore dans OSM</h1>
+<h1>Voies récentes selon FANTOIR, non retrouvées dans OSM</h1>
 <h4>Sélection aléatoire d'une voie par département, parmi les plus récentes d'après FANTOIR, connues du Cadastre, et inconnues dans OSM</h4>
 <div id="pied_de_page"></div>
 </div>

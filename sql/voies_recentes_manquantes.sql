@@ -14,6 +14,7 @@ d AS
 (SELECT f.*,
 	co.nom commune,
 	c.voie_cadastre,
+	c.geometrie,
 	RANK() OVER(PARTITION BY CASE WHEN code_dept = '97' THEN SUBSTR(code_insee,1,3) ELSE code_dept END ORDER BY date_creation DESC,random()) rang
 FROM	fantoir_voie f
 LEFT OUTER JOIN b
@@ -33,9 +34,10 @@ SELECT	CASE WHEN e.code_dept = '97' THEN SUBSTR(e.code_insee,1,3) ELSE e.code_de
 	e.commune,
 	e.voie_cadastre,
 	e.fantoir||e.cle_rivoli fantoir,
-	st_x(c.geometrie),
-	st_y(geometrie)
+	st_x(e.geometrie),
+	st_y(e.geometrie),
+	to_char(to_date(e.date_creation,'YYYYDDD'),'DD/MM/YYYY')
 FROM	e
-LEFT OUTER JOIN c
-USING	(fantoir)
+-- LEFT OUTER JOIN c
+-- USING	(fantoir)
 ORDER BY 1;
