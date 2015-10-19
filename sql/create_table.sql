@@ -21,13 +21,13 @@ VALUES (0,0,'Ok'),
 (4,4,'Type de voie différent'),
 (5,5,'Voie doublon et type de voie différent'),
 (6,6,'Voie doublon avec orthographe différente'),
-(15,7,'Voie doublon (même type et même nom)'),
 (7,8,'Répétition du type de voie'),
 (8,9,'Nom introuvable sur le terrain'),
 (9,10,'Ancien nom supprimé sur le terrain'),
 (10,99,'Erreurs combinées'),
 (11,15,'Adresses hors périmètre'),
-(12,11,'Voie détruite'),
-(13,12,'Voie incorporée à une autre'),
-(14,13,'Voie inexistante')
-;
+(12,12,'Voie détruite'),
+(13,13,'Voie incorporée à une autre'),
+(14,14,'Voie inexistante'),
+(15,7,'Voie doublon (même type et même nom)'),
+(16,11,'Nom tronqué');
