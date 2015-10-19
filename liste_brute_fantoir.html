@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
 <link rel="stylesheet" href="css/tablesorter.css" type="text/css"/>
 <script>
-	a_champs_fantoir = ['Fantoir OSM','dept','code_dir','code_com','code_insee','id_voie','rivoli','nature_voie','libelle_voie','type_commune','caractere_rur','caractere_voie','caractere_pop','pop_a_part','pop_fictive','caractere_annul','date_annul','date_creation','code_majic','type_voie','ld_bati','dernier_mot']
+	a_champs_fantoir = ['Fantoir OSM','dept','code_dir','code_com','code_insee','id_voie','rivoli','nature_voie','libelle_voie','type_commune','caractere_rur','caractere_voie','caractere_pop','pop_a_part','pop_fictive','caractere_annul','date_annul','date_creation','code_majic','type_voie','ld_bati','dernier_mot','code INSEE + ID Voie']
 	function check_url_for_insee(){
 		pattern_insee = new RegExp('^[0-9][0-9abAB][0-9]{3}$')
 		var res
@@ -57,10 +57,10 @@
 			for (c=0;c<fantoir.length;c++){
 				$('#listing_fantoir').append($('<tr>'))
 				for (d=0;d<fantoir[c].length;d++){
-					$('tr:last').append($('<td>').append(fantoir[c][d]))
+					$('tr:last').append($('<td>').attr('title',a_champs_fantoir[d]).append(fantoir[c][d]))
 				}
 			}
-			$('#listing_fantoir').tablesorter(); 
+			$('#listing_fantoir').tablesorter();
 		})
 		window.location.hash="#insee="+$('#input_insee')[0].value
 		$('body').css('cursor','default');
