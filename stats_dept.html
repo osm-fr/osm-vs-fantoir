@@ -196,11 +196,12 @@
 				for (d=0;d<stats[c].length;d++){
 					if (d==1){
 						$('#stats_dept tr:last').append($('<td>')
+												.attr('title',(a_champs_stats[d]).replace('<br\/>',' '))
 												.append($('<a>')
 												.attr('href','http://cadastre.openstreetmap.fr/fantoir/#insee='+stats[c][1])
 												.text(stats[c][1])))	
 					} else {
-						$('#stats_dept tr:last').append($('<td>').append(stats[c][d]))
+						$('#stats_dept tr:last').append($('<td>').attr('title',(a_champs_stats[d]).replace('<br\/>',' ')).append(stats[c][d]))
 					}
 					// style des cellules de format
 					$('#stats_dept tr:last td:first').addClass(stats[c][0])
