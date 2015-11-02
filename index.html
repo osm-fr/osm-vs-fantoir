@@ -354,7 +354,7 @@
 			document.title = nom_commune+' - Correspondance entre FANTOIR et voies OSM'
 			$('#table_infos_commune').empty()
 			$('.rubrique').empty()
-			
+
 			if (nom_commune.length == 0){
 				$('#table_infos_commune').append($('<h2>').append('INSEE '+$('#input_insee')[0].value+' : commune inconnue'))
 				$('body').css('cursor','default');
@@ -481,7 +481,7 @@
 									.append($('<a>')
 									.attr('href',href)
 									.attr('target','blank')
-									.text(text)))	
+									.text(text)))
 	}
 	function add_josm_link(table,xl,xr,yb,yt){
 		$('#'+table+' tr:last').append($('<td>')
@@ -503,7 +503,7 @@
 			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Cartes'))
 			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Édition'))
 			$('#'+table+' tr').append($('<th>').append('Statut FANTOIR ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/WikiProject_France/WikiProject_Base_Adresses_Nationale_Ouverte_(BANO)#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
-		} 
+		}
 	}
 	function add_statut_fantoir(id_statut){
 		$('#'+table+' tr:last').removeClass().addClass('statut'+id_statut)
@@ -558,7 +558,7 @@
 <div id="pied_de_page"></div>
 </div>
 <table id="rubriques">
-	<tr><th colspan="2">Voies <span class="emphase">avec</span> adresses</th><th colspan="2">Voies <span class="emphase">sans</span> adresses</th></tr>
+	<tr><th colspan="2" title="Il existe au moins une parcelle avec un numéro d'adresse associé à ces voies.">Voies <span class="emphase">avec</span> adresse(s) numérotée(s)</th><th colspan="2" title="Il n'existe pas d'adresse avec numéro pour ces voies.">Voies <span class="emphase">sans</span> adresse(s) numérotée(s)</th></tr>
 	<tr><td class="rubrique" id="rub_adresses_non_match" cible="table_adresses_non_match"></td>
 		<td class="rubrique" id="rub_adresses_match" cible="table_adresses_match"></td>
 		<td class="rubrique" id="rub_voies_fantoir_non_match" cible="table_voies_fantoir_non_match"></td>
@@ -575,7 +575,7 @@
 <div id="pied_de_page"></div>
 </div>
 <div id="credits">
-Données FANTOIR : © 2015 Ministère de l'Économie et des Finances (DGFiP) - <a href="http://wiki.data.gouv.fr/wiki/Licence_Ouverte_/_Open_Licence">Licence LO/OL</a> |||| 
+Données FANTOIR : © 2015 Ministère de l'Économie et des Finances (DGFiP) - <a href="http://wiki.data.gouv.fr/wiki/Licence_Ouverte_/_Open_Licence">Licence LO/OL</a> ||||
 Données OpenStreetMap : © les Contributeurs d'OpenStreetMap  <a href="http://opendatacommons.org/licenses/odbl/">Licence ODbL</a> |||| Icône "refresh" par iconsmind.com (the Noun project)
 </div>
 <div id="josm_target" style="visibility : hidden"></div>
