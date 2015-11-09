@@ -40,7 +40,7 @@ WHERE	a.fantoir IS NULL	AND
 e AS
 (SELECT	*
 FROM	d
-WHERE	rang < 4)
+WHERE	rang < 6)
 SELECT	CASE WHEN e.code_dept = '97' THEN SUBSTR(e.code_insee,1,3) ELSE e.code_dept END dept,
 	e.code_insee,
 	e.commune,
