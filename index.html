@@ -169,44 +169,52 @@
 		margin-bottom: 10px;
 		margin-left: 3px;
 	}
-	#rub_adresses_non_match.active,#rub_voies_fantoir_non_match.active{
+	#rub_adresses_non_match.active,#rub_voies_fantoir_non_match.active,#rub_places_non_match.active{
 		background:lightgrey;
 	}
-	#rub_adresses_match.active,#rub_voies_match.active{
+	#rub_adresses_match.active,#rub_voies_match.active,#rub_places_match.active{
 		background:lightgreen;
 	}
 	#table_voies_match tr td,
 	#table_adresses_match tr td,
 	#table_adresses_non_match tr td,
-	#table_voies_fantoir_non_match tr td{
+	#table_voies_fantoir_non_match tr td,
+	#table_places_non_match tr td,
+	#table_places_match tr td{
 		background:lightgrey;
 		color:grey;
 		font-weight: bold;
 	}
 	#table_voies_match tr.statut0 td,
 	#table_adresses_match tr.statut0 td,
+	#table_places_match tr.statut0 td,
 	#table_adresses_non_match tr.statut0 td,
-	#table_voies_fantoir_non_match tr.statut0 td{
+	#table_voies_fantoir_non_match tr.statut0 td,
+	#table_places_non_match tr.statut0 td{
 		background:white;
 		color:black;
 		font-weight: normal;
 	}
 	#table_voies_match tr.statut0 td.clicked,
 	#table_adresses_match tr.statut0 td.clicked,
+	#table_places_match tr.statut0 td.clicked,
 	#table_adresses_non_match tr.statut0 td.clicked,
-	#table_voies_fantoir_non_match tr.statut0 td.clicked{
+	#table_voies_fantoir_non_match tr.statut0 td.clicked,
+	#table_places_non_match tr.statut0 td.clicked{}
 		background-color:green;
 		color:white;
 		font-weight: normal;
 	}
 	#table_adresses_match tr.statut0 td.cell_fantoir,
-	#table_voies_match tr.statut0 td.cell_fantoir{
+	#table_voies_match tr.statut0 td.cell_fantoir,
+	#table_places_match tr.statut0 td.cell_fantoir{
 		background:lightgreen;
 		color:black;
 		font-weight: normal;
 	}
 	#table_adresses_non_match tr.statut0 td.cell_fantoir,
-	#table_voies_fantoir_non_match tr.statut0 td.cell_fantoir{
+	#table_voies_fantoir_non_match tr.statut0 td.cell_fantoir,
+	#table_places_non_match tr.statut0 td.cell_fantoir{
 		background:lightgrey;
 		color:black;
 		font-weight: normal;
@@ -328,6 +336,8 @@
 		$('#table_adresses_match').empty()
 		$('#table_voies_fantoir_non_match').empty()
 		$('#table_voies_match').empty()
+		$('#table_places_non_match').empty()
+		$('#table_places_match').empty()
 		$.ajax({
 			url: "requete_fantoir.py?insee="+$('#input_insee')[0].value
 		})
@@ -344,6 +354,8 @@
 			voies_fantoir_adresses_match = data[2]
 			voies_fantoir_seules_non_match = data[3]
 			voies_fantoir_seules_match = data[4]
+			places_fantoir_non_match = data[5]
+			places_fantoir_match = data[6]
 
 			url_map_org_part1 = 'http://www.openstreetmap.org/'
 			url_map_fr_part1 = 'http://tile.openstreetmap.fr/'
@@ -383,14 +395,20 @@
 			$('#rub_adresses_match').empty().text(voies_fantoir_adresses_match.length+" voies FANTOIR avec  rapprochement OSM")
 			$('#rub_voies_fantoir_non_match').empty().text(voies_fantoir_seules_non_match.length+" voies FANTOIR sans rapprochement OSM")
 			$('#rub_voies_match').empty().text(voies_fantoir_seules_match.length+" voies FANTOIR avec rapprochement OSM")
+			$('#rub_places_non_match').empty().text(places_fantoir_non_match.length+" lieux-dits FANTOIR sans rapprochement OSM")
+			$('#rub_places_match').empty().text(places_fantoir_match.length+" lieux-dits FANTOIR avec rapprochement OSM")
 			add_header('table_adresses_non_match',true)
 			add_header('table_adresses_match',true)
 			add_header('table_voies_fantoir_non_match',true)
 			add_header('table_voies_match',true)
+			add_header('table_places_non_match',true)
+			add_header('table_places_match',true)
 			a_data_table = [[voies_fantoir_adresses_non_match,'table_adresses_non_match'],
 							[voies_fantoir_adresses_match,'table_adresses_match'],
 							[voies_fantoir_seules_non_match,'table_voies_fantoir_non_match'],
-							[voies_fantoir_seules_match,'table_voies_match']]
+							[voies_fantoir_seules_match,'table_voies_match'],
+							[places_fantoir_non_match,'table_places_non_match'],
+							[places_fantoir_match,'table_places_match']]
 			for (s=0;s<a_data_table.length;s++){
 				data = a_data_table[s][0];
 				table = a_data_table[s][1];
@@ -451,7 +469,7 @@
 		return res
 	}
 	function check_url_for_tab(){
-		pattern_tab = new RegExp('^[0-3]$')
+		pattern_tab = new RegExp('^[0-5]$')
 		var res
 		res = 0
 		if (window.location.hash){
@@ -497,8 +515,8 @@
 	}
 	function add_header(table,with_edit_and_map_links){
 		$('#'+table).append($('<tr>').append($('<th>').append('Code FANTOIR')))
-		$('#'+table+' tr').append($('<th>').append('Voie FANTOIR'))
-		$('#'+table+' tr').append($('<th>').append('Voie OSM'))
+		$('#'+table+' tr').append($('<th>').append('Libellé FANTOIR'))
+		$('#'+table+' tr').append($('<th>').append('Libellé OSM'))
 		if (with_edit_and_map_links){
 			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Cartes'))
 			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Édition'))
@@ -558,11 +576,16 @@
 <div id="pied_de_page"></div>
 </div>
 <table id="rubriques">
-	<tr><th colspan="2" title="Il existe au moins une parcelle avec un numéro d'adresse associé à ces voies.">Voies <span class="emphase">avec</span> adresse(s) numérotée(s)</th><th colspan="2" title="Il n'existe pas d'adresse avec numéro pour ces voies.">Voies <span class="emphase">sans</span> adresse(s) numérotée(s)</th></tr>
+	<tr><th colspan="2" title="Il existe au moins une parcelle avec un numéro d'adresse associé à ces voies.">Voies <span class="emphase">avec</span> adresse(s) numérotée(s)</th>
+		<th colspan="2" title="Il n'existe pas d'adresse avec numéro pour ces voies.">Voies <span class="emphase">sans</span> adresse(s) numérotée(s)</th>
+		<th colspan="2" title="Lieux-dits.">Lieux-dits</th>
+	</tr>
 	<tr><td class="rubrique" id="rub_adresses_non_match" cible="table_adresses_non_match"></td>
 		<td class="rubrique" id="rub_adresses_match" cible="table_adresses_match"></td>
 		<td class="rubrique" id="rub_voies_fantoir_non_match" cible="table_voies_fantoir_non_match"></td>
 		<td class="rubrique" id="rub_voies_match" cible="table_voies_match"></td>
+		<td class="rubrique" id="rub_places_non_match" cible="table_places_non_match"></td>
+		<td class="rubrique" id="rub_places_match" cible="table_places_match"></td>
 	</tr>
 </table>
 </div>
@@ -572,6 +595,8 @@
 <table id="table_adresses_match" class="table_liste"></table>
 <table id="table_voies_fantoir_non_match" class="table_liste"></table>
 <table id="table_voies_match" class="table_liste"></table>
+<table id="table_places_non_match" class="table_liste"></table>
+<table id="table_places_match" class="table_liste"></table>
 <div id="pied_de_page"></div>
 </div>
 <div id="credits">

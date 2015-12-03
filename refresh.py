@@ -4,6 +4,7 @@
 import sys
 sys.path.append('/data/project/cadastre.openstreetmap.fr/bin/cadastre-housenumber/bano')
 import addr_2_db as a
+import place_2_db_3 as p
 import log_2_file as e
 import outils_de_gestion as o
 import os,os.path
@@ -41,6 +42,7 @@ def main():
 		a.main(['',insee_com,'OSM',False])
 		if format_cadastre == 'VECT':
 			a.main(['',insee_com,'CADASTRE',False])
+		p.main(['',insee_com])
 		statut = '1'
 	except :
 		statut = '0'
