@@ -23,4 +23,5 @@ SELECT	c.fantoir,
 	COALESCE(s.id_statut,0)
 FROM	c
 LEFT OUTER JOIN s
-ON	c.fantoir = s.fantoir;
+ON	c.fantoir = s.fantoir
+ORDER BY 2;
