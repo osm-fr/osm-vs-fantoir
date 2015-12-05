@@ -4,7 +4,7 @@
 import sys
 sys.path.append('/data/project/cadastre.openstreetmap.fr/bin/cadastre-housenumber/bano')
 import addr_2_db as a
-import place_2_db_3 as p
+import place_2_db as p
 import log_2_file as e
 import outils_de_gestion as o
 import os,os.path
