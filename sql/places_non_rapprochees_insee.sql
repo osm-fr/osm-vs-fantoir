@@ -20,8 +20,9 @@ SELECT	c.fantoir,
 	'--',
 	st_x(c.geometrie),
 	st_y(c.geometrie),
-	COALESCE(s.id_statut,0)
+	COALESCE(s.id_statut,0),
+	c.ld_bati
 FROM	c
 LEFT OUTER JOIN s
 ON	c.fantoir = s.fantoir
-ORDER BY 2;
+ORDER BY 7 desc,2;

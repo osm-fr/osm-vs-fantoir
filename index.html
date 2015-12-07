@@ -185,7 +185,13 @@
 		color:grey;
 		font-weight: bold;
 	}
-	#table_voies_match tr.statut0 td,
+/*	#table_places_non_match tr.statut0 td.ld_habite,
+	#table_places_match tr.statut0 td.ld_habite{
+		background-image: url("img/ld_habite.png");
+		background-size: 15px 12px;
+		background-repeat: no-repeat;
+	}
+*/	#table_voies_match tr.statut0 td,
 	#table_adresses_match tr.statut0 td,
 	#table_places_match tr.statut0 td,
 	#table_adresses_non_match tr.statut0 td,
@@ -416,7 +422,14 @@
 				//Fantoir
 					$('#'+table).append($('<tr>').attr('id',data[l][0]).append($('<td>').addClass('cell_fantoir').text(data[l][0])))
 				//Nom Fantoir
-					$('#'+table+' tr:last').append($('<td>').text(data[l][1]))
+					if ((table == 'table_places_non_match'||table == 'table_places_match') && (data[l][6] == 1)){
+						// $('#'+table+' tr:last').append($('<td>').append($('<img>').attr('src','img/ld_habite.png'))) //.append(data[l][1])
+						// $('td:last').text(data[l][1])
+						$('#'+table+' tr:last').append($('<td>').append($('<img>').attr('src','img/ld_habite.png').attr('title','Lieu-dit habité selon FANTOIR')).append($('<span>').text(data[l][1])))
+						console.log('toto')
+					} else {
+						$('#'+table+' tr:last').append($('<td>').text(data[l][1]))
+					}
 				//Nom OSM
 					$('#'+table+' tr:last').append($('<td>').text(data[l][2]))
 					lon = data[l][3]
