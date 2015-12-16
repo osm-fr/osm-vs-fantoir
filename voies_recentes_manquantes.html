@@ -1,9 +1,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Voies récentes manquantes</title>
 <script src="js/jquery-2.1.1.min.js"></script>
-<script src="js/jquery.tablesorter.min.js"></script>
+<!--script src="js/jquery.tablesorter.min.js"></script-->
 <style>
 	body{
 	    font-family: monospace;
@@ -11,7 +10,7 @@
 	#bandeau{
 		top:0px;
 		width:100%;
-		height:150px;
+		height:50px;
 		z-index:3;
 		position:fixed;
 		background-color:white;
@@ -32,7 +31,7 @@
 	}
 	#reponse{
 		position:absolute;
-		top:150px;
+		top:80px;
 		z-index:2;
 	}
 	.emphase{
@@ -139,7 +138,7 @@
 		visibility:hidden;
 		z-index: 10;
 	}
-	#table_fantoir_errone tr td,
+	#table_voies_recentes tr td,
 		background:white;
 		color:black;
 		font-weight: normal;
@@ -164,64 +163,112 @@
 	var menu_labels
 	var commune_valide = false
 	var osm_state
-	function start(){
-		$('body').css('cursor','progress');
-/*		$('#wait_ajax').empty()
-						.css('z-index','20')
-						.css('opacity','0.8')
-						.append($('<span>').append('Recherche des FANTOIRs erronés...'));*/
-		$.ajax({
-			url: "json/voies_recentes_manquantes.json",
-		})
-		.done(function( data ){
-			$('body').css('cursor','default');
-
-			url_map_org_part1 = 'http://www.openstreetmap.org/'
-			url_map_fr_part1 = 'http://tile.openstreetmap.fr/'
-			url_bano_part1 = 'http://tile.openstreetmap.fr/~cquest/leaflet/bano.html'
-			url_edit_part1 = 'http://www.openstreetmap.org/edit?editor='
-			delta = 0.0008
-
-			add_header('table_fantoir_errone',true)
-			table = 'table_fantoir_errone'
-			for (l=0;l<data.length;l++){
-				insee = (data[l][1])
-				//Dept
-				$('#'+table).append($('<tr>').attr('id',data[l][4]).append($('<td>').text(data[l][0])))
-				//Commune (INSEE)
-				$('#'+table+' tr:last').append($('<td>').text(data[l][2]+'('+data[l][1]+')'))
-				//Fantoir
-				$('#'+table+' tr:last').append($('<td>').text(data[l][4]))
-				//Voie
-				$('#'+table+' tr:last').append($('<td>').text(data[l][3]))
-				//Date de création
-				$('#'+table+' tr:last').append($('<td>').text(data[l][7]))
-				lon = data[l][5]
-				lat = data[l][6]
-				if (lon && lat){
-					url_ol_part2 = '?zoom=18&lat='+lat+'&lon='+lon
-					url_hash_coords = '18/'+lat+'/'+lon
-					xleft	= lon-delta
-					xright	= lon+delta
-					ybottom	= lat-delta
-					ytop	= lat+delta
-				//visu
-					add_map_link(table,url_map_org_part1+'#map='+url_hash_coords,'ORG')
-					add_map_link(table,url_map_fr_part1+url_ol_part2,'FR')
-					add_map_link(table,url_bano_part1+'#'+url_hash_coords,'BANO')
-				//JOSM
-					add_josm_link(table,xleft,xright,ybottom,ytop)
-				//ID
-					add_map_link(table,url_edit_part1+'id#map='+url_hash_coords,'ID')
-				//Potlatch
-					add_map_link(table,url_edit_part1+'potlatch2#map='+url_hash_coords,'P2')
-				//Fantoir
-					add_map_link(table,'./index.html#insee='+insee,'Fantoir-OSM '+insee)
-					add_map_link(table,'./liste_brute_fantoir.html#insee='+insee,'Fantoir brut '+insee)
+	var titre = "Voies récentes inconnues d'OSM"
+	function is_valid_dept(d){
+		pattern_dept = new RegExp('^([01]|[3-8])([0-9])$|^2([aAbB]|[1-9])$|^9([0-5]|7[1-4]|76)$')
+		res = false
+		if (pattern_dept.test(d)){
+			res = d
+		}
+		return res
+	}
+	function check_url_for_dept(){
+		var res
+		if (window.location.hash){
+			if (window.location.hash.split('dept=')[1]){
+				if (is_valid_dept(window.location.hash.split('dept=')[1].split('&')[0])){
+					res = window.location.hash.split('dept=')[1].split('&')[0]
+				} else {
+//					document.title = titre
+					alert(window.location.hash.split('dept=')[1].split('&')[0]+' n\'est pas un numero de département valide\n\nAbandon')
 				}
 			}
-		})
-	};
+		}
+		return res
+	}
+	function check_form_for_dept(){
+		res = false
+		if (is_valid_dept($('#input_dept')[0].value)){
+			res = $('#input_dept')[0].value
+		} else {
+			alert($('#input_dept')[0].value+' n\'est pas un numero de département valide\n\nAbandon')
+		}
+		return res
+	}
+	function start(){
+		document.title = titre
+		dept = check_url_for_dept()
+		if (dept){
+			$('#input_dept').empty()
+			$('#input_dept')[0].value = dept
+			requete_voies_dept();
+		}
+	}
+	function requete_voies_dept(){
+		if (check_form_for_dept()){
+			dept = $('#input_dept')[0].value
+			document.title = titre+' ('+dept+')'
+			$('body').css('cursor','progress');
+			$('#wait_ajax').empty()
+							.css('z-index','20')
+							.css('opacity','0.8')
+							.append($('<span>').append('Recherche des voies récentes...'));
+			$.ajax({
+				url: "voies_recentes_manquantes_dept.py?dept="+dept,
+			})
+			.done(function( data ){
+				$('body').css('cursor','default');
+				$('#table_voies_recentes').empty()
+
+				url_map_org_part1 = 'http://www.openstreetmap.org/'
+				url_map_fr_part1 = 'http://tile.openstreetmap.fr/'
+				url_bano_part1 = 'http://tile.openstreetmap.fr/~cquest/leaflet/bano.html'
+				url_edit_part1 = 'http://www.openstreetmap.org/edit?editor='
+				delta = 0.0008
+
+				add_header('table_voies_recentes',true)
+				table = 'table_voies_recentes'
+				for (l=0;l<data.length;l++){
+					insee = (data[l][1])
+					//Dept
+					$('#'+table).append($('<tr>').attr('id',data[l][4]).append($('<td>').text(data[l][0])))
+					//Commune (INSEE)
+					$('#'+table+' tr:last').append($('<td>').text(data[l][2]+'('+data[l][1]+')'))
+					//Fantoir
+					$('#'+table+' tr:last').append($('<td>').text(data[l][4]))
+					//Voie
+					$('#'+table+' tr:last').append($('<td>').text(data[l][3]))
+					//Date de création
+					$('#'+table+' tr:last').append($('<td>').text(data[l][7]))
+					lon = data[l][5]
+					lat = data[l][6]
+					if (lon && lat){
+						url_ol_part2 = '?zoom=18&lat='+lat+'&lon='+lon
+						url_hash_coords = '18/'+lat+'/'+lon
+						xleft	= lon-delta
+						xright	= lon+delta
+						ybottom	= lat-delta
+						ytop	= lat+delta
+					//visu
+						add_map_link(table,url_map_org_part1+'#map='+url_hash_coords,'ORG')
+						add_map_link(table,url_map_fr_part1+url_ol_part2,'FR')
+						add_map_link(table,url_bano_part1+'#'+url_hash_coords,'BANO')
+					//JOSM
+						add_josm_link(table,xleft,xright,ybottom,ytop)
+					//ID
+						add_map_link(table,url_edit_part1+'id#map='+url_hash_coords,'ID')
+					//Potlatch
+						add_map_link(table,url_edit_part1+'potlatch2#map='+url_hash_coords,'P2')
+					//Fantoir
+						add_map_link(table,'./index.html#insee='+insee,'Fantoir-OSM '+insee)
+						add_map_link(table,'./liste_brute_fantoir.html#insee='+insee,'Fantoir brut '+insee)
+					}
+				}
+				$('#wait_ajax').css('z-index','1').css('opacity','0');
+			})
+			window.location.hash="#dept="+$('#input_dept')[0].value
+		};
+	}
 	function add_map_link(table,href,text){
 		$('#'+table+' tr:last').append($('<td>')
 									.append($('<a>')
@@ -258,23 +305,24 @@
 </head>
 <body onload="start()">
 <div id="bandeau">
-<h1>Voies récentes selon FANTOIR, non retrouvées dans OSM</h1>
-<h4>Sélection aléatoire d'une voie par département, parmi les plus récentes d'après FANTOIR, connues du Cadastre, et inconnues dans OSM</h4>
+	<form action="javascript:requete_voies_dept()" autocomplete="on">
+	<input type="text" id="input_dept" placeholder="N° de département"></input>
+	<input type="submit" value="Afficher">
+	</form>
+<h2>Voies récentes selon FANTOIR, connues du Cadastre mais pas d'OSM</h2>
 <div id="pied_de_page"></div>
 </div>
-<table id="rubriques">
-	<tr><td class="rubrique" id="rub_adresses_non_match" cible="table_fantoir_errone"></td>
-	</tr>
-</table>
 </div>
 
 <div id="reponse">
-<table id="table_fantoir_errone" class="table_liste_"></table>
+<table id="table_voies_recentes" class="table_liste_"></table>
 <div id="pied_de_page"></div>
 </div>
 <div id="credits">
 Données OpenStreetMap : © les Contributeurs d'OpenStreetMap  <a href="http://opendatacommons.org/licenses/odbl/">Licence ODbL</a>
+ - Données FANTOIR : © 2015 Ministère de l'Économie et des Finances (DGFiP) - <a href="http://wiki.data.gouv.fr/wiki/Licence_Ouverte_/_Open_Licence">Licence LO/OL</a>
 </div>
 <div id="josm_target" style="visibility : hidden"></div>
+<div id="wait_ajax"></div>
 </body>
 </html>
