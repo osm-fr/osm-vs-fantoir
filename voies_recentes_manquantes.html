@@ -2,7 +2,8 @@
 <head>
 <meta charset="UTF-8">
 <script src="js/jquery-2.1.1.min.js"></script>
-<!--script src="js/jquery.tablesorter.min.js"></script-->
+<script src="js/jquery.tablesorter.min.js"></script>
+<link rel="stylesheet" href="css/tablesorter.css" type="text/css"/>
 <style>
 	body{
 	    font-family: monospace;
@@ -10,7 +11,7 @@
 	#bandeau{
 		top:0px;
 		width:100%;
-		height:50px;
+		height:70px;
 		z-index:3;
 		position:fixed;
 		background-color:white;
@@ -138,10 +139,19 @@
 		visibility:hidden;
 		z-index: 10;
 	}
-	#table_voies_recentes tr td,
+	#table_voies_recentes tr td{
 		background:white;
 		color:black;
 		font-weight: normal;
+	}
+	table.tablesorter thead tr .header {
+		height:40px;
+	}
+	#pied_de_page{
+		position:relative;
+		width:100%;
+		height:30px;
+		z-index:3;
 	}
 	#pied_de_page{
 		position:relative;
@@ -227,6 +237,7 @@
 				delta = 0.0008
 
 				add_header('table_voies_recentes',true)
+				$('#table_voies_recentes').append($('<tbody>'))
 				table = 'table_voies_recentes'
 				for (l=0;l<data.length;l++){
 					insee = (data[l][1])
@@ -265,6 +276,7 @@
 					}
 				}
 				$('#wait_ajax').css('z-index','1').css('opacity','0');
+				$('#table_voies_recentes').tablesorter();
 			})
 			window.location.hash="#dept="+$('#input_dept')[0].value
 		};
@@ -289,7 +301,8 @@
 								)
 	}
 	function add_header(table,with_edit_and_map_links){
-		$('#'+table).append($('<tr>').append($('<th>').append('Dept')))
+//			$('#stats_dept').empty().append($('<thead>').append($('<tr>')))
+		$('#'+table).empty().append($('<thead>').append($('<tr>').append($('<th>').append('Dept'))))
 		$('#'+table+' tr').append($('<th>').append('Commune(INSEE)'))
 		$('#'+table+' tr').append($('<th>').append('Fantoir'))
 		$('#'+table+' tr').append($('<th>').append('Voie'))
@@ -315,7 +328,7 @@
 </div>
 
 <div id="reponse">
-<table id="table_voies_recentes" class="table_liste_"></table>
+<table id="table_voies_recentes" class="tablesorter"></table>
 <div id="pied_de_page"></div>
 </div>
 <div id="credits">
