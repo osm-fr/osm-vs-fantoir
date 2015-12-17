@@ -16,7 +16,27 @@
 		position:fixed;
 		background-color:white;
 	}
-	.cellule_intitule{
+	#reponse{
+		position:absolute;
+		top:80px;
+		z-index:2;
+	}
+	#credits{
+		background:darkgrey;
+		position:fixed;
+		bottom:0px;
+		width:100%;
+		overflow:visible;
+		z-index:4;
+		text-align: justify;
+	}
+	#pied_de_page{
+		position:relative;
+		width:100%;
+		height:30px;
+		z-index:3;
+	}
+/*	.cellule_intitule{
 		text-align: right;
 	}
 	.cellule_data{
@@ -29,11 +49,6 @@
 	#rubriques th{
 		background-color:black;
 		color:white;
-	}
-	#reponse{
-		position:absolute;
-		top:80px;
-		z-index:2;
 	}
 	.emphase{
 		color:red;
@@ -55,7 +70,7 @@
 	.table_liste{
 		display:none;
 	}
-	.zone_click{
+*/	.zone_click{
 		cursor:pointer;
 		color:blue;
 		text-decoration: underline;
@@ -63,39 +78,6 @@
 	.zone_click.clicked{
 		background-color:green;
 		color:white;
-	}
-	#refresh_infos{
-		position: fixed;
-		width: 250px;
-		height: 56px;
-		top: 6px;
-		right: 109px;
-		display:none;
-	}
-	#refresh_infos span{
-		font-weight: bold;
-	}
-	#bouton_refresh{
-		position: fixed;
-		background-image: url("img/72176-600.png");
-		background-size: 49px 56px;
-		background-repeat: no-repeat;
-		width: 49px;
-		height: 56px;
-		top: 6px;
-		right: 60px;
-	}
-	#infos_refresh{
-		width:100%;
-		height:200px;
-		top:0px;
-		left:0px;
-		background-color:lightgrey;
-		opacity:0.8;
-		position:fixed;
-		//visibility:hidden;
-		display:none;
-		z-index: 15;
 	}
 	#wait_ajax{
 		position:fixed;
@@ -114,7 +96,7 @@
 		color:white;
 		border:50px solid black;
 	}
-	#infobulle_aide{
+/*	#infobulle_aide{
 		position: fixed;
 		color: red;
 		background: #dddddd;
@@ -139,34 +121,13 @@
 		visibility:hidden;
 		z-index: 10;
 	}
-	#table_voies_recentes tr td{
+*/	#table_voies_recentes tr td{
 		background:white;
 		color:black;
 		font-weight: normal;
 	}
 	table.tablesorter thead tr .header {
 		height:40px;
-	}
-	#pied_de_page{
-		position:relative;
-		width:100%;
-		height:30px;
-		z-index:3;
-	}
-	#pied_de_page{
-		position:relative;
-		width:100%;
-		height:30px;
-		z-index:3;
-	}
-	#credits{
-		background:darkgrey;
-		position:fixed;
-		bottom:0px;
-		width:100%;
-		overflow:visible;
-		z-index:4;
-		text-align: justify;
 	}
 </style>
 <script>
@@ -301,7 +262,6 @@
 								)
 	}
 	function add_header(table,with_edit_and_map_links){
-//			$('#stats_dept').empty().append($('<thead>').append($('<tr>')))
 		$('#'+table).empty().append($('<thead>').append($('<tr>').append($('<th>').append('Dept'))))
 		$('#'+table+' tr').append($('<th>').append('Commune(INSEE)'))
 		$('#'+table+' tr').append($('<th>').append('Fantoir'))
@@ -313,7 +273,6 @@
 			$('#'+table+' tr').append($('<th>').attr('colspan','2').append('FANTOIR'))
 		} 
 	}
-
 </script>
 </head>
 <body onload="start()">
@@ -323,8 +282,7 @@
 	<input type="submit" value="Afficher">
 	</form>
 <h2>Voies récentes selon FANTOIR, connues du Cadastre mais pas d'OSM</h2>
-<div id="pied_de_page"></div>
-</div>
+<!--div id="pied_de_page"></div-->
 </div>
 
 <div id="reponse">
