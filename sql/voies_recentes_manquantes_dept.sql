@@ -15,8 +15,12 @@ b AS
 FROM	fantoir_voie f
 WhERE	f.code_insee like '__dept__%' and type_voie in ('1','2')
 EXCEPT
-SELECT	fantoir FROM cumul_voies c
-WHERE	c.insee_com like '__dept__%'),
+(SELECT	fantoir FROM cumul_voies
+WHERE	insee_com like '__dept__%'
+UNION
+SELECT	fantoir FROM cumul_adresses
+WHERE	insee_com like '__dept__%'	AND
+		source='OSM')),
 -- Géometrie des voies du Cadastre ----
 -- 1 point adresse arbitraire ---------
 c AS
