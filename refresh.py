@@ -42,7 +42,7 @@ def main():
 		a.main(['',insee_com,'OSM',False])
 		if format_cadastre == 'VECT':
 			a.main(['',insee_com,'CADASTRE',False])
-		p.main(['',insee_com])
+		p.main(['',insee_com,False])
 		statut = '1'
 	except :
 		statut = '0'
