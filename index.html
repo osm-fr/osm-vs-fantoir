@@ -422,7 +422,7 @@
 				//Fantoir
 					$('#'+table).append($('<tr>').attr('id',data[l][0]).append($('<td>').addClass('cell_fantoir').text(data[l][0])))
 				//Nom Fantoir
-					if ((table == 'table_places_non_match'||table == 'table_places_match') && (data[l][6] == 1)){
+					if ((table == 'table_places_non_match'||table == 'table_places_match') && (data[l][6] == 0)){
 						// $('#'+table+' tr:last').append($('<td>').append($('<img>').attr('src','img/ld_habite.png'))) //.append(data[l][1])
 						// $('td:last').text(data[l][1])
 						$('#'+table+' tr:last').append($('<td>').append($('<img>').attr('src','img/ld_habite.png').attr('title','Lieu-dit bâti selon FANTOIR')).append($('<span>').text(data[l][1])))

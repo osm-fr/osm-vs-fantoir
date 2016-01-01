@@ -25,4 +25,4 @@ SELECT	c.fantoir,
 FROM	c
 LEFT OUTER JOIN s
 ON	c.fantoir = s.fantoir
-ORDER BY 7 desc,3;
+ORDER BY 7,3;
