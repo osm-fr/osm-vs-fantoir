@@ -24,5 +24,5 @@ ON		j.fantoir = s.fantoir
 WHERE	f.code_insee = '__com__'	AND
 		f.type_voie in ('1','2')	AND
 		f.date_annul = '0000000'	AND
-		j.voie_osm != ''
+		COALESCE(j.voie_osm,'') != ''
 ORDER BY 3;

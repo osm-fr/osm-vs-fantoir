@@ -9,7 +9,7 @@ JOIN	(SELECT	fantoir
 		FROM	cumul_adresses
 		WHERE	insee_com = '__com__'	AND
 				source = 'CADASTRE'		AND
-				voie_osm = ''
+				COALESCE(voie_osm,'') = ''
 		EXCEPT
 		SELECT	fantoir
 		FROM	cumul_adresses
