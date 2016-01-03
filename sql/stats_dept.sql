@@ -10,13 +10,13 @@ a AS (	SELECT 	insee_com,
 				count(distinct fantoir) voies_avec_adresses_rapprochees
 		FROM 	cumul_adresses
 		WHERE	insee_com like '__dept__'	AND
-				voie_osm IS NOT NULL and voie_osm != ''
+				COALESCE(voie_osm,'') != ''
 		GROUP BY insee_com),
 v AS (	SELECT 	insee_com,
 				count(distinct fantoir) voies_rapprochees
 		FROM 	cumul_voies
 		WHERE	insee_com like '__dept__'	AND
-				fantoir != ''				AND
+				COALESCE(fantoir,'') != ''	AND
 				voie_osm IS NOT NULL
 		GROUP BY insee_com),
 vl AS (	SELECT 	c.insee_com,
@@ -24,9 +24,9 @@ vl AS (	SELECT 	c.insee_com,
 		FROM 	cumul_voies c
 		JOIN	fantoir_voie f
 		ON		c.fantoir = f.code_insee||f.id_voie||f.cle_rivoli 
-		WHERE	c.insee_com like '__dept__'	AND
-				c.fantoir != ''				AND
-				c.voie_osm IS NOT NULL		AND
+		WHERE	c.insee_com like '__dept__'		AND
+				COALESCE(c.fantoir,'') != ''	AND
+				c.voie_osm IS NOT NULL			AND
 				f.type_voie = '3'
 		GROUP BY c.insee_com),
 t AS (	SELECT 	code_insee,
