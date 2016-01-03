@@ -23,9 +23,11 @@ if infos_commune:
 else:
 	nom_commune = []
 
-str_query = "SELECT code_insee||id_voie||cle_rivoli,* FROM fantoir_voie WHERE code_insee = '{:s}';".format(insee_com)
-cur = pgc.cursor()
-cur.execute(str_query)
-r = cur.fetchall()
-a = json.JSONEncoder().encode([[nom_commune],r])
+res = infos_commune = get_data_from_pg(pgc,'listing_fantoir',insee_com)
+
+# str_query = "SELECT code_insee||id_voie||cle_rivoli,* FROM fantoir_voie WHERE code_insee = '{:s}';".format(insee_com)
+# cur = pgc.cursor()
+# cur.execute(str_query)
+# r = cur.fetchall()
+a = json.JSONEncoder().encode([[nom_commune],res])
 print(a)

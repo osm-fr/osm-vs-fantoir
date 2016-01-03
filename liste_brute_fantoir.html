@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
 <link rel="stylesheet" href="css/tablesorter.css" type="text/css"/>
 <script>
-	a_champs_fantoir = ['Fantoir OSM','dept','code_dir','code_com','code_insee','id_voie','rivoli','nature_voie','libelle_voie','type_commune','caractere_rur','caractere_voie','caractere_pop','pop_a_part','pop_fictive','caractere_annul','date_annul','date_creation','code_majic','type_voie','ld_bati','dernier_mot','code INSEE + ID Voie']
+	a_champs_fantoir = ['Rapproché ?','Fantoir OSM','dept','code_dir','code_com','code_insee','id_voie','rivoli','nature_voie','libelle_voie','type_commune','caractere_rur','caractere_voie','caractere_pop','pop_a_part','pop_fictive','caractere_annul','date_annul','date_creation','code_majic','type_voie','ld_bati','dernier_mot','code INSEE + ID Voie']
 	function check_url_for_insee(){
 		pattern_insee = new RegExp('^[0-9][0-9abAB][0-9]{3}$')
 		var res
@@ -46,7 +46,7 @@
 				$('body').css('cursor','default');
 				return 0;
 			}
-			document.title = nom_commune+' - Liste FANTOIR 2014'
+			document.title = nom_commune+' - Liste FANTOIR 2015'
 
 			$('#table_infos_commune').append($('<tr>').append($('<th>').append($('<h1>').addClass('titre_commune').append((nom_commune+" ("+$('#input_insee')[0].value+")")))))
 			fantoir = data[1]
@@ -58,6 +58,12 @@
 				$('#listing_fantoir').append($('<tr>'))
 				for (d=0;d<fantoir[c].length;d++){
 					$('tr:last').append($('<td>').attr('title',a_champs_fantoir[d]).append(fantoir[c][d]))
+				}
+				if ($('tr:last td')[0].childNodes[0].data == 'OUI'){
+					$($('tr:last td')[0]).addClass('rapproche')
+				}
+				if ($('tr:last td')[0].childNodes[0].data == 'QUALIFIÉ'){
+					$($('tr:last td')[0]).addClass('qualifie')
 				}
 			}
 			$('#listing_fantoir').tablesorter();

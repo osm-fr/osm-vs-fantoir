@@ -37,3 +37,13 @@
 		z-index:4;
 		text-align: justify;
 	}
+	table.tablesorter tbody td.rapproche{
+		color:white;
+		font-weight:bold;
+		background:#009900;	
+	}
+	table.tablesorter tbody td.qualifie{
+		color:white;
+		font-weight:bold;
+		background:#555555;	
+	}
