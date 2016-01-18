@@ -60,6 +60,9 @@ def main():
 		nom_commune = []
 		lon_commune = None
 		lat_commune = None
+	voisins = get_data_from_pg(pgc,'voisins_insee',insee_com)
+	a_voisins = [[v[0],v[1],v[2]] for v in voisins]
+
 	date_import_cadastre = ''
 	date_fin_cumul = ['','']
 	if cadastre_com:
@@ -75,7 +78,7 @@ def main():
 	date_cache_highway = get_fin_etape_dept(pgc,'cache_dept_highway_insee',dept)[0]
 	date_cache_highway_relation = get_fin_etape_dept(pgc,'cache_dept_highway_relation_insee',dept)[0]
 
-	data = [[nom_commune,date_import_cadastre,date_fin_cumul[0],date_fin_cumul[1],date_cache_hsnr,date_cache_highway,date_cache_highway_relation,lon_commune,lat_commune,labels_statuts_fantoir],get_data_from_pg(pgc,'voies_adresses_non_rapprochees_insee',insee_com),get_data_from_pg(pgc,'voies_adresses_rapprochees_insee',insee_com),get_data_from_pg(pgc,'voies_seules_non_rapprochees_insee',insee_com),get_data_from_pg(pgc,'voies_seules_rapprochees_insee',insee_com),get_data_from_pg(pgc,'places_non_rapprochees_insee',insee_com),get_data_from_pg(pgc,'places_rapprochees_insee',insee_com)]
+	data = [[nom_commune,date_import_cadastre,date_fin_cumul[0],date_fin_cumul[1],date_cache_hsnr,date_cache_highway,date_cache_highway_relation,lon_commune,lat_commune,labels_statuts_fantoir,a_voisins],get_data_from_pg(pgc,'voies_adresses_non_rapprochees_insee',insee_com),get_data_from_pg(pgc,'voies_adresses_rapprochees_insee',insee_com),get_data_from_pg(pgc,'voies_seules_non_rapprochees_insee',insee_com),get_data_from_pg(pgc,'voies_seules_rapprochees_insee',insee_com),get_data_from_pg(pgc,'places_non_rapprochees_insee',insee_com),get_data_from_pg(pgc,'places_rapprochees_insee',insee_com)]
 
 	a = json.JSONEncoder().encode(data)
 	print(a)

@@ -80,9 +80,45 @@
 		top: 6px;
 		right: 109px;
 		display:none;
+		z-index: 5;
+		background-color: white;
 	}
 	#refresh_infos span{
 		font-weight: bold;
+	}
+	#bouton_communes_voisines{
+		position: fixed;
+		background-image: url("img/communes_voisines.png");
+		background-size: 40px 40px;
+		background-repeat: no-repeat;
+		width: 40px;
+		height: 40px;
+		top: 10px;
+		right: 119px;
+		z-index:4;
+	}
+	#table_communes_voisines{
+		position: fixed;
+		border: solid 1px;
+		//height: 100px;
+		top: 10px;
+		right: 119px;
+		background-color:white;
+		z-index:5;
+		visibility:hidden;
+	}
+	#table_communes_voisines table tr td.lien_commune{
+		color:blue;
+		text-decoration: underline;
+		cursor: pointer;
+	}
+	#table_communes_voisines table tr td.commune_centre{
+		color:black;
+		font-weight: bold;
+		text-align: center;
+		text-decoration: none;
+		cursor: default;
+		background-color: lightblue;
 	}
 	#bouton_refresh{
 		position: fixed;
@@ -102,7 +138,6 @@
 		background-color:lightgrey;
 		opacity:0.8;
 		position:fixed;
-		//visibility:hidden;
 		display:none;
 		z-index: 15;
 	}
@@ -246,6 +281,10 @@
 	var commune_valide = false
 	var osm_state
 	function start(){
+		$('#table_communes_voisines').css('visibility','hidden');
+		$('#table_communes_voisines table tr td').empty()
+													.removeAttr('insee_cible')
+													.unbind('click');
 		$('.rubrique').click(function() {
 			$('.rubrique').removeClass('active');
 			$(this).addClass('active');
@@ -279,6 +318,12 @@
 			$('#input_insee')[0].value = insee
 			requete_fantoir()
 		}
+		$('#bouton_communes_voisines').click(function(){
+			$('#table_communes_voisines').css('visibility','visible');
+		})
+		$('#table_communes_voisines > .fermer').click(function(){
+			$('#table_communes_voisines').css('visibility','hidden');
+		})
 		$('#bouton_refresh').click(function(){
 								refresh();
 							})
@@ -356,6 +401,7 @@
 			cache_ways = data[0][5]
 			lon_commune = data[0][7]
 			lat_commune = data[0][8]
+			communes_voisines = data[0][10]
 			voies_fantoir_adresses_non_match = data[1]
 			voies_fantoir_adresses_match = data[2]
 			voies_fantoir_seules_non_match = data[3]
@@ -403,6 +449,7 @@
 			$('#rub_voies_match').empty().text(voies_fantoir_seules_match.length+" voies FANTOIR avec rapprochement OSM")
 			$('#rub_places_non_match').empty().text(places_fantoir_non_match.length+" lieux-dits FANTOIR sans rapprochement OSM")
 			$('#rub_places_match').empty().text(places_fantoir_match.length+" lieux-dits FANTOIR avec rapprochement OSM")
+			$('.table_liste').empty()
 			add_header('table_adresses_non_match',true)
 			add_header('table_adresses_match',true)
 			add_header('table_voies_fantoir_non_match',true)
@@ -426,7 +473,6 @@
 						// $('#'+table+' tr:last').append($('<td>').append($('<img>').attr('src','img/ld_habite.png'))) //.append(data[l][1])
 						// $('td:last').text(data[l][1])
 						$('#'+table+' tr:last').append($('<td>').append($('<img>').attr('src','img/ld_habite.png').attr('title','Lieu-dit bâti selon FANTOIR')).append($('<span>').text(data[l][1])))
-						console.log('toto')
 					} else {
 						$('#'+table+' tr:last').append($('<td>').text(data[l][1]))
 					}
@@ -459,9 +505,20 @@
 				}
 			}
 
+			// table_communes_voisines
+			$('#table_communes_voisines tr td').empty()
+			$('#table_communes_voisines tr td.commune_centre').text(nom_commune)
+			for (v in communes_voisines){
+				//console.log(communes_voisines[v])
+				$('#table_communes_voisines tr td#'+(communes_voisines[v])[0]).text(communes_voisines[v][2]).attr('insee_cible',communes_voisines[v][1]).addClass('lien_commune')
+				// $('#table_communes_voisines tr td#'+(communes_voisines[v])[0]).append($('<div>').text(communes_voisines[v][2]).attr('insee_cible',communes_voisines[v][1]).addClass('lien_commune'))
+				.click(function(){
+					console.log($(this).attr('insee_cible'))
+					location.assign(window.location.href.split('#')[0]+'#insee='+$(this).attr('insee_cible'))
+					start()
+				})
+			}
 			tab = check_url_for_tab()
-//			var e = jQuery.Event( "click");
-//			jQuery($('#rub_adresses_non_match').trigger(e))
 			$('#rubriques tr td')[tab].click()
 			window.location.hash="#insee="+$('#input_insee')[0].value+"&tab="+tab
 			$('body').css('cursor','default');
@@ -496,6 +553,16 @@
 		}
 		return res
 	}
+	function update_url_insee(i){
+		p1 = window.location.hash.split('&tab=')[0]
+		p2=''
+		if (window.location.hash.split('&tab=')[1]){
+			if (window.location.hash.split('&tab=')[1].split('&')[1]){
+				p2 = window.location.hash.split('&tab=')[1].split('&')[1]
+			}
+		}
+		window.location.hash = p1+"&tab="+t+p2
+	}
 	function update_url_tab(t){
 		p1 = window.location.hash.split('&tab=')[0]
 		p2=''
@@ -505,7 +572,6 @@
 			}
 		}
 		window.location.hash = p1+"&tab="+t+p2
-		console.log(window.location.hash)
 	}
 	function add_map_link(table,href,text){
 		$('#'+table+' tr:last').append($('<td>')
@@ -566,6 +632,21 @@
 <table id="table_infos_commune"></table>
 </div>
 <div id="refresh_infos"></div>
+<div id="table_communes_voisines">
+<div class="fermer">X</div>
+<table>
+<tbody>
+	<tr><td id="11"></td><td id="12"></td><td id="1"></td><td id="2"></td></tr>
+<!-- 	<tr><td id="10"></td><td id="0"></td><td id="0"></td><td id="3"></td></tr>
+	<tr><td id="9"></td><td id="0"><td id="0"></td></td><td id="4"></td></tr>
+ -->
+ 	<tr><td id="10"></td><td class="commune_centre" colspan="2" rowspan="2"></td><td id="3"></td></tr>
+	<tr><td id="9"></td><td id="4"></td></tr>
+	<tr><td id="8"></td><td id="7"></td><td id="6"></td><td id="5"></td></tr>
+</tbody>
+</table>
+</div>
+<div id="bouton_communes_voisines" title="Communes voisines"></div>
 <div id="bouton_refresh" title="Mettre à jour les données BANO"></div>
 <div id="infobulle_aide" title="Aide">?</div>
 <div id="infos_refresh"></div>
@@ -581,7 +662,7 @@
 <li>Répétition du type de voie</li><p>Type de voie (rue, petite rue...) en double avec de possibles variantes dans les abréviations. Ex: Gde Rue Grande Rue
 <li>Nom introuvable sur le terrain</li><p>Pour un nom n'entrant pas dans les autres situations (doublon...) et sans aucune trace sur le terrain
 <li>Ancien nom supprimé sur le terrain</li><p>Normalement Fantoir indique une date de fin pour un nom obsolète, et tous les enregistrements avec une date passée sont ignorés dans BANO. Si un nom Fantoir apparaît dans les listes alors qu'il a été remplacé sur le terrain, il faut le marquer.
-<li>Nom tronqué</li>Les noms de voie Fantoir sont limités à 26 caractères. Ça peut être une cause d'échec de rapprochement, quand le nom OSM dépasse cette longueur.
+<li>Nom tronqué</li><p>Les noms de voie Fantoir sont limités à 26 caractères. Ça peut être une cause d'échec de rapprochement, quand le nom OSM dépasse cette longueur.
 <li>Voie détruite</li><p>La voie a bien existé mais son emprise a disparu suite à des travaux.
 <li>Voie incorporée à une autre</li><p>La voie a "fusionné" avec une autre. Son nom n'a pas été préservé.
 <li>Voie inexistante</li><p>Pas de trace de la voie sur le terrain, et pas de souvenir de son existence par le passé.
