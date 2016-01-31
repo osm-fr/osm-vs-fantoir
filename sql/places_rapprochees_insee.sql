@@ -17,7 +17,10 @@ WHERE	insee_com ='__com__'	AND
 	source = 'OSM')
 SELECT	c.fantoir,
 	c.libelle_fantoir,
-	c.libelle_osm,
+	CASE
+	  WHEN c.ld_osm IS NOT NULL THEN c.ld_osm||' : '||c.libelle_osm
+	  ELSE c.libelle_osm
+	END,
 	st_x(c.geometrie),
 	st_y(c.geometrie),
 	COALESCE(s.id_statut,0),

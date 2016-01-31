@@ -450,12 +450,12 @@
 			$('#rub_places_non_match').empty().text(places_fantoir_non_match.length+" lieux-dits FANTOIR sans rapprochement OSM")
 			$('#rub_places_match').empty().text(places_fantoir_match.length+" lieux-dits FANTOIR avec rapprochement OSM")
 			$('.table_liste').empty()
-			add_header('table_adresses_non_match',true)
-			add_header('table_adresses_match',true)
-			add_header('table_voies_fantoir_non_match',true)
-			add_header('table_voies_match',true)
-			add_header('table_places_non_match',true)
-			add_header('table_places_match',true)
+			add_header('table_adresses_non_match',true,false)
+			add_header('table_adresses_match',true,false)
+			add_header('table_voies_fantoir_non_match',true,false)
+			add_header('table_voies_match',true,false)
+			add_header('table_places_non_match',true,false)
+			add_header('table_places_match',true,true)
 			a_data_table = [[voies_fantoir_adresses_non_match,'table_adresses_non_match'],
 							[voies_fantoir_adresses_match,'table_adresses_match'],
 							[voies_fantoir_seules_non_match,'table_voies_fantoir_non_match'],
@@ -592,10 +592,14 @@
 									})
 								)
 	}
-	function add_header(table,with_edit_and_map_links){
+	function add_header(table,with_edit_and_map_links,with_type_osm){
 		$('#'+table).append($('<tr>').append($('<th>').append('Code FANTOIR')))
 		$('#'+table+' tr').append($('<th>').append('Libellé FANTOIR'))
-		$('#'+table+' tr').append($('<th>').append('Libellé OSM'))
+		if (with_type_osm){
+			$('#'+table+' tr').append($('<th>').append('Type OSM : libellé OSM'))
+		} else {
+			$('#'+table+' tr').append($('<th>').append('Libellé OSM'))
+		}
 		if (with_edit_and_map_links){
 			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Cartes'))
 			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Édition'))
