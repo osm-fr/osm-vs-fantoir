@@ -15,10 +15,11 @@ AS
 		WHEN 'city' THEN 1
 		WHEN 'town' THEN 2
 		WHEN 'suburb' THEN 3
-		WHEN 'neighbourhood' THEN 4
-		WHEN 'village' THEN 5
-		WHEN 'hamlet' THEN 6
-		WHEN 'isolated_dwelling' THEN 7
+		WHEN 'village' THEN 4
+		WHEN 'quarter' THEN 5
+		WHEN 'neighbourhood' THEN 6
+		WHEN 'hamlet' THEN 7
+		WHEN 'isolated_dwelling' THEN 8
 		WHEN 'locality' THEN 99
 		ELSE 98
 	END tri
@@ -39,4 +40,4 @@ SELECT	c.fantoir,
 FROM	c
 LEFT OUTER JOIN s
 ON	c.fantoir = s.fantoir
-ORDER BY 7,tri;
+ORDER BY tri,2;
