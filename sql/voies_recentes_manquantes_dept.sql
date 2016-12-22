@@ -53,7 +53,7 @@ WHERE	a.fantoir IS NULL	AND
 e AS
 (SELECT	*
 FROM	d
-WHERE rang < 50)
+WHERE rang < 250)
 SELECT	CASE WHEN e.code_dept = '97' THEN SUBSTR(e.code_insee,1,3) ELSE e.code_dept END dept,
 	e.code_insee,
 	e.commune,
@@ -61,6 +61,6 @@ SELECT	CASE WHEN e.code_dept = '97' THEN SUBSTR(e.code_insee,1,3) ELSE e.code_de
 	e.fantoir||e.cle_rivoli fantoir,
 	st_x(e.geometrie),
 	st_y(e.geometrie),
-	to_char(to_date(e.date_creation,'YYYYDDD'),'DD/MM/YYYY')
+	to_char(to_date(e.date_creation,'YYYYDDD'),'YYYY-MM-DD')
 FROM	e
 ORDER BY e.date_creation DESC,3,4;
