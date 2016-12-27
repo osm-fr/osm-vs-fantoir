@@ -20,7 +20,7 @@ WHERE	insee_com like '__dept__%'
 UNION
 SELECT	fantoir FROM cumul_adresses
 WHERE	insee_com like '__dept__%'	AND
-		source='OSM')),
+		(source='OSM' OR (source='CADASTRE' AND COALESCE(voie_osm,'')!='')))),
 -- Géometrie des voies du Cadastre ----
 -- 1 point adresse arbitraire ---------
 c AS
