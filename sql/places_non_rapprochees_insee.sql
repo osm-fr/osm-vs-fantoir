@@ -14,7 +14,12 @@ AS
 FROM	cumul_places
 WHERE	insee_com ='__com__'	AND
 	fantoir IS NOT NULL	AND
-	libelle_osm IS NULL)
+	libelle_osm IS NULL),
+v
+AS
+(SELECT fantoir
+FROM    cumul_voies
+WHERE   insee_com ='__com__')
 SELECT	c.fantoir,
 	c.libelle_fantoir,
 	'--',
@@ -25,4 +30,7 @@ SELECT	c.fantoir,
 FROM	c
 LEFT OUTER JOIN s
 ON	c.fantoir = s.fantoir
+LEFT OUTER JOIN v
+ON	c.fantoir = v.fantoir
+WHERE v.fantoir IS NULL
 ORDER BY 7,2;
