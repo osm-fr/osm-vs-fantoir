@@ -30,4 +30,5 @@ VALUES (0,0,'Ok'),
 (13,13,'Voie incorporée à une autre'),
 (14,14,'Voie inexistante'),
 (15,7,'Voie doublon (même type et même nom)'),
-(16,11,'Nom tronqué');
+(16,11,'Nom tronqué'),
+(17,16,'Erreur de commune');
