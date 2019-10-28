@@ -1,9 +1,19 @@
+WITH
+diff_numero_fantoir
+AS
+(SELECT numero,fantoir FROM cumul_adresses WHERE insee_com = '__com__' and source = 'CADASTRE'
+EXCEPT
+SELECT numero,fantoir FROM cumul_adresses WHERE insee_com = '__com__' and source = 'OSM'),
+fantoir_numeros_manquants
+AS
+(SELECT DISTINCT fantoir,1 AS a_proposer FROM diff_numero_fantoir)
 SELECT	f.code_insee||f.id_voie||f.cle_rivoli fantoir,
 		nature_voie||' '||libelle_voie voie,
 		j.voie_osm,
 		st_x(g.geometrie),
 		st_y(g.geometrie),
-		COALESCE(s.id_statut,0)
+		COALESCE(s.id_statut,0),
+		COALESCE(fm.a_proposer,0)
 FROM	fantoir_voie f
 JOIN 	(SELECT DISTINCT fantoir,voie_osm
 		FROM	cumul_adresses
@@ -21,6 +31,8 @@ LEFT OUTER JOIN	(SELECT fantoir,id_statut
 						WHERE	insee_com = '__com__')r
 				WHERE	rang = 1) s
 ON		j.fantoir = s.fantoir
+LEFT OUTER JOIN fantoir_numeros_manquants fm
+ON      f.code_insee||f.id_voie||f.cle_rivoli = fm.fantoir
 WHERE	f.code_insee = '__com__'	AND
 		f.type_voie in ('1','2')	AND
 		f.date_annul = '0000000'	AND

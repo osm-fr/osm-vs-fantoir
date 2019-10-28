@@ -15,12 +15,12 @@ LEFT OUTER JOIN	(SELECT	fantoir
 				WHERE	insee_com = '__com__'	AND
 						source = 'OSM') o
 ON		f.code_insee||f.id_voie||f.cle_rivoli = o.fantoir
-LEFT OUTER JOIN	(SELECT	voie_cadastre,
+LEFT OUTER JOIN	(SELECT	libelle,
 						ST_Transform(ST_SetSRID(ST_Centroid(ST_Collect(ST_Centroid(geometrie))),900913),4326) geometrie
-				FROM	parcelles
+				FROM	parcelles_noms
 				WHERE	insee_com = '__com__'
 				GROUP BY	1)g
-ON		f.nature_voie||' '||f.libelle_voie = g.voie_cadastre
+ON		f.nature_voie||' '||f.libelle_voie = g.libelle
 LEFT OUTER JOIN	(SELECT fantoir,id_statut
 				FROM 	(SELECT	*,rank() OVER (PARTITION BY fantoir ORDER BY timestamp_statut DESC) rang
 						FROM 	statut_fantoir
