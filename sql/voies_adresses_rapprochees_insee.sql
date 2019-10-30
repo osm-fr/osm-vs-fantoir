@@ -6,7 +6,7 @@ EXCEPT
 SELECT numero,fantoir FROM cumul_adresses WHERE insee_com = '__com__' and source = 'OSM'),
 fantoir_numeros_manquants
 AS
-(SELECT DISTINCT fantoir,1 AS a_proposer FROM diff_numero_fantoir)
+(SELECT DISTINCT fantoir,count(*) AS a_proposer FROM diff_numero_fantoir GROUP BY 1)
 SELECT	f.code_insee||f.id_voie||f.cle_rivoli fantoir,
 		nature_voie||' '||libelle_voie voie,
 		j.voie_osm,
