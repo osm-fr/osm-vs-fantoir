@@ -504,7 +504,7 @@
 					//Statut Fantoir
 					add_statut_fantoir(data[l][5])
 					if (s==1 && data[l][6]){
-  					    add_josm_addr_link(table,insee,data[l][0],data[l][1],data[l][6])
+  					    add_josm_addr_link(table,$('#input_insee')[0].value,data[l][0],data[l][1],data[l][6])
   					}
 				}
 			}
@@ -675,7 +675,7 @@
 </table>
 </div>
 <div id="bouton_communes_voisines" title="Communes voisines"></div>
-<div id="bouton_refresh" title="Mettre à jour les données BANO"></div>
+<!-- <div id="bouton_refresh" title="Mettre à jour les données BANO"></div> -->
 <div id="infobulle_aide" title="Aide">?</div>
 <div id="infos_refresh"></div>
 <div id="aide">
