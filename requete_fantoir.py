@@ -45,11 +45,12 @@ def get_batch_infos_etape_commune(etape,insee_com):
                          ORDER BY source;""")
         return conn.fetchall()
 
-def get_batch_infos_etape_dept(etape,dept):
+def get_batch_infos_etape_dept(etape,dept,source):
     with db.bano.cursor() as conn:
         conn.execute(f"""SELECT     timestamp_debut,etape,date_fin
                          FROM   batch
                          WHERE  etape = '{etape}'   AND
+                                source = '{source}' AND
                                 dept = '{dept}';""")
         return conn.fetchall()
 
@@ -78,7 +79,7 @@ def main():
     # a_voisins = [[v[0],v[1],v[2]] for v in voisins]
     a_voisins = [[v[0],v[1],v[2]] for v in get_data_from_bano_cache('voisins_insee',insee_com)]
 
-    date_import_cadastre = get_batch_infos_etape_dept('loadDeptBal',dept)
+    date_import_cadastre = get_batch_infos_etape_dept('loadDeptBal',dept, 'CADASTRE')
     date_fin_cumul = ['','']
     fin_etape = get_batch_infos_etape_commune('loadCumul',insee_com)
     if len(fin_etape) == 1:
