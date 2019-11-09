@@ -58,10 +58,8 @@ def main():
     print('Content-Type: application/json')
     print('')
 
-    # pgc = get_pgc()
     params = cgi.FieldStorage()
     insee_com = params['insee'].value
-    # cadastre_com = dbhp.get_code_cadastre_from_insee(insee_com)
     dept = hp.get_code_dept_from_insee(insee_com)
 
     labels_statuts_fantoir = get_data_from_bano('labels_statuts_fantoir','')
@@ -75,8 +73,6 @@ def main():
         nom_commune = []
         lon_commune = None
         lat_commune = None
-    # voisins = get_data_from_bano_cache('voisins_insee',insee_com)
-    # a_voisins = [[v[0],v[1],v[2]] for v in voisins]
     a_voisins = [[v[0],v[1],v[2]] for v in get_data_from_bano_cache('voisins_insee',insee_com)]
 
     date_import_cadastre = get_batch_infos_etape_dept('loadDeptBal',dept, 'CADASTRE')
@@ -84,7 +80,7 @@ def main():
     fin_etape = get_batch_infos_etape_commune('loadCumul',insee_com)
     if len(fin_etape) == 1:
         date_fin_cumul = [[],fin_etape[0]]
-    else:
+    elif fin_etape:
         date_fin_cumul = fin_etape
     date_cache_hsnr = '' #get_fin_etape_dept('cache_dept_hsnr_insee',dept)[0]
     date_cache_highway = '' #get_fin_etape_dept('cache_dept_highway_insee',dept)[0]
