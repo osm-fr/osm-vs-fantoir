@@ -12,7 +12,6 @@ print ("Content-Type: application/json\n\n")
 
 params = cgi.FieldStorage()
 insee_com = params['insee'].value
-# insee_com = '85047'
 
 infos_commune = get_data_from_bano_cache('infos_commune_insee',insee_com)
 if infos_commune:

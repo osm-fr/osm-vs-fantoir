@@ -33,7 +33,7 @@ WHERE		source = 'CADASTRE' AND
 -- Assemblage -------------------------
 d AS
 (SELECT f.*,
-	co.nom commune,
+	co.nom_com commune,
 	c.voie_cadastre,
 	c.geometrie,
 	RANK() OVER(PARTITION BY 1 ORDER BY date_creation DESC,random()) rang
@@ -44,8 +44,8 @@ LEFT OUTER JOIN a
 ON		f.fantoir = a.fantoir
 JOIN	c
 ON		f.fantoir = c.fantoir
-JOIN	communes co
-ON		co.insee = f.code_insee
+JOIN	code_cadastre co
+ON		co.insee_com = f.code_insee
 WHERE	a.fantoir IS NULL	AND
 		f.code_insee like '__dept__%' AND
 		f.type_voie IN ('1','2')),

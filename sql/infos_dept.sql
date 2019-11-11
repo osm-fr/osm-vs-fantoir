@@ -1,4 +1,5 @@
-SELECT 	code_insee,
-		nom
-FROM	departements
-WHERE	code_insee = '__dept__';
+SELECT 	"ref:INSEE",
+		name
+FROM	planet_osm_polygon
+WHERE	"ref:INSEE" = '__dept__' AND
+        admin_level = 6;
