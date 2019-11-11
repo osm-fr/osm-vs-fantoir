@@ -5,5 +5,5 @@ FROM	(SELECT	name,
 				ST_Transform(ST_Centroid(way),4326) p
 		FROM	planet_osm_polygon
 		WHERE	boundary='administrative' AND
-                admin_level=8 AND
+                admin_level in (8,9) AND
                 "ref:INSEE" = '__com__')a;
