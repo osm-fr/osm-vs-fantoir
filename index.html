@@ -451,7 +451,7 @@
 			$('#rub_places_non_match').empty().text(places_fantoir_non_match.length+" lieux-dits FANTOIR sans rapprochement OSM")
 			$('#rub_places_match').empty().text(places_fantoir_match.length+" lieux-dits FANTOIR avec rapprochement OSM")
 			$('.table_liste').empty()
-			add_header('table_adresses_non_match',true,false,false)
+			add_header('table_adresses_non_match',true,false,true)
 			add_header('table_adresses_match',true,false,true)
 			add_header('table_voies_fantoir_non_match',true,false,false)
 			add_header('table_voies_match',true,false,false)
@@ -503,7 +503,7 @@
 					}
 					//Statut Fantoir
 					add_statut_fantoir(data[l][5])
-					if (s==1 && data[l][6]){
+					if ((s==0|s==1) && data[l][6]){
   					    add_josm_addr_link(table,$('#input_insee')[0].value,data[l][0],data[l][1],data[l][6])
   					}
 				}
@@ -607,7 +607,7 @@
 									.addClass('zone_click')
 									.text('Relation')
 									.click(function(){
-										srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.split('fantoir')[0]+'fantoir/requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele=Relation';
+										srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.split('#')[0]+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele=Relation';
 										$('<img>').appendTo($('#josm_target')).attr('src',srcURL);
 										$(this).addClass('clicked');
 									})
