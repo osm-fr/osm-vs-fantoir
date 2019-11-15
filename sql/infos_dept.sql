@@ -1,5 +1,4 @@
-SELECT 	"ref:INSEE",
-		name
-FROM	planet_osm_polygon
-WHERE	"ref:INSEE" = '__dept__' AND
-        admin_level = 6;
+SELECT 	dep,
+		libelle
+FROM	cog_departement
+WHERE	dep = '__dept__';
