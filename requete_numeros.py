@@ -23,7 +23,7 @@ def append_osm_footer():
 
 def convert_dataset_to_osm_format(dataset,modele):
     if modele == 'Points':
-        return(''.join([f"""<node id='-{idx+1}' lat='{args[1]}' lon='{args[0]}' version="0"><tag k='addr:housenumber' v='{args[2]}'/><tag k='ref:FR:FANTOIR' v='{args[3]}'/><tag k='name' v="{args[4]}"/>        </node>""" for idx,args in enumerate(dataset)]))
+        return(''.join([f"""<node id='-{idx+1}' lat='{args[1]}' lon='{args[0]}' version="0"><tag k='addr:housenumber' v='{args[2]}'/><tag k='addr:street' v="{args[4]}"/>        </node>""" for idx,args in enumerate(dataset)]))
     if modele == 'Relation':
         return(''.join([f"""<node id='-{idx+1}' lat='{args[1]}' lon='{args[0]}' version="0"><tag k='addr:housenumber' v='{args[2]}'/></node>""" for idx,args in enumerate(dataset)])+f"""<relation id="-1" version="0">"""+''.join([f"""<member type="node" ref="-{idx+1}" role="house"/>""" for idx in range(0,len(dataset))])+f"""<tag k="name" v="{dataset[0][4]}"/><tag k="type" v="associatedStreet"/><tag k="ref:FR:FANTOIR" v="{dataset[0][3]}"/></relation>""")
 
