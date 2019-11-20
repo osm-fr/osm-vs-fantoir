@@ -312,6 +312,7 @@
 				a_menus_labels[id_label] = menu_labels
 			}
 		})
+		check_josm_remote_control()
 		insee = check_url_for_insee()
 		if (insee){
 			$('#input_insee').empty()
@@ -647,6 +648,19 @@
 				}
 			})
 		})))
+	}
+	function check_josm_remote_control(){
+		$.ajax({
+			url: "http://127.0.0.1:8111/version"
+		})
+		.done(function(data){
+			if (data){
+				console.log('Telecommande JOSM OK')
+			}
+		})
+		.error(function(data){
+			alert("La telecommande JOSM ne répond pas.\nCertains liens sur la page nécessitent que JOSM soit démarré avec la télécommande activée\n\nPour de l'aide sur la télécommande : https://josm.openstreetmap.de/wiki/Help/Preferences/RemoteControl")
+		})
 	}
 </script>
 </head>
