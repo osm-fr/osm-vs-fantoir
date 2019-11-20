@@ -598,7 +598,7 @@
 									.addClass('zone_click')
 									.text(nombre > 1 ? nombre+' Points':'1 Point')
 									.click(function(){
-										srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.split('fantoir')[0]+'fantoir/requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele=Points';
+										srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.split('#')[0]+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele=Points';
 										$('<img>').appendTo($('#josm_target')).attr('src',srcURL);
 										$(this).addClass('clicked');
 									})
