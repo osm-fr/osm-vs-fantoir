@@ -12,4 +12,5 @@ SELECT ST_X(c.geometrie),
 FROM   cumul_adresses c
 JOIN   diff
 USING  (numero,fantoir,insee_com)
-WHERE  source = 'CADASTRE';
+WHERE  source = 'CADASTRE'
+ORDER BY NULLIF(regexp_replace(diff.numero, '\D', '', 'g'), '')::int;
