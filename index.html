@@ -599,7 +599,8 @@
 									.addClass('zone_click')
 									.text(nombre > 1 ? nombre+' Points':'1 Point')
 									.click(function(){
-										srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.split('#')[0]+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele=Points';
+										stringToRemove = window.location.href.split('/').pop()
+										srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele=Points';
 										$('<img>').appendTo($('#josm_target')).attr('src',srcURL);
 										$(this).addClass('clicked');
 									})
@@ -608,7 +609,8 @@
 									.addClass('zone_click')
 									.text('Relation')
 									.click(function(){
-										srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.split('#')[0]+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele=Relation';
+										stringToRemove = window.location.href.split('/').pop()
+										srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele=Relation';
 										$('<img>').appendTo($('#josm_target')).attr('src',srcURL);
 										$(this).addClass('clicked');
 									})
