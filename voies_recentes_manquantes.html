@@ -216,13 +216,14 @@
 					lat = data[l][6]
 					if (lon && lat){
 						url_ol_part2 = '?zoom=18&lat='+lat+'&lon='+lon
+						url_marker = '?mlat='+lat+'&mlon='+lon
 						url_hash_coords = '18/'+lat+'/'+lon
 						xleft	= lon-delta
 						xright	= lon+delta
 						ybottom	= lat-delta
 						ytop	= lat+delta
 					//visu
-						add_map_link(table,url_map_org_part1+'#map='+url_hash_coords,'ORG')
+						add_map_link(table,url_map_org_part1+url_marker+'#map='+url_hash_coords,'ORG')
 						add_map_link(table,url_map_fr_part1+url_ol_part2,'FR')
 						add_map_link(table,url_bano_part1+'#'+url_hash_coords,'BANO')
 					//JOSM
