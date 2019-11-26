@@ -439,7 +439,7 @@
 			url_hash_coords = '15/'+lat_commune+'/'+lon_commune
 			url_ol_part2 = '?zoom=15&lat='+lat_commune+'&lon='+lon_commune
 			url_listing_fantoir = './liste_brute_fantoir.html#insee='+$('#input_insee')[0].value
-			add_map_link('table_infos_commune',url_map_org_part1+'#map='+url_hash_coords,'ORG')
+			add_map_link('table_infos_commune',url_map_org_part1+'?mlat='+lat_commune+'&mlon='+lon_commune+'#map='+url_hash_coords,'ORG')
 			add_map_link('table_infos_commune',url_map_fr_part1+url_ol_part2,'FR')
 			add_map_link('table_infos_commune',url_bano_part1+'#'+url_hash_coords,'BANO')
 			add_map_link('table_infos_commune',url_listing_fantoir,'FANTOIR')
