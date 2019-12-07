@@ -4,7 +4,7 @@ AS
 		ST_Centroid(way) gcentre
 FROM	planet_osm_polygon
 WHERE	boundary='administrative' AND
-        admin_level=8 AND
+        admin_level in (8,9) AND
         "ref:INSEE" = '__com__'),
 v
 AS
@@ -15,7 +15,9 @@ FROM	planet_osm_polygon c
 JOIN	i
 ON		ST_Touches(c.way,i.way)
 WHERE   c.boundary='administrative' AND
-        c.admin_level=8),
+        (c.admin_level=8 OR (c.admin_level=9 AND ("ref:INSEE" LIKE '751__' OR
+                                                  "ref:INSEE" LIKE '6938_' OR
+                                                  "ref:INSEE" LIKE '132__' )))),
 j
 AS
 (SELECT	v."ref:INSEE",(((DEGREES(ST_Azimuth(i.gcentre,v.gcentre)) - 15)/30)+1)::integer secteur,

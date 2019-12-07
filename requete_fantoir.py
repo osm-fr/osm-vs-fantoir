@@ -30,6 +30,9 @@ def get_data_from_bano(data_type,insee_com):
 def get_data_from_bano_cache(data_type,insee_com):
     with db.bano_cache.cursor() as conn:
         with open(f"sql/{data_type}.sql",'r') as fq:
+            # str_query = fq.read().replace('__com__',insee_com)
+            # conn.execute(str_query)
+            # print(str_query)
             conn.execute(fq.read().replace('__com__',insee_com))
             return conn.fetchall()
 
@@ -55,11 +58,9 @@ def get_batch_infos_etape_dept(etape,dept,source):
         return conn.fetchall()
 
 def main():
-    print('Content-Type: application/json')
-    print('')
-
     params = cgi.FieldStorage()
     insee_com = params['insee'].value
+    # insee_com = '75101'
     dept = hp.get_code_dept_from_insee(insee_com)
 
     labels_statuts_fantoir = get_data_from_bano('labels_statuts_fantoir','')
@@ -89,6 +90,7 @@ def main():
     data = [[nom_commune,date_import_cadastre,date_fin_cumul[0],date_fin_cumul[1],date_cache_hsnr,date_cache_highway,date_cache_highway_relation,lon_commune,lat_commune,labels_statuts_fantoir,a_voisins],get_data_from_bano('voies_adresses_non_rapprochees_insee',insee_com),get_data_from_bano('voies_adresses_rapprochees_insee',insee_com),get_data_from_bano('voies_seules_non_rapprochees_insee',insee_com),get_data_from_bano('voies_seules_rapprochees_insee',insee_com),get_data_from_bano('places_non_rapprochees_insee',insee_com),get_data_from_bano('places_rapprochees_insee',insee_com)]
 
     a = json.JSONEncoder().encode(data)
+    print('Content-Type: application/json\n')
     print(a)
 if __name__ == '__main__':
     main()
