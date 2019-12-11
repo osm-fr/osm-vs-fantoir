@@ -7,20 +7,10 @@ import json
 import sys
 
 import helpers as hp
-# sys.path.append('/data/project/bano/bano')
 import db
-# import constants
-# import db_helpers as dbhp
-
-# from pg_connexion import get_pgc
-# from addr_2_db import get_code_cadastre_from_insee
 
 cgitb.enable()
-# def get_code_dept_from_insee(insee_com):
-#   code_dept = insee_com[0:2]
-#   if insee_com[0:2] == '97':
-#       code_dept = insee_com[0:3]
-#   return code_dept
+
 def get_data_from_bano(data_type,insee_com):
     with db.bano.cursor() as conn:
         with open(f"sql/{data_type}.sql",'r') as fq:
@@ -57,10 +47,15 @@ def get_batch_infos_etape_dept(etape,dept,source):
                                 dept = '{dept}';""")
         return conn.fetchall()
 
+def format_csv(fetch):
+    return ('Code FANTOIR\tLibellé FANTOIR\tLibellé OSM\n'+'\n'.join([f"{c[0]}\t{c[1]}\t{c[2]}" for c in fetch]))
+
 def main():
     params = cgi.FieldStorage()
-    insee_com = params['insee'].value
     # insee_com = '75101'
+    insee_com = params['insee'].value
+    format = params.getvalue('format','json')
+    tab = int(params.getvalue('tab',0))
     dept = hp.get_code_dept_from_insee(insee_com)
 
     labels_statuts_fantoir = get_data_from_bano('labels_statuts_fantoir','')
@@ -87,10 +82,17 @@ def main():
     date_cache_highway = '' #get_fin_etape_dept('cache_dept_highway_insee',dept)[0]
     date_cache_highway_relation = ''#get_fin_etape_dept('cache_dept_highway_relation_insee',dept)[0]
 
-    data = [[nom_commune,date_import_cadastre,date_fin_cumul[0],date_fin_cumul[1],date_cache_hsnr,date_cache_highway,date_cache_highway_relation,lon_commune,lat_commune,labels_statuts_fantoir,a_voisins],get_data_from_bano('voies_adresses_non_rapprochees_insee',insee_com),get_data_from_bano('voies_adresses_rapprochees_insee',insee_com),get_data_from_bano('voies_seules_non_rapprochees_insee',insee_com),get_data_from_bano('voies_seules_rapprochees_insee',insee_com),get_data_from_bano('places_non_rapprochees_insee',insee_com),get_data_from_bano('places_rapprochees_insee',insee_com)]
+    data_columns = [get_data_from_bano('voies_adresses_non_rapprochees_insee',insee_com),get_data_from_bano('voies_adresses_rapprochees_insee',insee_com),get_data_from_bano('voies_seules_non_rapprochees_insee',insee_com),get_data_from_bano('voies_seules_rapprochees_insee',insee_com),get_data_from_bano('places_non_rapprochees_insee',insee_com),get_data_from_bano('places_rapprochees_insee',insee_com)]
 
-    a = json.JSONEncoder().encode(data)
-    print('Content-Type: application/json\n')
-    print(a)
+    data = [[nom_commune,date_import_cadastre,date_fin_cumul[0],date_fin_cumul[1],date_cache_hsnr,date_cache_highway,date_cache_highway_relation,lon_commune,lat_commune,labels_statuts_fantoir,a_voisins],*data_columns]
+
+    if format == 'csv':
+        print(f'Content-Type: text/csv\nContent-Disposition: Attachment; filename="insee-{insee_com}-{nom_commune}-onglet {tab}.csv"\n')
+        print(format_csv(data_columns[tab]))
+
+    if format == 'json':
+        print('Content-Type: application/json\n')
+        print(json.JSONEncoder().encode(data))
+
 if __name__ == '__main__':
     main()

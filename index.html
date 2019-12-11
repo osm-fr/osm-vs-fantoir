@@ -120,6 +120,19 @@
 		cursor: default;
 		background-color: lightblue;
 	}
+	#bouton_export_csv{
+		position: fixed;
+		background-color: green;
+		width: 60px;
+		height: 40px;
+		top: 10px;
+		right: 169px;
+	}
+	#bouton_export_csv a{
+		color: white;
+		font-weight: bold;
+		text-decoration: none;
+	}
 	#bouton_refresh{
 		position: fixed;
 		background-image: url("img/72176-600.png");
@@ -291,6 +304,7 @@
 			$('.table_liste').css({display:'none'})
 			$('#'+$(this).attr('cible')).css({display:'block'})
 			update_url_tab($(this).parent().children().index($(this)))
+			update_csv_url($(this).parent().children().index($(this)))
 		})
 		$.ajax({
 			url: "labels_statut_fantoir.py"
@@ -325,6 +339,8 @@
 		$('#table_communes_voisines > .fermer').click(function(){
 			$('#table_communes_voisines').css('visibility','hidden');
 		})
+		update_csv_url(check_url_for_tab)
+
 		$('#bouton_refresh').click(function(){
 								refresh();
 							})
@@ -520,7 +536,12 @@
 					start()
 				})
 			}
+
 			tab = check_url_for_tab()
+
+			// bouton export CSV
+			update_csv_url(tab)
+
 			$('#rubriques tr td')[tab].click()
 			window.location.hash="#insee="+$('#input_insee')[0].value+"&tab="+tab
 			$('body').css('cursor','default');
@@ -574,6 +595,13 @@
 			}
 		}
 		window.location.hash = p1+"&tab="+t+p2
+	}
+	function update_csv_url(tab){
+		$('#bouton_export_csv').empty()
+   		$('#bouton_export_csv').append($('<a>').attr('href',"requete_fantoir.py?insee="+$('#input_insee')[0].value+'&format=csv&tab='+tab)
+			                                   .attr('target','blank')
+			                                   .append('Export\nCSV'))
+
 	}
 	function add_map_link(table,href,text){
 		$('#'+table+' tr:last').append($('<td>')
@@ -690,6 +718,7 @@
 </tbody>
 </table>
 </div>
+<div id="bouton_export_csv" title="Exporter l'onglet courant en CSV"></div>
 <div id="bouton_communes_voisines" title="Communes voisines"></div>
 <!-- <div id="bouton_refresh" title="Mettre à jour les données BANO"></div> -->
 <div id="infobulle_aide" title="Aide">?</div>
@@ -740,7 +769,7 @@
 </div>
 <div id="credits">
 Données FANTOIR : © 2019 Ministère de l'Économie et des Finances (DGFiP) - <a href="http://wiki.data.gouv.fr/wiki/Licence_Ouverte_/_Open_Licence">Licence LO/OL</a> ||||
-Données OpenStreetMap : © les Contributeurs d'OpenStreetMap  <a href="http://opendatacommons.org/licenses/odbl/">Licence ODbL</a> |||| Icône "refresh" par iconsmind.com (the Noun project) ||||
+Données OpenStreetMap : © les Contributeurs d'OpenStreetMap  <a href="http://opendatacommons.org/licenses/odbl/">Licence ODbL</a> |||| <!-- Icône "refresh" par iconsmind.com (the Noun project) |||| -->
 <a href="https://github.com/osm-fr/osm-vs-fantoir/">Code source et signalement de bugs/problèmes/suggestions.</a>
 </div>
 <div id="josm_target" style="visibility : hidden"></div>
