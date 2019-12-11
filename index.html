@@ -122,16 +122,17 @@
 	}
 	#bouton_export_csv{
 		position: fixed;
-		background-color: green;
-		width: 60px;
-		height: 40px;
-		top: 10px;
+		top: 5px;
 		right: 169px;
 	}
 	#bouton_export_csv a{
 		color: white;
 		font-weight: bold;
 		text-decoration: none;
+	}
+	#bouton_export_csv a img{
+		height: 50px;
+		width: 50px;
 	}
 	#bouton_refresh{
 		position: fixed;
@@ -600,7 +601,8 @@
 		$('#bouton_export_csv').empty()
    		$('#bouton_export_csv').append($('<a>').attr('href',"requete_fantoir.py?insee="+$('#input_insee')[0].value+'&format=csv&tab='+tab)
 			                                   .attr('target','blank')
-			                                   .append('Export\nCSV'))
+			                                   .append($('<img>').attr('src','img/export-to-csv-icon-13.jpg')))
+			                                   // .append('Export\nCSV'))
 
 	}
 	function add_map_link(table,href,text){
