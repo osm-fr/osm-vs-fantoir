@@ -141,9 +141,9 @@
 				$('#table_anomalies').append($('<tbody>'))
 				table = 'table_anomalies'
 				for (l=0;l<data.length;l++){
-					insee = (data[l][1])
+					insee = (data[l][0])
 					//Commune (INSEE)
-					$('#'+table).append($('<tr>').attr('id',data[l][4]).append($('<td>').text(data[l][1]+'('+data[l][0]+')')))
+					$('#'+table).append($('<tr>').attr('id',data[l][4]).append($('<td>').text(data[l][1]+' ('+insee+')')))
 					// $('#'+table+' tr:last').append($('<td>').text(data[l][1]+'('+data[l][0]+')'))
 					//id OSM
 					$('#'+table+' tr:last').append($('<td>').text(data[l][4]))
