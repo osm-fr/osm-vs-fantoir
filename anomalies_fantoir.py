@@ -23,11 +23,12 @@ params = cgi.FieldStorage()
 dept = params['dept'].value
 # dept = '29'
 
-data_point = get_data_from_pg(db.bano_cache,'anomalies_fantoir_point',[['__dept__',dept]])
+data = get_data_from_pg(db.bano_cache,'anomalies_fantoir',[['__dept__',dept]])
+# data = get_data_from_pg(db.bano_cache,'anomalies_fantoir_point',[['__dept__',dept]])
 # data_ligne = get_data(db.bano_cache,'anomalies_fantoir_ligne',[[dept,'__dept__']])
 # data_polygone = get_data(db.bano_cache,'anomalies_fantoir_polygone',[[dept,'__dept__']])
 # data_relation = get_data(db.bano_cache,'anomalies_fantoir_relation',[[dept,'__dept__']])
 
 print("Content-Type: application/json\n")
 
-print(json.JSONEncoder().encode(data_point))
+print(json.JSONEncoder().encode(data))

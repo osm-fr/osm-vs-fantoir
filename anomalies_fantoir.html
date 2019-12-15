@@ -130,11 +130,11 @@
 			.done(function( data ){
 				$('body').css('cursor','default');
 				if (data.length == 0) {
-					$('#bandeau h2').text('Aucune anomalie de code FANTOIR sur les nodes OSM')
+					$('#bandeau h2').text('Aucune anomalie de code FANTOIR sur les nodes & ways OSM')
 				} else if (data.length == 1){
-					$('#bandeau h2').text('1 seul code FANTOIR porté par un node OSM et inconnu de la source FANTOIR')
+					$('#bandeau h2').text('1 seul code FANTOIR porté par un node ou way OSM et inconnu de la source FANTOIR')
 				} else {
-					$('#bandeau h2').text(data.length+' codes FANTOIR portés par des nodes OSM et inconnus de la source FANTOIR')
+					$('#bandeau h2').text(data.length+' codes FANTOIR portés par des nodes & ways OSM et inconnus de la source FANTOIR')
 				}
 				$('#table_anomalies').empty()
 
@@ -174,7 +174,7 @@
 						add_map_link(table,url_map_fr_part1+url_ol_part2,'FR')
 						add_map_link(table,url_bano_part1+'#'+url_hash_coords,'BANO')
 					//JOSM
-						add_josm_link(table,'n',data[l][4])
+						add_josm_link(table,data[l][4])
 					//ID
 						add_map_link(table,url_edit_part1+'id#map='+url_hash_coords,'ID')
 					//Potlatch
@@ -197,13 +197,12 @@
 									.attr('target','blank')
 									.text(text)))	
 	}
-	function add_josm_link(table,geom,id){
+	function add_josm_link(table,id){
 		$('#'+table+' tr:last').append($('<td>')
 									.addClass('zone_click')
-									// .attr('xleft',xl).attr('xright',xr).attr('ybottom',yb).attr('ytop',yt)
 									.text('JOSM')
 									.click(function(){
-										srcLoadObject = 'http://127.0.0.1:8111/load_object?objects='+geom+id;
+										srcLoadObject = 'http://127.0.0.1:8111/load_object?objects='+id;
 										$('<img>').appendTo($('#josm_target')).attr('src',srcLoadObject);
 										$(this).addClass('clicked');
 									})
