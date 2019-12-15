@@ -129,6 +129,13 @@
 			})
 			.done(function( data ){
 				$('body').css('cursor','default');
+				if (data.length == 0) {
+					$('#bandeau h2').text('Aucune anomalie de code FANTOIR sur les nodes OSM')
+				} else if (data.length == 1){
+					$('#bandeau h2').text('1 seul code FANTOIR porté par un node OSM et inconnu de la source FANTOIR')
+				} else {
+					$('#bandeau h2').text(data.length+' codes FANTOIR portés par des nodes OSM et inconnus de la source FANTOIR')
+				}
 				$('#table_anomalies').empty()
 
 				url_map_org_part1 = 'http://www.openstreetmap.org/'
@@ -140,6 +147,7 @@
 				add_header('table_anomalies',true)
 				$('#table_anomalies').append($('<tbody>'))
 				table = 'table_anomalies'
+
 				for (l=0;l<data.length;l++){
 					insee = (data[l][0])
 					//Commune (INSEE)
@@ -220,7 +228,7 @@
 	<input type="text" id="input_dept" placeholder="N° de département"></input>
 	<input type="submit" value="Afficher">
 	</form>
-<h2>Codes FANTOIR portés par des nodes OSM et inconnus de la source FANTOIR</h2>
+<h2></h2>
 <!--div id="pied_de_page"></div-->
 </div>
 
@@ -230,7 +238,7 @@
 </div>
 <div id="credits">
 Données OpenStreetMap : © les Contributeurs d'OpenStreetMap  <a href="http://opendatacommons.org/licenses/odbl/">Licence ODbL</a>
- - Données FANTOIR : © 2015 Ministère de l'Économie et des Finances (DGFiP) - <a href="http://wiki.data.gouv.fr/wiki/Licence_Ouverte_/_Open_Licence">Licence LO/OL</a>
+ - Données FANTOIR : © 2019 Ministère de l'Économie et des Finances (DGFiP) - <a href="http://wiki.data.gouv.fr/wiki/Licence_Ouverte_/_Open_Licence">Licence LO/OL</a>
 </div>
 <div id="josm_target" style="visibility : hidden"></div>
 <div id="wait_ajax"></div>
