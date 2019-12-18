@@ -202,7 +202,7 @@
 									.addClass('zone_click')
 									.text('JOSM')
 									.click(function(){
-										srcLoadObject = 'http://127.0.0.1:8111/load_object?objects='+id;
+										srcLoadObject = 'http://127.0.0.1:8111/load_object?objects='+id+'&referrers=true';
 										$('<img>').appendTo($('#josm_target')).attr('src',srcLoadObject);
 										$(this).addClass('clicked');
 									})
