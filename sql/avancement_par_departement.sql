@@ -8,7 +8,7 @@ GROUP BY 1),
 pop2017
 AS
 (SELECT dep,
-        count(*) nb_com_ok
+        count(distinct insee_com) nb_com_ok
 FROM population_insee p
 JOIN infos_communes i
 USING (insee_com,population)
