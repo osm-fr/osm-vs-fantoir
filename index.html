@@ -11,7 +11,7 @@
 	#bandeau{
 		top:0px;
 		width:100%;
-		height:210px;
+		height:240px;
 		z-index:3;
 		position:fixed;
 		background-color:white;
@@ -41,7 +41,7 @@
 	}
 	#reponse{
 		position:absolute;
-		top:230px;
+		top:240px;
 		z-index:2;
 	}
 	.emphase{
@@ -218,7 +218,7 @@
 		margin-bottom: 10px;
 		margin-left: 3px;
 	}
-	#rub_adresses_non_match.active,#rub_voies_fantoir_non_match.active,#rub_places_non_match.active{
+	#rub_adresses_non_match.active,#rub_voies_fantoir_non_match.active,#rub_places_non_match.active,#rub_OSM_non_match.active{
 		background:lightgrey;
 	}
 	#rub_adresses_match.active,#rub_voies_match.active,#rub_places_match.active{
@@ -229,23 +229,19 @@
 	#table_adresses_non_match tr td,
 	#table_voies_fantoir_non_match tr td,
 	#table_places_non_match tr td,
-	#table_places_match tr td{
+	#table_places_match tr td,
+	#table_OSM_non_match tr td{
 		background:lightgrey;
 		color:grey;
 		font-weight: bold;
 	}
-/*	#table_places_non_match tr.statut0 td.ld_habite,
-	#table_places_match tr.statut0 td.ld_habite{
-		background-image: url("img/ld_habite.png");
-		background-size: 15px 12px;
-		background-repeat: no-repeat;
-	}
-*/	#table_voies_match tr.statut0 td,
+	#table_voies_match tr.statut0 td,
 	#table_adresses_match tr.statut0 td,
 	#table_places_match tr.statut0 td,
 	#table_adresses_non_match tr.statut0 td,
 	#table_voies_fantoir_non_match tr.statut0 td,
-	#table_places_non_match tr.statut0 td{
+	#table_places_non_match tr.statut0 td,
+	#table_OSM_non_match tr.statut0 td{
 		background:white;
 		color:black;
 		font-weight: normal;
@@ -255,7 +251,8 @@
 	#table_places_match tr.statut0 td.clicked,
 	#table_adresses_non_match tr.statut0 td.clicked,
 	#table_voies_fantoir_non_match tr.statut0 td.clicked,
-	#table_places_non_match tr.statut0 td.clicked{
+	#table_places_non_match tr.statut0 td.clicked,
+	#table_OSM_non_match tr.statut0 td.clicked{
 		background-color:green;
 		color:white;
 		font-weight: normal;
@@ -269,7 +266,8 @@
 	}
 	#table_adresses_non_match tr.statut0 td.cell_fantoir,
 	#table_voies_fantoir_non_match tr.statut0 td.cell_fantoir,
-	#table_places_non_match tr.statut0 td.cell_fantoir{
+	#table_places_non_match tr.statut0 td.cell_fantoir,
+	#table_OSM_non_match tr.statut0 td.cell_fantoir{
 		background:lightgrey;
 		color:black;
 		font-weight: normal;
@@ -407,6 +405,7 @@
 		$('#table_voies_match').empty()
 		$('#table_places_non_match').empty()
 		$('#table_places_match').empty()
+		$('#table_OSM_non_match').empty()
 		$.ajax({
 			url: "requete_fantoir.py?insee="+$('#input_insee')[0].value
 		})
@@ -426,6 +425,7 @@
 			voies_fantoir_seules_match = data[4]
 			places_fantoir_non_match = data[5]
 			places_fantoir_match = data[6]
+			voies_OSM_non_match = data[7]
 
 			url_map_org_part1 = 'http://www.openstreetmap.org/'
 			url_map_fr_part1 = 'http://tile.openstreetmap.fr/'
@@ -468,6 +468,7 @@
 			$('#rub_voies_match').empty().text(voies_fantoir_seules_match.length+" voies FANTOIR avec rapprochement OSM")
 			$('#rub_places_non_match').empty().text(places_fantoir_non_match.length+" lieux-dits FANTOIR sans rapprochement OSM")
 			$('#rub_places_match').empty().text(places_fantoir_match.length+" lieux-dits FANTOIR avec rapprochement OSM")
+			$('#rub_OSM_non_match').empty().text(voies_OSM_non_match.length+" voies et emprises OSM inconnues de FANTOIR")
 			$('.table_liste').empty()
 			add_header('table_adresses_non_match',true,false,true)
 			add_header('table_adresses_match',true,false,true)
@@ -475,12 +476,14 @@
 			add_header('table_voies_match',true,false,false)
 			add_header('table_places_non_match',true,false,false)
 			add_header('table_places_match',true,true,false)
+			add_header('table_OSM_non_match',true,false,false)
 			a_data_table = [[voies_fantoir_adresses_non_match,'table_adresses_non_match'],
 							[voies_fantoir_adresses_match,'table_adresses_match'],
 							[voies_fantoir_seules_non_match,'table_voies_fantoir_non_match'],
 							[voies_fantoir_seules_match,'table_voies_match'],
 							[places_fantoir_non_match,'table_places_non_match'],
-							[places_fantoir_match,'table_places_match']]
+							[places_fantoir_match,'table_places_match'],
+							[voies_OSM_non_match,'table_OSM_non_match']]
 			for (s=0;s<a_data_table.length;s++){
 				data = a_data_table[s][0];
 				table = a_data_table[s][1];
@@ -520,7 +523,9 @@
 						$('#'+table+' tr:last').append($('<td>').attr('colspan','6'))
 					}
 					//Statut Fantoir
-					add_statut_fantoir(data[l][5])
+					if (data[l].length > 5){
+						add_statut_fantoir(data[l][5])
+					}
 					if ((s==0|s==1) && data[l][6]){
   					    add_josm_addr_link(table,$('#input_insee')[0].value,data[l][0],data[l][1],data[l][6])
   					}
@@ -749,6 +754,7 @@
 	<tr><th colspan="2" title="Il existe au moins une parcelle avec un numéro d'adresse associé à ces voies.">Voies <span class="emphase">avec</span> adresse(s) numérotée(s)</th>
 		<th colspan="2" title="Il n'existe pas d'adresse avec numéro pour ces voies.">Voies <span class="emphase">sans</span> adresse(s) numérotée(s)</th>
 		<th colspan="2" title="Lieux-dits.">Lieux-dits</th>
+		<th colspan="1" title="Voies uniquement connues d'OSM.">Dans OSM et inconnu de FANTOIR</th>
 	</tr>
 	<tr><td class="rubrique" id="rub_adresses_non_match" cible="table_adresses_non_match"></td>
 		<td class="rubrique" id="rub_adresses_match" cible="table_adresses_match"></td>
@@ -756,6 +762,7 @@
 		<td class="rubrique" id="rub_voies_match" cible="table_voies_match"></td>
 		<td class="rubrique" id="rub_places_non_match" cible="table_places_non_match"></td>
 		<td class="rubrique" id="rub_places_match" cible="table_places_match"></td>
+		<td class="rubrique" id="rub_OSM_non_match" cible="table_OSM_non_match"></td>
 	</tr>
 </table>
 </div>
@@ -767,6 +774,7 @@
 <table id="table_voies_match" class="table_liste"></table>
 <table id="table_places_non_match" class="table_liste"></table>
 <table id="table_places_match" class="table_liste"></table>
+<table id="table_OSM_non_match" class="table_liste"></table>
 <div id="pied_de_page"></div>
 </div>
 <div id="credits">
