@@ -2,7 +2,7 @@ WITH
 dep
 as
 (SELECT dep,
-        count(*) nb_com
+        count(distinct com) nb_com
 FROM    cog_commune 
 GROUP BY 1),
 pop2017
