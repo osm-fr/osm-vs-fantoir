@@ -3,7 +3,8 @@
 <meta charset="UTF-8">
 <title>Correspondance entre FANTOIR et voies OSM</title>
 <script src="js/jquery-2.1.1.min.js"></script>
-<script src="js/jquery.tablesorter.min.js"></script>
+<script src="js/tablesorter/jquery.tablesorter.min.js"></script>
+<link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 <style>
 	body{
 	    font-family: 'courier new', monospace;
@@ -230,7 +231,8 @@
 	#table_voies_fantoir_non_match tr td,
 	#table_places_non_match tr td,
 	#table_places_match tr td,
-	#table_OSM_non_match tr td{
+	#table_OSM_non_match tr td,
+	#table_inspect_adresse tr td{
 		background:lightgrey;
 		color:grey;
 		font-weight: bold;
@@ -241,7 +243,8 @@
 	#table_adresses_non_match tr.statut0 td,
 	#table_voies_fantoir_non_match tr.statut0 td,
 	#table_places_non_match tr.statut0 td,
-	#table_OSM_non_match tr.statut0 td{
+	#table_OSM_non_match tr.statut0 td,
+	#table_inspect_adresse tr.statut0 td{
 		background:white;
 		color:black;
 		font-weight: normal;
@@ -272,6 +275,21 @@
 		color:black;
 		font-weight: normal;
 	}
+	#modal_inspect_adresse{
+		position:fixed;
+		z-index:1;
+		width:100%;
+		height:100%;
+		background-color:lightgray;
+		opacity:0;
+		text-align:center;
+	}
+	#reponse_inspect_adresse {
+		background-color:black;
+		vertical-align:middle;
+		border:50px solid black;
+	}
+
 	#pied_de_page{
 		position:relative;
 		width:100%;
@@ -528,7 +546,11 @@
 					}
 					if ((s==0|s==1) && data[l][6]){
   					    add_josm_addr_link(table,$('#input_insee')[0].value,data[l][0],data[l][1],data[l][6])
+  					    // add_addr_inspector_link(table,$('#input_insee')[0].value,data[l][0],data[l][1])
   					}
+				}
+				if (data.length > 0){
+					$('#'+table).tablesorter();
 				}
 			}
 
@@ -651,8 +673,33 @@
 									})
 								)
 	}
+	function add_addr_inspector_link(table,insee,fantoir,nom_fantoir){
+		$('#'+table+' tr:last').append($('<td>')
+									.addClass('zone_click')
+									.text('Analyser')
+									.click(function(){
+										$.ajax({
+											url: "requete_inspect_numeros.py?insee="+insee+"&fantoir="+fantoir
+										})
+										.done(function( data ) {
+											$('#modal_inspect_adresse').css('z-index','20')
+											                           .css('opacity','0.8');
+											$('#table_inspect_adresse').empty().append($('<tr>').append($('<th>').append('Source')))
+											$('#table_inspect_adresse tr').append($('<th>').append('Numero'))
+											$('#table_inspect_adresse tr').append($('<th>').append('Libellé source'))
+											$('#table_inspect_adresse tr').append($('<th>').append('Libellé OSM'))
+											$('#table_inspect_adresse tr').append($('<th>').append('Statut de l\'adresse'))
+
+
+											console.log(data)
+   											$(this).addClass('clicked');
+										}
+									)}
+	))};
+
 	function add_header(table,with_edit_and_map_links,with_type_osm,with_cadastre_addr_link){
-		$('#'+table).append($('<tr>').append($('<th>').append('Code FANTOIR')))
+		// $('#'+table).append($('<tr>').append($('<th>').append('Code FANTOIR')))
+		$('#'+table).append($('<thead>').append($('<tr>').append($('<th>').append('Code FANTOIR'))))
 		$('#'+table+' tr').append($('<th>').append('Libellé FANTOIR'))
 		if (with_type_osm){
 			$('#'+table+' tr').append($('<th>').append('Type OSM : libellé OSM'))
@@ -665,7 +712,7 @@
 			$('#'+table+' tr').append($('<th>').append('Statut FANTOIR ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
 		}
 		if (with_cadastre_addr_link){
-			$('#'+table+' tr').append($('<th>').attr('colspan','2').append('Adresses à intégrer'))			
+			$('#'+table+' tr').append($('<th>').addClass('string-none').attr('colspan','2').append('Adresses à intégrer'))			
 		}
 	}
 	function add_statut_fantoir(id_statut){
@@ -784,5 +831,10 @@ Données OpenStreetMap : © les Contributeurs d'OpenStreetMap  <a href="http://o
 </div>
 <div id="josm_target" style="visibility : hidden"></div>
 <div id="wait_ajax"></div>
+<div id="modal_inspect_adresse">
+	<div id="reponse_inspect_adresse">
+		<table id="table_inspect_adresse" class="table_inspect"></table>
+	</div>
+</div>
 </body>
 </html>
