@@ -7,7 +7,8 @@ SELECT numero,fantoir FROM cumul_adresses WHERE insee_com = '__com__' and source
 fantoir_numeros_manquants
 AS
 (SELECT DISTINCT fantoir,count(*) AS a_proposer FROM diff_numero_fantoir GROUP BY 1)
-SELECT	f.code_insee||f.id_voie||f.cle_rivoli fantoir,
+SELECT	f.fantoir10,
+		to_char(to_date(f.date_creation,'YYYYDDD'),'YYYY-MM-DD'),
 		nature_voie||' '||libelle_voie voie,
 		'--',
 		st_x(g.geometrie),
@@ -25,7 +26,7 @@ JOIN	(SELECT	fantoir
 		FROM	cumul_adresses
 		WHERE	insee_com = '__com__'	AND
 				source = 'OSM') j
-ON		f.code_insee||f.id_voie||f.cle_rivoli = j.fantoir
+ON		f.fantoir10 = j.fantoir
 JOIN	(SELECT DISTINCT fantoir,
 				FIRST_VALUE(geometrie) OVER(PARTITION BY fantoir) geometrie
 		FROM	cumul_adresses
@@ -33,7 +34,7 @@ JOIN	(SELECT DISTINCT fantoir,
 				source = 'CADASTRE') g
 ON		g.fantoir = j.fantoir
 LEFT OUTER JOIN fantoir_numeros_manquants fm
-ON      f.code_insee||f.id_voie||f.cle_rivoli = fm.fantoir
+ON      f.fantoir10 = fm.fantoir
 LEFT OUTER JOIN	(SELECT fantoir,id_statut
 				FROM 	(SELECT	*,rank() OVER (PARTITION BY fantoir ORDER BY timestamp_statut DESC) rang
 						FROM 	statut_fantoir

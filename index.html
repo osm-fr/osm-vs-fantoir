@@ -2,8 +2,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Correspondance entre FANTOIR et voies OSM</title>
-<script src="js/jquery-2.1.1.min.js"></script>
-<script src="js/tablesorter/jquery.tablesorter.min.js"></script>
+<script src="js/jquery-3.4.1.min.js"></script>
+<script src="js/tablesorter/jquery.tablesorter.js"></script>
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 <style>
 	body{
@@ -507,19 +507,19 @@
 				table = a_data_table[s][1];
 				for (l=0;l<data.length;l++){
 				//Fantoir
-					$('#'+table).append($('<tr>').attr('id',data[l][0]).append($('<td>').addClass('cell_fantoir').text(data[l][0])))
+					$('#'+table+ ' tbody:last').append($('<tr>').attr('id',data[l][0]).append($('<td>').addClass('cell_fantoir').text(data[l][0])))
+				// Date de creation
+					$('#'+table+' tr:last').append($('<td>').text(data[l][1]))
 				//Nom Fantoir
-					if ((table == 'table_places_non_match'||table == 'table_places_match') && (data[l][6] == 0)){
-						// $('#'+table+' tr:last').append($('<td>').append($('<img>').attr('src','img/ld_habite.png'))) //.append(data[l][1])
-						// $('td:last').text(data[l][1])
-						$('#'+table+' tr:last').append($('<td>').append($('<img>').attr('src','img/ld_habite.png').attr('title','Lieu-dit bâti selon FANTOIR')).append($('<span>').text(data[l][1])))
+					if ((table == 'table_places_non_match'||table == 'table_places_match') && (data[l][7] == 0)){
+						$('#'+table+' tr:last').append($('<td>').append($('<img>').attr('src','img/ld_habite.png').attr('title','Lieu-dit bâti selon FANTOIR')).append($('<span>').text(data[l][2])))
 					} else {
-						$('#'+table+' tr:last').append($('<td>').text(data[l][1]))
+						$('#'+table+' tr:last').append($('<td>').text(data[l][2]))
 					}
 				//Nom OSM
-					$('#'+table+' tr:last').append($('<td>').text(data[l][2]))
-					lon = data[l][3]
-					lat = data[l][4]
+					$('#'+table+' tr:last').append($('<td>').text(data[l][3]))
+					lon = data[l][4]
+					lat = data[l][5]
 					if (lon && lat){
 						url_ol_part2 = '?zoom=18&lat='+lat+'&lon='+lon
 						url_hash_coords = '18/'+lat+'/'+lon
@@ -541,15 +541,16 @@
 						$('#'+table+' tr:last').append($('<td>').attr('colspan','6'))
 					}
 					//Statut Fantoir
-					if (data[l].length > 5){
-						add_statut_fantoir(data[l][5])
+					if (data[l].length > 6){
+						add_statut_fantoir(data[l][6])
 					}
-					if ((s==0|s==1) && data[l][6]){
-  					    add_josm_addr_link(table,$('#input_insee')[0].value,data[l][0],data[l][1],data[l][6])
+					if ((s==0|s==1) && data[l][7]){
+  					    add_josm_addr_link(table,$('#input_insee')[0].value,data[l][0],data[l][2],data[l][7])
   					    // add_addr_inspector_link(table,$('#input_insee')[0].value,data[l][0],data[l][1])
   					}
 				}
 				if (data.length > 0){
+					$('#'+table).trigger("resetToLoadState");
 					$('#'+table).tablesorter();
 				}
 			}
@@ -700,6 +701,7 @@
 	function add_header(table,with_edit_and_map_links,with_type_osm,with_cadastre_addr_link){
 		// $('#'+table).append($('<tr>').append($('<th>').append('Code FANTOIR')))
 		$('#'+table).append($('<thead>').append($('<tr>').append($('<th>').append('Code FANTOIR'))))
+		$('#'+table+' tr').append($('<th>').append('Date de création FANTOIR'))
 		$('#'+table+' tr').append($('<th>').append('Libellé FANTOIR'))
 		if (with_type_osm){
 			$('#'+table+' tr').append($('<th>').append('Type OSM : libellé OSM'))
@@ -714,6 +716,7 @@
 		if (with_cadastre_addr_link){
 			$('#'+table+' tr').append($('<th>').addClass('string-none').attr('colspan','2').append('Adresses à intégrer'))			
 		}
+		$('#'+table).append($('<tbody>'))
 	}
 	function add_statut_fantoir(id_statut){
 		$('#'+table+' tr:last').removeClass().addClass('statut'+id_statut)
@@ -742,7 +745,7 @@
 				console.log('Telecommande JOSM OK')
 			}
 		})
-		.error(function(data){
+		.fail(function(data){
 			alert("La telecommande JOSM ne répond pas.\nCertains liens sur la page nécessitent que JOSM soit démarré avec la télécommande activée\n\nPour de l'aide sur la télécommande : https://josm.openstreetmap.de/wiki/Help/Preferences/RemoteControl")
 		})
 	}

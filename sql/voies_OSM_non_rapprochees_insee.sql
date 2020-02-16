@@ -1,5 +1,6 @@
 SELECT	'--'::text AS Fantoir,
         '--'::text AS voie_fantoir,
+        '--'::text AS date_creation,
         c.voie_osm,
 		ST_X(c.geometrie),
 		ST_Y(c.geometrie),

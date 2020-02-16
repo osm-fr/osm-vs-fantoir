@@ -1,13 +1,27 @@
 WITH
+qualif_adresse
+AS
+(SELECT numero,fantoir,id_statut
+				FROM 	(SELECT	*,rank() OVER (PARTITION BY numero,fantoir ORDER BY timestamp_statut DESC) rang
+						FROM 	statut_adresse
+						WHERE	insee_com = '__com__')r
+				WHERE	rang = 1),
 diff_numero_fantoir
 AS
-(SELECT numero,fantoir FROM cumul_adresses WHERE insee_com = '__com__' and source = 'CADASTRE'
+(SELECT numero,fantoir 
+ FROM   cumul_adresses c
+ LEFT OUTER JOIN qualif_adresse q
+ USING  (numero,fantoir)
+ WHERE  c.insee_com = '__com__' AND
+        source = 'CADASTRE' AND
+        COALESCE(q.id_statut,0) = 0
 EXCEPT
 SELECT numero,fantoir FROM cumul_adresses WHERE insee_com = '__com__' and source = 'OSM'),
 fantoir_numeros_manquants
 AS
 (SELECT DISTINCT fantoir,count(*) AS a_proposer FROM diff_numero_fantoir GROUP BY 1)
 SELECT	f.fantoir10 fantoir,
+		to_char(to_date(f.date_creation,'YYYYDDD'),'YYYY-MM-DD'),
 		nature_voie||' '||libelle_voie voie,
 		j.voie_osm,
 		st_x(g.geometrie),
