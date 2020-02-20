@@ -4,6 +4,8 @@
 <title>Correspondance entre FANTOIR et voies OSM</title>
 <script src="js/jquery-3.4.1.min.js"></script>
 <script src="js/tablesorter/jquery.tablesorter.js"></script>
+<!-- <script src="js/tablesorter/parsers/parser-input-select.min.js"></script> -->
+<!-- <script src="js/tablesorter/widgets/widget-filter.min.js"></script> -->
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 <style>
 	body{
@@ -544,8 +546,12 @@
 					if (data[l].length > 6){
 						add_statut_fantoir(data[l][6])
 					}
-					if ((s==0|s==1) && data[l][7]){
+					if ((s==0) && data[l][7]){
   					    add_josm_addr_link(table,$('#input_insee')[0].value,data[l][0],data[l][2],data[l][7])
+  					    // add_addr_inspector_link(table,$('#input_insee')[0].value,data[l][0],data[l][1])
+  					}
+					if ((s==1) && data[l][7]){
+  					    add_josm_addr_link(table,$('#input_insee')[0].value,data[l][0],data[l][3],data[l][7])
   					    // add_addr_inspector_link(table,$('#input_insee')[0].value,data[l][0],data[l][1])
   					}
 				}
