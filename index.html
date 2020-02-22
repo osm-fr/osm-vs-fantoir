@@ -277,21 +277,46 @@
 		color:black;
 		font-weight: normal;
 	}
-	#modal_inspect_adresse{
+	#mask_inspect_adresse{
 		position:fixed;
-		z-index:1;
+		top:0px;
+		left: 0px;
+		z-index:10;
 		width:100%;
 		height:100%;
 		background-color:lightgray;
-		opacity:0;
 		text-align:center;
+		display: none;
 	}
-	#reponse_inspect_adresse {
-		background-color:black;
+	#modal_inspect_adresse{
+		position:absolute;
+		top:0px;
+		z-index:20;
+        left: 10%;
+		width:80%;
+		height:100%;
+		background-color:lightgray;
+		text-align:center;
+		display: none;
+	}
+	#titre_inspect_adresse {
+		background-color:white;
 		vertical-align:middle;
-		border:50px solid black;
+        left: 10%;
+		width:80%;
+		height: 50px;
+		/*border:50px solid black;*/
+		position:fixed;
+		z-index: 24;
 	}
-
+	#table_inspect_adresse{
+		overflow-y: scroll;
+		position: relative;
+		z-index: 21;
+		top: 50px;
+		left: 10%;
+		width: 80%;
+	}
 	#pied_de_page{
 		position:relative;
 		width:100%;
@@ -490,13 +515,13 @@
 			$('#rub_places_match').empty().text(places_fantoir_match.length+" lieux-dits FANTOIR avec rapprochement OSM")
 			$('#rub_OSM_non_match').empty().text(voies_OSM_non_match.length+" voies et emprises OSM inconnues de FANTOIR")
 			$('.table_liste').empty()
-			add_header('table_adresses_non_match',true,false,true)
-			add_header('table_adresses_match',true,false,true)
-			add_header('table_voies_fantoir_non_match',true,false,false)
-			add_header('table_voies_match',true,false,false)
-			add_header('table_places_non_match',true,false,false)
-			add_header('table_places_match',true,true,false)
-			add_header('table_OSM_non_match',true,false,false)
+			add_header('table_adresses_non_match',true,false,true,true)
+			add_header('table_adresses_match',true,false,true,true)
+			add_header('table_voies_fantoir_non_match',true,false,false,true)
+			add_header('table_voies_match',true,false,false,true)
+			add_header('table_places_non_match',true,false,false,true)
+			add_header('table_places_match',true,true,false,true)
+			add_header('table_OSM_non_match',true,false,false,false)
 			a_data_table = [[voies_fantoir_adresses_non_match,'table_adresses_non_match'],
 							[voies_fantoir_adresses_match,'table_adresses_match'],
 							[voies_fantoir_seules_non_match,'table_voies_fantoir_non_match'],
@@ -504,12 +529,16 @@
 							[places_fantoir_non_match,'table_places_non_match'],
 							[places_fantoir_match,'table_places_match'],
 							[voies_OSM_non_match,'table_OSM_non_match']]
+			global_ligne_id = 1000;
 			for (s=0;s<a_data_table.length;s++){
 				data = a_data_table[s][0];
 				table = a_data_table[s][1];
+				with_statut_fantoir = eval($('#'+table).attr('with_statut_fantoir'))
 				for (l=0;l<data.length;l++){
+					global_ligne_id+=1;
+					fantoir = data[l][0]
 				//Fantoir
-					$('#'+table+ ' tbody:last').append($('<tr>').attr('id',data[l][0]).append($('<td>').addClass('cell_fantoir').text(data[l][0])))
+					$('#'+table+ ' tbody:last').append($('<tr>').attr('id',global_ligne_id).append($('<td>').addClass('cell_fantoir').text(fantoir)))
 				// Date de creation
 					$('#'+table+' tr:last').append($('<td>').text(data[l][1]))
 				//Nom Fantoir
@@ -543,15 +572,17 @@
 						$('#'+table+' tr:last').append($('<td>').attr('colspan','6'))
 					}
 					//Statut Fantoir
-					if (data[l].length > 6){
-						add_statut_fantoir(data[l][6])
+					if (with_statut_fantoir){
+						add_statut_fantoir(global_ligne_id,fantoir,data[l][6])
+					} else {
+						$('tr:last').addClass('statut0')
 					}
 					if ((s==0) && data[l][7]){
-  					    add_josm_addr_link(table,$('#input_insee')[0].value,data[l][0],data[l][2],data[l][7])
+  					    add_josm_addr_link(table,$('#input_insee')[0].value,fantoir,data[l][2],data[l][7])
   					    // add_addr_inspector_link(table,$('#input_insee')[0].value,data[l][0],data[l][1])
   					}
 					if ((s==1) && data[l][7]){
-  					    add_josm_addr_link(table,$('#input_insee')[0].value,data[l][0],data[l][3],data[l][7])
+  					    add_josm_addr_link(table,$('#input_insee')[0].value,fantoir,data[l][3],data[l][7])
   					    // add_addr_inspector_link(table,$('#input_insee')[0].value,data[l][0],data[l][1])
   					}
 				}
@@ -689,23 +720,35 @@
 											url: "requete_inspect_numeros.py?insee="+insee+"&fantoir="+fantoir
 										})
 										.done(function( data ) {
-											$('#modal_inspect_adresse').css('z-index','20')
-											                           .css('opacity','0.8');
-											$('#table_inspect_adresse').empty().append($('<tr>').append($('<th>').append('Source')))
+											$('#mask_inspect_adresse').css('display','block');
+											$('#modal_inspect_adresse').css('display','block');
+											$('#table_inspect_adresse').empty().append($('<thead>').append($('<tr>').append($('<th>').append('Source'))))
 											$('#table_inspect_adresse tr').append($('<th>').append('Numero'))
 											$('#table_inspect_adresse tr').append($('<th>').append('Libellé source'))
 											$('#table_inspect_adresse tr').append($('<th>').append('Libellé OSM'))
 											$('#table_inspect_adresse tr').append($('<th>').append('Statut de l\'adresse'))
+											$('#table_inspect_adresse').append($('<tbody>'))
+											for (l=0;l<data.length;l++){
+												$('#table_inspect_adresse tbody:last').append($('<tr>').attr('id',data[l][0]).append($('<td>').addClass('cell_fantoir').text(data[l][0])))
+												$('#table_inspect_adresse tr:last').append($('<td>').text(data[l][1]))
+												$('#table_inspect_adresse tr:last').append($('<td>').text(data[l][2]))
+												$('#table_inspect_adresse tr:last').append($('<td>').text(data[l][3]))
+												$('#table_inspect_adresse tr:last').append($('<td>').text(data[l][4]))
+												$('#table_inspect_adresse tr:last').removeClass().addClass('statut'+data[l][4])
+											}
+											$('#table_inspect_adresse').trigger("resetToLoadState");
+											$('#table_inspect_adresse').tablesorter();
 
 
-											console.log(data)
+											// console.log(data)
    											$(this).addClass('clicked');
 										}
 									)}
 	))};
 
-	function add_header(table,with_edit_and_map_links,with_type_osm,with_cadastre_addr_link){
+	function add_header(table,with_edit_and_map_links,with_type_osm,with_cadastre_addr_link,with_statut_fantoir){
 		// $('#'+table).append($('<tr>').append($('<th>').append('Code FANTOIR')))
+		$('#'+table).attr('with_statut_fantoir',with_statut_fantoir)
 		$('#'+table).append($('<thead>').append($('<tr>').append($('<th>').append('Code FANTOIR'))))
 		$('#'+table+' tr').append($('<th>').append('Date de création FANTOIR'))
 		$('#'+table+' tr').append($('<th>').append('Libellé FANTOIR'))
@@ -717,6 +760,8 @@
 		if (with_edit_and_map_links){
 			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Cartes'))
 			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Édition'))
+		}
+		if (with_statut_fantoir){
 			$('#'+table+' tr').append($('<th>').append('Statut FANTOIR ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
 		}
 		if (with_cadastre_addr_link){
@@ -724,10 +769,9 @@
 		}
 		$('#'+table).append($('<tbody>'))
 	}
-	function add_statut_fantoir(id_statut){
+	function add_statut_fantoir(id_ligne,fantoir,id_statut){
 		$('#'+table+' tr:last').removeClass().addClass('statut'+id_statut)
 		$('#'+table+' tr:last').append($('<td>').append($(a_menus_labels[id_statut]).change(function() {
-			fantoir = (($(this).parents('tr'))[0].id);
 			insee = fantoir.substr(0,5);
 			statut = $(this)[0].value;
 			$.ajax({
@@ -735,7 +779,7 @@
 			})
 			.done(function( data ) {
 				if(data == statut){
-					$('tr#'+fantoir).removeClass().addClass('statut'+statut)
+					$('tr#'+id_ligne).removeClass().addClass('statut'+statut)
 				} else {
 					alert("Souci lors de la mise à jour du statut. Le nouveau statut n'a pas été pris en compte")
 				}
@@ -840,10 +884,17 @@ Données OpenStreetMap : © les Contributeurs d'OpenStreetMap  <a href="http://o
 </div>
 <div id="josm_target" style="visibility : hidden"></div>
 <div id="wait_ajax"></div>
+<div id="mask_inspect_adresse"></div>
 <div id="modal_inspect_adresse">
-	<div id="reponse_inspect_adresse">
-		<table id="table_inspect_adresse" class="table_inspect"></table>
-	</div>
+    <div class="fermer">X</div>
+	<div id="titre_inspect_adresse"><h1>Titre</h1></div>
+	<table id="table_inspect_adresse"></table>
 </div>
+<script>
+	$('#modal_inspect_adresse > .fermer').click(function(){
+		$('#mask_inspect_adresse').css('display','none');
+		$('#modal_inspect_adresse').css('display','none');
+	})
+</script>
 </body>
 </html>
