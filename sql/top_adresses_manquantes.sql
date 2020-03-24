@@ -9,10 +9,16 @@ WHERE   voie_cadastre IS NOT NULL AND
         fantoir IS NOT NULL AND
         dept = '__dept__'
 EXCEPT
-SELECT insee_com,
+(SELECT insee_com,
 	    fantoir
 FROM    cumul_voies
-WHERE   dept = '__dept__'),
+WHERE   dept = '__dept__'
+UNION
+SELECT  insee_com,
+	    fantoir
+FROM    cumul_adresses
+WHERE   voie_osm IS NOT NULL AND
+        dept = '__dept__')),
 -- Voies avec max adresses ---------------
 max
 AS
