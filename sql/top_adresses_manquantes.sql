@@ -3,11 +3,14 @@ WITH
 fantoir
 AS
 (SELECT insee_com,
-	    fantoir
-FROM    cumul_adresses
+	    c.fantoir
+FROM    cumul_adresses c
+-- JOIN    fantoir_voie f
+-- ON      c.fantoir = fantoir10
 WHERE   voie_cadastre IS NOT NULL AND
-        fantoir IS NOT NULL AND
-        dept = '__dept__'
+        c.fantoir IS NOT NULL AND
+        -- f.type_voie in ('1','2') AND
+        c.dept = '__dept__'
 EXCEPT
 (SELECT insee_com,
 	    fantoir
@@ -31,7 +34,7 @@ JOIN    fantoir
 USING (fantoir)
 GROUP BY 1,2,3
 ORDER BY 4 DESC
-LIMIT 150),
+LIMIT 200),
 -- statut FANTOIR ---------------------
 statut
 AS
@@ -74,4 +77,4 @@ ON		max.fantoir = l.fantoir
 WHERE	l.fantoir IS NULL	AND
 		cog.dep = '__dept__'
 ORDER BY a_proposer DESC
-LIMIT 100;
+LIMIT 200;
