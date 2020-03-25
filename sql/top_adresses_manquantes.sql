@@ -21,6 +21,12 @@ SELECT  insee_com,
 	    fantoir
 FROM    cumul_adresses
 WHERE   voie_osm IS NOT NULL AND
+        dept = '__dept__'
+UNION
+SELECT  insee_com,
+	    fantoir
+FROM    cumul_places
+WHERE   libelle_osm IS NOT NULL AND
         dept = '__dept__')),
 -- Voies avec max adresses ---------------
 max
