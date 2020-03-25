@@ -38,6 +38,7 @@ AS
 FROM    cumul_adresses c
 JOIN    fantoir
 USING (fantoir)
+WHERE   c.voie_cadastre IS NOT NULL
 GROUP BY 1,2,3
 ORDER BY 4 DESC
 LIMIT 200),
