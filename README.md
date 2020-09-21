@@ -1,10 +1,10 @@
 osm-vs-fantoir
 ==============
 
-Code utilisé à http://cadastre.openstreetmap.fr/fantoir/
+Code utilisé à https://bano.openstreetmap.fr/fantoir/
 
 Confrontation des données FANTOIR et du contenu OSM utilisé dans BANO
 
 Visualisation sous forme de listes
 
-branche BANO v2 en test/quasi stable sur https://dev.cadastre.openstreetmap.fr/fantoir/ avec des données + à jour
+*La branche active est https://github.com/osm-fr/osm-vs-fantoir/tree/bano_v2*
