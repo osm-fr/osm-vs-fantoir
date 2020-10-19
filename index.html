@@ -517,7 +517,7 @@
 			$('.table_liste').empty()
 			add_header('table_adresses_non_match',true,false,true,true)
 			add_header('table_adresses_match',true,false,true,true)
-			add_header('table_voies_fantoir_non_match',true,false,false,true)
+			add_header('table_voies_fantoir_non_match',false,false,false,true)
 			add_header('table_voies_match',true,false,false,true)
 			add_header('table_places_non_match',true,false,false,true)
 			add_header('table_places_match',true,true,false,true)
@@ -534,6 +534,7 @@
 				data = a_data_table[s][0];
 				table = a_data_table[s][1];
 				with_statut_fantoir = eval($('#'+table).attr('with_statut_fantoir'))
+				with_edit_and_map_links = eval($('#'+table).attr('with_edit_and_map_links'))
 				for (l=0;l<data.length;l++){
 					global_ligne_id+=1;
 					fantoir = data[l][0]
@@ -551,7 +552,7 @@
 					$('#'+table+' tr:last').append($('<td>').text(data[l][3]))
 					lon = data[l][4]
 					lat = data[l][5]
-					if (lon && lat){
+					if (with_edit_and_map_links && lon && lat){
 						url_ol_part2 = '?zoom=18&lat='+lat+'&lon='+lon
 						url_hash_coords = '18/'+lat+'/'+lon
 						xleft	= lon-delta
@@ -568,8 +569,8 @@
 						add_map_link(table,url_edit_part1+'id#map='+url_hash_coords,'ID')
 					//Potlatch
 						add_map_link(table,url_edit_part1+'potlatch2#map='+url_hash_coords,'P2')
-					} else {
-						$('#'+table+' tr:last').append($('<td>').attr('colspan','6'))
+					// } else {
+					// 	$('#'+table+' tr:last').append($('<td>').attr('colspan','6'))
 					}
 					//Statut Fantoir
 					if (with_statut_fantoir){
@@ -748,6 +749,7 @@
 
 	function add_header(table,with_edit_and_map_links,with_type_osm,with_cadastre_addr_link,with_statut_fantoir){
 		// $('#'+table).append($('<tr>').append($('<th>').append('Code FANTOIR')))
+		$('#'+table).attr('with_edit_and_map_links',with_edit_and_map_links)
 		$('#'+table).attr('with_statut_fantoir',with_statut_fantoir)
 		$('#'+table).append($('<thead>').append($('<tr>').append($('<th>').append('Code FANTOIR'))))
 		$('#'+table+' tr').append($('<th>').append('Date de création FANTOIR'))
