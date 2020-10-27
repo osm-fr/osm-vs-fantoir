@@ -32,3 +32,23 @@ VALUES (0,0,'Ok'),
 (15,7,'Voie doublon (même type et même nom)'),
 (16,11,'Nom tronqué'),
 (17,16,'Erreur de commune');
+
+CREATE TABLE statut_adresse (
+    numero text,
+    fantoir character (10),
+    source text,
+    id_statut integer,
+    timestamp_statut double precision,
+    insee_com character(5));
+CREATE INDEX idx_statut_adresse_insee ON statut_adresse(insee_com);
+
+CREATE TABLE labels_statuts_adresse(
+    id_statut integer primary key,
+    tri integer default 0,
+    label_statut character varying(200)
+);
+
+INSERT INTO labels_statuts_adresse (id_statut,tri,label_statut)
+VALUES (0,0,'Ok'),
+(1,1,'Adresse fictive'),
+(2,2,'Adresse invisible sur le terrain');
