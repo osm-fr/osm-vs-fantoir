@@ -1,11 +1,18 @@
-with f as
-(select fantoir from cumul_voies where fantoir != ''
-except
-SELECT	code_insee||id_voie||cle_rivoli fantoir
+WITH
+f
+AS
+(SELECT fantoir
+ FROM   cumul_voies
+ WHERE fantoir != ''
+EXCEPT
+SELECT  fantoir10
 FROM	fantoir_voie)
-select v.fantoir,v.voie_osm,st_x(v.geometrie),st_y(v.geometrie)
-from cumul_voies v
-join f
-on v.fantoir = f.fantoir
-order by 1
+SELECT v.fantoir,
+       v.voie_osm,
+       ST_X(v.geometrie),
+       ST_Y(v.geometrie)
+FROM   cumul_voies v
+JOIN   f
+USING  (fantoir)
+ORDER BY 1
 
