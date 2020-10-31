@@ -20,21 +20,21 @@ WHERE	insee_com like '__dept__%'
 UNION
 SELECT	fantoir FROM cumul_adresses
 WHERE	insee_com like '__dept__%'	AND
-		(source='OSM' OR (source='CADASTRE' AND COALESCE(voie_osm,'')!='')))),
--- Géometrie des voies du Cadastre ----
+		(source='OSM' OR (source='BAN' AND COALESCE(voie_osm,'')!='')))),
+-- Géometrie des voies BAN ----
 -- 1 point adresse arbitraire ---------
 c AS
 (SELECT DISTINCT SUBSTR(fantoir,1,9) fantoir,
-		voie_cadastre,
+		voie_autre,
 		FIRST_VALUE(geometrie) OVER(PARTITION BY fantoir) geometrie
 FROM		cumul_adresses
-WHERE		source = 'CADASTRE' AND
+WHERE		source = 'BAN' AND
 		insee_com like '__dept__%'),
 -- Assemblage -------------------------
 d AS
 (SELECT f.*,
 	co.nom_com commune,
-	c.voie_cadastre,
+	c.voie_autre,
 	c.geometrie,
 	RANK() OVER(PARTITION BY 1 ORDER BY date_creation DESC,random()) rang
 FROM	fantoir_voie f
@@ -57,7 +57,7 @@ WHERE rang < 250)
 SELECT	CASE WHEN e.code_dept = '97' THEN SUBSTR(e.code_insee,1,3) ELSE e.code_dept END dept,
 	e.code_insee,
 	e.commune,
-	e.voie_cadastre,
+	e.voie_autre,
 	e.fantoir||e.cle_rivoli fantoir,
 	st_x(e.geometrie),
 	st_y(e.geometrie),

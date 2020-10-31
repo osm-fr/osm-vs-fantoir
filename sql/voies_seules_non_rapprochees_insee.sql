@@ -9,7 +9,7 @@ FROM	fantoir_voie f
 LEFT OUTER JOIN	(SELECT	fantoir
 				FROM	cumul_adresses
 				WHERE	insee_com = '__com__'	AND
-						source in ('OSM','CADASTRE')
+						source in ('OSM','BAN')
 				UNION
 				SELECT	fantoir
 				FROM	cumul_voies

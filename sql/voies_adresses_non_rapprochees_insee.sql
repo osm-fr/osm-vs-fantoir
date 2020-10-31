@@ -1,7 +1,7 @@
 WITH
 diff_numero_fantoir
 AS
-(SELECT numero,fantoir FROM cumul_adresses WHERE insee_com = '__com__' and source = 'CADASTRE'
+(SELECT numero,fantoir FROM cumul_adresses WHERE insee_com = '__com__' and source = 'BAN'
 EXCEPT
 SELECT numero,fantoir FROM cumul_adresses WHERE insee_com = '__com__' and source = 'OSM'),
 fantoir_numeros_manquants
@@ -19,7 +19,7 @@ FROM	fantoir_voie f
 JOIN	(SELECT	fantoir
 		FROM	cumul_adresses
 		WHERE	insee_com = '__com__'	AND
-				source = 'CADASTRE'		AND
+				source = 'BAN'		AND
 				COALESCE(voie_osm,'') = ''
 		EXCEPT
 		SELECT	fantoir
@@ -31,7 +31,7 @@ JOIN	(SELECT DISTINCT fantoir,
 				FIRST_VALUE(geometrie) OVER(PARTITION BY fantoir) geometrie
 		FROM	cumul_adresses
 		WHERE	insee_com = '__com__' AND
-				source = 'CADASTRE') g
+				source = 'BAN') g
 ON		g.fantoir = j.fantoir
 LEFT OUTER JOIN fantoir_numeros_manquants fm
 ON      f.fantoir10 = fm.fantoir
