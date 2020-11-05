@@ -34,7 +34,7 @@ def get_OSM_relation_id_by_name_and_position_as_GeoJSON(name,GeoJSON_positions):
 def get_empty_OSM_XML():
     x = BeautifulSoup('<osm>','xml')
     x.osm['version'] = 0.6
-    x.osm['generator'] = 'https://dev.cadastre.openstreetmap.fr/fantoir/'
+    x.osm['generator'] = 'https://bano.openstreetmap.fr/fantoir/'
     x.osm['copyright'] = 'OpenStreetMap and contributors'
     x.osm['attribution'] = 'http://www.openstreetmap.org/copyright'
     x.osm['license'] = 'http://opendatacommons.org/licenses/odbl/1-0/'
