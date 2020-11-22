@@ -33,7 +33,7 @@ def get_batch_infos_etape_commune(etape,insee_com):
                                 date_fin
                          FROM   batch
                          WHERE  etape = '{etape}'   AND
-                                source in ('OSM','CADASTRE') AND
+                                source in ('OSM','BAN') AND
                                 insee_com = '{insee_com}'
                          ORDER BY source;""")
         return conn.fetchall()
