@@ -456,14 +456,11 @@
 		})
 		.done(function( data ) {
 			nom_commune = data[0][0]
-			import_cadastre = data[0][1]
-			rappr_cadastre = data[0][2]
-			rappr_osm = data[0][3]
-			cache_hsnr = data[0][4]
-			cache_ways = data[0][5]
-			lon_commune = data[0][7]
-			lat_commune = data[0][8]
-			communes_voisines = data[0][10]
+			rappr_cadastre = data[0][1]
+			rappr_osm = data[0][2]
+			lon_commune = data[0][3]
+			lat_commune = data[0][4]
+			communes_voisines = data[0][5]
 			voies_fantoir_adresses_non_match = data[1]
 			voies_fantoir_adresses_match = data[2]
 			voies_fantoir_seules_non_match = data[3]
@@ -488,15 +485,10 @@
 				return 0;
 			}
 			commune_valide = true;
-			if (import_cadastre[0]){
-				intitule = 'Cadastre récupéré le'
-				date_import_cadastre = import_cadastre[0][2]
-			} else {
-				intitule = 'Cadastre'
-				date_import_cadastre = 'en format image'
-			}
-			$('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append(intitule)).append($('<td>').addClass('cellule_data').append(date_import_cadastre)).append($('<th>').attr('rowspan','4').append($('<h1>').addClass('titre_commune').append((nom_commune)))))
-			$('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append('Dernier rapprochement le')).append($('<td>').addClass('cellule_data').append(rappr_cadastre[2])))
+			
+			$('#table_infos_commune').append($('<tr>').append($('<td>')).append($('<td>')).append($('<th>').attr('rowspan','4').append($('<h1>').addClass('titre_commune').append((nom_commune)))))
+
+			$('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append('Dernier rapprochement BAN le')).append($('<td>').addClass('cellule_data').append(rappr_cadastre[2])))
 			$('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append('Données OSM en date du')).append($('<td>').addClass('cellule_data').append(rappr_osm[2])))
 			url_hash_coords = '15/'+lat_commune+'/'+lon_commune
 			url_ol_part2 = '?zoom=15&lat='+lat_commune+'&lon='+lon_commune
