@@ -39,7 +39,8 @@ FROM	fantoir_voie f
 JOIN 	(SELECT DISTINCT fantoir,voie_osm
 		FROM	cumul_adresses
 		WHERE	insee_com = '__com__' AND
-		        COALESCE(voie_osm,'') != '') j
+		        COALESCE(voie_osm,'') != '' AND
+		        source in ('BAN','OSM')) j
 ON		f.fantoir10 = j.fantoir
 JOIN	(SELECT DISTINCT fantoir,
 				FIRST_VALUE(geometrie) OVER(PARTITION BY fantoir) geometrie
@@ -55,6 +56,6 @@ ON		j.fantoir = s.fantoir
 LEFT OUTER JOIN fantoir_numeros_manquants fm
 ON      f.fantoir10 = fm.fantoir
 WHERE	f.code_insee = '__com__'	AND
-		f.type_voie in ('1','2')	AND
+		f.type_voie in ('1','2','3')	AND
 		f.date_annul = '0000000'		
 ORDER BY 3;
