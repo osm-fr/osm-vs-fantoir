@@ -10,19 +10,19 @@ AS
 SELECT	f.fantoir10,
 		to_char(to_date(f.date_creation,'YYYYDDD'),'YYYY-MM-DD'),
 		nature_voie||' '||libelle_voie voie,
-		'--',
+		j.voie_autre,
 		st_x(g.geometrie),
 		st_y(g.geometrie),
 		COALESCE(s.id_statut,0),
 		COALESCE(fm.a_proposer,0)
 FROM	fantoir_voie f
-JOIN	(SELECT	fantoir
+JOIN	(SELECT	fantoir,voie_autre
 		FROM	cumul_adresses
 		WHERE	insee_com = '__com__'	AND
 				source = 'BAN'		AND
 				COALESCE(voie_osm,'') = ''
 		EXCEPT
-		SELECT	fantoir
+		SELECT	fantoir,voie_autre
 		FROM	cumul_adresses
 		WHERE	insee_com = '__com__'	AND
 				source = 'OSM') j
