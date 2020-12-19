@@ -127,7 +127,7 @@
 <script>
 
 	var menu_labels
-	var a_champs_stats = ['Format','Code INSEE','Commune','Voies avec adresses<br/>rapprochées (a)','Toutes voies<br/>rapprochées (b)...','...dont voies rapprochées sur<br/>lieux-dits FANTOIR','Voies FANTOIR (c)','Voies et lieux-dits<br/>FANTOIR (d)','Pct adresses /<br/>voies FANTOIR (a/c)','Pct voies /<br/>voies FANTOIR (b/c)','Pct voies /<br/>voies et lieux-dits FANTOIR (b/d)','Indice 2020']
+	var a_champs_stats = ['Format','Code INSEE','Commune','Voies avec adresses<br/>rapprochées (a)','Toutes voies<br/>rapprochées (b)...','...dont voies rapprochées sur<br/>lieux-dits FANTOIR','Voies FANTOIR (c)','Voies et lieux-dits<br/>FANTOIR (d)','Voies avec adresses /<br/>voies FANTOIR (a/c)<br/>en %','Voies rapprochées /<br/>voies FANTOIR (b/c)<br/>en %','Voies rapprochées /<br/>voies et lieux-dits FANTOIR (b/d)<br/>en %','Adresses OSM','Adresses BAN','Adresses BAN sans voie rapprochées','Adresse BAN avec voie rapprochée<br/>en %','Indice 2020']
 	function is_valid_dept(d){
 		pattern_dept = new RegExp('^([01]|[3-8])([0-9])$|^2([aAbB]|[1-9])$|^9([0-5]|7[1-4]|76)$')
 		var res
@@ -198,7 +198,7 @@
 						$('#stats_dept tr:last').append($('<td>')
 												.attr('title',(a_champs_stats[d]).replace('<br\/>',' '))
 												.append($('<a>')
-												.attr('href','http://cadastre.openstreetmap.fr/fantoir/#insee='+stats[c][1])
+												.attr('href','./index.html#insee='+stats[c][1])
 												.text(stats[c][1])))	
 					} else {
 						$('#stats_dept tr:last').append($('<td>').attr('title',(a_champs_stats[d]).replace('<br\/>',' ')).append(stats[c][d]))
@@ -235,24 +235,28 @@
 <h2>Read The F(ANTOIR) Manual</h2>
 <h3>Tableau</h3>
 <p>Les en-têtes de colonnes sont cliquables pour trier le tableau.</p>
-<p>Les liens dans la colonne "Code INSEE" amène à la page http://cadastre.openstreetmap.fr/fantoir/ de la commune et s'ouvrent dans le même onglet.</p>
+<p>Les liens dans la colonne "Code INSEE" amène à la page http://bano.openstreetmap.fr/fantoir/ de la commune et s'ouvrent dans le même onglet.</p>
 <p>Pour chaque commune, les chiffres sont issus des données BANO au moment du chargement de la page.</p>
 <h3>Description des colonnes</h3>
 <li>Format</li><p>Format du cadastre de la commune. Information mise à jour chaque jour à minuit.</p>
-<li>Voies avec adresses rapprochées (a)</li><p>Nombre de voies dont le nom existe dans OSM, dont on connaît le code Fantoir, et pour lesquelles on trouve des adresses, dans OSM ou le Cadastre</p>
+<li>Voies avec adresses rapprochées (a)</li><p>Nombre de voies dont le nom existe dans OSM, dont on connaît le code Fantoir, et pour lesquelles on trouve des adresses, dans OSM, dans la <a href="https://adresse.data.gouv.fr/">Base Adresse National ou une base adresse local</a></p>
 <li>Toutes voies rapprochées (b)</li><p>Nombre de voies dont le nom existe dans OSM et dont on connaît le code Fantoir. Le décompte inclut les voies sans adresses.</p>
 <li>Voies FANTOIR (c)</li><p>Nombre de voies non annulées, de type 1 ou 2 sur la commune, dans le Fantoir 2015.</p>
 <li>Voies et lieux-dits FANTOIR (d)</li><p>Nombre de voies non annulées, de type 1, 2 ou 3 (lieux-dits) sur la commune, dans le Fantoir 2015.</p>
-<li>Pct adresses / voies FANTOIR (a/c)</li><p>Pourcentage de voies OSM dont on connaît le code Fantoir, et ayant des adresses, par rapport au nombre de voies de type 1 et 2 au Fantoir</p>
-<li>Pct voies / voies FANTOIR (b/c)</li><p>Pourcentage de voies OSM dont on connaît le code Fantoir, y compris des voies sans adresses, par rapport au nombre de voies de type 1 et 2 au Fantoir</p>
-<li>Pct voies / voies et lieux-dits FANTOIR (b/d)</li><p>Pourcentage de voies OSM dont on connaît le code Fantoir, y compris des voies sans adresses, par rapport au nombre de voies de type 1, 2 ou 3 au Fantoir</p>
+<li>Adresses / voies FANTOIR (a/c) en %</li><p>Pourcentage de voies OSM dont on connaît le code Fantoir, et ayant des adresses, par rapport au nombre de voies de type 1 et 2 au Fantoir</p>
+<li>Voies / voies FANTOIR (b/c) en %</li><p>Pourcentage de voies OSM dont on connaît le code Fantoir, y compris des voies sans adresses, par rapport au nombre de voies de type 1 et 2 au Fantoir</p>
+<li>Voies / voies et lieux-dits FANTOIR (b/d) en %</li><p>Pourcentage de voies OSM dont on connaît le code Fantoir, y compris des voies sans adresses, par rapport au nombre de voies de type 1, 2 ou 3 au Fantoir</p>
+<li>Adresses OSM</li><p>Nombre d'adresses presentes dans OSM sur la commune</p>
+<li>Adresses BAN</li><p>Nombre d'adresses presentes dans la Base Adresse National ou une base adresse local sur la commune</p>
+<li>Adresses BAN sans voie rapprochées</li><p>Nombre d'adresses présentes dans la <a href="https://adresse.data.gouv.fr/">Base Adresse National ou une base adresse local</a> sur la commune dont le nom de rue n'existe pas dans OSM</p>
+<li>Adresse BAN avec voie rapprochée en %</li><p>Pourcentage d'adresses présentes dans la <a href="https://adresse.data.gouv.fr/">Base Adresse National ou une base adresse local</a> dont le nom de rue existe dans OSM</p>
 <li>Indice 2020</li><p>((a/c)*(c-a)) + ((b/c)*(c-b)) + ((b/d)* (d-b))</br>qui qualifie mieux la notion déficitaire que le simple ecart relatif (plus le chiffre est gros, plus y a de boulot)</p>
 <h3>Documentation FANTOIR</h3>
-<p>Elle est visible dans <a href="http://www.collectivites-locales.gouv.fr/files/files/gestion_locale_dgfip/national/FANTOIR_Descriptif.pdf">ce PDF</a></p>
+<p>Elle est visible dans <a href="https://www.collectivites-locales.gouv.fr/files/files/finances_locales/fantoir/Descriptif_FANTOIR_2016.pdf">ce PDF</a></p>
 <div id="pied_de_page"></div>
 </div>
 <div id="credits">
-Données FANTOIR : © 2015 Ministère de l'Économie et des Finances (DGFiP) - <a href="http://wiki.data.gouv.fr/wiki/Licence_Ouverte_/_Open_Licence">Licence LO/OL</a>
+Données FANTOIR : © 11/2020 Ministère de l'Économie et des Finances (DGFiP) - <a href="https://www.etalab.gouv.fr/licence-ouverte-open-licence">Licence LO/OL</a>
 </div>
 </body>
 </html>
