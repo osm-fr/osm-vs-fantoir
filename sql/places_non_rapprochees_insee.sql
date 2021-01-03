@@ -23,7 +23,7 @@ WHERE   insee_com ='__com__')
 SELECT	c.fantoir,
 		to_char(to_date(f.date_creation,'YYYYDDD'),'YYYY-MM-DD'),
 		c.libelle_fantoir,
-		'--',
+		c.libelle_cadastre,
 		st_x(c.geometrie),
 		st_y(c.geometrie),
 		COALESCE(s.id_statut,0),

@@ -748,6 +748,10 @@
 		$('#'+table+' tr').append($('<th>').append('Libellé FANTOIR'))
 		if (with_type_osm){
 			$('#'+table+' tr').append($('<th>').append('Type OSM : libellé OSM'))
+		} else if (table=='table_adresses_non_match'){
+			$('#'+table+' tr').append($('<th>').append('Libellé BAN'))
+		} else if (table=='table_places_non_match'){
+			$('#'+table+' tr').append($('<th>').append('Libellé Cadastre'))
 		} else {
 			$('#'+table+' tr').append($('<th>').append('Libellé OSM'))
 		}
@@ -872,7 +876,7 @@
 <div id="pied_de_page"></div>
 </div>
 <div id="credits">
-Données FANTOIR : © 07/2020 Ministère de l'Économie et des Finances (DGFiP) - <a href="http://wiki.data.gouv.fr/wiki/Licence_Ouverte_/_Open_Licence">Licence LO/OL</a> ||||
+Données FANTOIR : © 11/2020 Ministère de l'Économie et des Finances (DGFiP) - <a href="https://www.etalab.gouv.fr/licence-ouverte-open-licence">Licence LO/OL</a> ||||
 Données OpenStreetMap : © les Contributeurs d'OpenStreetMap  <a href="http://opendatacommons.org/licenses/odbl/">Licence ODbL</a> |||| <!-- Icône "refresh" par iconsmind.com (the Noun project) |||| -->
 <a href="https://github.com/osm-fr/osm-vs-fantoir/">Code source et signalement de bugs/problèmes/suggestions.</a>
 </div>
