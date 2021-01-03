@@ -4,7 +4,12 @@ SELECT	f.fantoir10,
 		c.voie_osm,
 		ST_X(c.geometrie),
 		ST_Y(c.geometrie),
-		COALESCE(s.id_statut,0)
+		COALESCE(s.id_statut,0),
+		0::integer, -- adresses a proposer
+		CASE f.date_annul
+		    WHEN '0000000' THEN '1'
+		    ELSE -1
+		END AS fantoir_annule
 FROM	fantoir_voie f
 JOIN	(SELECT fantoir FROM cumul_voies WHERE insee_com = '__com__'
 		EXCEPT

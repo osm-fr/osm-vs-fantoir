@@ -34,7 +34,11 @@ SELECT	f.fantoir10 fantoir,
 		st_x(g.geometrie),
 		st_y(g.geometrie),
 		COALESCE(s.id_statut,0),
-		COALESCE(fm.a_proposer,0)
+		COALESCE(fm.a_proposer,0),
+		CASE f.date_annul
+		    WHEN '0000000' THEN '1'
+		    ELSE -1
+		END AS fantoir_annule
 FROM	fantoir_voie f
 JOIN 	(SELECT DISTINCT fantoir,voie_osm
 		FROM	cumul_adresses
@@ -56,6 +60,5 @@ ON		j.fantoir = s.fantoir
 LEFT OUTER JOIN fantoir_numeros_manquants fm
 ON      f.fantoir10 = fm.fantoir
 WHERE	f.code_insee = '__com__'	AND
-		f.type_voie in ('1','2','3')	AND
-		f.date_annul = '0000000'		
+		f.type_voie in ('1','2','3')
 ORDER BY 3;

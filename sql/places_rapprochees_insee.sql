@@ -37,7 +37,11 @@ SELECT	c.fantoir,
 		st_x(c.geometrie),
 		st_y(c.geometrie),
 		COALESCE(s.id_statut,0),
-		c.ld_bati
+		c.ld_bati,
+		CASE f.date_annul
+		    WHEN '0000000' THEN '1'
+		    ELSE -1
+		END AS fantoir_annule
 FROM	c
 JOIN	fantoir_voie f
 ON		c.fantoir = f.fantoir10

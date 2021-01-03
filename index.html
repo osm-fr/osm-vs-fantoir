@@ -269,6 +269,11 @@
 		color:black;
 		font-weight: normal;
 	}
+	#table_adresses_match tr.statut0 td.cell_fantoir.annule,
+	#table_voies_match tr.statut0 td.cell_fantoir.annule,
+	#table_places_match tr.statut0 td.cell_fantoir.annule{
+		background:#FFCF6A;
+	}
 	#table_adresses_non_match tr.statut0 td.cell_fantoir,
 	#table_voies_fantoir_non_match tr.statut0 td.cell_fantoir,
 	#table_places_non_match tr.statut0 td.cell_fantoir,
@@ -532,6 +537,13 @@
 					fantoir = data[l][0]
 				//Fantoir
 					$('#'+table+ ' tbody:last').append($('<tr>').attr('id',global_ligne_id).append($('<td>').addClass('cell_fantoir').text(fantoir)))
+				//Fantoir annulé
+				    if (data[l].length > 8){
+				        if (data[l][8] == -1){
+				            $('#'+table+ ' tbody:last tr:last  td:last').addClass('annule').attr('title','FANTOIR annulé, à remplacer dans OSM')
+				        }
+				    }
+
 				// Date de creation
 					$('#'+table+' tr:last').append($('<td>').text(data[l][1]))
 				//Nom Fantoir
