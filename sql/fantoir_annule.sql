@@ -13,7 +13,6 @@ SELECT v.fantoir,
        v.voie_osm,
        ST_X(v.geometrie),
        ST_Y(v.geometrie),
-       transfert,
        date_annul
 FROM   cumul_voies v
 JOIN   f

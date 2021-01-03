@@ -203,8 +203,6 @@
 				//Nom OSM
 				$('#'+table+' tr:last').append($('<td>').text(data[l][1]))
 				//Date d'annulation
-				$('#'+table+' tr:last').append($('<td>').text(data[l][5]))
-				//transfert
 				$('#'+table+' tr:last').append($('<td>').text(data[l][4]))
 				lon = data[l][2]
 				lat = data[l][3]
@@ -269,7 +267,6 @@
 		$('#'+table).append($('<tr>').append($('<th>').append('Code FANTOIR')))
 		$('#'+table+' tr').append($('<th>').append('Voie OSM'))
 		$('#'+table+' tr').append($('<th>').append('Date d\'annulation'))
-		$('#'+table+' tr').append($('<th>').append('Avec ou sans transfert'))
 		if (with_edit_and_map_links){
 			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Cartes'))
 			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Édition'))
@@ -282,7 +279,7 @@
 <body onload="start()">
 <div id="bandeau">
 <h1></h1>
-<h4>Liste des codes Fantoir trouvés dans OSM et qui ont été annulés d'après le fichier Fantoir officiel.</h4>
+<h4>Liste des codes Fantoir trouvés dans OSM et qui ont été annulés d'après le fichier Fantoir officiel.<br>Cela peux être des noms de voies  remplacés par d'autres, des voies en double dont un seul code est conservé...<br>Lors de fusions de communes, les codes fantoirs des voies des communes dont le code insee disparait ont toutes leurs codes fantoir annulés et remplacés par de nouveaux dans la nouvelle commune donc dans ce cas c'est dans la page de la nouvelle commune qu'il faut chercher le nouveau code fantoir.</h4>
 <div id="pied_de_page"></div>
 </div>
 <table id="rubriques">
