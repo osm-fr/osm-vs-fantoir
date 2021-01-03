@@ -511,7 +511,7 @@
 			add_header('table_adresses_match',true,false,true,true)
 			add_header('table_voies_fantoir_non_match',false,false,false,true)
 			add_header('table_voies_match',true,false,false,true)
-			add_header('table_places_non_match',true,false,true,true)
+			add_header('table_places_non_match',true,false,false,true)
 			add_header('table_places_match',true,true,false,true)
 			add_header('table_OSM_non_match',true,false,false,false)
 			a_data_table = [[voies_fantoir_adresses_non_match,'table_adresses_non_match'],
@@ -535,7 +535,7 @@
 				// Date de creation
 					$('#'+table+' tr:last').append($('<td>').text(data[l][1]))
 				//Nom Fantoir
-					if ((table == 'table_places_non_match'||table == 'table_places_match') && (data[l][8] == 0)){
+					if ((table == 'table_places_non_match'||table == 'table_places_match') && (data[l][7] == 0)){
 						$('#'+table+' tr:last').append($('<td>').append($('<img>').attr('src','img/ld_habite.png').attr('title','Lieu-dit bâti selon FANTOIR')).append($('<span>').text(data[l][2])))
 					} else {
 						$('#'+table+' tr:last').append($('<td>').text(data[l][2]))
@@ -575,10 +575,6 @@
   					    // add_addr_inspector_link(table,$('#input_insee')[0].value,data[l][0],data[l][1])
   					}
 					if ((s==1) && data[l][7]){
-  					    add_josm_addr_link(table,$('#input_insee')[0].value,fantoir,data[l][3],data[l][7])
-  					    // add_addr_inspector_link(table,$('#input_insee')[0].value,data[l][0],data[l][1])
-  					}
-  					if ((s==4) && data[l][7]){
   					    add_josm_addr_link(table,$('#input_insee')[0].value,fantoir,data[l][3],data[l][7])
   					    // add_addr_inspector_link(table,$('#input_insee')[0].value,data[l][0],data[l][1])
   					}

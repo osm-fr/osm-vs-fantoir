@@ -1,12 +1,4 @@
 WITH
-diff_numero_fantoir
-AS
-(SELECT numero,fantoir FROM cumul_adresses WHERE insee_com = '__com__' and source = 'BAN'
-EXCEPT
-SELECT numero,fantoir FROM cumul_adresses WHERE insee_com = '__com__' and source = 'OSM'),
-fantoir_numeros_manquants
-AS
-(SELECT DISTINCT fantoir,count(*) AS a_proposer FROM diff_numero_fantoir GROUP BY 1),
 s
 AS
 (SELECT fantoir,
@@ -35,7 +27,6 @@ SELECT	c.fantoir,
 		st_x(c.geometrie),
 		st_y(c.geometrie),
 		COALESCE(s.id_statut,0),
-		COALESCE(fm.a_proposer,0),
 		c.ld_bati
 FROM	c
 JOIN	fantoir_voie f
@@ -44,7 +35,5 @@ LEFT OUTER JOIN s
 ON	c.fantoir = s.fantoir
 LEFT OUTER JOIN v
 ON	c.fantoir = v.fantoir
-LEFT OUTER JOIN fantoir_numeros_manquants fm
-ON      f.fantoir10 = fm.fantoir
 WHERE v.fantoir IS NULL
-ORDER BY 8 DESC,9,2;
+ORDER BY 7,2;

@@ -37,7 +37,6 @@ SELECT	c.fantoir,
 		st_x(c.geometrie),
 		st_y(c.geometrie),
 		COALESCE(s.id_statut,0),
-		'',
 		c.ld_bati
 FROM	c
 JOIN	fantoir_voie f
