@@ -21,15 +21,6 @@
 		top:80px;
 		z-index:2;
 	}
-	#credits{
-		background:darkgrey;
-		position:fixed;
-		bottom:0px;
-		width:100%;
-		overflow:visible;
-		z-index:4;
-		text-align: justify;
-	}
 	#pied_de_page{
 		position:relative;
 		width:100%;
@@ -235,10 +226,9 @@
 <table id="table_anomalies" class="tablesorter"></table>
 <div id="pied_de_page"></div>
 </div>
-<div id="credits">
-Données OpenStreetMap : © les Contributeurs d'OpenStreetMap  <a href="http://opendatacommons.org/licenses/odbl/">Licence ODbL</a>
- - Données FANTOIR : © 2019 Ministère de l'Économie et des Finances (DGFiP) - <a href="http://wiki.data.gouv.fr/wiki/Licence_Ouverte_/_Open_Licence">Licence LO/OL</a>
-</div>
+<footer>
+<!--#include virtual="/fantoir-dev/footer.html" -->
+</footer>
 <div id="josm_target" style="visibility : hidden"></div>
 <div id="wait_ajax"></div>
 </body>
