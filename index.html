@@ -221,6 +221,18 @@
 		margin-bottom: 10px;
 		margin-left: 3px;
 	}
+	#alerte_commune{
+		position:fixed;
+		width:100%;
+		height: 150px;
+		background:#FFCF6A;
+		overflow-y:scroll;
+		visibility:hidden;
+		z-index: 10;
+	}
+	#alerte_commune h3{
+		text-align: center;
+	}
 	#rub_adresses_non_match.active,#rub_voies_fantoir_non_match.active,#rub_places_non_match.active,#rub_OSM_non_match.active{
 		background:lightgrey;
 	}
@@ -466,6 +478,8 @@
 			lon_commune = data[0][3]
 			lat_commune = data[0][4]
 			communes_voisines = data[0][5]
+			insee_commune_parente = data[0][6]
+			nom_commune_parente = data[0][7]
 			voies_fantoir_adresses_non_match = data[1]
 			voies_fantoir_adresses_match = data[2]
 			voies_fantoir_seules_non_match = data[3]
@@ -483,6 +497,7 @@
 			document.title = nom_commune+' - Correspondance entre FANTOIR et voies OSM'
 			$('#table_infos_commune').empty()
 			$('.rubrique').empty()
+			$('#alerte_commune').css('visibility','hidden');
 
 			if (nom_commune.length == 0){
 				$('#table_infos_commune').append($('<h2>').append('INSEE '+$('#input_insee')[0].value+' : commune inconnue'))
@@ -616,6 +631,16 @@
 			$('#rubriques tr td')[tab].click()
 			window.location.hash="#insee="+$('#input_insee')[0].value+"&tab="+tab
 			$('body').css('cursor','default');
+
+			if (insee_commune_parente){
+				$('#alerte_commune').empty();
+				$('#alerte_commune').css('visibility','visible');
+				$('#alerte_commune').append($('<div>').addClass('fermer').text('X'))
+ 				$('#alerte_commune > .fermer').click(function(){
+					$('#alerte_commune').css('visibility','hidden');
+				})
+				$('#alerte_commune').append($('<h3>').text(nom_commune+' est une ancienne commune. Elle a été incorporée dans ').append($('<a>').attr('href','index.html#insee='+insee_commune_parente).text(nom_commune_parente+'('+insee_commune_parente+')')))
+			}
 		})
 	};
 	function check_url_for_insee(){
@@ -840,6 +865,7 @@
 <!-- <div id="bouton_refresh" title="Mettre à jour les données BANO"></div> -->
 <div id="infobulle_aide" title="Aide">?</div>
 <div id="infos_refresh"></div>
+<div id="alerte_commune"></div>
 <div id="aide">
 <div class="fermer">X</div>
 <h3>Statuts FANTOIR</h3>
