@@ -67,6 +67,13 @@ def main():
         nom_commune = []
         lon_commune = None
         lat_commune = None
+
+    commune_parente = get_data_from_bano_cache('commune_parente',insee_com)
+    if commune_parente:
+        insee_commune_parente, nom_commune_parente = commune_parente[0]
+    else:
+        insee_commune_parente, nom_commune_parente = [None,None]
+
     a_voisins = [[v[0],v[1],v[2]] for v in get_data_from_bano_cache('voisins_insee',insee_com)]
 
     date_fin_cumul = ['','']
@@ -78,7 +85,7 @@ def main():
 
     data_columns = [get_data_from_bano('voies_adresses_non_rapprochees_insee',insee_com),get_data_from_bano('voies_adresses_rapprochees_insee',insee_com),get_data_from_bano('voies_seules_non_rapprochees_insee',insee_com),get_data_from_bano('voies_seules_rapprochees_insee',insee_com),get_data_from_bano('places_non_rapprochees_insee',insee_com),get_data_from_bano('places_rapprochees_insee',insee_com),get_data_from_bano('voies_OSM_non_rapprochees_insee',insee_com)]
 
-    data = [[nom_commune,date_fin_cumul[0],date_fin_cumul[1],lon_commune,lat_commune,a_voisins],*data_columns]
+    data = [[nom_commune,date_fin_cumul[0],date_fin_cumul[1],lon_commune,lat_commune,a_voisins,insee_commune_parente, nom_commune_parente],*data_columns]
 
     if format == 'csv':
         print(f'Content-Type: text/csv\nContent-Disposition: Attachment; filename="insee-{insee_com}-{nom_commune}-onglet {tab}.csv"\n')

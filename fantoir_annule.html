@@ -150,15 +150,6 @@
 		height:30px;
 		z-index:3;
 	}
-	#credits{
-		background:darkgrey;
-		position:fixed;
-		bottom:0px;
-		width:100%;
-		overflow:visible;
-		z-index:4;
-		text-align: justify;
-	}
 </style>
 <script>
 	var menu_labels
@@ -292,9 +283,9 @@
 <table id="table_fantoir_annule" class="table_liste_"></table>
 <div id="pied_de_page"></div>
 </div>
-<div id="credits">
-Données OpenStreetMap : © les Contributeurs d'OpenStreetMap  <a href="http://opendatacommons.org/licenses/odbl/">Licence ODbL</a>
-</div>
+<footer>
+<!--#include virtual="/fantoir-dev/footer.html" -->
+</footer>
 <div id="josm_target" style="visibility : hidden"></div>
 <div id="wait_ajax"></div>
 </body>
