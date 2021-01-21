@@ -1,49 +1,369 @@
-	body{
-	    font-family: monospace;
+body{
+	    font-family: 'courier new', monospace;
 	}
-	#bandeau{
-		top:0px;
-		width:100%;
-		height:100px;
-		z-index:2;
-		position:fixed;
-		background-color:white;
-	}
-	#input_insee{
-		top:10px;
-	}
-	#bandeau_commune{
-		border-bottom-style: outset;
-	}
-	.titre_commune{
-		margin-left:30px;
-	}
-	#reponse{
-		position:absolute;
-		top:100px
-	}
-	#pied_de_page{
-		position:relative;
-		width:100%;
-		height:30px;
-		z-index:3;
-	}
-	#credits{
-		background:darkgrey;
-		position:fixed;
-		bottom:0px;
-		width:100%;
-		overflow:visible;
-		z-index:4;
-		text-align: justify;
-	}
-	table.tablesorter tbody td.rapproche{
-		color:white;
-		font-weight:bold;
-		background:#009900;	
-	}
-	table.tablesorter tbody td.qualifie{
-		color:white;
-		font-weight:bold;
-		background:#555555;	
-	}
+
+/*-----------------------------------------------------------------------*/
+/*-------------------------------- BANDEAU ------------------------------*/
+/*-----------------------------------------------------------------------*/
+
+#bandeau{
+	position:fixed;
+	top:30px;
+	width:100%;
+	height:240px;
+	padding-top: 5px;
+	z-index:3;
+	background-color:white;
+}
+#input_insee{
+	top:40px;
+}
+#bandeau_commune{
+	border-bottom-style: outset;
+}
+.titre_commune{
+	margin-left:30px;
+}
+.cellule_intitule{
+	text-align: right;
+}
+.cellule_data{
+	font-weight: bold;
+}
+
+/*-----------------------------------------------------------------------*/
+/*-------------------------- CROIX ROUGE FERMER -------------------------*/
+/*-----------------------------------------------------------------------*/
+
+.fermer{
+	color: red;
+	float: right;
+	border: 1px black solid;
+	width: 20px;
+	text-align: center;
+	background: black;
+	font-weight: bolder;
+}
+
+/*-----------------------------------------------------------------------*/
+/*--------------------------- BOUTONS HAUT DROITE -----------------------*/
+/*-----------------------------------------------------------------------*/
+
+#bouton_export_csv{
+	position: fixed;
+	top: 35px;
+	right: 169px;
+}
+#bouton_export_csv a{
+	color: white;
+	font-weight: bold;
+	text-decoration: none;
+}
+#bouton_export_csv a img{
+	height: 50px;
+	width: 50px;
+}
+/*---------------------------------------------*/
+#bouton_communes_voisines{
+	cursor: pointer;
+	position: fixed;
+	background-image: url("../img/communes_voisines.png");
+	background-size: 40px 40px;
+	background-repeat: no-repeat;
+	width: 40px;
+	height: 40px;
+	top: 40px;
+	right: 119px;
+	z-index:4;
+}
+#table_communes_voisines{
+	position: fixed;
+	border: solid 1px;
+	//height: 100px;
+	top: 40px;
+	right: 119px;
+	background-color:white;
+	z-index:5;
+	visibility:hidden;
+}
+#table_communes_voisines table tr td.lien_commune{
+	color:blue;
+	text-decoration: underline;
+	cursor: pointer;
+}
+#table_communes_voisines table tr td.commune_centre{
+	color:black;
+	font-weight: bold;
+	text-align: center;
+	text-decoration: none;
+	cursor: default;
+	background-color: lightblue;
+}
+/*---------------------------------------------*/
+#bouton_refresh{
+	cursor: pointer;
+	position: fixed;
+	background-image: url("../img/refresh.png");
+	background-size: 40px 40px;
+	background-repeat: no-repeat;
+	width: 49px;
+	height: 56px;
+	top: 40px;
+	right: 60px;
+}
+#refresh_infobulle{
+	position: fixed;
+	width: 250px;
+	height: 56px;
+	top: 36px;
+	right: 109px;
+	display:none;
+	z-index: 5;
+	background-color: white;
+}
+#refresh_infobulle span{
+	font-weight: bold;
+}
+
+#infos_refresh{ /* ------------------------ ????????????????? ----------------------- */
+	width:100%;
+	height:200px;
+	top:30px;
+	left:0px;
+	background-color:lightgrey;
+	opacity:0.8;
+	position:fixed;
+	display:none;
+	z-index: 15;
+}
+#wait_ajax{
+	position:fixed;
+	z-index:1;
+	width:100%;
+	height:100%;
+	background-color:lightgray;
+	opacity:0;
+	text-align:center;
+}
+#wait_ajax span{
+	background-color:black;
+	vertical-align:middle;
+	font-size:30px;
+	line-height:500px;
+	color:white;
+	border:50px solid black;
+}
+/*---------------------------------------------*/
+#bouton_aide{
+	cursor: pointer;
+	position: fixed;
+	background-image: url("../img/help.png");
+	background-size: 40px 40px;
+	background-repeat: no-repeat;
+	width: 40px;
+	height: 40px;
+	top: 40px;
+	right: 17px;
+	z-index:4;
+}
+#aide{
+	position:fixed;
+	top:35px;
+	right:5px;
+	width:400px;
+	height:calc(100% - 70px);
+	background-color:lavender;
+	overflow-y:scroll;
+	visibility:hidden;
+	z-index: 10;
+}
+#aide h3{
+	text-align: center;
+}
+#aide li{
+	font-weight:bolder;
+	background-color:ivory;
+}
+#aide p{
+	margin-top: 0px;
+	margin-bottom: 10px;
+	margin-left: 3px;
+}
+
+/*----------------------------------------------------------------------------------*/
+/*------------------------------------- REPONSE ------------------------------------*/
+/*----------------------------------------------------------------------------------*/
+
+#reponse{
+	position:absolute;
+	top:270px;
+	z-index:2;
+}
+
+/*----------- ALERTE ANCIENNE COMMUNE -----------*/
+
+#alerte_commune{
+	position:fixed;
+	width:100%;
+	height: 150px;
+	background:#FFCF6A;
+	overflow-y:scroll;
+	visibility:hidden;
+	z-index: 10;
+}
+#alerte_commune h3{
+	text-align: center;
+}
+
+/*--------------- En-tête colonnes ---------------*/
+
+#rubriques{
+	position:absolute;
+	top:160px;
+}
+#rubriques th{
+	background-color:black;
+	color:white;
+}
+.emphase{
+	color:red;
+	font-size: x-large;
+}
+.rubrique{
+	cursor:pointer;
+	width:200px;
+	height:50px;
+	position:relative;
+	color:black;
+	font-weight: bold;
+	background:white;
+	margin-right:10px;
+}
+
+.rubrique.active{
+	border:3px solid black;
+}
+
+#rub_adresses_non_match.active,
+#rub_voies_fantoir_non_match.active,
+#rub_places_non_match.active,
+#rub_OSM_non_match.active {
+	background:lightgrey;
+}
+
+#rub_adresses_match.active,
+#rub_voies_match.active,
+#rub_places_match.active {
+	background:lightgreen;
+}
+
+/*--------------- Contenu tableau ---------------*/
+
+.table_liste{
+	display:none;
+}
+.zone_click{
+	cursor:pointer;
+	color:blue;
+	text-decoration: underline;
+}
+.zone_click.clicked{
+	background-color:green;
+	color:white;
+}
+
+#table_voies_match tr td,
+#table_adresses_match tr td,
+#table_adresses_non_match tr td,
+#table_voies_fantoir_non_match tr td,
+#table_places_non_match tr td,
+#table_places_match tr td,
+#table_OSM_non_match tr td,
+#table_inspect_adresse tr td{
+	background:lightgrey;
+	color:grey;
+	font-weight: bold;
+}
+#table_voies_match tr.statut0 td,
+#table_adresses_match tr.statut0 td,
+#table_places_match tr.statut0 td,
+#table_adresses_non_match tr.statut0 td,
+#table_voies_fantoir_non_match tr.statut0 td,
+#table_places_non_match tr.statut0 td,
+#table_OSM_non_match tr.statut0 td,
+#table_inspect_adresse tr.statut0 td{
+	background:white;
+	color:black;
+	font-weight: normal;
+}
+#table_voies_match tr.statut0 td.clicked,
+#table_adresses_match tr.statut0 td.clicked,
+#table_places_match tr.statut0 td.clicked,
+#table_adresses_non_match tr.statut0 td.clicked,
+#table_voies_fantoir_non_match tr.statut0 td.clicked,
+#table_places_non_match tr.statut0 td.clicked,
+#table_OSM_non_match tr.statut0 td.clicked{
+	background-color:green;
+	color:white;
+	font-weight: normal;
+}
+#table_adresses_match tr.statut0 td.cell_fantoir,
+#table_voies_match tr.statut0 td.cell_fantoir,
+#table_places_match tr.statut0 td.cell_fantoir{
+	background:lightgreen;
+	color:black;
+	font-weight: normal;
+}
+#table_adresses_match tr.statut0 td.cell_fantoir.annule,
+#table_voies_match tr.statut0 td.cell_fantoir.annule,
+#table_places_match tr.statut0 td.cell_fantoir.annule{
+	background:#FFCF6A;
+}
+#table_adresses_non_match tr.statut0 td.cell_fantoir,
+#table_voies_fantoir_non_match tr.statut0 td.cell_fantoir,
+#table_places_non_match tr.statut0 td.cell_fantoir,
+#table_OSM_non_match tr.statut0 td.cell_fantoir{
+	background:lightgrey;
+	color:black;
+	font-weight: normal;
+}
+#mask_inspect_adresse{
+	position:fixed;
+	top:0px;
+	left: 0px;
+	z-index:10;
+	width:100%;
+	height:100%;
+	background-color:lightgray;
+	text-align:center;
+	display: none;
+}
+#modal_inspect_adresse{
+	position:absolute;
+	top:0px;
+	z-index:20;
+    left: 10%;
+	width:80%;
+	height:100%;
+	background-color:lightgray;
+	text-align:center;
+	display: none;
+}
+#titre_inspect_adresse {
+	background-color:white;
+	vertical-align:middle;
+    left: 10%;
+	width:80%;
+	height: 50px;
+	/*border:50px solid black;*/
+	position:fixed;
+	z-index: 24;
+}
+#table_inspect_adresse{
+	overflow-y: scroll;
+	position: relative;
+	z-index: 21;
+	top: 50px;
+	left: 10%;
+	width: 80%;
+}
