@@ -24,3 +24,16 @@
 	color: #fff;
 	background:#333;
 }
+
+#topnav .menu_actif {
+	float:left;
+	margin: 0;
+	padding: 6px 20px 7px;
+	font-family: 'Arial', sans serif;
+ 	font-size: 0.9em;
+	font-weight: bold;
+ 	text-transform: uppercase;
+	text-decoration: none;
+ 	color: #fff;
+ 	background:#333;
+}
