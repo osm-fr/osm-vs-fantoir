@@ -31,7 +31,8 @@ VALUES (0,0,'Ok'),
 (14,14,'Voie inexistante'),
 (15,7,'Voie doublon (même type et même nom)'),
 (16,11,'Nom tronqué'),
-(17,16,'Erreur de commune');
+(17,16,'Erreur de commune'),
+(18,17,'FANTOIR annulé non remplacé');
 
 CREATE TABLE statut_adresse (
     numero text,
