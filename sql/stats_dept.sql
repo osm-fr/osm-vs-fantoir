@@ -10,51 +10,54 @@ r AS (	SELECT	CASE format_cadastre
 a AS (	SELECT 	insee_com,
 				count(distinct fantoir) voies_avec_adresses_rapprochees
 		FROM 	cumul_adresses
-		WHERE	insee_com like '__dept__%'	AND
+		WHERE	insee_com LIKE '__dept__%'	AND
 				COALESCE(voie_osm,'') != ''
 		GROUP BY insee_com),
 adrOSM AS (	SELECT 	insee_com,
 				count(distinct concat(numero,fantoir,voie_osm)) adresses_OSM
 		FROM 	cumul_adresses
-		WHERE	insee_com like '__dept__%'
+		WHERE	insee_com LIKE '__dept__%'
 		GROUP BY insee_com),
 adrBAN AS (	SELECT 	insee_com,
 				count(distinct concat(numero,fantoir,voie_autre)) adresses_BAN
 		FROM 	cumul_adresses
-		WHERE	insee_com like '__dept__%'
+		WHERE	insee_com LIKE '__dept__%'
 		GROUP BY insee_com),
 adrnon AS (	SELECT 	insee_com,
 				count(distinct concat(numero,fantoir,voie_autre)) adresses_non_rapprochees
 		FROM 	cumul_adresses
-		WHERE	insee_com like '__dept__%' AND COALESCE(voie_osm,'') = ''
+		WHERE	insee_com LIKE '__dept__%' AND COALESCE(voie_osm,'') = ''
 		GROUP BY insee_com),
 v AS (	SELECT 	insee_com,
 				count(distinct fantoir) voies_rapprochees
 		FROM 	cumul_voies
-		WHERE	insee_com like '__dept__%'	AND
+		WHERE	insee_com LIKE '__dept__%'	AND
 				COALESCE(fantoir,'') != ''	AND
 				voie_osm IS NOT NULL
 		GROUP BY insee_com),
 vl AS (	SELECT 	c.insee_com,
 				count(distinct c.fantoir) voies_rapprochees
-		FROM 	cumul_voies c
-		JOIN	fantoir_voie f
-		ON		c.fantoir = f.code_insee||f.id_voie||f.cle_rivoli 
-		WHERE	c.insee_com like '__dept__%'		AND
-				COALESCE(c.fantoir,'') != ''	AND
-				c.voie_osm IS NOT NULL			AND
-				f.type_voie = '3'
+		FROM 	(SELECT insee_com,
+                        fantoir
+                FROM    cumul_voies
+                WHERE   insee_com LIKE '__dept__%'  AND
+                        COALESCE(fantoir,'') != ''  AND
+                        voie_osm IS NOT NULL) c
+        JOIN    (SELECT fantoir10
+                FROM    fantoir_voie
+                WHERE type_voie = '3') f
+		ON		c.fantoir = f.fantoir10
 		GROUP BY c.insee_com),
 t AS (	SELECT 	code_insee AS insee_com,
 				count(*) voies_fantoir
 		FROM 	fantoir_voie
-		WHERE	code_insee like '__dept__%'	AND
+		WHERE	code_insee LIKE '__dept__%'	AND
 				type_voie in ('1','2')
 		GROUP BY code_insee),
 f AS (	SELECT 	code_insee AS insee_com,
 				count(*) voies_fantoir
 		FROM 	fantoir_voie
-		WHERE	code_insee like '__dept__%'	AND
+		WHERE	code_insee LIKE '__dept__%'	AND
 				type_voie in ('1','2','3')
 		GROUP BY code_insee),
 i AS (	SELECT 	r.format_cadastre,
