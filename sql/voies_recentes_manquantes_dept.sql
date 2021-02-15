@@ -52,7 +52,12 @@ LEFT OUTER JOIN a
 ON      f.fantoir10 = a.fantoir
 JOIN    c
 ON      f.fantoir10 = c.fantoir
-JOIN    cog_commune co
+JOIN    (SELECT libelle,
+                com,
+                dep
+         FROM   cog_commune
+         WHERE  dep = '__dept__' AND
+                typecom in ('COM','ARM')) co
 ON      co.com = f.code_insee
 WHERE   a.fantoir IS NULL),
 -- Selection des 5 1ers par dept-------
