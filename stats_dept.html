@@ -4,126 +4,10 @@
 <title>Statistiques de couverture en voies nommées par département</title>
 <script src="js/jquery-2.1.1.min.js"></script>
 <script src="js/jquery.tablesorter.min.js"></script>
+<link rel="stylesheet" href="css/style_stats_dept.css" type="text/css"/>
 <link rel="stylesheet" href="css/tablesorter.css" type="text/css"/>
-<style>
-	body{
-	    font-family: monospace;
-	}
-	#bandeau{
-		top:0px;
-		width:100%;
-		height:90px;
-		z-index:3;
-		position:fixed;
-		background-color:white;
-	}
-	#input_dept{
-		top:10px;
-	}
-	.titre_dept{
-		margin-left:0px;
-	}
-	#reponse{
-		position:absolute;
-		top:90px;
-		z-index:2;
-	}
-	#wait_ajax{
-		position:fixed;
-		z-index:1;
-		width:100%;
-		height:100%;
-		background-color:lightgray;
-		opacity:0;
-		text-align:center;
-	}
-	#wait_ajax span{
-		background-color:black;
-		vertical-align:middle;
-		font-size:30px;
-		line-height:500px;
-		color:white;
-		border:50px solid black;
-	}
-	#pied_de_page{
-		position:relative;
-		width:100%;
-		height:30px;
-		z-index:3;
-	}
-	#credits{
-		background:darkgrey;
-		position:fixed;
-		bottom:0px;
-		width:100%;
-		overflow:visible;
-		z-index:4;
-		text-align: justify;
-	}
-	#infobulle_aide{
-		position: fixed;
-		color: red;
-		background: #dddddd;
-		width: 40px;
-		height: 40px;
-		border-radius: 40px;
-		top: 10px;
-		right: 10px;
-		vertical-align: bottom;
-		text-align: center;
-		font-weight: bolder;
-		font-size: 35px;
-	}
-	#aide{
-		position:fixed;
-		top:5px;
-		right:5px;
-		width:400px;
-		height:100%;
-		background-color:lavender;
-		overflow-y:scroll;
-		visibility:hidden;
-		z-index: 10;
-	}
-	.fermer{
-		color: red;
-		float: right;
-		border: 1px black solid;
-		width: 20px;
-		text-align: center;
-		background: black;
-		font-weight: bolder;
-	}
-	#aide h3{
-		margin-top: 30px;
-		margin-left: 10px;
-	}
-	#aide li{
-		font-weight:bolder;
-		background-color:ivory;
-	}
-	#aide p{
-		margin-top: 0px;
-		margin-bottom: 10px;
-		margin-left: 3px;
-	}
-	table.tablesorter thead tr .header{
-		//width:150px;
-		height:60px;
-	}
-	table.tablesorter tbody tr td.Raster{
-		color:#ffffff;
-		text-align: center;
-		font-weight:bolder;
-		background: #000000;
-	}
-	table.tablesorter tbody tr td.Vecteur{
-		text-align: center;
-		font-weight:bolder;
-		background: #ffbb00;
-	}
+<link rel="stylesheet" href="css/menu.css" type="text/css"/>
 
-</style>
 <script>
 
 	var menu_labels
@@ -215,6 +99,11 @@
 </script>
 </head>
 <body onload="start()">
+
+<header>
+	<!--#include file="includes/menu.html" -->
+</header>
+
 <div id="bandeau">
 	<form action="javascript:requete_stats_dept()" autocomplete="on">
 	<input type="text" id="input_dept" placeholder="N° de département"></input>

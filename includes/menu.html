@@ -9,10 +9,10 @@
 		// remove parameters from current_url
 		current_url = current_url.substring(0, (current_url.indexOf("?") == -1) ? current_url.length : current_url.indexOf("?"));
 		// select file name
-		current_url = current_url.substr(current_url.lastIndexOf("bano.openstreetmap.fr")+20);
+		current_url = current_url.substr(current_url.lastIndexOf("/")+1);
 		// If file name not available
 		if(current_url == ''){
-			current_url = '../';
+			current_url = 'index.html';
 		}
 		// Loop all menu items
 		$('#topnav a').each(function(){
