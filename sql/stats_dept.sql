@@ -16,12 +16,14 @@ a AS (	SELECT 	insee_com,
 adrOSM AS (	SELECT 	insee_com,
 				count(distinct concat(numero,fantoir,voie_osm)) adresses_OSM
 		FROM 	cumul_adresses
-		WHERE	insee_com LIKE '__dept__%'
+		WHERE	insee_com LIKE '__dept__%' AND
+                source = 'OSM'
 		GROUP BY insee_com),
 adrBAN AS (	SELECT 	insee_com,
 				count(distinct concat(numero,fantoir,voie_autre)) adresses_BAN
 		FROM 	cumul_adresses
-		WHERE	insee_com LIKE '__dept__%'
+		WHERE	insee_com LIKE '__dept__%' AND
+		        source = 'BAN'
 		GROUP BY insee_com),
 adrnon AS (	SELECT 	insee_com,
 				count(distinct concat(numero,fantoir,voie_autre)) adresses_non_rapprochees
