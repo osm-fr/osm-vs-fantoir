@@ -1,0 +1,38 @@
+<html>
+<script type="text/javascript">
+	//Vérification URL de la page en cours pour bouton de menu
+	$(document).ready(function() {
+		// Get current page current_url
+		var current_url = window.location.href;
+		// remove # from current_url
+		current_url = current_url.substring(0, (current_url.indexOf("#") == -1) ? current_url.length : current_url.indexOf("#"));
+		// remove parameters from current_url
+		current_url = current_url.substring(0, (current_url.indexOf("?") == -1) ? current_url.length : current_url.indexOf("?"));
+		// select file name
+		current_url = current_url.substr(current_url.lastIndexOf("/")+1);
+		// If file name not available
+		if(current_url == ''){
+			current_url = 'index.html';
+		}
+		// Loop all menu items
+		$('#topnav a').each(function(){
+			// select href
+			var href = $(this).attr('href');
+			// Check filename
+			if(current_url == href){
+				// Add active class
+				$(this).removeClass('bouton_nav').addClass('menu_actif');
+			}
+		});
+	});
+</script>
+<div id="topnav">
+		<a class="bouton_nav" href="../" title=""><img src="img/home.png" /></a>
+		<a class="bouton_nav" href="index.html" title="OSM vs Fantoir">OSM vs Fantoir</a>
+		<a class="bouton_nav" href="fantoir_errone.html" title="Fantoir erronés">Fantoir erronés</a>
+		<a class="bouton_nav" href="fantoir_annule.html" title="Fantoirs annulés">Fantoirs annulés</a>
+		<a class="bouton_nav" href="stats_dept.html" title="Statistiques communes">Statistiques communes</a>
+		<a class="bouton_nav" href="top_adresses_manquantes.html" title="Top adresses manquantes">Top adresses manquantes</a>
+		<a class="bouton_nav" href="voies_recentes_manquantes.html" title="Voies récentes manquantes">Voies récentes manquantes</a>
+	</div>
+</html>

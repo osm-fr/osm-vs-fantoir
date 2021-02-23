@@ -7,349 +7,8 @@
 <!-- <script src="js/tablesorter/parsers/parser-input-select.min.js"></script> -->
 <!-- <script src="js/tablesorter/widgets/widget-filter.min.js"></script> -->
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
-<style>
-	body{
-	    font-family: 'courier new', monospace;
-	}
-	#bandeau{
-		top:0px;
-		width:100%;
-		height:240px;
-		z-index:3;
-		position:fixed;
-		background-color:white;
-	}
-	#input_insee{
-		top:10px;
-	}
-	#bandeau_commune{
-		border-bottom-style: outset;
-	}
-	.titre_commune{
-		margin-left:30px;
-	}
-	.cellule_intitule{
-		text-align: right;
-	}
-	.cellule_data{
-		font-weight: bold;
-	}
-	#rubriques{
-		position:absolute;
-		top:130px;
-	}
-	#rubriques th{
-		background-color:black;
-		color:white;
-	}
-	#reponse{
-		position:absolute;
-		top:240px;
-		z-index:2;
-	}
-	.emphase{
-		color:red;
-		font-size: x-large;
-	}
-	.rubrique{
-		cursor:pointer;
-		width:200px;
-		height:50px;
-		position:relative;
-		color:black;
-		font-weight: bold;
-		background:white;
-		margin-right:10px;
-	}
-	.rubrique.active{
-		border:3px solid black;
-	}
-	.table_liste{
-		display:none;
-	}
-	.zone_click{
-		cursor:pointer;
-		color:blue;
-		text-decoration: underline;
-	}
-	.zone_click.clicked{
-		background-color:green;
-		color:white;
-	}
-	#refresh_infos{
-		position: fixed;
-		width: 250px;
-		height: 56px;
-		top: 6px;
-		right: 109px;
-		display:none;
-		z-index: 5;
-		background-color: white;
-	}
-	#refresh_infos span{
-		font-weight: bold;
-	}
-	#bouton_communes_voisines{
-		position: fixed;
-		background-image: url("img/communes_voisines.png");
-		background-size: 40px 40px;
-		background-repeat: no-repeat;
-		width: 40px;
-		height: 40px;
-		top: 10px;
-		right: 119px;
-		z-index:4;
-	}
-	#table_communes_voisines{
-		position: fixed;
-		border: solid 1px;
-		//height: 100px;
-		top: 10px;
-		right: 119px;
-		background-color:white;
-		z-index:5;
-		visibility:hidden;
-	}
-	#table_communes_voisines table tr td.lien_commune{
-		color:blue;
-		text-decoration: underline;
-		cursor: pointer;
-	}
-	#table_communes_voisines table tr td.commune_centre{
-		color:black;
-		font-weight: bold;
-		text-align: center;
-		text-decoration: none;
-		cursor: default;
-		background-color: lightblue;
-	}
-	#bouton_export_csv{
-		position: fixed;
-		top: 5px;
-		right: 169px;
-	}
-	#bouton_export_csv a{
-		color: white;
-		font-weight: bold;
-		text-decoration: none;
-	}
-	#bouton_export_csv a img{
-		height: 50px;
-		width: 50px;
-	}
-	#bouton_refresh{
-		position: fixed;
-		background-image: url("img/72176-600.png");
-		background-size: 49px 56px;
-		background-repeat: no-repeat;
-		width: 49px;
-		height: 56px;
-		top: 6px;
-		right: 60px;
-	}
-	#infos_refresh{
-		width:100%;
-		height:200px;
-		top:0px;
-		left:0px;
-		background-color:lightgrey;
-		opacity:0.8;
-		position:fixed;
-		display:none;
-		z-index: 15;
-	}
-	#wait_ajax{
-		position:fixed;
-		z-index:1;
-		width:100%;
-		height:100%;
-		background-color:lightgray;
-		opacity:0;
-		text-align:center;
-	}
-	#wait_ajax span{
-		background-color:black;
-		vertical-align:middle;
-		font-size:30px;
-		line-height:500px;
-		color:white;
-		border:50px solid black;
-	}
-	#infobulle_aide{
-		position: fixed;
-		color: red;
-		background: #dddddd;
-		width: 40px;
-		height: 40px;
-		border-radius: 40px;
-		top: 10px;
-		right: 10px;
-		vertical-align: bottom;
-		text-align: center;
-		font-weight: bolder;
-		font-size: 35px;
-	}
-	#aide{
-		position:fixed;
-		top:5px;
-		right:5px;
-		width:400px;
-		height:100%;
-		background-color:lavender;
-		overflow-y:scroll;
-		visibility:hidden;
-		z-index: 10;
-	}
-	.fermer{
-		color: red;
-		float: right;
-		border: 1px black solid;
-		width: 20px;
-		text-align: center;
-		background: black;
-		font-weight: bolder;
-	}
-	#aide h3{
-		text-align: center;
-	}
-	#aide li{
-		font-weight:bolder;
-		background-color:ivory;
-	}
-	#aide p{
-		margin-top: 0px;
-		margin-bottom: 10px;
-		margin-left: 3px;
-	}
-	#alerte_commune{
-		position:fixed;
-		width:100%;
-		height: 150px;
-		background:#FFCF6A;
-		overflow-y:scroll;
-		visibility:hidden;
-		z-index: 10;
-	}
-	#alerte_commune h3{
-		text-align: center;
-	}
-	#rub_adresses_non_match.active,#rub_voies_fantoir_non_match.active,#rub_places_non_match.active,#rub_OSM_non_match.active{
-		background:lightgrey;
-	}
-	#rub_adresses_match.active,#rub_voies_match.active,#rub_places_match.active{
-		background:lightgreen;
-	}
-	#table_voies_match tr td,
-	#table_adresses_match tr td,
-	#table_adresses_non_match tr td,
-	#table_voies_fantoir_non_match tr td,
-	#table_places_non_match tr td,
-	#table_places_match tr td,
-	#table_OSM_non_match tr td,
-	#table_inspect_adresse tr td{
-		background:lightgrey;
-		color:grey;
-		font-weight: bold;
-	}
-	#table_voies_match tr.statut0 td,
-	#table_adresses_match tr.statut0 td,
-	#table_places_match tr.statut0 td,
-	#table_adresses_non_match tr.statut0 td,
-	#table_voies_fantoir_non_match tr.statut0 td,
-	#table_places_non_match tr.statut0 td,
-	#table_OSM_non_match tr.statut0 td,
-	#table_inspect_adresse tr.statut0 td{
-		background:white;
-		color:black;
-		font-weight: normal;
-	}
-	#table_voies_match tr.statut0 td.clicked,
-	#table_adresses_match tr.statut0 td.clicked,
-	#table_places_match tr.statut0 td.clicked,
-	#table_adresses_non_match tr.statut0 td.clicked,
-	#table_voies_fantoir_non_match tr.statut0 td.clicked,
-	#table_places_non_match tr.statut0 td.clicked,
-	#table_OSM_non_match tr.statut0 td.clicked{
-		background-color:green;
-		color:white;
-		font-weight: normal;
-	}
-	#table_adresses_match tr.statut0 td.cell_fantoir,
-	#table_voies_match tr.statut0 td.cell_fantoir,
-	#table_places_match tr.statut0 td.cell_fantoir{
-		background:lightgreen;
-		color:black;
-		font-weight: normal;
-	}
-	#table_adresses_match tr.statut0 td.cell_fantoir.annule,
-	#table_voies_match tr.statut0 td.cell_fantoir.annule,
-	#table_places_match tr.statut0 td.cell_fantoir.annule{
-		background:#FFCF6A;
-	}
-	#table_adresses_non_match tr.statut0 td.cell_fantoir,
-	#table_voies_fantoir_non_match tr.statut0 td.cell_fantoir,
-	#table_places_non_match tr.statut0 td.cell_fantoir,
-	#table_OSM_non_match tr.statut0 td.cell_fantoir{
-		background:lightgrey;
-		color:black;
-		font-weight: normal;
-	}
-	#mask_inspect_adresse{
-		position:fixed;
-		top:0px;
-		left: 0px;
-		z-index:10;
-		width:100%;
-		height:100%;
-		background-color:lightgray;
-		text-align:center;
-		display: none;
-	}
-	#modal_inspect_adresse{
-		position:absolute;
-		top:0px;
-		z-index:20;
-        left: 10%;
-		width:80%;
-		height:100%;
-		background-color:lightgray;
-		text-align:center;
-		display: none;
-	}
-	#titre_inspect_adresse {
-		background-color:white;
-		vertical-align:middle;
-        left: 10%;
-		width:80%;
-		height: 50px;
-		/*border:50px solid black;*/
-		position:fixed;
-		z-index: 24;
-	}
-	#table_inspect_adresse{
-		overflow-y: scroll;
-		position: relative;
-		z-index: 21;
-		top: 50px;
-		left: 10%;
-		width: 80%;
-	}
-	#pied_de_page{
-		position:relative;
-		width:100%;
-		height:30px;
-		z-index:3;
-	}
-	#credits{
-		background:darkgrey;
-		position:fixed;
-		bottom:0px;
-		width:100%;
-		overflow:visible;
-		z-index:4;
-		text-align: justify;
-	}
-</style>
+<link rel="stylesheet" href="css/style.css" type="text/css"/>
+<link rel="stylesheet" href="css/menu.css" type="text/css"/>
 <script>
 	var menu_labels
 	var commune_valide = false
@@ -407,20 +66,20 @@
 							})
 							.mouseover(function(){
 								get_osm_state();
-								refresh_infos();
+								refresh_infobulle();
 							})
 							.mouseout(function(){
-								$('#refresh_infos').hide()
+								$('#refresh_infobulle').hide()
 							})
-		$('#infobulle_aide').click(function(){
+		$('#bouton_aide').click(function(){
 			$('#aide').css('visibility','visible');
 		})
 		$('#aide > .fermer').click(function(){
 			$('#aide').css('visibility','hidden');
 		})
 	};
-	function refresh_infos(){
-		$('#refresh_infos').empty()
+	function refresh_infobulle(){
+		$('#refresh_infobulle').empty()
 							.append('Mettre à jour avec les données OSM du ')
 							.append($('<span>').append(osm_state))
 							.show()
@@ -836,82 +495,90 @@
 	}
 </script>
 </head>
+
 <body onload="start()">
+
+<header>
+	<!--#include file="includes/menu.html" -->
+</header>
+
 <div id="bandeau">
-<form action="javascript:requete_fantoir()" autocomplete="on">
-<input type="text" id="input_insee" placeholder="Code INSEE"></input>
-<input type="submit" value="Lister">
-</form>
-<div id='bandeau_commune'>
-<table id="table_infos_commune"></table>
-</div>
-<div id="refresh_infos"></div>
-<div id="table_communes_voisines">
-<div class="fermer">X</div>
-<table>
-<tbody>
-	<tr><td id="11"></td><td id="12"></td><td id="1"></td><td id="2"></td></tr>
-<!-- 	<tr><td id="10"></td><td id="0"></td><td id="0"></td><td id="3"></td></tr>
-	<tr><td id="9"></td><td id="0"><td id="0"></td></td><td id="4"></td></tr>
- -->
- 	<tr><td id="10"></td><td class="commune_centre" colspan="2" rowspan="2"></td><td id="3"></td></tr>
-	<tr><td id="9"></td><td id="4"></td></tr>
-	<tr><td id="8"></td><td id="7"></td><td id="6"></td><td id="5"></td></tr>
-</tbody>
-</table>
-</div>
-<div id="bouton_export_csv" title="Exporter l'onglet courant en CSV"></div>
-<div id="bouton_communes_voisines" title="Communes voisines"></div>
-<div id="bouton_refresh" title="Mettre à jour les données BANO"></div>
-<div id="infobulle_aide" title="Aide">?</div>
-<div id="infos_refresh"></div>
-<div id="alerte_commune"></div>
-<div id="aide">
-<div class="fermer">X</div>
-<h3>Statuts FANTOIR</h3>
-<li>Erreur d'orthographe</li><p>Erreur d'orthographe de FANTOIR vérifié sur le terrain ou de source officielle (documents)</p>
-<li>Divergence d'orthographe</li><p>Pas la même orthographe dans Fantoir et sur le terrain, sans qu'il soit évident de trancher.
-<li>Nom différent</li><p>Existence d'adresse dans une même rue avec des nom de rues différents, coté FANTOIR. Ce n'est ni une erreur d'orthographe, ni un doublon, mais un nom *vraiment* différent. À marquer si ce nom n'est volontairement pas retenu pour les rapprochements.
-<li>Type de voie différent</li><p>Par ex. :'Impasse XXX' dans Fantoir, et 'Ruelle XXX' sur le terrain, sans qu'il existe ailleurs dans la commune une 'Impasse XXX'
-<li>Voie doublon et type de voie différent</li><p>Par ex. : 2 entrées 'Impasse XXX' ET 'Ruelle XXX' dans Fantoir, et uniquement une 'Ruelle XXX' sur le terrain, sans qu'il existe ailleurs dans la commune d' 'Impasse XXX'. => 'Impasse XXX' à marquer en doublon.
-<li>Voie doublon avec orthographe différente</li><p>2 graphies pour un même nom dans Fantoir.
-<li>Répétition du type de voie</li><p>Type de voie (rue, petite rue...) en double avec de possibles variantes dans les abréviations. Ex: Gde Rue Grande Rue
-<li>Nom introuvable sur le terrain</li><p>Pour un nom n'entrant pas dans les autres situations (doublon...) et sans aucune trace sur le terrain
-<li>Ancien nom supprimé sur le terrain</li><p>Normalement Fantoir indique une date de fin pour un nom obsolète, et tous les enregistrements avec une date passée sont ignorés dans BANO. Si un nom Fantoir apparaît dans les listes alors qu'il a été remplacé sur le terrain, il faut le marquer.
-<li>Nom tronqué</li><p>Les noms de voie Fantoir sont limités à 26 caractères. Ça peut être une cause d'échec de rapprochement, quand le nom OSM dépasse cette longueur.
-<li>Voie détruite</li><p>La voie a bien existé mais son emprise a disparu suite à des travaux.
-<li>Voie incorporée à une autre</li><p>La voie a "fusionné" avec une autre. Son nom n'a pas été préservé.
-<li>Voie inexistante</li><p>Pas de trace de la voie sur le terrain, et pas de souvenir de son existence par le passé.
-<li>Adresses hors périmètre</li><p>C'est plus un souci de géométrie dans le Cadastre, que dans les listes Fantoir en tant que tel : lorsque certains points d'adresse sont situés à plusieurs rues du reste des adresses de la voie, sans aucune justification.
-<li>Erreurs combinées</li><p>À utiliser quand plusieurs choix sont possibles dans la liste des anomalies.
-<div id="pied_de_page"></div>
-</div>
-<table id="rubriques">
-	<tr><th colspan="2" title="Il existe au moins une parcelle avec un numéro d'adresse associé à ces voies.">Voies <span class="emphase">avec</span> adresse(s) numérotée(s)</th>
-		<th colspan="2" title="Il n'existe pas d'adresse avec numéro pour ces voies.">Voies <span class="emphase">sans</span> adresse(s) numérotée(s)</th>
-		<th colspan="2" title="Lieux-dits.">Lieux-dits</th>
-		<th colspan="1" title="Voies uniquement connues d'OSM.">Dans OSM et inconnu de FANTOIR</th>
-	</tr>
-	<tr><td class="rubrique" id="rub_adresses_non_match" cible="table_adresses_non_match"></td>
-		<td class="rubrique" id="rub_adresses_match" cible="table_adresses_match"></td>
-		<td class="rubrique" id="rub_voies_fantoir_non_match" cible="table_voies_fantoir_non_match"></td>
-		<td class="rubrique" id="rub_voies_match" cible="table_voies_match"></td>
-		<td class="rubrique" id="rub_places_non_match" cible="table_places_non_match"></td>
-		<td class="rubrique" id="rub_places_match" cible="table_places_match"></td>
-		<td class="rubrique" id="rub_OSM_non_match" cible="table_OSM_non_match"></td>
-	</tr>
-</table>
+	<form action="javascript:requete_fantoir()" autocomplete="on">
+		<input type="text" id="input_insee" placeholder="Code INSEE"></input>
+		<input type="submit" value="Lister">
+	</form>
+
+	<div id='bandeau_commune'>
+		<table id="table_infos_commune"></table>
+	</div>
+
+	<div id="refresh_infobulle"></div>
+
+	<div id="table_communes_voisines">
+		<div class="fermer">X</div>
+		<table>
+		<tbody>
+			<tr><td id="11"></td><td id="12"></td><td id="1"></td><td id="2"></td></tr>
+		<!-- 	<tr><td id="10"></td><td id="0"></td><td id="0"></td><td id="3"></td></tr>
+			<tr><td id="9"></td><td id="0"><td id="0"></td></td><td id="4"></td></tr>
+		 -->
+		 	<tr><td id="10"></td><td class="commune_centre" colspan="2" rowspan="2"></td><td id="3"></td></tr>
+			<tr><td id="9"></td><td id="4"></td></tr>
+			<tr><td id="8"></td><td id="7"></td><td id="6"></td><td id="5"></td></tr>
+		</tbody>
+		</table>
+	</div>
+
+	<div id="bouton_export_csv" title="Exporter l'onglet courant en CSV"></div>
+	<div id="bouton_communes_voisines" title="Communes voisines"></div>
+	<div id="bouton_refresh" title="Mettre à jour les données BANO"></div>
+	<div id="bouton_aide" title="Aide"></div>
+	<div id="infos_refresh"></div>
+	<div id="alerte_commune"></div>
+	<div id="aide">
+		<div class="fermer">X</div>
+		<h3>Statuts FANTOIR</h3>
+		<li>Erreur d'orthographe</li><p>Erreur d'orthographe de FANTOIR vérifié sur le terrain ou de source officielle (documents)</p>
+		<li>Divergence d'orthographe</li><p>Pas la même orthographe dans Fantoir et sur le terrain, sans qu'il soit évident de trancher.
+		<li>Nom différent</li><p>Existence d'adresse dans une même rue avec des nom de rues différents, coté FANTOIR. Ce n'est ni une erreur d'orthographe, ni un doublon, mais un nom *vraiment* différent. À marquer si ce nom n'est volontairement pas retenu pour les rapprochements.
+		<li>Type de voie différent</li><p>Par ex. :'Impasse XXX' dans Fantoir, et 'Ruelle XXX' sur le terrain, sans qu'il existe ailleurs dans la commune une 'Impasse XXX'
+		<li>Voie doublon et type de voie différent</li><p>Par ex. : 2 entrées 'Impasse XXX' ET 'Ruelle XXX' dans Fantoir, et uniquement une 'Ruelle XXX' sur le terrain, sans qu'il existe ailleurs dans la commune d' 'Impasse XXX'. => 'Impasse XXX' à marquer en doublon.
+		<li>Voie doublon avec orthographe différente</li><p>2 graphies pour un même nom dans Fantoir.
+		<li>Répétition du type de voie</li><p>Type de voie (rue, petite rue...) en double avec de possibles variantes dans les abréviations. Ex: Gde Rue Grande Rue
+		<li>Nom introuvable sur le terrain</li><p>Pour un nom n'entrant pas dans les autres situations (doublon...) et sans aucune trace sur le terrain
+		<li>Ancien nom supprimé sur le terrain</li><p>Normalement Fantoir indique une date de fin pour un nom obsolète, et tous les enregistrements avec une date passée sont ignorés dans BANO. Si un nom Fantoir apparaît dans les listes alors qu'il a été remplacé sur le terrain, il faut le marquer.
+		<li>Nom tronqué</li><p>Les noms de voie Fantoir sont limités à 26 caractères. Ça peut être une cause d'échec de rapprochement, quand le nom OSM dépasse cette longueur.
+		<li>Voie détruite</li><p>La voie a bien existé mais son emprise a disparu suite à des travaux.
+		<li>Voie incorporée à une autre</li><p>La voie a "fusionné" avec une autre. Son nom n'a pas été préservé.
+		<li>Voie inexistante</li><p>Pas de trace de la voie sur le terrain, et pas de souvenir de son existence par le passé.
+		<li>Adresses hors périmètre</li><p>C'est plus un souci de géométrie dans le Cadastre, que dans les listes Fantoir en tant que tel : lorsque certains points d'adresse sont situés à plusieurs rues du reste des adresses de la voie, sans aucune justification.
+		<li>Erreurs combinées</li><p>À utiliser quand plusieurs choix sont possibles dans la liste des anomalies.
+	</div>
+	<table id="rubriques">
+		<tr><th colspan="2" title="Il existe au moins une parcelle avec un numéro d'adresse associé à ces voies.">Voies <span class="emphase">avec</span> adresse(s) numérotée(s)</th>
+			<th colspan="2" title="Il n'existe pas d'adresse avec numéro pour ces voies.">Voies <span class="emphase">sans</span> adresse(s) numérotée(s)</th>
+			<th colspan="2" title="Lieux-dits.">Lieux-dits</th>
+			<th colspan="1" title="Voies uniquement connues d'OSM.">Dans OSM et inconnu de FANTOIR</th>
+		</tr>
+		<tr><td class="rubrique" id="rub_adresses_non_match" cible="table_adresses_non_match"></td>
+			<td class="rubrique" id="rub_adresses_match" cible="table_adresses_match"></td>
+			<td class="rubrique" id="rub_voies_fantoir_non_match" cible="table_voies_fantoir_non_match"></td>
+			<td class="rubrique" id="rub_voies_match" cible="table_voies_match"></td>
+			<td class="rubrique" id="rub_places_non_match" cible="table_places_non_match"></td>
+			<td class="rubrique" id="rub_places_match" cible="table_places_match"></td>
+			<td class="rubrique" id="rub_OSM_non_match" cible="table_OSM_non_match"></td>
+		</tr>
+	</table>
 </div>
 
 <div id="reponse">
-<table id="table_adresses_non_match" class="table_liste"></table>
-<table id="table_adresses_match" class="table_liste"></table>
-<table id="table_voies_fantoir_non_match" class="table_liste"></table>
-<table id="table_voies_match" class="table_liste"></table>
-<table id="table_places_non_match" class="table_liste"></table>
-<table id="table_places_match" class="table_liste"></table>
-<table id="table_OSM_non_match" class="table_liste"></table>
-<div id="pied_de_page"></div>
+	<table id="table_adresses_non_match" class="table_liste"></table>
+	<table id="table_adresses_match" class="table_liste"></table>
+	<table id="table_voies_fantoir_non_match" class="table_liste"></table>
+	<table id="table_voies_match" class="table_liste"></table>
+	<table id="table_places_non_match" class="table_liste"></table>
+	<table id="table_places_match" class="table_liste"></table>
+	<table id="table_OSM_non_match" class="table_liste"></table>
 </div>
 <!--div id="credits">
 Données FANTOIR : © 11/2020 Ministère de l'Économie et des Finances (DGFiP) - <a href="https://www.etalab.gouv.fr/licence-ouverte-open-licence">Licence LO/OL</a> ||||
@@ -920,7 +587,7 @@ Données OpenStreetMap : © les Contributeurs d'OpenStreetMap  <a href="http://o
 </div-->
 
 <footer>
-<!--#include virtual="/fantoir-dev/footer.html" -->
+<!--#include file="includes/footer.html" -->
 </footer>
 
 <div id="josm_target" style="visibility : hidden"></div>
