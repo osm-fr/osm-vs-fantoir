@@ -1,129 +1,68 @@
-body{
-	    font-family: monospace;
-	}
-	#bandeau{
-		top:30px;
-		width:100%;
-		height:70px;
-		z-index:3;
-		position:fixed;
-		background-color:white;
-	}
-	#reponse{
-		position:absolute;
-		top:110px;
-		z-index:2;
-	}
-	#credits{
-		background:darkgrey;
-		position:fixed;
-		bottom:0px;
-		width:100%;
-		overflow:visible;
-		z-index:4;
-		text-align: justify;
-	}
-	#pied_de_page{
-		position:relative;
-		width:100%;
-		height:30px;
-		z-index:3;
-	}
-/*	.cellule_intitule{
-		text-align: right;
-	}
-	.cellule_data{
-		font-weight: bold;
-	}
-	#rubriques{
-		position:absolute;
-		top:130px;
-	}
-	#rubriques th{
-		background-color:black;
-		color:white;
-	}
-	.emphase{
-		color:red;
-		font-size: x-large;
-	}
-	.rubrique{
-		cursor:pointer;
-		width:200px;
-		height:50px;
-		position:relative;
-		color:black;
-		font-weight: bold;
-		background:white;
-		margin-right:10px;
-	}
-	.rubrique.active{
-		border:3px solid black;
-	}
-	.table_liste{
-		display:none;
-	}
-*/	.zone_click{
-		cursor:pointer;
-		color:blue;
-		text-decoration: underline;
-	}
-	.zone_click.clicked{
-		background-color:green;
-		color:white;
-	}
-	#wait_ajax{
-		position:fixed;
-		z-index:1;
-		width:100%;
-		height:100%;
-		background-color:lightgray;
-		opacity:0;
-		text-align:center;
-	}
-	#wait_ajax span{
-		background-color:black;
-		vertical-align:middle;
-		font-size:30px;
-		line-height:500px;
-		color:white;
-		border:50px solid black;
-	}
-/*	#infobulle_aide{
-		position: fixed;
-		color: red;
-		background: #dddddd;
-		width: 40px;
-		height: 40px;
-		border-radius: 40px;
-		top: 10px;
-		right: 10px;
-		vertical-align: bottom;
-		text-align: center;
-		font-weight: bolder;
-		font-size: 35px;
-	}
-	#aide{
-		position:fixed;
-		top:5px;
-		right:5px;
-		width:400px;
-		height:100%;
-		background-color:lavender;
-		overflow-y:scroll;
-		visibility:hidden;
-		z-index: 10;
-	}
-*/	#table_top_adresses tr td{
-		background:white;
-		color:black;
-		font-weight: normal;
-	}
-	#table_top_adresses tr td.clicked{
-		background-color:green;
-		color:white;
-		font-weight: normal;
-	}
-	table.tablesorter thead tr .header {
-		height:40px;
-	}
+#bandeau{
+	top:60px;
+	width:100%;
+	height:70px;
+	z-index:3;
+	position:fixed;
+	background-color:white;
+}
+#reponse{
+	position:absolute;
+	top:120px;
+	z-index:2;
+}
+#credits{
+	background:darkgrey;
+	position:fixed;
+	bottom:0px;
+	width:100%;
+	overflow:visible;
+	z-index:4;
+	text-align: justify;
+}
+#pied_de_page{
+	position:relative;
+	width:100%;
+	height:30px;
+	z-index:3;
+}
+.zone_click{
+	cursor:pointer;
+	color:blue;
+	text-decoration: underline;
+}
+.zone_click.clicked{
+	background-color:green;
+	color:white;
+}
+#wait_ajax{
+	position:fixed;
+	top:60px;
+	z-index:1;
+	width:100%;
+	height:100%;
+	background-color:lightgray;
+	opacity:0;
+	text-align:center;
+}
+#wait_ajax span{
+	background-color:black;
+	vertical-align:middle;
+	font-size:30px;
+	line-height:500px;
+	color:white;
+	border:50px solid black;
+}
+#table_top_adresses tr td{
+	background:white;
+	color:black;
+	font-weight: normal;
+}
+#table_top_adresses tr td.clicked{
+	background-color:green;
+	color:white;
+	font-weight: normal;
+}
+table.tablesorter thead tr .header {
+	height:40px;
+}

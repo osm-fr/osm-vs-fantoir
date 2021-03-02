@@ -4,7 +4,9 @@
 <title>Listes FANTOIR par commune</title>
 <script src="js/jquery-2.1.1.min.js"></script>
 <script src="js/jquery.tablesorter.min.js"></script>
+<link rel="stylesheet" href="css/style.css" type="text/css"/>
 <link rel="stylesheet" href="css/style_liste_brute_fantoir.css" type="text/css"/>
+<link rel="stylesheet" href="css/menu.css" type="text/css"/>
 <link rel="stylesheet" href="css/tablesorter.css" type="text/css"/>
 <script>
 	a_champs_fantoir = ['Rapproché ?','dept','code_dir','code_com','code_insee','id_voie','fantoir','Fantoir OSM','rivoli','nature_voie','libelle_voie','type_commune','caractere_rur','caractere_voie','caractere_pop','pop_a_part','pop_fictive','caractere_annul','date_annul','date_creation','code_majic','type_voie','ld_bati','dernier_mot']
@@ -74,22 +76,34 @@
 </script>
 </head>
 <body onload="start()">
-<div id="bandeau">
-<form action="javascript:listing_fantoir()" autocomplete="on">
-<input type="text" id="input_insee" placeholder="Code INSEE"></input>
-<input type="submit" value="Lister">
-</form>
-<div id='bandeau_commune'>
-<table id="table_infos_commune"></table>
-</div></div>
+	<header>
+		<!--#include file="includes/menu.html" -->
+	</header>
 
-<div id="reponse">
-<table id="listing_fantoir" class="tablesorter">
-</table>
-<div id="pied_de_page"></div>
-</div>
-<footer>
- <!--#include file="includes/footer.html" -->
-</footer>
+	<div id="barre-jaune">
+		<span>Commune :</span>
+		<form action="javascript:listing_fantoir()" autocomplete="on">
+			<input type="text" id="input_insee" placeholder="Code INSEE"></input>
+			<input type="submit" value="Lister">
+		</form>
+	</div>
+
+	<div id="bandeau">
+		<div id='bandeau_commune'>
+			<table id="table_infos_commune"></table>
+		</div>
+	</div>
+
+	<div id="reponse">
+		<table id="listing_fantoir" class="tablesorter">
+		</table>
+		<div id="pied_de_page">
+			
+		</div>
+	</div>
+
+	<footer>
+	 <!--#include file="includes/footer.html" -->
+	</footer>
 </body>
 </html>

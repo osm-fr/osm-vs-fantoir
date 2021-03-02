@@ -4,6 +4,7 @@
 <title>Statistiques de couverture en voies nommées par département</title>
 <script src="js/jquery-2.1.1.min.js"></script>
 <script src="js/jquery.tablesorter.min.js"></script>
+<link rel="stylesheet" href="css/style.css" type="text/css"/>
 <link rel="stylesheet" href="css/style_stats_dept.css" type="text/css"/>
 <link rel="stylesheet" href="css/tablesorter.css" type="text/css"/>
 <link rel="stylesheet" href="css/menu.css" type="text/css"/>
@@ -100,15 +101,20 @@
 </head>
 <body onload="start()">
 
-<header>
-	<!--#include file="includes/menu.html" -->
-</header>
+	<header>
+		<!--#include file="includes/menu.html" -->
+	</header>
+
+	<div id="barre-jaune">
+		<span>Département :</span>
+		<form action="javascript:requete_stats_dept()" autocomplete="on">
+			<input type="text" id="input_dept" placeholder="N° de département"></input>
+			<input type="submit" value="Afficher">
+		</form>
+	</div>
 
 <div id="bandeau">
-	<form action="javascript:requete_stats_dept()" autocomplete="on">
-	<input type="text" id="input_dept" placeholder="N° de département"></input>
-	<input type="submit" value="Afficher">
-	</form>
+
 	<div id='bandeau_dept'>
 		<table id="table_infos_dept"></table>
 	</div>
