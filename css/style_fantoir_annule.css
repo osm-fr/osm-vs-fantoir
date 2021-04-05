@@ -11,6 +11,30 @@
 h4 {
 	font-size: 0.9em;
 }
+
+/*------------------Tableau de réponse------------------*/
+/*Général*/
+#table_fantoir_annule {
+	font-size: 0.9em;
+}
+th {
+	padding-bottom: 10px;
+}
+td {
+	padding:1px 15px;
+}
+
+/*----- Petites résolutions d'écran -----*/
+@media only screen and (max-width: 1200px) {
+td {padding:1px 5px;}
+}
+
+/*Première colonne avec codes Fantoir*/
+.cell_fantoir {
+	font-family: monospace;
+	font-size: 1.3em;
+}
+
 .cellule_intitule{
 	text-align: right;
 }

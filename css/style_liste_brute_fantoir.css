@@ -1,45 +1,41 @@
-
-	#bandeau{
-		top:60px;
-		width:100%;
-		height:100px;
-		z-index:2;
-		position:fixed;
-		background-color:white;
-	}
-
-	#bandeau_commune{
-		/*border-bottom: solid #555;*/
-	}
-	.titre_commune{
-		margin: 10px 30px;
-	}
-	#reponse{
-		position:absolute;
-		top:140px
-	}
-	#pied_de_page{
-		position:relative;
-		width:100%;
-		height:30px;
-		z-index:3;
-	}
-	#credits{
-		background:darkgrey;
-		position:fixed;
-		bottom:0px;
-		width:100%;
-		overflow:visible;
-		z-index:4;
-		text-align: justify;
-	}
-	table.tablesorter tbody td.rapproche{
-		color:white;
-		font-weight:bold;
-		background:#009900;	
-	}
-	table.tablesorter tbody td.qualifie{
-		color:white;
-		font-weight:bold;
-		background:#555555;	
-	}
+#bandeau{
+	top:60px;
+	width:100%;
+	height:70px;
+	z-index:3;
+	position:fixed;
+	background-color:white;
+	border-bottom: 1px solid black;
+}
+.titre_commune{
+	margin: 10px 30px;
+}
+#reponse{
+	position:absolute;
+	top:150px
+}
+#pied_de_page{
+	position:relative;
+	width:100%;
+	height:30px;
+	z-index:3;
+}
+#credits{
+	background:darkgrey;
+	position:fixed;
+	bottom:0px;
+	width:100%;
+	overflow:visible;
+	z-index:4;
+	text-align: justify;
+}
+table.tablesorter tbody td.rapproche{
+	color:white;
+	font-weight:bold;
+	background:#009900;	
+}
+table.tablesorter tbody td.qualifie{
+	color:white;
+	font-weight:bold;
+	background:#555555;	
+}

@@ -1,55 +1,58 @@
-	#bandeau{
-		top:60px;
-		width:100%;
-		height:70px;
-		z-index:3;
-		position:fixed;
-		background-color:white;
-	}
-	#reponse{
-		position:absolute;
-		top:120px;
-		z-index:2;
-	}
-	#pied_de_page{
-		position:relative
-;		width:100%;
-		height:30px;
-		z-index:3;
-	}
-	.zone_click{
-		cursor:pointer;
-		color:blue;
-		text-decoration: underline;
-	}
-	.zone_click.clicked{
-		background-color:green;
-		color:white;
-	}
-	#wait_ajax{
-		position:fixed;
-		top: 60px;
-		z-index:1;
-		width:100%;
-		height:100%;
-		background-color:lightgray;
-		opacity:0;
-		text-align:center;
-	}
-	#wait_ajax span{
-		background-color:black;
-		vertical-align:middle;
-		font-size:30px;
-		line-height:500px;
-		color:white;
-		border:50px solid black;
-	}
+#bandeau{
+	top:60px;
+	width:100%;
+	height:70px;
+	z-index:3;
+	position:fixed;
+	background-color:white;
+}
+h2 {
+	margin: 10px 30px;
+}
+#reponse{
+	position:absolute;
+	top:120px;
+	z-index:2;
+}
+#pied_de_page{
+	position:relative;
+	width:100%;
+	height:30px;
+	z-index:3;
+}
+.zone_click{
+	cursor:pointer;
+	color:blue;
+	text-decoration: underline;
+}
+.zone_click.clicked{
+	background-color:green;
+	color:white;
+}
+#wait_ajax{
+	position:fixed;
+	top: 60px;
+	z-index:1;
+	width:100%;
+	height:100%;
+	background-color:lightgray;
+	opacity:0;
+	text-align:center;
+}
+#wait_ajax span{
+	background-color:black;
+	vertical-align:middle;
+	font-size:30px;
+	line-height:500px;
+	color:white;
+	border:50px solid black;
+}
 
 #table_voies_recentes tr td{
-		background:white;
-		color:black;
-		font-weight: normal;
-	}
-	table.tablesorter thead tr .header {
-		height:40px;
-	}
+	background:white;
+	color:black;
+	font-weight: normal;
+}
+table.tablesorter thead tr .header {
+	height:40px;
+}
