@@ -1,11 +1,12 @@
 #bandeau{
 	top:30px;
 	width:100%;
-	margin-left:10px;
 	height:150px;
+	margin-left:10px;
 	z-index:3;
 	position:fixed;
 	background-color:white;
+	border-bottom: 1px solid black;
 }
 
 h4 {

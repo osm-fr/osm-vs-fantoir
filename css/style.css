@@ -7,10 +7,10 @@ body{
 	position: fixed;
 	z-index: 3;
 	top: 30px;
+	height: 30px;
 	width: 100%;
 	padding: 4px 10px 3px 57px;
 	background-color: #faff99;
-	border-bottom: 1px solid #555;
 	font-family: 'Arial', sans serif;
 	font-size: 0.9em;
 	font-weight: bold;
@@ -20,4 +20,8 @@ body{
 #barre-jaune form {
 	display: inline;
  	padding-right: 10px;
+}
+
+#barre-jaune form input {
+	height:22px;
 }
