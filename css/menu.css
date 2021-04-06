@@ -29,7 +29,7 @@
 #topnav .menu_actif {
 	float:left;
 	margin: 0;
-	padding: 6px 20px 7px;
+	padding: 7px 20px 7px;
 	font-family: 'Arial', sans serif;
  	font-size: 0.9em;
 	font-weight: bold;
@@ -45,15 +45,15 @@
 		padding: 6px 10px 7px;
 	}
 }
-@media only screen and (max-width: 1300px) {
+@media only screen and (max-width: 1330px) {
 	#topnav .bouton_nav, #topnav .menu_actif {
-		padding: 6px 6px 7px;
+		padding: 8px 6px;
 		font-size: 0.8em;
 	}
 }
 @media only screen and (max-width: 1150px) {
 	#topnav .bouton_nav, #topnav .menu_actif {
-		padding: 6px 6px 7px;
+		padding: 8px 6px;
 		font-size: 0.75em;
 	}
 }

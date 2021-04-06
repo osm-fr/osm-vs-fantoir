@@ -9,7 +9,7 @@ body{
 	top: 30px;
 	height: 30px;
 	width: 100%;
-	padding: 4px 10px 3px 57px;
+	padding: 4px 10px 4px 57px;
 	background-color: #faff99;
 	font-family: 'Arial', sans serif;
 	font-size: 0.9em;
@@ -17,11 +17,21 @@ body{
 	text-transform: uppercase;
 }
 
+#barre-jaune span {
+	vertical-align: middle;
+}
+
 #barre-jaune form {
 	display: inline;
- 	padding-right: 10px;
 }
 
 #barre-jaune form input {
 	height:22px;
+	vertical-align: middle;
+	line-height: 1em;
+}
+
+#barre-jaune input[type="text"] {
+    border: 1px solid #777;
+    border-radius: 3px;
 }
