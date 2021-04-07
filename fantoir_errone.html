@@ -4,6 +4,7 @@
 <title>FANTOIRs erronés</title>
 <script src="js/jquery-2.1.1.min.js"></script>
 <script src="js/jquery.tablesorter.min.js"></script>
+<link rel="stylesheet" href="css/style.css" type="text/css"/>
 <link rel="stylesheet" href="css/style_fantoir_errone.css" type="text/css"/>
 <link rel="stylesheet" href="css/menu.css" type="text/css"/>
 
@@ -122,30 +123,33 @@
 </head>
 <body onload="start()">
 
-<header>
-	<!--#include file="includes/menu.html" -->
-</header>
+	<header>
+		<!--#include file="includes/menu.html" -->
+	</header>
+		
+	<div id="bandeau">
+		<h1></h1>
+		<h4>Liste des codes Fantoir trouvés dans OSM et inconnus du fichier Fantoir officiel. Ce sont souvent des codes erronés, à cause d'erreurs de frappe : minuscules, inversions de caratères, etc.</h4>
+		<div id="pied_de_page"></div>
+	</div>
 	
-<div id="bandeau">
-<h1></h1>
-<h4>Liste des codes Fantoir trouvés dans OSM et inconnus du fichier Fantoir officiel. Ce sont souvent des codes erronés, à cause d'erreurs de frappe : minuscules, inversions de caratères, etc.</h4>
-<div id="pied_de_page"></div>
-</div>
-<table id="rubriques">
-	<tr><td class="rubrique" id="rub_adresses_non_match" cible="table_fantoir_errone"></td>
-	</tr>
-</table>
-</div>
+	<table id="rubriques">
+		<tr>
+			<td class="rubrique" id="rub_adresses_non_match" cible="table_fantoir_errone"></td>
+		</tr>
+	</table>
 
-<div id="reponse">
-<table id="table_fantoir_errone" class="table_liste_"></table>
-<div id="pied_de_page"></div>
-</div>
-<footer>
- <!--#include file="includes/footer.html" -->
-</footer>
+	<div id="reponse">
+		<table id="table_fantoir_errone" class="table_liste_"></table>
+		<div id="pied_de_page"></div>
+	</div>
 
-<div id="josm_target" style="visibility : hidden"></div>
-<div id="wait_ajax"></div>
+	<footer>
+		<!--#include file="includes/footer.html" -->
+	</footer>
+
+	<div id="josm_target" style="visibility : hidden"></div>
+	<div id="wait_ajax"></div>
+
 </body>
 </html>

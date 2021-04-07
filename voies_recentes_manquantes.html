@@ -4,6 +4,7 @@
 <script src="js/jquery-2.1.1.min.js"></script>
 <script src="js/jquery.tablesorter.min.js"></script>
 <link rel="stylesheet" href="css/tablesorter.css" type="text/css"/>
+<link rel="stylesheet" href="css/style.css" type="text/css"/>
 <link rel="stylesheet" href="css/style_voies_recentes_manquantes.css" type="text/css"/>
 <link rel="stylesheet" href="css/menu.css" type="text/css"/>
 
@@ -155,27 +156,32 @@
 </head>
 <body onload="start()">
 
-<header>
-	<!--#include file="includes/menu.html" -->
-</header>
+	<header>
+		<!--#include file="includes/menu.html" -->
+	</header>
 
-<div id="bandeau">
-	<form action="javascript:requete_voies_dept()" autocomplete="on">
-	<input type="text" id="input_dept" placeholder="N° de département"></input>
-	<input type="submit" value="Afficher">
-	</form>
-<h2>Voies récentes selon FANTOIR, connues de la BAN mais pas d'OSM</h2>
-<!--div id="pied_de_page"></div-->
-</div>
+	<div id="barre-jaune">
+		<span>Département :</span>
+		<form action="javascript:requete_voies_dept()" autocomplete="on">
+			<input type="text" id="input_dept" placeholder="N° de département"></input>
+			<input type="submit" value="Afficher">
+		</form>
+	</div>
+	
+	<div id="bandeau">
+		
+	<h2>Voies récentes selon FANTOIR, connues de la BAN mais pas d'OSM</h2>
+	<!--div id="pied_de_page"></div-->
+	</div>
 
-<div id="reponse">
-<table id="table_voies_recentes" class="tablesorter"></table>
-<div id="pied_de_page"></div>
-</div>
-<footer>
-<!--#include file="includes/footer.html" -->
-</footer>
-<div id="josm_target" style="visibility : hidden"></div>
-<div id="wait_ajax"></div>
+	<div id="reponse">
+	<table id="table_voies_recentes" class="tablesorter"></table>
+	<div id="pied_de_page"></div>
+	</div>
+	<footer>
+	<!--#include file="includes/footer.html" -->
+	</footer>
+	<div id="josm_target" style="visibility : hidden"></div>
+	<div id="wait_ajax"></div>
 </body>
 </html>
