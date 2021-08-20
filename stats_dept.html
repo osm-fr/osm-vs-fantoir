@@ -48,12 +48,20 @@
 			requete_stats_dept();
 		}
 	}
+	function update_csv_url(dept){
+		$('#bouton_export_csv').empty()
+   		$('#bouton_export_csv').append($('<a>').attr('href',"stats_dept.py?dept="+dept+'&format=csv')
+			                                   .attr('target','blank')
+			                                   .append($('<img>').attr('src','img/export-to-csv-icon-13.jpg')))
+	}
 	function requete_stats_dept(){
 		if (!is_valid_dept($('#input_dept')[0].value)){
 			alert($('#input_dept')[0].value+" n'est pas un numéro de département valide\n\nAbandon")
 			return;
 		}
+
 		$('body').css('cursor','progress');
+		update_csv_url($('#input_dept')[0].value)
 		$('#input_dept')[0].value = $('#input_dept')[0].value.toUpperCase()
 		$.ajax({
 			url: "stats_dept.py?dept="+$('#input_dept')[0].value
@@ -94,6 +102,8 @@
 			}
 			$('#stats_dept').tablesorter();
 			$('body').css('cursor','default');
+
+
 		})
 		window.location.hash="#dept="+$('#input_dept')[0].value
 	}
@@ -118,6 +128,7 @@
 	<div id='bandeau_dept'>
 		<table id="table_infos_dept"></table>
 	</div>
+<div id="bouton_export_csv" title="Exporter l'onglet courant en CSV"></div>
 <div id="infobulle_aide" title="Aide">?</div>
 </div>
 <div id="reponse">

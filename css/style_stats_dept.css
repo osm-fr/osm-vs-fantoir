@@ -47,6 +47,20 @@
 	z-index:4;
 	text-align: justify;
 }
+#bouton_export_csv{
+	position: fixed;
+	top: 35px;
+	right: 59px;
+}
+#bouton_export_csv a{
+	color: white;
+	font-weight: bold;
+	text-decoration: none;
+}
+#bouton_export_csv a img{
+	height: 50px;
+	width: 50px;
+}
 #infobulle_aide{
 	position: fixed;
 	color: red;
