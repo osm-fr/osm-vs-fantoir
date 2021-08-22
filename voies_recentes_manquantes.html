@@ -53,10 +53,20 @@
 			requete_voies_dept();
 		}
 	}
+	function update_csv_url(dept){
+		$('#bouton_export_csv').empty()
+   		$('#bouton_export_csv').append($('<a>').attr('href',"voies_recentes_manquantes_dept.py?dept="+dept+'&format=csv')
+			                                   .attr('target','blank')
+			                                   .append($('<img>').attr('src','img/export-to-csv-icon-13.jpg')))
+	}
+
 	function requete_voies_dept(){
 		if (check_form_for_dept()){
 			dept = $('#input_dept')[0].value
 			document.title = titre+' ('+dept+')'
+
+			update_csv_url(dept)
+
 			$('body').css('cursor','progress');
 			$('#wait_ajax').empty()
 							.css('z-index','20')
@@ -171,7 +181,7 @@
 	<div id="bandeau">
 		
 	<h2>Voies récentes selon FANTOIR, connues de la BAN mais pas d'OSM</h2>
-	<!--div id="pied_de_page"></div-->
+    <div id="bouton_export_csv" title="Exporter la liste courante en CSV"></div>
 	</div>
 
 	<div id="reponse">

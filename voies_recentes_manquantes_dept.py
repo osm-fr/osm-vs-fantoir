@@ -16,8 +16,17 @@ def get_data(data_type,dept):
 
             return cur.fetchall()
 
+def format_csv(fetch):
+    return ('Département\tCode INSEE\tCommune\tFANTOIR\tVoie\tDate de création\n'+'\n'.join([f'{c[0]}\t{c[1]}\t"{c[2]}"\t{c[4]}\t{c[3]}\t{c[7]}' for c in fetch]))
+
 params = cgi.FieldStorage()
 dept = params['dept'].value
+format = params.getvalue('format','json')
 
-print("Content-Type: application/json\n")
-print(json.JSONEncoder().encode(get_data('voies_recentes_manquantes_dept',dept)))
+if format == 'json':
+    print("Content-Type: application/json\n")
+    print(json.JSONEncoder().encode(get_data('voies_recentes_manquantes_dept',dept)))
+
+if format == 'csv':
+    print(f'Content-Type: text/csv\nContent-Disposition: Attachment; filename="Dept {dept} - voies recentes manquantes.csv"\n')
+    print(format_csv(get_data('voies_recentes_manquantes_dept',dept)))
