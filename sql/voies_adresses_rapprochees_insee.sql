@@ -3,7 +3,7 @@ qualif_adresse
 AS
 (SELECT numero,fantoir,id_statut
 				FROM 	(SELECT	*,rank() OVER (PARTITION BY numero,fantoir ORDER BY timestamp_statut DESC) rang
-						FROM 	statut_adresse
+						FROM 	statut_numero
 						WHERE	insee_com = '__com__')r
 				WHERE	rang = 1),
 diff_numero_fantoir
