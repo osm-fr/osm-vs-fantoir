@@ -1,0 +1,201 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Qualification des numéros d'adresses BAN</title>
+<script src="js/jquery-3.4.1.min.js"></script>
+<script src="js/tablesorter/jquery.tablesorter.js"></script>
+<!-- <script src="js/tablesorter/parsers/parser-input-select.min.js"></script> -->
+<!-- <script src="js/tablesorter/widgets/widget-filter.min.js"></script> -->
+<link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
+<link rel="stylesheet" href="css/style.css" type="text/css"/>
+<link rel="stylesheet" href="css/style_numeros.css" type="text/css"/>
+<link rel="stylesheet" href="css/menu.css" type="text/css"/>
+<!-- leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+   crossorigin=""></script>
+<script>
+    var menu_labels
+    function check_url_for_insee(){
+        pattern_insee = new RegExp('^[0-9][0-9abAB][0-9]{3}$')
+        var res
+        if (window.location.search){
+            if (window.location.search.split('insee=')[1].split('&')[0]){
+                if (pattern_insee.test(window.location.search.split('insee=')[1].split('&')[0])){
+                    res = window.location.search.split('insee=')[1].split('&')[0]
+                } else {
+                    alert(window.location.search.split('insee=')[1].split('&')[0]+' n\'est pas un code INSEE de commune\n\nAbandon')
+                }
+            }
+        }
+        return res
+    }
+    function check_url_for_fantoir(){
+        pattern_fantoir = new RegExp('^[0-9][0-9abAB][0-9]{3}[0-9|a-z|A-Z]{5}$')
+        var res
+        if (window.location.search){
+            if (window.location.search.split('fantoir=')[1].split('&')[0]){
+                if (pattern_fantoir.test(window.location.search.split('fantoir=')[1].split('&')[0])){
+                    res = window.location.search.split('fantoir=')[1].split('&')[0]
+                } else {
+                    alert(window.location.search.split('fantoir=')[1].split('&')[0]+' n\'est pas un code FANTOIR valide\n\nAbandon')
+                }
+            }
+        }
+        return res
+    }
+    function check_url_for_tab(){
+        pattern_tab = new RegExp('^[0-5]$')
+        var res
+        res = 0
+        if (window.location.search){
+            if (window.location.search.split('&tab=')[1]){
+                if (window.location.search.split('tab=')[1].split('&')[0]){
+                    if (pattern_tab.test(window.location.search.split('tab=')[1].split('&')[0])) {
+                        res = window.location.search.split('tab=')[1].split('&')[0]
+                    }
+                }
+            }
+        }
+        return res
+    }
+    function check_url_for_source(){
+        var res
+        res = ""
+        if (window.location.search){
+            if (window.location.search.split('&source=')[1]){
+                if (window.location.search.split('source=')[1].split('&')[0]){
+                    res = window.location.search.split('source=')[1].split('&')[0]
+                }
+            }
+        }
+        return res
+    }
+    function add_statut_numero(id_ligne,numero,statut,insee,fantoir,source){
+        $('#table_inspect_adresse tr:last').removeClass().addClass('statut'+statut).attr('numero',numero)
+        $('#table_inspect_adresse tr:last').append($('<td>').append($(a_menus_labels[statut]).change(function() {
+            statut = $(this)[0].value;
+            $.ajax({
+                url: "statut_numero.py?insee="+insee+"&fantoir="+fantoir+"&statut="+statut+"&numero="+numero+"&source="+source
+            })
+            .done(function( data ) {
+                if(data == statut){
+                    $('tr#'+id_ligne).removeClass().addClass('statut'+statut)
+                } else {
+                    alert("Souci lors de la mise à jour du statut. Le nouveau statut n'a pas été pris en compte")
+                }
+                refresh();
+            })
+        })))
+    }
+    function start(){
+        $.ajax({
+            url: "labels_statut_numero.py"
+        })
+        .done(function( data ) {
+            a_menus_labels = []
+            for (c=0;c<data.length;c++){
+                menu_labels = '<select>'
+                id_label = 0
+                for (i=0;i<data.length;i++){
+                    if (c!=i){
+                        menu_labels+='<option value='+data[i][0]+'>'+data[i][1]+'</option>'
+                    } else {
+                        menu_labels+='<option value='+data[i][0]+' selected>'+data[i][1]+'</option>'
+                        id_label = data[i][0]
+                    }
+                }
+                menu_labels+='</select>'
+                a_menus_labels[id_label] = menu_labels
+            }
+        })
+
+        insee = check_url_for_insee()
+        fantoir = check_url_for_fantoir()
+        source = check_url_for_source()
+        tab = check_url_for_tab()
+        $('#lien-retour').empty().append($('<a>').attr('href','index.html#insee='+insee+'&tab='+tab).append('<< Retour à la commune'))
+        global_ligne_id = 1000;
+
+        $.ajax({
+            url: "requete_inspect_numeros.py?insee="+insee+"&fantoir="+fantoir
+        })
+        .done(function( data ) {
+                                min_lon = data[0][7];
+                                max_lon = data[0][7];
+                                min_lat = data[0][8];
+                                max_lat = data[0][8];
+
+                                var map = L.map('map').setView([data[0][8], data[0][7]], 18);
+                                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',maxZoom: 19}).addTo(map);
+                                $('#bandeau').append($('<h1>').append(data[0][2]?data[0][2]:data[0][3])).append(($('<h2>').append(data[0][5]+" ("+data[0][6]+")")))
+                                $('#table_inspect_adresse').empty().append($('<thead>').append($('<tr>').append($('<th>').append('Source'))))
+                                $('#table_inspect_adresse tr').append($('<th>').append('Numero'))
+                                $('#table_inspect_adresse tr').append($('<th>').append('Statut de l\'adresse'))
+                                $('#table_inspect_adresse').append($('<tbody>'))
+                                for (l=0;l<data.length;l++){
+                                    source = data[l][0]
+                                    numero = data[l][1]
+                                    statut = data[l][4]
+                                    lon = data[l][7]
+                                    lat = data[l][8]
+                                    $('#table_inspect_adresse tbody:last').append($('<tr>').attr('id',global_ligne_id).append($('<td>').text(source)))
+                                    $('#table_inspect_adresse tr:last').append($('<td>').text(numero));
+
+                                    add_statut_numero(global_ligne_id,numero,statut,insee,fantoir,source)
+
+                                    var myIcon = L.divIcon({className: 'map-numero ligne'+global_ligne_id,html:'<span>'+numero+'</span>'});
+                                    L.marker([lat, lon],{icon: myIcon}).addTo(map)
+                                    min_lon = Math.min(min_lon,lon);
+                                    max_lon = Math.max(max_lon,lon);
+                                    min_lat = Math.min(min_lat,lat);
+                                    max_lat = Math.max(max_lat,lat);
+
+                                    global_ligne_id+=1
+                                }
+                                $('#table_inspect_adresse').trigger("resetToLoadState");
+                                $('#table_inspect_adresse').tablesorter();
+                                map.fitBounds([[min_lat,min_lon],[max_lat,max_lon]]);
+
+                                refresh();
+                            })
+    }
+    function refresh(){
+        $('.map-numero').removeClass('anomalie');
+        for (i=1;i<a_menus_labels.length;i++){
+            $('.statut'+i).each(function(){
+                $('.map-numero.ligne'+$(this).attr('id')).addClass('anomalie')
+            })
+        }
+    }
+
+    
+</script>
+</head>
+
+<body onload="start()">
+
+    <header>
+        <!--#include file="includes/menu.html" -->
+    </header>
+
+    <div id="barre-jaune">
+        <span>> Qualification des anomalies des numéros d'adresse</span>
+    </div>
+
+    <div id="bandeau">
+        <div id="lien-retour"><a href="blablabla">Retour à la commune</a></div>
+    </div>
+
+    <div id="reponse">
+        <table id="table_inspect_adresse"></table>
+    </div>
+     <div id="map"></div>
+    <footer>
+        <!--#include file="includes/footer.html" -->
+    </footer>
+    </body>
+</html>

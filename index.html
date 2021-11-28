@@ -257,13 +257,18 @@
 					} else {
 						$('tr:last').addClass('statut0')
 					}
-					if ((s==0) && data[l][7]){
+					if (((s==0)||(s==1)) && data[l][7]){
   					    add_josm_addr_link(table,$('#input_insee')[0].value,fantoir,data[l][2],data[l][7])
-  					    // add_addr_inspector_link(table,$('#input_insee')[0].value,data[l][0],data[l][1])
+  					    add_addr_inspector_link(table,$('#input_insee')[0].value,data[l][0],s,'BAN')
   					}
-					if ((s==1) && data[l][7]){
-  					    add_josm_addr_link(table,$('#input_insee')[0].value,fantoir,data[l][3],data[l][7])
-  					    // add_addr_inspector_link(table,$('#input_insee')[0].value,data[l][0],data[l][1])
+				//	else if ((s==1) && data[l][7]){
+  				//	    add_josm_addr_link(table,$('#input_insee')[0].value,fantoir,data[l][3],data[l][7])
+  				//	    add_addr_inspector_link(table,$('#input_insee')[0].value,data[l][0],data[l][1],s,'BAN')
+  				//	}
+                    else if ((s==0)||(s==1)){
+  					    $('#'+table+' tr:last').append($('<td>'))
+  					    $('#'+table+' tr:last').append($('<td>'))
+  					    add_addr_inspector_link(table,$('#input_insee')[0].value,data[l][0],s,'BAN')
   					}
 				}
 				if (data.length > 0){
@@ -401,40 +406,10 @@
 									})
 								)
 	}
-	function add_addr_inspector_link(table,insee,fantoir,nom_fantoir){
-		$('#'+table+' tr:last').append($('<td>')
-									.addClass('zone_click')
-									.text('Analyser')
-									.click(function(){
-										$.ajax({
-											url: "requete_inspect_numeros.py?insee="+insee+"&fantoir="+fantoir
-										})
-										.done(function( data ) {
-											$('#mask_inspect_adresse').css('display','block');
-											$('#modal_inspect_adresse').css('display','block');
-											$('#table_inspect_adresse').empty().append($('<thead>').append($('<tr>').append($('<th>').append('Source'))))
-											$('#table_inspect_adresse tr').append($('<th>').append('Numero'))
-											$('#table_inspect_adresse tr').append($('<th>').append('Libellé source'))
-											$('#table_inspect_adresse tr').append($('<th>').append('Libellé OSM'))
-											$('#table_inspect_adresse tr').append($('<th>').append('Statut de l\'adresse'))
-											$('#table_inspect_adresse').append($('<tbody>'))
-											for (l=0;l<data.length;l++){
-												$('#table_inspect_adresse tbody:last').append($('<tr>').attr('id',data[l][0]).append($('<td>').addClass('cell_fantoir').text(data[l][0])))
-												$('#table_inspect_adresse tr:last').append($('<td>').text(data[l][1]))
-												$('#table_inspect_adresse tr:last').append($('<td>').text(data[l][2]))
-												$('#table_inspect_adresse tr:last').append($('<td>').text(data[l][3]))
-												$('#table_inspect_adresse tr:last').append($('<td>').text(data[l][4]))
-												$('#table_inspect_adresse tr:last').removeClass().addClass('statut'+data[l][4])
-											}
-											$('#table_inspect_adresse').trigger("resetToLoadState");
-											$('#table_inspect_adresse').tablesorter();
-
-
-											// console.log(data)
-   											$(this).addClass('clicked');
-										}
-									)}
-	))};
+	function add_addr_inspector_link(table,insee,fantoir,tab,source){
+		$('#'+table+' tr:last').append($('<td>').append($('<a>').attr('href',"numeros.html?insee="+insee+'&fantoir='+fantoir+'&source='+source+'&tab='+tab)
+			                                   .append('Anomalies'))
+	)};
 
 	function add_header(table,with_edit_and_map_links,with_type_osm,with_cadastre_addr_link,with_statut_fantoir){
 		// $('#'+table).append($('<tr>').append($('<th>').append('Code FANTOIR')))
@@ -460,7 +435,7 @@
 			$('#'+table+' tr').append($('<th>').append('Statut FANTOIR ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
 		}
 		if (with_cadastre_addr_link){
-			$('#'+table+' tr').append($('<th>').addClass('string-none').attr('colspan','2').append('Adresses à intégrer'))			
+			$('#'+table+' tr').append($('<th>').addClass('string-none').attr('colspan','3').append('Adresses à intégrer'))			
 		}
 		$('#'+table).append($('<tbody>'))
 	}
