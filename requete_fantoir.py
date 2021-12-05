@@ -48,7 +48,7 @@ def get_batch_infos_etape_dept(etape,dept,source):
         return conn.fetchall()
 
 def format_csv(fetch):
-    return ('Code FANTOIR\tDate création\tLibellé FANTOIR\tLibellé OSM\n'+'\n'.join([f"{c[0]}\t{c[1]}\t{c[2]}\t{c[3]}" for c in fetch]))
+    return ('Code FANTOIR\tDate création\tLibellé FANTOIR\tLibellé OSM\tLon\tLat\n'+'\n'.join([f"{c[0]}\t{c[1]}\t{c[2]}\t{c[3]}\t{c[4]}\t{c[5]}" for c in fetch]))
 
 def main():
     params = cgi.FieldStorage()
