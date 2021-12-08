@@ -47,8 +47,19 @@ def get_batch_infos_etape_dept(etape,dept,source):
                                 dept = '{dept}';""")
         return conn.fetchall()
 
-def format_csv(fetch):
-    return ('Code FANTOIR\tDate création\tLibellé FANTOIR\tLibellé OSM\tLon\tLat\n'+'\n'.join([f"{c[0]}\t{c[1]}\t{c[2]}\t{c[3]}\t{c[4]}\t{c[5]}" for c in fetch]))
+def format_csv(tab, fetch):
+    if tab == 0 :
+        return ('Code FANTOIR;Date création;Libellé FANTOIR;Libellé BAN;Lon;Lat\n'+'\n'.join([f"{c[0]};{c[1]};{c[2]};{c[3]};{c[4]};{c[5]}" for c in fetch]))
+    elif tab == 1 or tab == 3 :
+        return ('Code FANTOIR;Date création;Libellé FANTOIR;Libellé OSM;Lon;Lat\n'+'\n'.join([f"{c[0]};{c[1]};{c[2]};{c[3]};{c[4]};{c[5]}" for c in fetch]))
+    elif tab == 2 :
+        return ('Code FANTOIR;Date création;Libellé FANTOIR\n'+'\n'.join([f"{c[0]};{c[1]};{c[2]}" for c in fetch]))
+    elif tab == 4 :
+        return ('Code FANTOIR;Date création;Libellé FANTOIR;Libellé Cadastre;Lon;Lat\n'+'\n'.join([f"{c[0]};{c[1]};{c[2]};{c[3]};{c[4]};{c[5]}" for c in fetch]))
+    elif tab == 5 :
+        return ('Code FANTOIR;Date création;Libellé FANTOIR;Type OSM : Libellé OSM;Lon;Lat\n'+'\n'.join([f"{c[0]};{c[1]};{c[2]};{c[3]};{c[4]};{c[5]}" for c in fetch]))
+    elif tab == 6 :
+        return ('Libellé OSM;Lon;Lat\n'+'\n'.join([f"{c[3]};{c[4]};{c[5]}" for c in fetch]))
 
 def main():
     params = cgi.FieldStorage()
@@ -89,7 +100,7 @@ def main():
 
     if format == 'csv':
         print(f'Content-Type: text/csv\nContent-Disposition: Attachment; filename="insee-{insee_com}-{nom_commune}-onglet {tab}.csv"\n')
-        print(format_csv(data_columns[tab]))
+        print(format_csv(tab,data_columns[tab]))
 
     if format == 'json':
         print('Content-Type: application/json\n')
