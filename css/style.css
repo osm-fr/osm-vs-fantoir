@@ -1,49 +1,37 @@
-	body{
-	    font-family: monospace;
+body{
+		font-family: 'Arial', sans serif;
+	    margin: 0;
 	}
-	#bandeau{
-		top:0px;
-		width:100%;
-		height:100px;
-		z-index:2;
-		position:fixed;
-		background-color:white;
-	}
-	#input_insee{
-		top:10px;
-	}
-	#bandeau_commune{
-		border-bottom-style: outset;
-	}
-	.titre_commune{
-		margin-left:30px;
-	}
-	#reponse{
-		position:absolute;
-		top:100px
-	}
-	#pied_de_page{
-		position:relative;
-		width:100%;
-		height:30px;
-		z-index:3;
-	}
-	#credits{
-		background:darkgrey;
-		position:fixed;
-		bottom:0px;
-		width:100%;
-		overflow:visible;
-		z-index:4;
-		text-align: justify;
-	}
-	table.tablesorter tbody td.rapproche{
-		color:white;
-		font-weight:bold;
-		background:#009900;	
-	}
-	table.tablesorter tbody td.qualifie{
-		color:white;
-		font-weight:bold;
-		background:#555555;	
-	}
+
+#barre-jaune {
+	position: fixed;
+	z-index: 3;
+	top: 30px;
+	height: 30px;
+	width: 100%;
+	padding: 4px 10px 4px 57px;
+	background-color: #faff99;
+	font-family: 'Arial', sans serif;
+	font-size: 0.9em;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+#barre-jaune span {
+	vertical-align: middle;
+}
+
+#barre-jaune form {
+	display: inline;
+}
+
+#barre-jaune form input {
+	height:22px;
+	vertical-align: middle;
+	line-height: 1em;
+}
+
+#barre-jaune input[type="text"] {
+    border: 1px solid #777;
+    border-radius: 3px;
+}

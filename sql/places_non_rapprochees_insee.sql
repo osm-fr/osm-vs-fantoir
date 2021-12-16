@@ -13,21 +13,24 @@ AS
 (SELECT *
 FROM	cumul_places
 WHERE	insee_com ='__com__'	AND
-	fantoir IS NOT NULL	AND
-	libelle_osm IS NULL),
+		fantoir IS NOT NULL	AND
+		libelle_osm IS NULL),
 v
 AS
 (SELECT fantoir
 FROM    cumul_voies
 WHERE   insee_com ='__com__')
 SELECT	c.fantoir,
-	c.libelle_fantoir,
-	'--',
-	st_x(c.geometrie),
-	st_y(c.geometrie),
-	COALESCE(s.id_statut,0),
-	c.ld_bati
+		to_char(to_date(f.date_creation,'YYYYDDD'),'YYYY-MM-DD'),
+		c.libelle_fantoir,
+		c.libelle_cadastre,
+		st_x(c.geometrie),
+		st_y(c.geometrie),
+		COALESCE(s.id_statut,0),
+		c.ld_bati
 FROM	c
+JOIN	fantoir_voie f
+ON		c.fantoir = f.fantoir10
 LEFT OUTER JOIN s
 ON	c.fantoir = s.fantoir
 LEFT OUTER JOIN v

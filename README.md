@@ -3,8 +3,8 @@ osm-vs-fantoir
 
 Code utilisé à https://bano.openstreetmap.fr/fantoir/
 
-Confrontation des données FANTOIR et du contenu OSM utilisé dans BANO
+Confrontation des données FANTOIR et du contenu OSM+Cadastre+BAL utilisé dans BANO
 
-Visualisation sous forme de listes
+Visualisation sous forme de listes. 
 
-*La branche active est https://github.com/osm-fr/osm-vs-fantoir/tree/bano_v2*
+Ce projet nécessite une base PostgreSQL avec le contenu BANO pour fonctionner. Cf https://github.com/osm-fr/bano

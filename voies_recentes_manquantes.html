@@ -4,132 +4,10 @@
 <script src="js/jquery-2.1.1.min.js"></script>
 <script src="js/jquery.tablesorter.min.js"></script>
 <link rel="stylesheet" href="css/tablesorter.css" type="text/css"/>
-<style>
-	body{
-	    font-family: monospace;
-	}
-	#bandeau{
-		top:0px;
-		width:100%;
-		height:70px;
-		z-index:3;
-		position:fixed;
-		background-color:white;
-	}
-	#reponse{
-		position:absolute;
-		top:80px;
-		z-index:2;
-	}
-	#credits{
-		background:darkgrey;
-		position:fixed;
-		bottom:0px;
-		width:100%;
-		overflow:visible;
-		z-index:4;
-		text-align: justify;
-	}
-	#pied_de_page{
-		position:relative;
-		width:100%;
-		height:30px;
-		z-index:3;
-	}
-/*	.cellule_intitule{
-		text-align: right;
-	}
-	.cellule_data{
-		font-weight: bold;
-	}
-	#rubriques{
-		position:absolute;
-		top:130px;
-	}
-	#rubriques th{
-		background-color:black;
-		color:white;
-	}
-	.emphase{
-		color:red;
-		font-size: x-large;
-	}
-	.rubrique{
-		cursor:pointer;
-		width:200px;
-		height:50px;
-		position:relative;
-		color:black;
-		font-weight: bold;
-		background:white;
-		margin-right:10px;
-	}
-	.rubrique.active{
-		border:3px solid black;
-	}
-	.table_liste{
-		display:none;
-	}
-*/	.zone_click{
-		cursor:pointer;
-		color:blue;
-		text-decoration: underline;
-	}
-	.zone_click.clicked{
-		background-color:green;
-		color:white;
-	}
-	#wait_ajax{
-		position:fixed;
-		z-index:1;
-		width:100%;
-		height:100%;
-		background-color:lightgray;
-		opacity:0;
-		text-align:center;
-	}
-	#wait_ajax span{
-		background-color:black;
-		vertical-align:middle;
-		font-size:30px;
-		line-height:500px;
-		color:white;
-		border:50px solid black;
-	}
-/*	#infobulle_aide{
-		position: fixed;
-		color: red;
-		background: #dddddd;
-		width: 40px;
-		height: 40px;
-		border-radius: 40px;
-		top: 10px;
-		right: 10px;
-		vertical-align: bottom;
-		text-align: center;
-		font-weight: bolder;
-		font-size: 35px;
-	}
-	#aide{
-		position:fixed;
-		top:5px;
-		right:5px;
-		width:400px;
-		height:100%;
-		background-color:lavender;
-		overflow-y:scroll;
-		visibility:hidden;
-		z-index: 10;
-	}
-*/	#table_voies_recentes tr td{
-		background:white;
-		color:black;
-		font-weight: normal;
-	}
-	table.tablesorter thead tr .header {
-		height:40px;
-	}
-</style>
+<link rel="stylesheet" href="css/style.css" type="text/css"/>
+<link rel="stylesheet" href="css/style_voies_recentes_manquantes.css" type="text/css"/>
+<link rel="stylesheet" href="css/menu.css" type="text/css"/>
+
 <script>
 	var menu_labels
 	var commune_valide = false
@@ -175,10 +53,20 @@
 			requete_voies_dept();
 		}
 	}
+	function update_csv_url(dept){
+		$('#bouton_export_csv').empty()
+   		$('#bouton_export_csv').append($('<a>').attr('href',"voies_recentes_manquantes_dept.py?dept="+dept+'&format=csv')
+			                                   .attr('target','blank')
+			                                   .append($('<img>').attr('src','img/export-to-csv-icon-13.jpg')))
+	}
+
 	function requete_voies_dept(){
 		if (check_form_for_dept()){
 			dept = $('#input_dept')[0].value
 			document.title = titre+' ('+dept+')'
+
+			update_csv_url(dept)
+
 			$('body').css('cursor','progress');
 			$('#wait_ajax').empty()
 							.css('z-index','20')
@@ -216,13 +104,14 @@
 					lat = data[l][6]
 					if (lon && lat){
 						url_ol_part2 = '?zoom=18&lat='+lat+'&lon='+lon
+						url_marker = '?mlat='+lat+'&mlon='+lon
 						url_hash_coords = '18/'+lat+'/'+lon
 						xleft	= lon-delta
 						xright	= lon+delta
 						ybottom	= lat-delta
 						ytop	= lat+delta
 					//visu
-						add_map_link(table,url_map_org_part1+'#map='+url_hash_coords,'ORG')
+						add_map_link(table,url_map_org_part1+url_marker+'#map='+url_hash_coords,'ORG')
 						add_map_link(table,url_map_fr_part1+url_ol_part2,'FR')
 						add_map_link(table,url_bano_part1+'#'+url_hash_coords,'BANO')
 					//JOSM
@@ -276,24 +165,33 @@
 </script>
 </head>
 <body onload="start()">
-<div id="bandeau">
-	<form action="javascript:requete_voies_dept()" autocomplete="on">
-	<input type="text" id="input_dept" placeholder="N° de département"></input>
-	<input type="submit" value="Afficher">
-	</form>
-<h2>Voies récentes selon FANTOIR, connues du Cadastre mais pas d'OSM</h2>
-<!--div id="pied_de_page"></div-->
-</div>
 
-<div id="reponse">
-<table id="table_voies_recentes" class="tablesorter"></table>
-<div id="pied_de_page"></div>
-</div>
-<div id="credits">
-Données OpenStreetMap : © les Contributeurs d'OpenStreetMap  <a href="http://opendatacommons.org/licenses/odbl/">Licence ODbL</a>
- - Données FANTOIR : © 2015 Ministère de l'Économie et des Finances (DGFiP) - <a href="http://wiki.data.gouv.fr/wiki/Licence_Ouverte_/_Open_Licence">Licence LO/OL</a>
-</div>
-<div id="josm_target" style="visibility : hidden"></div>
-<div id="wait_ajax"></div>
+	<header>
+		<!--#include file="includes/menu.html" -->
+	</header>
+
+	<div id="barre-jaune">
+		<span>Département :</span>
+		<form action="javascript:requete_voies_dept()" autocomplete="on">
+			<input type="text" id="input_dept" placeholder="N° de département"></input>
+			<input type="submit" value="Afficher">
+		</form>
+	</div>
+	
+	<div id="bandeau">
+		
+	<h2>Voies récentes selon FANTOIR, connues de la BAN mais pas d'OSM</h2>
+    <div id="bouton_export_csv" title="Exporter la liste courante en CSV"></div>
+	</div>
+
+	<div id="reponse">
+	<table id="table_voies_recentes" class="tablesorter"></table>
+	<div id="pied_de_page"></div>
+	</div>
+	<footer>
+	<!--#include file="includes/footer.html" -->
+	</footer>
+	<div id="josm_target" style="visibility : hidden"></div>
+	<div id="wait_ajax"></div>
 </body>
 </html>

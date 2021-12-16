@@ -1,0 +1,176 @@
+#bandeau{
+	top:30px;
+	width:100%;
+	height:150px;
+	margin-left:10px;
+	z-index:3;
+	position:fixed;
+	background-color:white;
+	border-bottom: 1px solid black;
+}
+
+h4 {
+	font-size: 0.9em;
+}
+
+/*------------------Tableau de réponse------------------*/
+/*Général*/
+#table_fantoir_errone {
+	font-size: 0.9em;
+}
+th {
+	padding-bottom: 10px;
+}
+td {
+	padding:1px 15px;
+}
+
+/*----- Petites résolutions d'écran -----*/
+@media only screen and (max-width: 1200px) {
+td {padding:1px 5px;}
+}
+
+/*Première colonne avec codes Fantoir*/
+.cell_fantoir {
+	font-family: monospace;
+	font-size: 1.3em;
+}
+
+.cellule_intitule{
+	text-align: right;
+}
+.cellule_data{
+	font-weight: bold;
+}
+#rubriques{
+	position:absolute;
+	top:160px;
+	margin-left:10px;
+}
+#rubriques th{
+	background-color:black;
+	color:white;
+}
+#reponse{
+	position:absolute;
+	top:180px;
+	margin-left:10px;
+	z-index:2;
+}
+.emphase{
+	color:red;
+	font-size: x-large;
+}
+.rubrique{
+	cursor:pointer;
+	width:200px;
+	height:50px;
+	position:relative;
+	color:black;
+	font-weight: bold;
+	background:white;
+	margin-right:10px;
+}
+.rubrique.active{
+	border:3px solid black;
+}
+.table_liste{
+	display:none;
+}
+.zone_click{
+	cursor:pointer;
+	color:blue;
+	text-decoration: underline;
+}
+.zone_click.clicked{
+	background-color:green;
+	color:white;
+}
+#refresh_infos{
+	position: fixed;
+	width: 250px;
+	height: 56px;
+	top: 36px;
+	right: 109px;
+	display:none;
+}
+#refresh_infos span{
+	font-weight: bold;
+}
+#bouton_refresh{
+	position: fixed;
+	background-image: url("img/72176-600.png");
+	background-size: 49px 56px;
+	background-repeat: no-repeat;
+	width: 49px;
+	height: 56px;
+	top: 36px;
+	right: 60px;
+}
+#infos_refresh{
+	width:100%;
+	height:200px;
+	top:30px;
+	left:0px;
+	background-color:lightgrey;
+	opacity:0.8;
+	position:fixed;
+	//visibility:hidden;
+	display:none;
+	z-index: 15;
+}
+#wait_ajax{
+	position:fixed;
+	z-index:1;
+	width:100%;
+	height:100%;
+	background-color:lightgray;
+	opacity:0;
+	text-align:center;
+}
+#wait_ajax span{
+	background-color:black;
+	vertical-align:middle;
+	font-size:30px;
+	line-height:500px;
+	color:white;
+	border:50px solid black;
+}
+#infobulle_aide{
+	position: fixed;
+	color: red;
+	background: #dddddd;
+	width: 40px;
+	height: 40px;
+	border-radius: 40px;
+	top: 40px;
+	right: 10px;
+	vertical-align: bottom;
+	text-align: center;
+	font-weight: bolder;
+	font-size: 35px;
+}
+#aide{
+	position:fixed;
+	top:35px;
+	right:5px;
+	width:400px;
+	height:100%;
+	background-color:lavender;
+	overflow-y:scroll;
+	visibility:hidden;
+	z-index: 10;
+}
+#table_fantoir_errone tr td{
+	background:white;
+	color:black;
+	font-weight: normal;
+}
+
+
+#pied_de_page{
+	position:relative;
+	width:100%;
+	height:30px;
+	z-index:3;
+}

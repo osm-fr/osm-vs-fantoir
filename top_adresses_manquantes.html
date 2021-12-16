@@ -1,0 +1,215 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="js/jquery-2.1.1.min.js"></script>
+<script src="js/jquery.tablesorter.min.js"></script>
+<link rel="stylesheet" href="css/tablesorter.css" type="text/css"/>
+<link rel="stylesheet" href="css/style.css" type="text/css"/>
+<link rel="stylesheet" href="css/style_top_adresses_manquantes.css" type="text/css"/>
+<link rel="stylesheet" href="css/menu.css" type="text/css"/>
+<script>
+	var menu_labels
+	var commune_valide = false
+	var osm_state
+	var titre = "Voies inconnues d'OSM avec un maximum d'adresses"
+	function is_valid_dept(d){
+		pattern_dept = new RegExp('^([01]|[3-8])([0-9])$|^2([aAbB]|[1-9])$|^9([0-5]|7[1-4]|76)$')
+		res = false
+		if (pattern_dept.test(d)){
+			res = d
+		}
+		return res
+	}
+	function check_url_for_dept(){
+		var res
+		if (window.location.hash){
+			if (window.location.hash.split('dept=')[1]){
+				if (is_valid_dept(window.location.hash.split('dept=')[1].split('&')[0])){
+					res = window.location.hash.split('dept=')[1].split('&')[0]
+				} else {
+//					document.title = titre
+					alert(window.location.hash.split('dept=')[1].split('&')[0]+' n\'est pas un numero de département valide\n\nAbandon')
+				}
+			}
+		}
+		return res
+	}
+	function check_form_for_dept(){
+		res = false
+		if (is_valid_dept($('#input_dept')[0].value)){
+			res = $('#input_dept')[0].value
+		} else {
+			alert($('#input_dept')[0].value+' n\'est pas un numero de département valide\n\nAbandon')
+		}
+		return res
+	}
+	function start(){
+		document.title = titre
+		dept = check_url_for_dept()
+		if (dept){
+			$('#input_dept').empty()
+			$('#input_dept')[0].value = dept
+			requete_voies_dept();
+		}
+	}
+	function requete_voies_dept(){
+		if (check_form_for_dept()){
+			dept = $('#input_dept')[0].value
+			document.title = titre+' ('+dept+')'
+			$('body').css('cursor','progress');
+			$('#wait_ajax').empty()
+							.css('z-index','20')
+							.css('opacity','0.8')
+							.append($('<span>').append('Recherche des voies non rapprochées, avec beauuuuuuucoup d\'adresses...'));
+			$.ajax({
+				url: "requete_par_dept.py?requete=top_adresses_manquantes&cache=False&dept="+dept
+			})
+			.done(function( data ){
+				$('body').css('cursor','default');
+				$('#table_top_adresses').empty()
+
+				url_map_org_part1 = 'http://www.openstreetmap.org/'
+				url_map_fr_part1 = 'http://tile.openstreetmap.fr/'
+				url_bano_part1 = 'http://tile.openstreetmap.fr/~cquest/leaflet/bano.html'
+				url_edit_part1 = 'http://www.openstreetmap.org/edit?editor='
+				delta = 0.0008
+
+				add_header('table_top_adresses',true)
+				$('#table_top_adresses').append($('<tbody>'))
+				table = 'table_top_adresses'
+				data = data[1]
+				for (l=0;l<data.length;l++){
+					dept = data[l][0]
+					insee = data[l][1]
+					nom_com = data[l][2]
+					voie = data[l][3]
+					fantoir = data[l][4]
+					lon = data[l][5]
+					lat = data[l][6]
+					nbaddr = data[l][7]
+					//Dept
+					$('#'+table).append($('<tr>').attr('id',data[l][4]).append($('<td>').text(data[l][0])))
+					//Commune (INSEE)
+					$('#'+table+' tr:last').append($('<td>').text(data[l][2]+'('+data[l][1]+')'))
+					//Fantoir
+					$('#'+table+' tr:last').append($('<td>').text(data[l][4]))
+					//Voie
+					$('#'+table+' tr:last').append($('<td>').text(data[l][3]))
+					//Date de création
+					// $('#'+table+' tr:last').append($('<td>').text(data[l][7]))
+					if (lon && lat){
+						url_ol_part2 = '?zoom=18&lat='+lat+'&lon='+lon
+						url_marker = '?mlat='+lat+'&mlon='+lon
+						url_hash_coords = '18/'+lat+'/'+lon
+						xleft	= lon-delta
+						xright	= lon+delta
+						ybottom	= lat-delta
+						ytop	= lat+delta
+					//visu
+						add_map_link(table,url_map_org_part1+url_marker+'#map='+url_hash_coords,'ORG')
+						add_map_link(table,url_map_fr_part1+url_ol_part2,'FR')
+						add_map_link(table,url_bano_part1+'#'+url_hash_coords,'BANO')
+					//JOSM
+						add_josm_link(table,xleft,xright,ybottom,ytop)
+					//ID
+						add_map_link(table,url_edit_part1+'id#map='+url_hash_coords,'ID')
+					//Potlatch
+						add_map_link(table,url_edit_part1+'potlatch2#map='+url_hash_coords,'P2')
+					//Fantoir
+						add_map_link(table,'./index.html#insee='+insee,'Fantoir-OSM '+insee)
+						add_map_link(table,'./liste_brute_fantoir.html#insee='+insee,'Fantoir brut '+insee)
+					}
+				    add_josm_addr_link(table,insee,fantoir,voie,nbaddr)
+				}
+				$('#wait_ajax').css('z-index','1').css('opacity','0');
+				$('#table_top_adresses').tablesorter();
+			})
+			window.location.hash="#dept="+dept
+		};
+	}
+	function add_map_link(table,href,text){
+		$('#'+table+' tr:last').append($('<td>')
+									.append($('<a>')
+									.attr('href',href)
+									.attr('target','blank')
+									.text(text)))	
+	}
+	function add_josm_link(table,xl,xr,yb,yt){
+		$('#'+table+' tr:last').append($('<td>')
+									.addClass('zone_click')
+									.attr('xleft',xl).attr('xright',xr).attr('ybottom',yb).attr('ytop',yt)
+									.text('JOSM')
+									.click(function(){
+										srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xl+'&right='+xr+'&top='+yt+'&bottom='+yb;
+										$('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
+										$(this).addClass('clicked');
+									})
+								)
+	}
+	function add_header(table,with_edit_and_map_links){
+		$('#'+table).empty().append($('<thead>').append($('<tr>').append($('<th>').append('Dept'))))
+		$('#'+table+' tr').append($('<th>').append('Commune(INSEE)'))
+		$('#'+table+' tr').append($('<th>').append('Fantoir'))
+		$('#'+table+' tr').append($('<th>').append('Voie'))
+		// $('#'+table+' tr').append($('<th>').append('Date de création'))
+		// if (with_edit_and_map_links){
+			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Cartes'))
+			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Édition'))
+			$('#'+table+' tr').append($('<th>').attr('colspan','2').append('FANTOIR'))
+		// } 
+		$('#'+table+' tr').append($('<th>').addClass('string-none').attr('colspan','2').append('Adresses à intégrer'))			
+	}
+	function add_josm_addr_link(table,insee,fantoir,nom_fantoir,nombre){
+		$('#'+table+' tr:last').append($('<td>')
+									.addClass('zone_click')
+									.text(nombre > 1 ? nombre+' Points':'1 Point')
+									.click(function(){
+										stringToRemove = window.location.href.split('/').pop()
+										srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele=Points';
+										$('<img>').appendTo($('#josm_target')).attr('src',srcURL);
+										$(this).addClass('clicked');
+									})
+								)
+		$('#'+table+' tr:last').append($('<td>')
+									.addClass('zone_click')
+									.text('Relation')
+									.click(function(){
+										stringToRemove = window.location.href.split('/').pop()
+										srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele=Relation';
+										$('<img>').appendTo($('#josm_target')).attr('src',srcURL);
+										$(this).addClass('clicked');
+									})
+								)
+	}
+</script>
+</head>
+<body onload="start()">
+
+	<header>
+		<!--#include file="includes/menu.html" -->
+	</header>
+
+	<div id="barre-jaune">
+		<span>Département :</span>
+		<form action="javascript:requete_voies_dept()" autocomplete="on">
+			<input type="text" id="input_dept" placeholder="N° de département"></input>
+			<input type="submit" value="Afficher">
+		</form>
+	</div>
+
+	<div id="bandeau">
+		
+	<h2>Voies connues de la BAN mais pas d'OSM, avec beaucoup d'adresses</h2>
+	</div>
+
+	<div id="reponse">
+	<table id="table_top_adresses" class="tablesorter"></table>
+	</div>
+
+	<footer>
+	<!--#include file="includes/footer.html" -->
+	</footer>
+	<div id="josm_target" style="visibility : hidden"></div>
+	<div id="wait_ajax"></div>
+</body>
+</html>

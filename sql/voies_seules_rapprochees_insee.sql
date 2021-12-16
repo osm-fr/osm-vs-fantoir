@@ -1,14 +1,20 @@
-SELECT	f.code_insee||f.id_voie||f.cle_rivoli fantoir,
+SELECT	f.fantoir10,
+		to_char(to_date(f.date_creation,'YYYYDDD'),'YYYY-MM-DD'),
 		nature_voie||' '||libelle_voie voie,
 		c.voie_osm,
 		ST_X(c.geometrie),
 		ST_Y(c.geometrie),
-		COALESCE(s.id_statut,0)
+		COALESCE(s.id_statut,0),
+		0::integer, -- adresses a proposer
+		CASE f.date_annul
+		    WHEN '0000000' THEN '1'
+		    ELSE -1
+		END AS fantoir_annule
 FROM	fantoir_voie f
 JOIN	(SELECT fantoir FROM cumul_voies WHERE insee_com = '__com__'
 		EXCEPT
 		SELECT fantoir FROM cumul_adresses WHERE insee_com = '__com__' AND voie_osm != '')r
-ON		f.code_insee||f.id_voie||f.cle_rivoli = r.fantoir
+ON		f.fantoir10 = r.fantoir
 JOIN	cumul_voies c
 ON		r.fantoir = c.fantoir
 LEFT OUTER JOIN	(SELECT fantoir,id_statut

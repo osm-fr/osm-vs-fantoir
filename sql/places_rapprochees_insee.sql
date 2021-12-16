@@ -28,16 +28,23 @@ WHERE	insee_com ='__com__'	AND
 	fantoir IS NOT NULL	AND
 	source = 'OSM')
 SELECT	c.fantoir,
-	c.libelle_fantoir,
-	CASE
-	  WHEN c.ld_osm IS NOT NULL THEN c.ld_osm||' : '||c.libelle_osm
-	  ELSE c.libelle_osm
-	END,
-	st_x(c.geometrie),
-	st_y(c.geometrie),
-	COALESCE(s.id_statut,0),
-	c.ld_bati
+		to_char(to_date(f.date_creation,'YYYYDDD'),'YYYY-MM-DD'),
+		c.libelle_fantoir,
+		CASE
+		  WHEN c.ld_osm IS NOT NULL THEN c.ld_osm||' : '||c.libelle_osm
+		  ELSE c.libelle_osm
+		END,
+		st_x(c.geometrie),
+		st_y(c.geometrie),
+		COALESCE(s.id_statut,0),
+		c.ld_bati,
+		CASE f.date_annul
+		    WHEN '0000000' THEN '1'
+		    ELSE -1
+		END AS fantoir_annule
 FROM	c
+JOIN	fantoir_voie f
+ON		c.fantoir = f.fantoir10
 LEFT OUTER JOIN s
-ON	c.fantoir = s.fantoir
+ON		c.fantoir = s.fantoir
 ORDER BY tri,2;

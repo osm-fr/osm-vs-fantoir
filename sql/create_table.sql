@@ -31,4 +31,28 @@ VALUES (0,0,'Ok'),
 (14,14,'Voie inexistante'),
 (15,7,'Voie doublon (même type et même nom)'),
 (16,11,'Nom tronqué'),
-(17,16,'Erreur de commune');
+(17,16,'Erreur de commune'),
+(18,17,'FANTOIR annulé non remplacé');
+
+CREATE TABLE statut_numero (
+    numero text,
+    fantoir character (10),
+    source text,
+    id_statut integer,
+    timestamp_statut double precision,
+    insee_com character(5));
+CREATE INDEX idx_statut_numero_fantoir ON statut_numero(fantoir,numero);
+
+CREATE TABLE labels_statuts_numero(
+    id_statut integer primary key,
+    tri integer default 0,
+    label_statut character varying(200)
+);
+TRUNCATE labels_statuts_numero;
+INSERT INTO labels_statuts_numero (id_statut,tri,label_statut)
+VALUES (0,0,'Ok'),
+(1,1,'Adresse fictive en 5xxx'),
+(2,2,'Adresse fictive en 9xxx'),
+(3,3,'Adresse invisible sur le terrain'),
+(4,4,'Emplacement sur une autre voie'),
+(5,5,'Adresse en dehors de la commune');

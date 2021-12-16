@@ -1,4 +1,4 @@
-SELECT 	code_insee,
-		nom
-FROM	departements
-WHERE	code_insee = '__dept__';
+SELECT 	dep,
+		libelle
+FROM	cog_departement
+WHERE	dep = '__dept__';
