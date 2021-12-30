@@ -1,9 +1,31 @@
 WITH
+qualif_adresse
+AS
+(SELECT TRANSLATE(UPPER(numero),' ','') AS uppernumero,
+        fantoir,
+        id_statut
+FROM    (SELECT *,rank() OVER (PARTITION BY numero,fantoir ORDER BY timestamp_statut DESC) rang
+        FROM    statut_numero
+        WHERE   insee_com = '__com__')r
+WHERE   rang = 1),
 diff_numero_fantoir
 AS
-(SELECT numero,fantoir FROM cumul_adresses WHERE insee_com = '__com__' and source = 'BAN'
+(SELECT uppernumero,
+        fantoir
+ FROM   (SELECT TRANSLATE(UPPER(numero),' ','') AS uppernumero,
+                fantoir 
+        FROM    cumul_adresses
+        WHERE   insee_com = '__com__' AND
+                source = 'BAN') c
+LEFT OUTER JOIN qualif_adresse q
+USING   (uppernumero,fantoir)
+WHERE   COALESCE(q.id_statut,0) = 0
 EXCEPT
-SELECT numero,fantoir FROM cumul_adresses WHERE insee_com = '__com__' and source = 'OSM'),
+SELECT  TRANSLATE(UPPER(numero),' ','') AS numero,
+        fantoir
+FROM    cumul_adresses
+WHERE   insee_com = '__com__' AND
+        source = 'OSM'),
 fantoir_numeros_manquants
 AS
 (SELECT DISTINCT fantoir,count(*) AS a_proposer FROM diff_numero_fantoir GROUP BY 1)
