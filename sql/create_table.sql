@@ -55,4 +55,5 @@ VALUES (0,0,'Ok'),
 (2,2,'Adresse fictive en 9xxx'),
 (3,3,'Adresse invisible sur le terrain'),
 (4,4,'Emplacement sur une autre voie'),
-(5,5,'Adresse en dehors de la commune');
+(5,5,'Adresse en dehors de la commune'),
+(6,6,'Adresse doublon');
