@@ -17,7 +17,7 @@ def get_data(data_type,dept):
             return cur.fetchall()
 
 def format_csv(fetch):
-    return ('Département\tCode INSEE\tCommune\tFANTOIR\tVoie\tDate de création\n'+'\n'.join([f'{c[0]}\t{c[1]}\t"{c[2]}"\t{c[4]}\t{c[3]}\t{c[7]}' for c in fetch]))
+    return ('Département;Code INSEE;Commune;FANTOIR;Voie;Date de création;lon;lat\n'+'\n'.join([f'{c[0]};{c[1]};"{c[2]}";{c[4]};{c[3]};{c[7]};{c[5]};{c[6]}' for c in fetch]))
 
 params = cgi.FieldStorage()
 dept = params['dept'].value
