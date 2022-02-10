@@ -20,16 +20,22 @@ def get_data(data_type,dept,cache_db):
 
             return cur.fetchall()
 
+def format_csv(fetch):
+    return ('Département;Code INSEE;Commune;FANTOIR;Voie;Adresses à intégrer;lon;lat\n'+'\n'.join([f'{c[0]};{c[1]};"{c[2]}";{c[4]};{c[3]};{c[7]};{c[5]};{c[6]}' for c in fetch]))
+
 cache = True
 params = cgi.FieldStorage()
 dept = params['dept'].value
 requete = params['requete'].value
+format = params.getvalue('format','json')
 
 if 'cache' in params:
     cache = not(params['cache'].value.lower() == 'false')
 
-# requete = 'top_adresses_manquantes'
-# dept = '92'
+if format == 'json':
+    print("Content-Type: application/json\n")
+    print(json.JSONEncoder().encode([get_data('infos_dept',dept,True),get_data(requete,dept,cache)]))
 
-print("Content-Type: application/json\n")
-print(json.JSONEncoder().encode([get_data('infos_dept',dept,True),get_data(requete,dept,cache)]))
+if format == 'csv':
+    print(f'Content-Type: text/csv\nContent-Disposition: Attachment; filename="Dept {dept} - top adresses manquantes.csv"\n')
+    print(format_csv(get_data(requete,dept,cache)))
