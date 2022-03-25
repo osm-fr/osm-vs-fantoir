@@ -6,12 +6,16 @@ import cgitb
 
 import lxml
 import requests
+
 from bs4 import BeautifulSoup
 
 import helpers as hp
 import db
 
 cgitb.enable()
+
+# force IP V4 cf https://github.com/osm-fr/osm-vs-fantoir/issues/162
+requests.packages.urllib3.util.connection.HAS_IPV6 = False
 
 def get_data_from_pg(conn,data_type,substitutions):
     with conn.cursor() as cur:
@@ -161,8 +165,8 @@ def main():
     insee_com = params['insee'].value
     fantoir = params['fantoir'].value
     modele = params['modele'].value
-    # insee_com = '95219'
-    # fantoir = '952190800H'
+    # insee_com = '01002'
+    # fantoir = '010020050T'
     # # modele = 'Points'
     # modele = 'Relation'
 
