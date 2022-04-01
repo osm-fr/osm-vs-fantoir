@@ -1,7 +1,7 @@
 osm-vs-fantoir
 ==============
 
-Code utilisé à https://bano.openstreetmap.fr/fantoir/
+Code utilisé à https://bano.openstreetmap.fr/pifometre/
 
 Confrontation des données FANTOIR et du contenu OSM+Cadastre+BAL utilisé dans BANO
 
