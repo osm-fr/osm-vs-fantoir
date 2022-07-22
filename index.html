@@ -82,7 +82,7 @@
 	function refresh_infobulle(){
 		$('#refresh_infobulle').empty()
 							.append('Mettre à jour avec les données OSM du ')
-							.append($('<span>').append(osm_state))
+							.append($('<span>').append(osm_state+' (UTC)'))
 							.show()
 	}
 	function refresh(){
