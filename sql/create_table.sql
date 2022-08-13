@@ -32,7 +32,8 @@ VALUES (0,0,'Ok'),
 (15,7,'Voie doublon (même type et même nom)'),
 (16,11,'Nom tronqué'),
 (17,16,'Erreur de commune'),
-(18,17,'FANTOIR annulé non remplacé');
+(18,17,'FANTOIR annulé non remplacé'),
+(19,18,'Point cardinal superflu');
 
 CREATE TABLE statut_numero (
     numero text,
