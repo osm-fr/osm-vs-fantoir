@@ -46,15 +46,16 @@ def get_empty_OSM_XML():
 
     return x
 
-def get_empty_associatedStreet_XML(fantoir,name):
+def get_empty_associatedStreet_XML(fantoir,name,fantoir_dans_relation):
     x = get_empty_OSM_XML()
     relation = x.new_tag('relation')
     relation['id'] = -1
     relation['version'] = 0
     relation['visible'] = 'true'
     relation.append(x.new_tag('tag', k='type', v='associatedStreet'))
-    relation.append(x.new_tag('tag', k='ref:FR:FANTOIR', v=fantoir))
     relation.append(x.new_tag('tag', k='name', v=name))
+    if fantoir_dans_relation:
+        relation.append(x.new_tag('tag', k='ref:FR:FANTOIR', v=fantoir))
     x.osm.append(relation)
 
     return x
@@ -165,9 +166,10 @@ def main():
     insee_com = params['insee'].value
     fantoir = params['fantoir'].value
     modele = params['modele'].value
-    # insee_com = '01002'
-    # fantoir = '010020050T'
-    # # modele = 'Points'
+    fantoir_dans_relation = params['fantoir_dans_relation'].value == 'ok'
+    # insee_com = '87104'
+    # fantoir = '87104B19BB'
+    # modele = 'Points'
     # modele = 'Relation'
 
     xmlResponse = None
@@ -182,7 +184,7 @@ def main():
                 xmlResponse = BeautifulSoup(resp.content,'xml')
 
         if not xmlResponse:
-            xmlResponse = get_empty_associatedStreet_XML(fantoir,name)
+            xmlResponse = get_empty_associatedStreet_XML(fantoir,name,fantoir_dans_relation)
             xmlResponse = append_street_role(xmlResponse,geom_position,name,fantoir)
 
     if not xmlResponse:

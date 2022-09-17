@@ -4,7 +4,13 @@ SELECT	f.fantoir10,
 		'--',
 		st_x(g.geometrie),
 		st_y(g.geometrie),
-		COALESCE(s.id_statut,0)
+		COALESCE(s.id_statut,0),
+		0::integer, -- adresses a proposer
+		CASE f.date_annul
+		    WHEN '0000000' THEN '1'
+		    ELSE -1
+		END AS fantoir_annule,
+		f.caractere_annul
 FROM	fantoir_voie f
 LEFT OUTER JOIN	(SELECT	fantoir
 				FROM	cumul_adresses
