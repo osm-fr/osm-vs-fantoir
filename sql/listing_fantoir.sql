@@ -24,4 +24,5 @@ LEFT OUTER JOIN f
 ON		fv.fantoir10 = f.fantoir
 LEFT OUTER JOIN a
 ON		fv.fantoir10 = a.fantoir
-WHERE	code_insee = '__com__';
+WHERE	code_insee = '__com__' AND
+        caractere_annul != 'B'; -- Filtre sur les pseudo-Fantoir BAN

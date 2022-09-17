@@ -9,7 +9,8 @@ SELECT	f.fantoir10,
 		CASE f.date_annul
 		    WHEN '0000000' THEN '1'
 		    ELSE -1
-		END AS fantoir_annule
+		END AS fantoir_annule,
+		f.caractere_annul
 FROM	fantoir_voie f
 JOIN	(SELECT fantoir FROM cumul_voies WHERE insee_com = '__com__'
 		EXCEPT

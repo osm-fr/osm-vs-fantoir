@@ -29,14 +29,19 @@ WHERE   insee_com = '__com__' AND
 fantoir_numeros_manquants
 AS
 (SELECT DISTINCT fantoir,count(*) AS a_proposer FROM diff_numero_fantoir GROUP BY 1)
-SELECT	f.fantoir10,
-		to_char(to_date(f.date_creation,'YYYYDDD'),'YYYY-MM-DD'),
-		nature_voie||' '||libelle_voie voie,
-		j.voie_autre,
-		st_x(g.geometrie),
-		st_y(g.geometrie),
-		COALESCE(s.id_statut,0),
-		COALESCE(fm.a_proposer,0)
+SELECT	fantoir10,
+	to_char(to_date(f.date_creation,'YYYYDDD'),'YYYY-MM-DD'),
+	nature_voie||' '||libelle_voie voie,
+	j.voie_autre,
+	st_x(g.geometrie),
+	st_y(g.geometrie),
+	COALESCE(s.id_statut,0),
+	COALESCE(fm.a_proposer,0),
+        CASE f.date_annul
+            WHEN '0000000' THEN '1'
+            ELSE -1
+        END AS fantoir_annule,
+        f.caractere_annul
 FROM	fantoir_voie f
 JOIN	(SELECT	fantoir,voie_autre
 		FROM	cumul_adresses
@@ -50,7 +55,7 @@ JOIN	(SELECT	fantoir,voie_autre
 				source = 'OSM') j
 ON		f.fantoir10 = j.fantoir
 JOIN	(SELECT DISTINCT fantoir,
-				FIRST_VALUE(geometrie) OVER(PARTITION BY fantoir) geometrie
+			 FIRST_VALUE(geometrie) OVER(PARTITION BY fantoir) geometrie
 		FROM	cumul_adresses
 		WHERE	insee_com = '__com__' AND
 				source = 'BAN') g
@@ -64,6 +69,6 @@ LEFT OUTER JOIN	(SELECT fantoir,id_statut
 				WHERE	rang = 1) s
 ON		j.fantoir = s.fantoir
 WHERE	f.code_insee = '__com__'	AND
-		f.type_voie in ('1','2')	AND
+		f.type_voie in ('1','2','B')	AND
 		f.date_annul = '0000000'
 ORDER BY 2; 

@@ -31,7 +31,7 @@ AS
 (SELECT DISTINCT fantoir,count(*) AS a_proposer
 FROM    diff_numero_fantoir
 GROUP BY 1)
-SELECT  f.fantoir10 fantoir,
+SELECT  fantoir10,
         to_char(to_date(f.date_creation,'YYYYDDD'),'YYYY-MM-DD'),
         nature_voie||' '||libelle_voie voie,
         j.voie_osm,
@@ -42,7 +42,8 @@ SELECT  f.fantoir10 fantoir,
         CASE f.date_annul
             WHEN '0000000' THEN '1'
             ELSE -1
-        END AS fantoir_annule
+        END AS fantoir_annule,
+        f.caractere_annul
 FROM    fantoir_voie f
 JOIN    (SELECT DISTINCT fantoir,voie_osm
         FROM    cumul_adresses
@@ -64,5 +65,5 @@ ON      j.fantoir = s.fantoir
 LEFT OUTER JOIN fantoir_numeros_manquants fm
 ON      f.fantoir10 = fm.fantoir
 WHERE   f.code_insee = '__com__'    AND
-        f.type_voie in ('1','2','3')
+        f.type_voie in ('1','2','3','B')
 ORDER BY 3;
