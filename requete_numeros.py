@@ -166,7 +166,8 @@ def main():
     insee_com = params['insee'].value
     fantoir = params['fantoir'].value
     modele = params['modele'].value
-    fantoir_dans_relation = params['fantoir_dans_relation'].value == 'ok'
+    if modele == 'Relation':
+        fantoir_dans_relation = params['fantoir_dans_relation'].value == 'ok'
     # insee_com = '87104'
     # fantoir = '87104B19BB'
     # modele = 'Points'
