@@ -9,6 +9,7 @@ source config
 
 pip install -qqe .
 
+bano ban2fantoir --code_insee ${1}
 bano process_commune OSM --code_insee ${1}
 bano process_commune BAN --code_insee ${1}
 bano process_commune_lieux-dits --code_insee ${1}

@@ -214,7 +214,7 @@
 					fantoir_dans_relation = 'ok'
 					if (((s==0)||(s==1)||(s==2)||(s==3)) && data[l][9]){
 						if (data[l][9] == 'B'){
-							fantoir_affiche = ' '
+							fantoir_affiche = 'Voie sans FANTOIR'
 							fantoir_dans_relation = 'ko'
 						}
 						//console.log(fantoir+' '+fantoir_affiche+' '+ data[l][9])
@@ -263,7 +263,7 @@
 					}
 					//Statut Fantoir
 					if (with_statut_fantoir){
-						add_statut_fantoir(global_ligne_id,fantoir,data[l][6])
+						add_statut_fantoir(global_ligne_id,fantoir_affiche,data[l][6])
 					} else {
 						$('tr:last').addClass('statut0')
 					}
