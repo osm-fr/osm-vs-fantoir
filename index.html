@@ -269,7 +269,11 @@
 					}
 					if (((s==0)||(s==1)) && data[l][7]){
   					    add_josm_addr_link(table,$('#input_insee')[0].value,fantoir,data[l][2],data[l][7],fantoir_dans_relation)
-  					    add_addr_inspector_link(table,$('#input_insee')[0].value,data[l][0],s,'BAN')
+  					    if (fantoir_dans_relation == 'ok'){
+  					    	add_addr_inspector_link(table,$('#input_insee')[0].value,data[l][0],s,'BAN')
+  					    } else {
+  					    	$('#'+table+' tr:last').append($('<td>'))
+  					    }
   					}
 				//	else if ((s==1) && data[l][7]){
   				//	    add_josm_addr_link(table,$('#input_insee')[0].value,fantoir,data[l][3],data[l][7])
@@ -278,7 +282,11 @@
                     else if ((s==0)||(s==1)){
   					    $('#'+table+' tr:last').append($('<td>'))
   					    $('#'+table+' tr:last').append($('<td>'))
-  					    add_addr_inspector_link(table,$('#input_insee')[0].value,data[l][0],s,'BAN')
+   					    if (fantoir_dans_relation == 'ok'){
+  					    	add_addr_inspector_link(table,$('#input_insee')[0].value,data[l][0],s,'BAN')
+  					    } else {
+  					    	$('#'+table+' tr:last').append($('<td>'))
+  					    }
   					}
 				}
 				if (data.length > 0){
