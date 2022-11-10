@@ -33,7 +33,8 @@ VALUES (0,0,'Ok'),
 (16,11,'Nom tronqué'),
 (17,16,'Erreur de commune'),
 (18,17,'FANTOIR annulé non remplacé'),
-(19,18,'Point cardinal superflu');
+(19,18,'Point cardinal superflu'),
+(20,19,'Voie en projet');
 
 CREATE TABLE statut_numero (
     numero text,
