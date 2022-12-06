@@ -2,8 +2,9 @@
 <head>
 <meta charset="UTF-8">
 <script src="js/jquery-2.1.1.min.js"></script>
-<script src="js/jquery.tablesorter.min.js"></script>
+<script src="tablesorter-2.31.3/js/jquery.tablesorter.min.js"></script>
 <link rel="stylesheet" href="css/tablesorter.css" type="text/css"/>
+<link rel="stylesheet" href="tablesorter-2.31.3/css/theme.blue.css" type="text/css">
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
 <link rel="stylesheet" href="css/style_top_adresses_manquantes.css" type="text/css"/>
 <link rel="stylesheet" href="css/menu.css" type="text/css"/>
@@ -136,8 +137,9 @@
 				    add_josm_addr_link(table,insee,fantoir,voie,nbaddr,fantoir_dans_relation)
 				}
 				$('#wait_ajax').css('z-index','1').css('opacity','0');
-				$('#table_top_adresses').tablesorter();
-			})
+				$('#table_top_adresses').tablesorter({
+					theme : 'blue'});
+			    })
 			window.location.hash="#dept="+dept
 		};
 	}
@@ -171,7 +173,8 @@
 			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Édition'))
 			$('#'+table+' tr').append($('<th>').attr('colspan','2').append('FANTOIR'))
 		// } 
-		$('#'+table+' tr').append($('<th>').addClass('string-none').attr('colspan','2').append('Adresses à intégrer'))			
+		$('#'+table+' tr').append($('<th>').addClass('nbpoints').append('Points à intégrer'))
+		$('#'+table+' tr').append($('<th>').addClass('string-none').append('Relations'))
 	}
 	function add_josm_addr_link(table,insee,fantoir,nom_fantoir,nombre,fantoir_dans_relation){
 		$('#'+table+' tr:last').append($('<td>')
