@@ -191,7 +191,7 @@
 			add_header('table_adresses_match',true,false,true,true)
 			add_header('table_voies_fantoir_non_match',false,false,false,true)
 			add_header('table_voies_match',true,false,false,true)
-			add_header('table_places_non_match',true,false,false,true)
+			add_header('table_places_non_match',true,false,true,true)
 			add_header('table_places_match',true,true,false,true)
 			add_header('table_OSM_non_match',true,false,false,false)
 			a_data_table = [[voies_fantoir_adresses_non_match,'table_adresses_non_match'],
@@ -287,6 +287,9 @@
   					    } else {
   					    	$('#'+table+' tr:last').append($('<td>'))
   					    }
+  					}
+  					if ((s==4) && data[l][8]){
+  					    $('#'+table+' tr:last').append($('<td title="Adresses de la Base adresse nationale. Non intégrables via Pifomètre">').text(data[l][8] > 1 ? data[l][8]+' Adresses':'1 Adresse'))
   					}
 				}
 				if (data.length > 0){
