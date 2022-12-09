@@ -1,10 +1,18 @@
-WITH 
-r AS (	SELECT	CASE format_cadastre
-					WHEN 'IMAG' THEN 'Raster'
-					ELSE 'Vecteur'
-				END format_cadastre,
-				insee_com,
-				nom_com
+WITH
+cog AS  (       SELECT com AS insee_com,
+	               libelle
+                FROM   cog_commune c
+                LEFT OUTER JOIN (SELECT comparent FROM cog_commune WHERE dep = '__dept__' AND typecom = 'ARM') p
+                ON     (c.com = p.comparent)
+                WHERE  c.dep = '__dept__' AND
+                       c.typecom != 'COMD' AND
+                       p.comparent IS NULL
+                ORDER BY 1),
+r AS    (       SELECT  CASE format_cadastre
+			  WHEN 'IMAG' THEN 'Raster'
+			  ELSE 'Vecteur'
+			END AS format_cadastre,
+				insee_com
 		FROM	code_cadastre
 		WHERE	dept = '__dept__'),
 a AS (	SELECT 	insee_com,
@@ -63,30 +71,31 @@ f AS (	SELECT 	code_insee AS insee_com,
 				type_voie in ('1','2','3')
 		GROUP BY code_insee),
 i AS (	SELECT 	r.format_cadastre,
-				r.insee_com, --Code INSEE
-				r.nom_com, --Commune
-				coalesce(a.voies_avec_adresses_rapprochees::integer,0) a, --Voies avec adresses rapprochées (a)
-				coalesce(v.voies_rapprochees::integer,0) b, --Toutes voies rapprochées (b)
-				coalesce(vl.voies_rapprochees::integer,0) b1, --Voies rapprochées sur lieux-dits (bl)
-				t.voies_fantoir c, --Voies FANTOIR (c)
-				f.voies_fantoir d, --Voies FANTOIR + lieux-dits (d)
-				coalesce(((a.voies_avec_adresses_rapprochees*100/t.voies_fantoir))::integer,0), --Pourcentage de rapprochement avec adresses
-				coalesce(((v.voies_rapprochees*100/t.voies_fantoir))::integer,0), --Pourcentage de rapprochement sur voies
-				coalesce(((v.voies_rapprochees*100/f.voies_fantoir))::integer,0), --Pourcentage de rapprochement sur voies+lieux-dits
-				coalesce(adrOSM.adresses_OSM::integer,0), --Adresses OSM
-				coalesce(adrBAN.adresses_BAN::integer,0), --Adresses BAN, BAL
-				coalesce(adrnon.adresses_non_rapprochees::integer,0), --Adresses sans voie rapprochée
-				coalesce(((100-adrnon.adresses_non_rapprochees*100/adrBAN.adresses_BAN))::integer,100) --Pourcentage d'adresses avec voie rapprochée
-		FROM	r
-		LEFT OUTER JOIN v USING (insee_com)
-		LEFT OUTER JOIN vl USING (insee_com)
-		LEFT OUTER JOIN a USING (insee_com)
-		LEFT OUTER JOIN adrOSM USING (insee_com)
-		LEFT OUTER JOIN adrBAN USING (insee_com)
-		LEFT OUTER JOIN adrnon USING (insee_com)
-		JOIN 	t USING (insee_com)
-		JOIN 	f USING (insee_com))
-SELECT	i.*,--(((a/c::double precision)*(c-a)) + ((b/c::double precision)*(c-b)) + ((b/d::double precision)* (d-b)))::integer
-		((power(c-a,2)/c) + (power(b-c,2)/c) + (power(d-b,2)/d))::integer
+		cog.insee_com, --Code INSEE
+		cog.libelle, --Commune
+		coalesce(a.voies_avec_adresses_rapprochees::integer,0) a, --Voies avec adresses rapprochées (a)
+		coalesce(v.voies_rapprochees::integer,0) b, --Toutes voies rapprochées (b)
+		coalesce(vl.voies_rapprochees::integer,0) b1, --Voies rapprochées sur lieux-dits (bl)
+		t.voies_fantoir c, --Voies FANTOIR (c)
+		f.voies_fantoir d, --Voies FANTOIR + lieux-dits (d)
+		coalesce(((a.voies_avec_adresses_rapprochees*100/t.voies_fantoir))::integer,0), --Pourcentage de rapprochement avec adresses
+		coalesce(((v.voies_rapprochees*100/t.voies_fantoir))::integer,0), --Pourcentage de rapprochement sur voies
+		coalesce(((v.voies_rapprochees*100/f.voies_fantoir))::integer,0), --Pourcentage de rapprochement sur voies+lieux-dits
+		coalesce(adrOSM.adresses_OSM::integer,0), --Adresses OSM
+		coalesce(adrBAN.adresses_BAN::integer,0), --Adresses BAN, BAL
+		coalesce(adrnon.adresses_non_rapprochees::integer,0), --Adresses sans voie rapprochée
+		coalesce(((100-adrnon.adresses_non_rapprochees*100/adrBAN.adresses_BAN))::integer,100) --Pourcentage d'adresses avec voie rapprochée
+	FROM	cog
+	LEFT OUTER JOIN r USING (insee_com)
+	LEFT OUTER JOIN v USING (insee_com)
+	LEFT OUTER JOIN vl USING (insee_com)
+	LEFT OUTER JOIN a USING (insee_com)
+	LEFT OUTER JOIN adrOSM USING (insee_com)
+	LEFT OUTER JOIN adrBAN USING (insee_com)
+	LEFT OUTER JOIN adrnon USING (insee_com)
+	JOIN 	t USING (insee_com)
+	JOIN 	f USING (insee_com))
+SELECT	i.*,
+        ((power(c-a,2)/c) + (power(b-c,2)/c) + (power(d-b,2)/d))::integer
 FROM	i
 ORDER  BY 2
