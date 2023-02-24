@@ -73,7 +73,7 @@ i AS (  SELECT  cog.insee_com, --Code INSEE
                 COALESCE(a.voies_avec_adresses_rapprochees::integer,0) a, --Voies avec adresses rapprochées (a)
                 COALESCE(v.voies_rapprochees::integer,0) b, --Toutes voies rapprochées (b)
                 COALESCE(vl.voies_rapprochees::integer,0) b1, --Voies rapprochées sur lieux-dits (bl)
-                t.voies_fantoir c, --Voies FANTOIR (c)
+                COALESCE(t.voies_fantoir::integer,0) c, --Voies FANTOIR (c)
                 f.voies_fantoir d, --Voies FANTOIR + lieux-dits (d)
                 COALESCE(((a.voies_avec_adresses_rapprochees*100/t.voies_fantoir))::integer,0), --Pourcentage de rapprochement avec adresses
                 COALESCE(((v.voies_rapprochees*100/t.voies_fantoir))::integer,0), --Pourcentage de rapprochement sur voies
@@ -90,9 +90,12 @@ i AS (  SELECT  cog.insee_com, --Code INSEE
         LEFT OUTER JOIN adrOSM USING (insee_com)
         LEFT OUTER JOIN adrBAN USING (insee_com)
         LEFT OUTER JOIN adrnon USING (insee_com)
-        JOIN    t USING (insee_com)
+        LEFT OUTER JOIN    t USING (insee_com)
         JOIN    f USING (insee_com))
 SELECT  i.*,
-        ((power(c-a,2)/c) + (power(b-c,2)/c) + (power(d-b,2)/d))::integer
+        CASE
+            WHEN c = 0 THEN 0
+            ELSE ((power(c-a,2)/c) + (power(b-c,2)/c) + (power(d-b,2)/d))::integer
+        END
 FROM    i
 ORDER  BY 2
