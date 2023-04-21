@@ -1,0 +1,196 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Pifomètre</title>
+<script src="js/jquery-3.6.4.min.js"></script>
+<script src="js/tablesorter/jquery.tablesorter.js"></script>
+<link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
+<link rel="stylesheet" href="css/style.css" type="text/css"/>
+<link rel="stylesheet" href="css/style_pifometre.css" type="text/css"/>
+<link rel="stylesheet" href="css/menu.css" type="text/css"/>
+<link rel="search" type="application/opensearchdescription+xml" title="Pifomètre BANO" href="opensearch.xml" />
+<script>
+    FILTRES = [["voie"," voies",0,true],
+               ["lieu_dit"," lieux-dits",0,true],
+               ["nom_integre"," connus d'OSM",0,true],
+               ["nom_a_integrer"," à ajouter dans OSM",0,true],
+               ["avec_adresses"," avec adresses",0,true],
+               ["sans_adresses"," sans adresses",0,true]]
+
+    function start(){
+        requete_pifometre()
+        /*update_menu_filtres()*/
+    };
+    function update_filtres(){
+        for (let i = 0; i < FILTRES.length; i++){
+            FILTRES[i] = [FILTRES[i][0],FILTRES[i][1],$('#table_pifometre tr.'+FILTRES[i][0]).length,$('#check_'+FILTRES[i][0]).is(':checked')]
+        }
+    }
+    function update_menu_filtres(){
+        $('#filtres').empty()
+        for (let f of FILTRES){
+            $('#filtres').append($('<input>').attr('type','checkbox').attr('id','check_'+f[0]).attr('checked',true))
+            $('#filtres').append($('<label>').attr('for','check_'+f[0]).text(f[1]))
+        }
+        $('#filtres input').click(function(){
+            show_mask_lines()
+        })
+    };
+    function show_mask_lines(){
+        update_filtres()
+        $('#table_pifometre tbody tr').each(function() {
+           action = 'donotfilter'
+           for (let f of FILTRES){
+                if ($(this).hasClass(f[0]) && f[3] == false){
+                    action = 'filter'
+                }
+                $(this).removeClass('filtered')
+                if (action == 'filter'){
+                    $(this).addClass('filtered')
+                }
+            }
+       });
+    }
+    function requete_pifometre(){
+        commune_valide = false;
+        $('body').css('cursor','progress');
+        $('#input_insee')[0].value = $('#input_insee')[0].value.toUpperCase()
+
+        $.ajax({
+            url: "requete_pifometre.py"
+        })
+        .done(function( data ) {
+            add_header()
+            for (s=0;s<data.length;s++){
+                record = data[s]
+                fantoir = record[0]
+                date_creation = record[1]
+                annule = record[2]
+                nom_topo = record[3]
+                nom_osm = record[4]
+                nom_ban = record[5]
+                lon = record[6]
+                lat = record[7]
+                statut_voie = record[8]
+                numeros_a_proposer = record[9]
+
+                $('#table_pifometre tbody').append($('<tr>').append($('<td>').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir)))
+                // Date de creation
+                $('#table_pifometre'+' tr:last').append($('<td>').text(date_creation))
+                //Nom Fantoir
+                $('#table_pifometre'+' tr:last').append($('<td>').text(nom_topo))
+                //Nom OSM
+                $('#table_pifometre'+' tr:last').append($('<td>').text(nom_osm))
+                //Nom BAN
+                $('#table_pifometre'+' tr:last').append($('<td>').text(nom_ban))
+                //Statut FANTOIR
+                $('#table_pifometre'+' tr:last').append($('<td>').text(statut_voie))
+                //Adresses à integrer
+                $('#table_pifometre'+' tr:last').append($('<td>').text(numeros_a_proposer))
+
+                if (nom_osm == undefined) {
+                    $('#table_pifometre'+' tr:last').addClass('nom_a_integrer')
+                } else {
+                    $('#table_pifometre'+' tr:last').addClass('nom_integre')
+                } 
+                if (numeros_a_proposer > 0) {
+                    $('#table_pifometre'+' tr:last').addClass('avec_adresses')
+                } else {
+                    $('#table_pifometre'+' tr:last').addClass('sans_adresses')
+                }
+            }
+            $('#table_pifometre').tablesorter();
+            update_menu_filtres()
+        })
+    };
+
+    function add_header(){
+        $('#table_pifometre').append($('<thead>').append($('<tr>').append($('<th>').append('Code FANTOIR'))))
+        $('#table_pifometre'+' tr').append($('<th>').append('Création TOPO'))
+        $('#table_pifometre'+' tr').append($('<th>').append('Libellé TOPO'))
+        $('#table_pifometre'+' tr').append($('<th>').append('Libellé OSM'))
+        $('#table_pifometre'+' tr').append($('<th>').append('Libellé BAN ou CADASTRE'))
+        $('#table_pifometre'+' tr').append($('<th>').append('Statut FANTOIR ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
+        $('#table_pifometre'+' tr').append($('<th>').addClass('string-none').append('Adresses à intégrer'))         
+        $('#table_pifometre').append($('<tbody>'))
+    };
+    
+</script>
+</head>
+
+<body onload="start()">
+    <header>
+        <!--#include file="includes/menu.html" -->
+    </header>
+    <div id="barre-jaune">
+        <span>Commune :</span>
+        <form action="javascript:requete_fantoir()" autocomplete="on">
+            <input type="text" id="input_insee" placeholder="Code INSEE"></input>
+            <input type="submit" value="Lister">
+        </form>
+    </div>
+    <div id="bandeau">
+        <div id='bandeau_commune'>
+            <table id="table_infos_commune"></table>
+        </div>
+        <div id="refresh_infobulle"></div>
+        <div id="table_communes_voisines">
+            <div class="fermer">X</div>
+            <table>
+            <tbody>
+                <tr><td id="11"></td><td id="12"></td><td id="1"></td><td id="2"></td></tr>
+                <tr><td id="10"></td><td class="commune_centre" colspan="2" rowspan="2"></td><td id="3"></td></tr>
+                <tr><td id="9"></td><td id="4"></td></tr>
+                <tr><td id="8"></td><td id="7"></td><td id="6"></td><td id="5"></td></tr>
+            </tbody>
+            </table>
+        </div>
+        <div id="bouton_export_csv" title="Exporter l'onglet courant en CSV"></div>
+        <div id="bouton_communes_voisines" title="Communes voisines"></div>
+        <div id="bouton_refresh" title="Mettre à jour les données BANO"></div>
+        <div id="bouton_aide" title="Aide"></div>
+        <div id="infos_refresh"></div>
+        <div id="alerte_commune"></div>
+        <div id="aide">
+            <div class="fermer">X</div>
+            <h3>Statuts FANTOIR</h3>
+            <li>Erreur d'orthographe</li><p>Erreur d'orthographe de FANTOIR vérifié sur le terrain ou de source officielle (documents)</p>
+            <li>Divergence d'orthographe</li><p>Pas la même orthographe dans Fantoir et sur le terrain, sans qu'il soit évident de trancher.
+            <li>Nom différent</li><p>Existence d'adresse dans une même rue avec des nom de rues différents, coté FANTOIR. Ce n'est ni une erreur d'orthographe, ni un doublon, mais un nom *vraiment* différent. À marquer si ce nom n'est volontairement pas retenu pour les rapprochements.
+            <li>Type de voie différent</li><p>Par ex. :'Impasse XXX' dans Fantoir, et 'Ruelle XXX' sur le terrain, sans qu'il existe ailleurs dans la commune une 'Impasse XXX'
+            <li>Voie doublon et type de voie différent</li><p>Par ex. : 2 entrées 'Impasse XXX' ET 'Ruelle XXX' dans Fantoir, et uniquement une 'Ruelle XXX' sur le terrain, sans qu'il existe ailleurs dans la commune d' 'Impasse XXX'. => 'Impasse XXX' à marquer en doublon.
+            <li>Voie doublon avec orthographe différente</li><p>2 graphies pour un même nom dans Fantoir.
+            <li>Répétition du type de voie</li><p>Type de voie (rue, petite rue...) en double avec de possibles variantes dans les abréviations. Ex: Gde Rue Grande Rue
+            <li>Nom introuvable sur le terrain</li><p>Pour un nom n'entrant pas dans les autres situations (doublon...) et sans aucune trace sur le terrain
+            <li>Ancien nom supprimé sur le terrain</li><p>Normalement Fantoir indique une date de fin pour un nom obsolète, et tous les enregistrements avec une date passée sont ignorés dans BANO. Si un nom Fantoir apparaît dans les listes alors qu'il a été remplacé sur le terrain, il faut le marquer.
+            <li>Nom tronqué</li><p>Les noms de voie Fantoir sont limités à 26 caractères. Ça peut être une cause d'échec de rapprochement, quand le nom OSM dépasse cette longueur.
+            <li>Voie détruite</li><p>La voie a bien existé mais son emprise a disparu suite à des travaux.
+            <li>Voie incorporée à une autre</li><p>La voie a "fusionné" avec une autre. Son nom n'a pas été préservé.
+            <li>Voie inexistante</li><p>Pas de trace de la voie sur le terrain, et pas de souvenir de son existence par le passé.
+            <li>Adresses hors périmètre</li><p>C'est plus un souci de géométrie dans le Cadastre, que dans les listes Fantoir en tant que tel : lorsque certains points d'adresse sont situés à plusieurs rues du reste des adresses de la voie, sans aucune justification.
+            <li>Erreurs combinées</li><p>À utiliser quand plusieurs choix sont possibles dans la liste des anomalies.
+        </div>
+        <div id='filtres'></div>
+    </div>
+    <div id="reponse">
+        <table id="table_pifometre"></table>
+    </div>
+    <footer>
+    <!--#include file="includes/footer.html" -->
+    </footer>
+    <div id="josm_target" style="visibility : hidden"></div>
+    <div id="wait_ajax"></div>
+    <div id="mask_inspect_adresse"></div>
+    <div id="modal_inspect_adresse">
+        <div class="fermer">X</div>
+        <div id="titre_inspect_adresse"><h1>Titre</h1></div>
+        <table id="table_inspect_adresse"></table>
+    </div>
+    <script>
+        $('#modal_inspect_adresse > .fermer').click(function(){
+            $('#mask_inspect_adresse').css('display','none');
+            $('#modal_inspect_adresse').css('display','none');
+        })
+    </script>
+</body>
+</html>
