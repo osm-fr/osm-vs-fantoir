@@ -54,7 +54,8 @@ SELECT t.fantoir,
        COALESCE(pn.lon,ST_X(g.geometrie),NULL),
        COALESCE(pn.lat,ST_Y(g.geometrie),NULL),
        COALESCE(s.id_statut,0),
-       a_proposer
+       a_proposer,
+       t.caractere_annul
 FROM topo t
 LEFT OUTER JOIN fantoir_numeros_manquants
 USING (fantoir)

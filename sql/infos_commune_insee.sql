@@ -7,5 +7,5 @@ FROM	(SELECT	name,
 		FROM	planet_osm_polygon
 		WHERE	boundary='administrative' AND
                 admin_level in (8,9) AND
-                "ref:INSEE" = '__com__'
+                "ref:INSEE" = '__code_insee__'
         ORDER BY admin_level)a;

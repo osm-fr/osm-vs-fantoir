@@ -48,41 +48,35 @@ cgitb.enable()
 #         return ('Libellé OSM;Lon;Lat\n'+'\n'.join([f"{c[3]};{c[4]};{c[5]}" for c in fetch]))
 
 def main():
-    # params = cgi.FieldStorage()
+    params = cgi.FieldStorage()
     # insee_com = '75101'
-    # code_insee = params['insee'].value
+    code_insee = params['insee'].value
     # code_insee = params['insee']
-    # format = params.getvalue('format','json')
+    format = params.getvalue('format','json')
     # tab = int(params.getvalue('tab',0))
 
-    code_insee = '95219'
-    format = 'json'
-    tab = 0
+    # code_insee = '95219'
+    # format = 'json'
+    # tab = 0
 
     dept = hp.get_code_dept_from_insee(code_insee)
 
     data = sql_get_data('pifometre',{'code_insee':code_insee})
-    # for d in data:
-    #     print(d)
 
+    nom_commune = []
+    lon_commune = None
+    lat_commune = None
+    infos_commune = sql_get_data('infos_commune_insee',{'code_insee':code_insee})
+    if infos_commune:
+        nom_commune,lon_commune,lat_commune = infos_commune[0]
 
-    # infos_commune = get_data_from_bano_cache('infos_commune_insee',insee_com)
-    # if infos_commune:
-    #     nom_commune = infos_commune[0][0]
-    #     lon_commune = infos_commune[0][1]
-    #     lat_commune = infos_commune[0][2]
-    # else:
-    #     nom_commune = []
-    #     lon_commune = None
-    #     lat_commune = None
+    insee_commune_parente = None
+    nom_commune_parente = None
+    commune_parente = sql_get_data('commune_parente',{'code_insee':code_insee})
+    if commune_parente:
+        insee_commune_parente, nom_commune_parente = commune_parente[0]
 
-    # commune_parente = get_data_from_bano_cache('commune_parente',insee_com)
-    # if commune_parente:
-    #     insee_commune_parente, nom_commune_parente = commune_parente[0]
-    # else:
-    #     insee_commune_parente, nom_commune_parente = [None,None]
-
-    # a_voisins = [[v[0],v[1],v[2]] for v in get_data_from_bano_cache('voisins_insee',insee_com)]
+    a_voisins = [[v[0],v[1],v[2]] for v in sql_get_data('voisins_insee',{'code_insee':code_insee})]
 
     # date_fin_cumul = ['','']
     # fin_etape = get_batch_infos_etape_commune('loadCumul',insee_com)
@@ -93,7 +87,7 @@ def main():
 
     # data_columns = [get_data_from_bano('voies_adresses_non_rapprochees_insee',insee_com),get_data_from_bano('voies_adresses_rapprochees_insee',insee_com),get_data_from_bano('voies_seules_non_rapprochees_insee',insee_com),get_data_from_bano('voies_seules_rapprochees_insee',insee_com),get_data_from_bano('places_non_rapprochees_insee',insee_com),get_data_from_bano('places_rapprochees_insee',insee_com),get_data_from_bano('voies_OSM_non_rapprochees_insee',insee_com)]
 
-    # data = [[nom_commune,date_fin_cumul[0],date_fin_cumul[1],lon_commune,lat_commune,a_voisins,insee_commune_parente, nom_commune_parente],*data_columns]
+    data = [nom_commune,lon_commune,lat_commune,a_voisins,insee_commune_parente, nom_commune_parente,data]
 
     if format == 'csv':
         print(f'Content-Type: text/csv\nContent-Disposition: Attachment; filename="insee-{insee_com}-{nom_commune}-onglet {tab}.csv"\n')
