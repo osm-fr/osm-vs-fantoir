@@ -55,11 +55,14 @@ SELECT t.fantoir,
        COALESCE(pn.lat,ST_Y(g.geometrie),NULL),
        COALESCE(s.id_statut,0),
        a_proposer,
-       t.caractere_annul
+       t.caractere_annul,
+       COALESCE(place.is_place,false)
 FROM topo t
 LEFT OUTER JOIN fantoir_numeros_manquants
 USING (fantoir)
 LEFT OUTER JOIN (SELECT * FROM bano_points_nommes WHERE code_insee = '__code_insee__' AND source = 'OSM') pn
+USING (fantoir)
+LEFT OUTER JOIN (SELECT DISTINCT fantoir,true AS is_place FROM bano_points_nommes WHERE code_insee = '__code_insee__' AND nature in ('place','lieu-dit')) place
 USING (fantoir)
 LEFT OUTER JOIN (SELECT * FROM nom_fantoir WHERE code_insee = '__code_insee__' AND source != 'OSM') nb
 USING (fantoir)
