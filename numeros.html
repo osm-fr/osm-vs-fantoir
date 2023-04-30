@@ -2,7 +2,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Qualification des numéros d'adresses BAN</title>
-<script src="js/jquery-3.4.1.min.js"></script>
+<script src="js/jquery-3.6.4.min.js"></script>
 <script src="js/tablesorter/jquery.tablesorter.js"></script>
 <!-- <script src="js/tablesorter/parsers/parser-input-select.min.js"></script> -->
 <!-- <script src="js/tablesorter/widgets/widget-filter.min.js"></script> -->
@@ -34,7 +34,7 @@
         return res
     }
     function check_url_for_fantoir(){
-        pattern_fantoir = new RegExp('^[0-9][0-9abAB][0-9]{3}[0-9|a-z|A-Z]{5}$')
+        pattern_fantoir = new RegExp('^[0-9][0-9abAB][0-9]{3}[0-9|a-z|A-Z]{4}$')
         var res
         if (window.location.search){
             if (window.location.search.split('fantoir=')[1].split('&')[0]){
@@ -42,21 +42,6 @@
                     res = window.location.search.split('fantoir=')[1].split('&')[0]
                 } else {
                     alert(window.location.search.split('fantoir=')[1].split('&')[0]+' n\'est pas un code FANTOIR valide\n\nAbandon')
-                }
-            }
-        }
-        return res
-    }
-    function check_url_for_tab(){
-        pattern_tab = new RegExp('^[0-5]$')
-        var res
-        res = 0
-        if (window.location.search){
-            if (window.location.search.split('&tab=')[1]){
-                if (window.location.search.split('tab=')[1].split('&')[0]){
-                    if (pattern_tab.test(window.location.search.split('tab=')[1].split('&')[0])) {
-                        res = window.location.search.split('tab=')[1].split('&')[0]
-                    }
                 }
             }
         }
@@ -116,22 +101,21 @@
         insee = check_url_for_insee()
         fantoir = check_url_for_fantoir()
         source = check_url_for_source()
-        tab = check_url_for_tab()
-        $('#lien-retour').empty().append($('<a>').attr('href','index.html#insee='+insee+'&tab='+tab).append('<< Retour à la commune'))
+        $('#lien-retour').empty().append($('<a>').attr('href','pifometre.html#insee='+insee).append('<< Retour à la commune'))
         global_ligne_id = 1000;
 
         $.ajax({
             url: "requete_inspect_numeros.py?insee="+insee+"&fantoir="+fantoir
         })
         .done(function( data ) {
-                                min_lon = data[0][7];
-                                max_lon = data[0][7];
-                                min_lat = data[0][8];
-                                max_lat = data[0][8];
+                                min_lon = data[0][6];
+                                max_lon = data[0][6];
+                                min_lat = data[0][7];
+                                max_lat = data[0][7];
 
-                                var map = L.map('map').setView([data[0][8], data[0][7]], 18);
+                                var map = L.map('map').setView([data[0][7], data[0][6]], 18);
                                 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',maxZoom: 19}).addTo(map);
-                                $('#bandeau').append($('<h1>').append(data[0][2]?data[0][2]:data[0][3])).append(($('<h2>').append(data[0][5]+" ("+data[0][6]+")")))
+                                $('#bandeau').append($('<h1>').append(data[0][2])).append(($('<h2>').append(data[0][4]+" ("+data[0][5]+")")))
                                 $('#table_inspect_adresse').empty().append($('<thead>').append($('<tr>').append($('<th>').append('Source'))))
                                 $('#table_inspect_adresse tr').append($('<th>').append('Numero'))
                                 $('#table_inspect_adresse tr').append($('<th>').append('Statut de l\'adresse'))
@@ -139,9 +123,9 @@
                                 for (l=0;l<data.length;l++){
                                     source = data[l][0]
                                     numero = data[l][1]
-                                    statut = data[l][4]
-                                    lon = data[l][7]
-                                    lat = data[l][8]
+                                    statut = data[l][3]
+                                    lon = data[l][6]
+                                    lat = data[l][7]
                                     $('#table_inspect_adresse tbody:last').append($('<tr>').attr('id',global_ligne_id).append($('<td>').text(source)))
                                     $('#table_inspect_adresse tr:last').append($('<td>').text(numero));
 

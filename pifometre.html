@@ -188,6 +188,10 @@
                                     )
         }
     }
+    function add_addr_inspector_link(insee,fantoir,source){
+        $('#table_pifometre tr:last').append($('<td>').append($('<a>').attr('href',"numeros.html?insee="+insee+'&fantoir='+fantoir+'&source='+source+'&tab=0')
+                                               .append('Qualifier'))
+    )};
     function requete_pifometre(){
         commune_valide = false;
         $('body').css('cursor','progress');
@@ -265,7 +269,8 @@
                 //Adresses à integrer
                 if (numeros_a_proposer > 0){
                                 add_josm_addr_link($('#input_insee')[0].value,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
-                                }
+                                add_addr_inspector_link($('#input_insee')[0].value,fantoir,'BAN')
+                }
                 //$('#table_pifometre'+' tr:last').append($('<td>').text(numeros_a_proposer))
                 if (is_place){
                     $('#table_pifometre'+' tr:last').addClass('lieu_dit')
@@ -298,7 +303,8 @@
         $('#table_pifometre'+' tr').append($('<th>').append('Libellé BAN ou CADASTRE'))
         $('#table_pifometre'+' tr').append($('<th>').append('Edition'))
         $('#table_pifometre'+' tr').append($('<th>').append('Statut FANTOIR ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
-        $('#table_pifometre'+' tr').append($('<th>').addClass('string-none').append('Adresses à intégrer'))         
+        $('#table_pifometre'+' tr').append($('<th>').addClass('string-none').append('Intégrer les adresses'))
+        $('#table_pifometre'+' tr').append($('<th>').append('Qualifier les adresses'))
         $('#table_pifometre').append($('<tbody>'))
     };
     function check_url_for_insee(){
