@@ -39,16 +39,23 @@ geom_adresses
 AS
 (SELECT DISTINCT fantoir,
                 FIRST_VALUE(geometrie) OVER(PARTITION BY fantoir) geometrie
-        FROM    bano_adresses
-        WHERE   code_insee = '__code_insee__')
+ FROM    bano_adresses
+ WHERE   code_insee = '__code_insee__'),
+
+fantoir_avec_adresses_ban
+AS
+(SELECT DISTINCT fantoir,true AS fantoir_avec_adresses_ban
+ FROM   bano_adresses
+ WHERE  code_insee = '__code_insee__' AND
+        source = 'BAN')
 
 SELECT t.fantoir,
-       to_char(to_date(t.date_creation::text,'YYYYMMDD'),'YYYY-MM-DD'),
+       TO_CHAR(TO_DATE(t.date_creation::text,'YYYYMMDD'),'YYYY-MM-DD'),
        CASE t.date_annul
            WHEN 0 THEN '1'
            ELSE -1
        END AS fantoir_annule,
-       TRIM (BOTH FROM (COALESCE(nature_voie,'')||' '||libelle_voie)) AS nom_topo,
+       nom_topo,
        pn.nom AS nom_osm,
        nb.nom AS nom_ban,
        COALESCE(pn.lon,ST_X(g.geometrie),NULL),
@@ -56,17 +63,42 @@ SELECT t.fantoir,
        COALESCE(s.id_statut,0),
        a_proposer,
        t.caractere_annul,
-       COALESCE(place.is_place,false)
-FROM topo t
+       COALESCE(place.is_place,false),
+       COALESCE(faab.fantoir_avec_adresses_ban,false)
+
+FROM   (SELECT fantoir,
+               date_creation,
+               date_annul,
+               nature_voie,
+               TRIM (BOTH FROM (COALESCE(nature_voie,'')||' '||libelle_voie)) AS nom_topo,
+               caractere_annul
+        FROM   topo
+        WHERE  code_insee = '__code_insee__')t
 LEFT OUTER JOIN fantoir_numeros_manquants
 USING (fantoir)
-LEFT OUTER JOIN (SELECT * FROM bano_points_nommes WHERE code_insee = '__code_insee__' AND source = 'OSM') pn
+LEFT OUTER JOIN (SELECT fantoir,
+                        nom,
+                        lon,
+                        lat
+                 FROM   bano_points_nommes
+                 WHERE  code_insee = '__code_insee__' AND
+                        source = 'OSM') pn
 USING (fantoir)
-LEFT OUTER JOIN (SELECT DISTINCT fantoir,true AS is_place FROM bano_points_nommes WHERE code_insee = '__code_insee__' AND nature in ('place','lieu-dit')) place
+LEFT OUTER JOIN (SELECT DISTINCT fantoir,
+                        true AS is_place
+                 FROM   bano_points_nommes
+                 WHERE  code_insee = '__code_insee__' AND
+                        nature IN ('place','lieu-dit')) place
 USING (fantoir)
-LEFT OUTER JOIN (SELECT * FROM nom_fantoir WHERE code_insee = '__code_insee__' AND source != 'OSM') nb
+LEFT OUTER JOIN (SELECT fantoir,
+                        nom
+                 FROM   nom_fantoir
+                 WHERE code_insee = '__code_insee__' AND
+                       source != 'OSM') nb
 USING (fantoir)
 LEFT OUTER JOIN geom_adresses AS g
+USING (fantoir)
+LEFT OUTER JOIN fantoir_avec_adresses_ban AS faab
 USING (fantoir)
 LEFT OUTER JOIN (SELECT fantoir,id_statut
                 FROM    (SELECT *,rank() OVER (PARTITION BY fantoir ORDER BY timestamp_statut DESC) rang
@@ -74,14 +106,4 @@ LEFT OUTER JOIN (SELECT fantoir,id_statut
                         WHERE   code_insee = '__code_insee__')r
                 WHERE   rang = 1) s
 USING (fantoir)
-WHERE t.code_insee = '__code_insee__'
 ORDER BY 1
-
-/*
-select * from nom_fantoir
-where code_insee = '__code_insee__'
-order by 1
-
-select * from bano_points_nommes
-where code_insee = '__code_insee__'
-order by 1*/

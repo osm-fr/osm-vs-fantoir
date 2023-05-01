@@ -49,11 +49,8 @@ cgitb.enable()
 
 def main():
     params = cgi.FieldStorage()
-    # insee_com = '75101'
     code_insee = params['insee'].value
-    # code_insee = params['insee']
     format = params.getvalue('format','json')
-    # tab = int(params.getvalue('tab',0))
 
     # code_insee = '95219'
     # format = 'json'

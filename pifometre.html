@@ -12,8 +12,8 @@
 <script>
     FILTRES = [["voie"," voies",0,true],
                ["lieu_dit"," lieux-dits",0,true],
-               ["nom_integre"," connus d'OSM",0,true],
-               ["nom_a_integrer"," à ajouter dans OSM",0,true],
+               ["nom_integre"," rapprochés",0,true],
+               ["nom_a_integrer"," non rapprochés",0,true],
                ["avec_adresses"," avec adresses",0,true],
                ["sans_adresses"," sans adresses",0,true]]
     STATUS_FANTOIR = []
@@ -237,6 +237,7 @@
                 numeros_a_proposer = record[9]
                 caractere_annul = record[10]
                 is_place = record[11]
+                avec_adresses_ban = record[12]
 
                 fantoir_affiche = fantoir
                 fantoir_dans_relation = 'ok'
@@ -268,8 +269,14 @@
                 add_statut_fantoir(tr_id,fantoir,statut_voie)
                 //Adresses à integrer
                 if (numeros_a_proposer > 0){
-                                add_josm_addr_link($('#input_insee')[0].value,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
-                                add_addr_inspector_link($('#input_insee')[0].value,fantoir,'BAN')
+                    add_josm_addr_link($('#input_insee')[0].value,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
+                } else {
+                    $('#table_pifometre tr:last').append($('<td>'))
+                }
+                if (avec_adresses_ban){
+                    add_addr_inspector_link($('#input_insee')[0].value,fantoir,'BAN')
+                } else {
+                    $('#table_pifometre tr:last').append($('<td>'))
                 }
                 //$('#table_pifometre'+' tr:last').append($('<td>').text(numeros_a_proposer))
                 if (is_place){
@@ -282,7 +289,7 @@
                 } else {
                     $('#table_pifometre'+' tr:last').addClass('nom_integre')
                 } 
-                if (numeros_a_proposer > 0) {
+                if (avec_adresses_ban) {
                     $('#table_pifometre'+' tr:last').addClass('avec_adresses')
                 } else {
                     $('#table_pifometre'+' tr:last').addClass('sans_adresses')
