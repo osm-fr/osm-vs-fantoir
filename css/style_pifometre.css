@@ -209,6 +209,8 @@
 	position:absolute;
 	top:240px;
 	z-index:2;
+	height: 500px;
+	overflow-y: auto;
 }
 
 /*----------- ALERTE ANCIENNE COMMUNE -----------*/
