@@ -19,7 +19,7 @@
 }
 .cellule_intitule{
 	font-size: 0.9em;
-	text-align: right;
+	text-align: right
 }
 .cellule_data{
 	font-size: 0.9em;
@@ -59,20 +59,6 @@
 /*--------------------------- BOUTONS HAUT DROITE -----------------------*/
 /*-----------------------------------------------------------------------*/
 
-#bouton_export_csv{
-	position: fixed;
-	top: 35px;
-	right: 169px;
-}
-#bouton_export_csv a{
-	color: white;
-	font-weight: bold;
-	text-decoration: none;
-}
-#bouton_export_csv a img{
-	height: 50px;
-	width: 50px;
-}
 /*---------------------------------------------*/
 #bouton_communes_voisines{
 	cursor: pointer;
@@ -125,15 +111,22 @@
 	position: fixed;
 	width: 250px;
 	height: 56px;
-	top: 36px;
-	right: 109px;
+	top: 90px;
+	right: 20px;
+	border: 1px grey solid;
+	border-radius: 5px;
+    padding: 5px;
 	display:none;
 	z-index: 5;
 	background-color: white;
+	font: 0.9em Arial,Sans-serif;
+	text-align: right;
 }
 #refresh_infobulle span{
 	font-weight: bold;
 }
+
+/*----------------------------------*/
 
 #infos_refresh{ /* ------------------------ ????????????????? ----------------------- */
 	width:100%;
@@ -146,6 +139,26 @@
 	display:none;
 	z-index: 15;
 }
+
+/*----------------------------------*/
+
+#bouton_export_csv{
+	position: fixed;
+	top: 35px;
+	right: 17px;
+}
+#bouton_export_csv a{
+	color: white;
+	font-weight: bold;
+	text-decoration: none;
+}
+#bouton_export_csv a img{
+	height: 50px;
+	width: 50px;
+}
+
+/*----------------------------------*/
+
 #wait_ajax{
 	position:fixed;
 	top:60px;
@@ -164,41 +177,27 @@
 	color:white;
 	border:50px solid black;
 }
-/*---------------------------------------------*/
-#bouton_aide{
-	cursor: pointer;
-	position: fixed;
-	background-image: url("../img/help.png");
-	background-size: 40px 40px;
-	background-repeat: no-repeat;
-	width: 40px;
-	height: 40px;
-	top: 40px;
-	right: 17px;
-	z-index:4;
+
+/*----------------------------------------------------------------------------------*/
+/*------------------------------- BOUTONS FILTRES ----------------------------------*/
+/*----------------------------------------------------------------------------------*/
+
+#boutons-filtres {
+	display: inline-block;
+	margin-left: 5%;
+	margin-top: 30px;
+	width: 60%;
+	font-size: 0.9em;
 }
-#aide{
-	position:fixed;
-	top:35px;
-	right:5px;
-	width:400px;
-	height:calc(100% - 70px);
-	background-color:lavender;
-	overflow-y:scroll;
-	visibility:hidden;
-	z-index: 10;
+
+#boutons-filtres div {
+	width: auto;
+	padding: 3px 5px;
+	display: inline-block;
 }
-#aide h3{
-	text-align: center;
-}
-#aide li{
-	font-weight:bolder;
-	background-color:ivory;
-}
-#aide p{
-	margin-top: 0px;
-	margin-bottom: 10px;
-	margin-left: 3px;
+
+#boutons-filtres ul {
+  list-style-type: none;
 }
 
 /*----------------------------------------------------------------------------------*/
@@ -207,10 +206,16 @@
 
 #reponse{
 	position:absolute;
-	top:240px;
+	top:300px;
+	width: 100%;
+	font-size:0.9em;
 	z-index:2;
 	height: 500px;
 	overflow-y: auto;
+}
+
+#reponse tr:hover td {
+	background-color: #FCFFB7;
 }
 
 /*----------- ALERTE ANCIENNE COMMUNE -----------*/
@@ -282,13 +287,59 @@
 .table_liste{
 	display:none;
 }
-.zone_click{
+
+/*--------------- Pastilles correspondant aux filtres ---------------*/
+
+.pastille-verte {
+  height: 15px;
+  width: 15px;
+  background-color: #48c78e;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 2px 10px 0 10px;
+}
+.pastille-orange {
+  height: 15px;
+  width: 15px;
+  background-color: #f1AC45;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 2px 10px 0 10px;
+}
+
+/*--------------- Liens JOSM et adresses dans le tableau ---------------*/
+
+.zone-clic{
 	cursor:pointer;
 	color:blue;
 	text-decoration: underline;
 }
-.zone_click.clicked{
+.zone-clic:hover{
+}
+.zone-clic.clicked{
 	background-color:green;
+	color:white;
+}
+
+.zone-clic-adresses, .zone-clic-adresses a{
+	cursor:pointer;
+	color:#D33A8B;
+	font-weight: bold;
+	text-decoration: underline;
+}
+.zone-clic-adresses.clicked{
+	background-color:#D33A8B;
+	color:white;
+}
+
+.zone-clic-josm{
+	cursor:pointer;
+	color:#863602; /* Marron logo JOSM */
+	font-weight: bold;
+	text-decoration: underline;
+}
+.zone-clic-josm.clicked{
+	background-color:#863602;
 	color:white;
 }
 
