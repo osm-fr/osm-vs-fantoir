@@ -198,24 +198,21 @@
     function requete_pifometre(){
         commune_valide = false;
         $('body').css('cursor','progress');
-        $('#input_insee')[0].value = $('#input_insee')[0].value.toUpperCase()
+        $('#table_pifometre').trigger("destroy");
         $('#table_pifometre').empty()
+        $('#input_insee')[0].value = $('#input_insee')[0].value.toUpperCase()
         $.ajax({
-            url: "requete_pifometre.py?insee="+$('#input_insee')[0].value
+            url: "requete_pifometre_commune.py?insee="+$('#input_insee')[0].value
         })
         .done(function( pifodata ) {
-            add_header()
             nom_commune = pifodata[0]
             lon_commune = pifodata[1]
             lat_commune = pifodata[2]
             communes_voisines = pifodata[3]
             insee_commune_parente = pifodata[4]
             nom_commune_parente = pifodata[5]
-            data = pifodata[6]
-
             document.title = nom_commune+' - Pifomètre'
             $('#table_infos_commune').empty()
-            $('.rubrique').empty()
             $('#alerte_commune').css('visibility','hidden');
 
             if (nom_commune.length == 0){
@@ -225,104 +222,6 @@
             }
             commune_valide = true;
             $('#table_infos_commune').append($('<tr>').append($('<td>')).append($('<td>')).append($('<th>').attr('rowspan','4').append($('<h1>').addClass('titre_commune').append((nom_commune)))))
-            tr_id = 1000
-            for (s=0;s<data.length;s++){
-                record = data[s]
-                fantoir = record[0]
-                date_creation = record[1]
-                annule = record[2]
-                nom_topo = record[3]
-                nom_osm = record[4]
-                nom_ban = record[5]
-                lon = record[6]
-                lat = record[7]
-                statut_voie = record[8]
-                numeros_a_proposer = record[9]
-                caractere_annul = record[10]
-                is_place = record[11]
-                avec_adresses_ban = record[12]
-
-                fantoir_affiche = fantoir
-                fantoir_dans_relation = 'ok'
-                if (caractere_annul == 'B'){
-                    fantoir_affiche = 'Voie sans FANTOIR'
-                    fantoir_dans_relation = 'ko'
-                }
-
-                tr_id+=1
-
-                $('#table_pifometre tbody').append($('<tr>').attr('id',tr_id).append($('<td>').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir)))
-                
-                //Ajout des classes pour les filtres à chaque ligne
-                if (is_place){
-                    $('#table_pifometre'+' tr:last').addClass('lieu_dit')
-                } else {
-                    $('#table_pifometre'+' tr:last').addClass('voie')
-                }
-                if (nom_osm == undefined) {
-                    $('#table_pifometre'+' tr:last').addClass('nom_a_integrer')
-                } else {
-                    $('#table_pifometre'+' tr:last').addClass('nom_integre')
-                } 
-                if (avec_adresses_ban) {
-                    $('#table_pifometre'+' tr:last').addClass('avec_adresses')
-                } else {
-                    $('#table_pifometre'+' tr:last').addClass('sans_adresses')
-                }
-
-                //Remplissage des cellules avec leur contenu
-
-                // Date de creation
-                $('#table_pifometre'+' tr:last').append($('<td>').text(date_creation))
-                //Nom Fantoir
-                $('#table_pifometre'+' tr:last').append($('<td>').text(nom_topo))
-                //Nom OSM
-                if ($('#table_pifometre'+' tr:last').hasClass('nom_integre')){
-	                $('#table_pifometre'+' tr:last').append($('<td>')
-	                								.append($('<span class="pastille-verte">'))
-	                								.append($('<span>').text(nom_osm)))
-                }
-                else {
-	                $('#table_pifometre'+' tr:last').append($('<td>')
-	                								.append($('<span class="pastille-orange">'))
-	                								.append($('<span>').text(nom_osm)))
-            	}
-                //Nom BAN
-                $('#table_pifometre'+' tr:last').append($('<td>').text(nom_ban))
-                xmin  = lon-DELTA
-                xmax  = lon+DELTA
-                ymin  = lat-DELTA
-                ymax  = lat+DELTA
-                //visu
-//                add_map_link(table,url_map_org_part1+'#map='+url_hash_coords,'ORG')
-                //JOSM
-                add_josm_link(xmin,xmax,ymin,ymax)
-                //Statut FANTOIR
-                add_statut_fantoir(tr_id,fantoir,statut_voie)
-                //Adresses à integrer
-                if (numeros_a_proposer > 0){
-                    add_josm_addr_link($('#input_insee')[0].value,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
-                } else {
-                    $('#table_pifometre tr:last').append($('<td>'))
-                }
-                if (avec_adresses_ban){
-                    add_addr_inspector_link($('#input_insee')[0].value,fantoir,'BAN')
-                } else {
-                    $('#table_pifometre tr:last').append($('<td>'))
-                }
-                //$('#table_pifometre'+' tr:last').append($('<td>').text(numeros_a_proposer))
-
-            }
-            $('#table_pifometre').tablesorter({
-                widgets: ['stickyHeaders','filter'],
-                widgetOptions: {
-                          stickyHeaders_offset : 0,
-                          stickyHeaders_attachTo : '#reponse',
-                          stickyHeaders_zIndex : 10,
-                          stickyHeaders_addResizeEvent : true,
-                            }});
-            update_menu_filtres()
-            window.location.hash="#insee="+$('#input_insee')[0].value
 
             //communes voisines
             $('#table_communes_voisines tr td').empty()
@@ -343,6 +242,117 @@
                 })
                 $('#alerte_commune').append($('<h3>').text(nom_commune+' est une ancienne commune. Elle a été incorporée dans ').append($('<a>').attr('href','index.html#insee='+insee_commune_parente).text(nom_commune_parente+'('+insee_commune_parente+')')))
             }
+            $.ajax({
+                url: "requete_pifometre_voies.py?insee="+$('#input_insee')[0].value
+            })
+            .done(function( data ) {
+                $('#table_pifometre').append($('<thead>').append($('<tr>').append($('<th>').append('Code FANTOIR'))))
+                $('#table_pifometre'+' tr').append($('<th>').append('Création TOPO'))
+                $('#table_pifometre'+' tr').append($('<th>').append('Libellé TOPO'))
+                $('#table_pifometre'+' tr').append($('<th>').append('Libellé OSM'))
+                $('#table_pifometre'+' tr').append($('<th>').append('Libellé BAN ou CADASTRE'))
+                $('#table_pifometre'+' tr').append($('<th>').append('Edition'))
+                $('#table_pifometre'+' tr').append($('<th>').append('Statut FANTOIR ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
+                $('#table_pifometre'+' tr').append($('<th>').addClass('string-none').append('Intégrer les adresses'))
+                $('#table_pifometre'+' tr').append($('<th>').append('Qualifier les adresses'))
+                $('#table_pifometre').append($('<tbody>'))
+                tr_id = 1000
+                for (s=0;s<data.length;s++){
+                    record = data[s]
+                    fantoir = record[0]
+                    date_creation = record[1]
+                    annule = record[2]
+                    nom_topo = record[3]
+                    nom_osm = record[4]
+                    nom_ban = record[5]
+                    lon = record[6]
+                    lat = record[7]
+                    statut_voie = record[8]
+                    numeros_a_proposer = record[9]
+                    caractere_annul = record[10]
+                    is_place = record[11]
+                    avec_adresses_ban = record[12]
+
+                    fantoir_affiche = fantoir
+                    fantoir_dans_relation = 'ok'
+                    if (caractere_annul == 'B'){
+                        fantoir_affiche = 'Voie sans FANTOIR'
+                        fantoir_dans_relation = 'ko'
+                    }
+
+                    tr_id+=1
+
+                    $('#table_pifometre tbody').append($('<tr>').attr('id',tr_id).append($('<td>').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir)))
+                    
+                    //Ajout des classes pour les filtres à chaque ligne
+                    if (is_place){
+                        $('#table_pifometre'+' tr:last').addClass('lieu_dit')
+                    } else {
+                        $('#table_pifometre'+' tr:last').addClass('voie')
+                    }
+                    if (nom_osm == undefined) {
+                        $('#table_pifometre'+' tr:last').addClass('nom_a_integrer')
+                    } else {
+                        $('#table_pifometre'+' tr:last').addClass('nom_integre')
+                    } 
+                    if (avec_adresses_ban) {
+                        $('#table_pifometre'+' tr:last').addClass('avec_adresses')
+                    } else {
+                        $('#table_pifometre'+' tr:last').addClass('sans_adresses')
+                    }
+
+                    //Remplissage des cellules avec leur contenu
+
+                    // Date de creation
+                    $('#table_pifometre'+' tr:last').append($('<td>').text(date_creation))
+                    //Nom Fantoir
+                    $('#table_pifometre'+' tr:last').append($('<td>').text(nom_topo))
+                    //Nom OSM
+                    if ($('#table_pifometre'+' tr:last').hasClass('nom_integre')){
+                        $('#table_pifometre'+' tr:last').append($('<td>')
+                                                        .append($('<span class="pastille-verte">'))
+                                                        .append($('<span>').text(nom_osm)))
+                    }
+                    else {
+                        $('#table_pifometre'+' tr:last').append($('<td>')
+                                                        .append($('<span class="pastille-orange">'))
+                                                        .append($('<span>').text(nom_osm)))
+                    }
+                    //Nom BAN
+                    $('#table_pifometre'+' tr:last').append($('<td>').text(nom_ban))
+                    xmin  = lon-DELTA
+                    xmax  = lon+DELTA
+                    ymin  = lat-DELTA
+                    ymax  = lat+DELTA
+                    //visu
+    //                add_map_link(table,url_map_org_part1+'#map='+url_hash_coords,'ORG')
+                    //JOSM
+                    add_josm_link(xmin,xmax,ymin,ymax)
+                    //Statut FANTOIR
+                    add_statut_fantoir(tr_id,fantoir,statut_voie)
+                    //Adresses à integrer
+                    if (numeros_a_proposer > 0){
+                        add_josm_addr_link($('#input_insee')[0].value,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
+                    } else {
+                        $('#table_pifometre tr:last').append($('<td>'))
+                    }
+                    if (avec_adresses_ban){
+                        add_addr_inspector_link($('#input_insee')[0].value,fantoir,'BAN')
+                    } else {
+                        $('#table_pifometre tr:last').append($('<td>'))
+                    }
+                }
+                $('#table_pifometre').tablesorter({
+                    widgets: ['stickyHeaders','filter'],
+                    widgetOptions: {
+                              stickyHeaders_offset : 0,
+                              stickyHeaders_attachTo : '#reponse',
+                              stickyHeaders_zIndex : 10,
+                              stickyHeaders_addResizeEvent : true,
+                                }});
+                update_menu_filtres()
+            })
+            window.location.hash="#insee="+$('#input_insee')[0].value
             $('body').css('cursor','default');
         })
     };
@@ -524,4 +534,4 @@
         })
     </script>
 </body>
-</html>
+</html>}}
