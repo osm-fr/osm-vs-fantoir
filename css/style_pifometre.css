@@ -313,13 +313,16 @@
 
 /*--------------- Liens JOSM et adresses dans le tableau ---------------*/
 
-.zone-clic{
+.zone-clic,
+.zone-clic-adresses,
+.zone-clic-adresses a,
+.zone-clic-josm {
 	cursor:pointer;
-	color:blue;
+	font-weight: bold;
 	text-decoration: underline;
+	text-align: center;
 }
-.zone-clic:hover{
-}
+
 .zone-clic.clicked{
 	background-color:green;
 	color:white;
@@ -327,27 +330,22 @@
 
 .statut0 .zone-clic-adresses,
 .statut0 .zone-clic-adresses a {
-	cursor:pointer;
 	background-color: white !important;
 	color:#D33A8B !important;
-	font-weight: bold;
-	text-decoration: underline;
 }
-.statut0 .zone-clic-adresses.clicked{
+.statut0 .zone-clic-adresses.clicked,
+.statut0 .zone-clic-adresses.clicked a {
 	background-color:#D33A8B !important;
-	color:white;
+	color:white !important;
 }
 
 .statut0 .zone-clic-josm{
-	cursor:pointer;
 	background-color: white !important;
 	color:#863602 !important; /* Marron logo JOSM */
-	font-weight: bold;
-	text-decoration: underline;
 }
 .statut0 .zone-clic-josm.clicked{
 	background-color:#863602 !important;
-	color:white;
+	color:white !important;
 }
 
 #mask_inspect_adresse{
