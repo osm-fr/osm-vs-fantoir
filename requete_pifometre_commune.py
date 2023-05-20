@@ -23,7 +23,7 @@ def main():
     lat_commune = None
     infos_commune = sql_get_data('infos_commune_insee',{'code_insee':code_insee})
     if infos_commune:
-        nom_commune,lon_commune,lat_commune = infos_commune[0]
+        nom_commune,lon_commune,lat_commune,date_debut = infos_commune[0]
 
     insee_commune_parente = None
     nom_commune_parente = None
@@ -33,7 +33,7 @@ def main():
 
     a_voisins = [[v[0],v[1],v[2]] for v in sql_get_data('voisins_insee',{'code_insee':code_insee})]
 
-    data = [nom_commune,lon_commune,lat_commune,a_voisins,insee_commune_parente, nom_commune_parente]
+    data = [nom_commune,lon_commune,lat_commune,a_voisins,insee_commune_parente, nom_commune_parente,date_debut]
 
     print('Content-Type: application/json\n')
     print(json.JSONEncoder().encode(data))
