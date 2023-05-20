@@ -130,7 +130,6 @@
 
     function add_josm_link(xl,xr,yb,yt){
         $('#table_pifometre tr:last').append($('<td>')
-                                    .append($('<span>')
                                     .addClass('zone-clic-josm')
                                     .attr('xleft',xl).attr('xright',xr).attr('ybottom',yb).attr('ytop',yt)
                                     .text('JOSM')
@@ -138,7 +137,7 @@
                                         srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xl+'&right='+xr+'&top='+yt+'&bottom='+yb;
                                         $('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
                                         $(this).addClass('clicked');
-                                    }))
+                                    })
                                 )
     }
     function add_statut_fantoir(id_ligne,fantoir,id_statut){
@@ -188,13 +187,16 @@
     }
     function add_addr_inspector_link(insee,fantoir,source){
         $('#table_pifometre tr:last')   .append($('<td>')
-                                            .append($('<span>') .addClass('zone-clic-adresses')
-                                                .append($('<a>').attr('href',"numeros.html?insee="+insee+'&fantoir='+fantoir+'&source='+source+'&tab=0')
-                                                    .text('Qualifier')
-                                                )
-                                            )
+                                        .addClass('zone-clic-adresses')
+                                        .append($('<a>').attr('href',"numeros.html?insee="+insee+'&fantoir='+fantoir+'&source='+source+'&tab=0').attr('target',"blank")
+                                            .text('Qualifier')
+                                        )
+                                        .click(function(){
+                                            $(this).addClass('clicked');
+                                        })
                                         )
     };
+
     function requete_pifometre(){
         commune_valide = false;
         $('body').css('cursor','progress');
