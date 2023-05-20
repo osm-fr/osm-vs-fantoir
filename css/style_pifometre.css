@@ -218,6 +218,21 @@
 	background-color: #FCFFB7;
 }
 
+/*----------- LIGNE GRISEE, si statut fantoir pas OK -----------*/
+
+#reponse tr td, 
+#reponse tr td .zone-clic-josm,
+#reponse tr td .zone-clic-adresses,
+#reponse tr td .zone-clic-adresses a {
+	background: #e6e6e6;
+	color: #666;
+}
+
+#reponse tr.statut0 td {
+	background: white;
+	color: black;
+}
+
 /*----------- ALERTE ANCIENNE COMMUNE -----------*/
 
 #alerte_commune{
@@ -269,18 +284,7 @@
 	border:3px solid black;
 }
 
-#rub_adresses_non_match.active,
-#rub_voies_fantoir_non_match.active,
-#rub_places_non_match.active,
-#rub_OSM_non_match.active {
-	background:lightgrey;
-}
 
-#rub_adresses_match.active,
-#rub_voies_match.active,
-#rub_places_match.active {
-	background:lightgreen;
-}
 
 /*--------------- Contenu tableau ---------------*/
 
@@ -321,83 +325,31 @@
 	color:white;
 }
 
-.zone-clic-adresses, .zone-clic-adresses a{
+.statut0 .zone-clic-adresses,
+.statut0 .zone-clic-adresses a {
 	cursor:pointer;
-	color:#D33A8B;
+	background-color: white !important;
+	color:#D33A8B !important;
 	font-weight: bold;
 	text-decoration: underline;
 }
-.zone-clic-adresses.clicked{
-	background-color:#D33A8B;
+.statut0 .zone-clic-adresses.clicked{
+	background-color:#D33A8B !important;
 	color:white;
 }
 
-.zone-clic-josm{
+.statut0 .zone-clic-josm{
 	cursor:pointer;
-	color:#863602; /* Marron logo JOSM */
+	background-color: white !important;
+	color:#863602 !important; /* Marron logo JOSM */
 	font-weight: bold;
 	text-decoration: underline;
 }
-.zone-clic-josm.clicked{
-	background-color:#863602;
+.statut0 .zone-clic-josm.clicked{
+	background-color:#863602 !important;
 	color:white;
 }
 
-#table_voies_match tr td,
-#table_adresses_match tr td,
-#table_adresses_non_match tr td,
-#table_voies_fantoir_non_match tr td,
-#table_places_non_match tr td,
-#table_places_match tr td,
-#table_OSM_non_match tr td,
-#table_inspect_adresse tr td{
-	background:lightgrey;
-	color:grey;
-	font-weight: bold;
-}
-#table_voies_match tr.statut0 td,
-#table_adresses_match tr.statut0 td,
-#table_places_match tr.statut0 td,
-#table_adresses_non_match tr.statut0 td,
-#table_voies_fantoir_non_match tr.statut0 td,
-#table_places_non_match tr.statut0 td,
-#table_OSM_non_match tr.statut0 td,
-#table_inspect_adresse tr.statut0 td{
-	background:white;
-	color:black;
-	font-weight: normal;
-}
-#table_voies_match tr.statut0 td.clicked,
-#table_adresses_match tr.statut0 td.clicked,
-#table_places_match tr.statut0 td.clicked,
-#table_adresses_non_match tr.statut0 td.clicked,
-#table_voies_fantoir_non_match tr.statut0 td.clicked,
-#table_places_non_match tr.statut0 td.clicked,
-#table_OSM_non_match tr.statut0 td.clicked{
-	background-color:green;
-	color:white;
-	font-weight: normal;
-}
-#table_adresses_match tr.statut0 td.cell_fantoir,
-#table_voies_match tr.statut0 td.cell_fantoir,
-#table_places_match tr.statut0 td.cell_fantoir{
-	background:lightgreen;
-	color:black;
-	font-weight: normal;
-}
-#table_adresses_match tr.statut0 td.cell_fantoir.annule,
-#table_voies_match tr.statut0 td.cell_fantoir.annule,
-#table_places_match tr.statut0 td.cell_fantoir.annule{
-	background:#FFCF6A;
-}
-#table_adresses_non_match tr.statut0 td.cell_fantoir,
-#table_voies_fantoir_non_match tr.statut0 td.cell_fantoir,
-#table_places_non_match tr.statut0 td.cell_fantoir,
-#table_OSM_non_match tr.statut0 td.cell_fantoir{
-	background:lightgrey;
-	color:black;
-	font-weight: normal;
-}
 #mask_inspect_adresse{
 	position:fixed;
 	top:0px;
