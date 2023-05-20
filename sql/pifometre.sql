@@ -58,6 +58,7 @@ SELECT t.fantoir,
        nom_topo,
        pn.nom AS nom_osm,
        nb.nom AS nom_ban,
+       nb.nom_ancienne_commune,
        COALESCE(pn.lon,ST_X(g.geometrie),NULL),
        COALESCE(pn.lat,ST_Y(g.geometrie),NULL),
        COALESCE(s.id_statut,0),
@@ -91,7 +92,8 @@ LEFT OUTER JOIN (SELECT DISTINCT fantoir,
                         nature IN ('place','lieu-dit')) place
 USING (fantoir)
 LEFT OUTER JOIN (SELECT fantoir,
-                        nom
+                        nom,
+                        nom_ancienne_commune
                  FROM   nom_fantoir
                  WHERE code_insee = '__code_insee__' AND
                        source != 'OSM') nb

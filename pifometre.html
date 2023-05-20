@@ -211,6 +211,7 @@
             communes_voisines = pifodata[3]
             insee_commune_parente = pifodata[4]
             nom_commune_parente = pifodata[5]
+            date_dernier_rapprochement = pifodata[6]
             document.title = nom_commune+' - Pifomètre'
             $('#table_infos_commune').empty()
             $('#alerte_commune').css('visibility','hidden');
@@ -222,6 +223,7 @@
             }
             commune_valide = true;
             $('#table_infos_commune').append($('<tr>').append($('<td>')).append($('<td>')).append($('<th>').attr('rowspan','4').append($('<h1>').addClass('titre_commune').append((nom_commune)))))
+            $('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append('Dernier rapprochement le')).append($('<td>').addClass('cellule_data').append(date_dernier_rapprochement)))
 
             //communes voisines
             $('#table_communes_voisines tr td').empty()

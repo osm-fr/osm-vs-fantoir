@@ -21,6 +21,7 @@ def main():
     nom_commune = []
     lon_commune = None
     lat_commune = None
+    date_debut = None
     infos_commune = sql_get_data('infos_commune_insee',{'code_insee':code_insee})
     if infos_commune:
         nom_commune,lon_commune,lat_commune,date_debut = infos_commune[0]
