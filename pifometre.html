@@ -332,7 +332,11 @@
                     //visu
     //                add_map_link(table,url_map_org_part1+'#map='+url_hash_coords,'ORG')
                     //JOSM
-                    add_josm_link(xmin,xmax,ymin,ymax)
+                    if (lon != undefined) {
+                        add_josm_link(xmin,xmax,ymin,ymax)
+                    } else {
+                        $('#table_pifometre'+' tr:last').append($('<td>'))
+                    }
                     //Statut FANTOIR
                     add_statut_fantoir(tr_id,fantoir,statut_voie)
                     //Adresses à integrer
