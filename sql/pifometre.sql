@@ -50,7 +50,6 @@ AS
         source = 'BAN')
 
 SELECT t.fantoir,
-       TO_CHAR(TO_DATE(t.date_creation::text,'YYYYMMDD'),'YYYY-MM-DD'),
        CASE t.date_annul
            WHEN 0 THEN '1'
            ELSE -1
@@ -95,8 +94,7 @@ LEFT OUTER JOIN (SELECT fantoir,
                         nom,
                         nom_ancienne_commune
                  FROM   nom_fantoir
-                 WHERE code_insee = '__code_insee__' AND
-                       source != 'OSM') nb
+                 WHERE code_insee = '__code_insee__' AND source != 'OSM') nb
 USING (fantoir)
 LEFT OUTER JOIN geom_adresses AS g
 USING (fantoir)

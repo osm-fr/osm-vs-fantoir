@@ -207,13 +207,15 @@
             url: "requete_pifometre_commune.py?insee="+$('#input_insee')[0].value
         })
         .done(function( pifodata ) {
-            nom_commune = pifodata[0]
-            lon_commune = pifodata[1]
-            lat_commune = pifodata[2]
-            communes_voisines = pifodata[3]
-            insee_commune_parente = pifodata[4]
-            nom_commune_parente = pifodata[5]
-            date_dernier_rapprochement = pifodata[6]
+            let [nom_commune,
+                 lon_commune,
+                 lat_commune,
+                 communes_voisines,
+                 insee_commune_parente,
+                 nom_commune_parente,
+                 date_dernier_rapprochement,
+                 commune_composee] = pifodata
+
             document.title = nom_commune+' - Pifomètre'
             $('#table_infos_commune').empty()
             $('#alerte_commune').css('visibility','hidden');
@@ -251,7 +253,9 @@
             })
             .done(function( data ) {
                 $('#table_pifometre').append($('<thead>').append($('<tr>').append($('<th>').append('Code FANTOIR'))))
-                $('#table_pifometre'+' tr').append($('<th>').append('Création TOPO'))
+                if (commune_composee == 1){
+                    $('#table_pifometre'+' tr').append($('<th>').append('Ancienne commune'))
+                }
                 $('#table_pifometre'+' tr').append($('<th>').append('Libellé TOPO'))
                 $('#table_pifometre'+' tr').append($('<th>').append('Libellé OSM'))
                 $('#table_pifometre'+' tr').append($('<th>').append('Libellé BAN ou CADASTRE'))
@@ -262,23 +266,20 @@
                 $('#table_pifometre').append($('<tbody>'))
                 tr_id = 1000
                 for (s=0;s<data.length;s++){
-                    record = data[s]
-                    fantoir = record[0]
-                    date_creation = record[1]
-                    annule = record[2]
-                    nom_topo = record[3]
-                    nom_osm = record[4]
-                    nom_ban = record[5]
-                    nom_ancienne_commune = record[6]
-                    lon = record[7]
-                    lat = record[8]
-                    statut_voie = record[9]
-                    numeros_a_proposer = record[10]
-                    caractere_annul = record[11]
-                    is_place = record[12]
-                    avec_adresses_ban = record[13]
-
-                    fantoir_affiche = fantoir
+                    let [fantoir,
+                         annule,
+                         nom_topo,
+                         nom_osm,
+                         nom_ban,
+                         nom_ancienne_commune,
+                         lon,
+                         lat,
+                         statut_voie,
+                         numeros_a_proposer,
+                         caractere_annul,
+                         is_place,
+                         avec_adresses_ban,
+                         fantoir_affiche] = data[s]
                     fantoir_dans_relation = 'ok'
                     if (caractere_annul == 'B'){
                         fantoir_affiche = 'Voie sans FANTOIR'
@@ -308,8 +309,10 @@
 
                     //Remplissage des cellules avec leur contenu
 
-                    // Date de creation
-                    $('#table_pifometre'+' tr:last').append($('<td>').text(date_creation))
+                    // Nom de l'ancienne commune
+                    if (commune_composee == 1){
+                        $('#table_pifometre'+' tr:last').append($('<td>').text(nom_ancienne_commune))
+                    }
                     //Nom Fantoir
                     $('#table_pifometre'+' tr:last').append($('<td>').text(nom_topo))
                     //Nom OSM

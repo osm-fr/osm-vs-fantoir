@@ -1,7 +1,8 @@
 SELECT nom,
 		ST_X(p),
 		ST_Y(p),
-		date_debut
+		date_debut,
+		commune_composee
 FROM	(SELECT	nom,
 				ST_Centroid(geometrie) p,
 				admin_level,
@@ -15,4 +16,9 @@ JOIN    (SELECT code_zone,date_debut
          FROM batch
          WHERE code_zone = '__code_insee__' AND
                etape = 'rapprochement') r
-USING   (code_zone);
+USING   (code_zone)
+CROSS JOIN (SELECT COALESCE(MAX(c),0) commune_composee
+           FROM (SELECT 1 AS c 
+           	     FROM   ban
+           	     WHERE  code_insee = '__code_insee__' AND
+           	            nom_ancienne_commune IS NOT NULL LIMIT 1)a)b
