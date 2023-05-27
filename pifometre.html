@@ -278,8 +278,8 @@
                          numeros_a_proposer,
                          caractere_annul,
                          is_place,
-                         avec_adresses_ban,
-                         fantoir_affiche] = data[s]
+                         avec_adresses_ban] = data[s]
+                    fantoir_affiche = fantoir
                     fantoir_dans_relation = 'ok'
                     if (caractere_annul == 'B'){
                         fantoir_affiche = 'Voie sans FANTOIR'
@@ -288,7 +288,7 @@
 
                     tr_id+=1
 
-                    $('#table_pifometre tbody').append($('<tr>').attr('id',tr_id).append($('<td>').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir)))
+                    $('#table_pifometre tbody').append($('<tr>').attr('id',tr_id).append($('<td>').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir_affiche)))
                     
                     //Ajout des classes pour les filtres à chaque ligne
                     if (is_place){
