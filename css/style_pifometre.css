@@ -214,6 +214,10 @@
 	overflow-y: auto;
 }
 
+#reponse tbody tr td:not(.zone-clic-josm):not(.zone-clic-adresses) {
+	padding-left: 1em;
+}
+
 /*----------- LIGNE GRISEE, si statut fantoir pas OK -----------*/
 
 #reponse tr td, 
@@ -314,45 +318,4 @@
 .statut0 .zone-clic-josm.clicked{
 	background-color:#863602 !important;
 	color:white !important;
-}
-
-#mask_inspect_adresse{
-	position:fixed;
-	top:0px;
-	left: 0px;
-	z-index:10;
-	width:100%;
-	height:100%;
-	background-color:lightgray;
-	text-align:center;
-	display: none;
-}
-#modal_inspect_adresse{
-	position:absolute;
-	top:0px;
-	z-index:20;
-    left: 10%;
-	width:80%;
-	height:100%;
-	background-color:lightgray;
-	text-align:center;
-	display: none;
-}
-#titre_inspect_adresse {
-	background-color:white;
-	vertical-align:middle;
-    left: 10%;
-	width:80%;
-	height: 50px;
-	/*border:50px solid black;*/
-	position:fixed;
-	z-index: 24;
-}
-#table_inspect_adresse{
-	overflow-y: scroll;
-	position: relative;
-	z-index: 21;
-	top: 50px;
-	left: 10%;
-	width: 80%;
 }

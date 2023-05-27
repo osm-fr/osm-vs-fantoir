@@ -67,26 +67,25 @@
 /*----------------------------------------------------------------------------------*/
 
 #reponse{
-	position:absolute;
-	top:200px;
+	position: relative;
+	margin-top:200px;
 	width:40%;
+	height:70%;
 	margin-left:10%;
 	z-index:2;
+	overflow-y: auto;
 }
+
+/*--------------- TABLEAU des adresses ---------------*/
 
 #table_inspect_adresse{
 /*	display: block;
 */	width: 100%;
 }
-/*
-#table_inspect_adresse{
-	overflow-y: scroll;
-	position: relative;
-	z-index: 21;
-	top: 50px;
-	left: 10%;
-	width: 80%;
-}*/
+
+#reponse tbody tr td {
+	padding-left: 1.2em;
+}
 
 #mask_inspect_adresse{
 	position:fixed;
@@ -120,127 +119,26 @@
 	z-index: 24;
 }
 
+/*----------- LIGNE GRISEE, si statut adresse pas OK -----------*/
 
-
-/*--------------- En-tête colonnes ---------------*/
-
-#rubriques{
-	position:absolute;
-	top:70px;
-	font-size: 0.9em;
-}
-@media only screen and (max-width: 1200px) {
-	#rubriques{font-size: 0.8em;}
+#reponse tr td {
+	background: #e6e6e6;
+	color: #666;
 }
 
-#rubriques th{
-	background-color:black;
-	color:white;
-}
-.emphase{
-	color:red;
-	font-size:larger;
-}
-.rubrique{
-	cursor:pointer;
-	width:200px;
-	height:50px;
-	position:relative;
-	color:black;
-	text-align: center;
-	font-size: 0.9em;
-	font-weight: bold;
-	background:white;
-	margin-right:10px;
+#reponse tr.statut0 td {
+	background: white;
+	color: black;
 }
 
-.rubrique.active{
-	border:3px solid black;
+/*--------------- Couleur de ligne au survol -----------------*/
+
+#reponse tr:hover td,
+#reponse tr.statut0:hover td {
+	background-color: #FCFFB7 !important;
 }
 
-#rub_adresses_non_match.active,
-#rub_voies_fantoir_non_match.active,
-#rub_places_non_match.active,
-#rub_OSM_non_match.active {
-	background:lightgrey;
-}
-
-#rub_adresses_match.active,
-#rub_voies_match.active,
-#rub_places_match.active {
-	background:lightgreen;
-}
-
-/*--------------- Contenu tableau ---------------*/
-
-.table_liste{
-	display:none;
-}
-.zone_click{
-	cursor:pointer;
-	color:blue;
-	text-decoration: underline;
-}
-.zone_click.clicked{
-	background-color:green;
-	color:white;
-}
-
-#table_voies_match tr td,
-#table_adresses_match tr td,
-#table_adresses_non_match tr td,
-#table_voies_fantoir_non_match tr td,
-#table_places_non_match tr td,
-#table_places_match tr td,
-#table_OSM_non_match tr td,
-#table_inspect_adresse tr td{
-	background:lightgrey;
-	color:grey;
-	font-weight: bold;
-}
-#table_voies_match tr.statut0 td,
-#table_adresses_match tr.statut0 td,
-#table_places_match tr.statut0 td,
-#table_adresses_non_match tr.statut0 td,
-#table_voies_fantoir_non_match tr.statut0 td,
-#table_places_non_match tr.statut0 td,
-#table_OSM_non_match tr.statut0 td,
-#table_inspect_adresse tr.statut0 td{
-	background:white;
-	color:black;
-	font-weight: normal;
-}
-#table_voies_match tr.statut0 td.clicked,
-#table_adresses_match tr.statut0 td.clicked,
-#table_places_match tr.statut0 td.clicked,
-#table_adresses_non_match tr.statut0 td.clicked,
-#table_voies_fantoir_non_match tr.statut0 td.clicked,
-#table_places_non_match tr.statut0 td.clicked,
-#table_OSM_non_match tr.statut0 td.clicked{
-	background-color:green;
-	color:white;
-	font-weight: normal;
-}
-#table_adresses_match tr.statut0 td.cell_fantoir,
-#table_voies_match tr.statut0 td.cell_fantoir,
-#table_places_match tr.statut0 td.cell_fantoir{
-	background:lightgreen;
-	color:black;
-	font-weight: normal;
-}
-#table_adresses_match tr.statut0 td.cell_fantoir.annule,
-#table_voies_match tr.statut0 td.cell_fantoir.annule,
-#table_places_match tr.statut0 td.cell_fantoir.annule{
-	background:#FFCF6A;
-}
-#table_adresses_non_match tr.statut0 td.cell_fantoir,
-#table_voies_fantoir_non_match tr.statut0 td.cell_fantoir,
-#table_places_non_match tr.statut0 td.cell_fantoir,
-#table_OSM_non_match tr.statut0 td.cell_fantoir{
-	background:lightgrey;
-	color:black;
-	font-weight: normal;
-}
+/*--------------- CARTE et légende ---------------*/
 
 #map{
 	width: 500px;
@@ -250,7 +148,8 @@
 	left: 55%;
 	z-index: 3;
 }
-.map-numero{
+.map-numero,
+.legende-numero {
 	font-weight: bold;
 	font-size: 1.3em;
 	line-height: 1em;
@@ -261,6 +160,13 @@
 	white-space: nowrap;
 	border:  solid 1px;
 }
-.map-numero.anomalie{
+.map-numero.anomalie,
+.legende-numero.anomalie {
 	color: #AD005E;
+}
+
+#legende_map {
+	position: fixed;
+	top: 720px;
+	left: 55%;
 }

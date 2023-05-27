@@ -4,6 +4,7 @@
 <title>Qualification des numéros d'adresses BAN</title>
 <script src="js/jquery-3.6.4.min.js"></script>
 <script src="js/tablesorter/jquery.tablesorter.js"></script>
+<script src="js/jquery.tablesorter.combined.min.js"></script>
 <!-- <script src="js/tablesorter/parsers/parser-input-select.min.js"></script> -->
 <!-- <script src="js/tablesorter/widgets/widget-filter.min.js"></script> -->
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
@@ -117,7 +118,7 @@
                                 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',maxZoom: 19}).addTo(map);
                                 $('#bandeau').append($('<h1>').append(data[0][2])).append(($('<h2>').append(data[0][4]+" ("+data[0][5]+")")))
                                 $('#table_inspect_adresse').empty().append($('<thead>').append($('<tr>').append($('<th>').append('Source'))))
-                                $('#table_inspect_adresse tr').append($('<th>').append('Numero'))
+                                $('#table_inspect_adresse tr').append($('<th>').append('Numéro'))
                                 $('#table_inspect_adresse tr').append($('<th>').append('Statut de l\'adresse'))
                                 $('#table_inspect_adresse').append($('<tbody>'))
                                 for (l=0;l<data.length;l++){
@@ -141,12 +142,23 @@
                                     global_ligne_id+=1
                                 }
                                 $('#table_inspect_adresse').trigger("resetToLoadState");
-                                $('#table_inspect_adresse').tablesorter();
+                                
+                                //Sticky headers : le tableau scrolle dans son contenant
+                                $('#table_inspect_adresse').tablesorter({
+                                    widthFixed : true,
+                                    headerTemplate : '{content} {icon}', // Add icon for various themes
+                                    widgets: [ 'stickyHeaders', 'filter' ],
+                                    widgetOptions: {
+                                      stickyHeaders_attachTo : '#reponse'
+                                    }
+                                });
+
                                 map.fitBounds([[min_lat,min_lon],[max_lat,max_lon]]);
 
                                 refresh();
                             })
     }
+
     function refresh(){
         $('.map-numero').removeClass('anomalie');
         for (i=1;i<a_menus_labels.length;i++){
@@ -178,6 +190,10 @@
         <table id="table_inspect_adresse"></table>
     </div>
      <div id="map"></div>
+     <div id="legende_map">
+         <p><span class="legende-numero">Bleu</span> : Adresses ok</p>
+         <p><span class="legende-numero anomalie">Rose</span> : Adresses avec anomalie identifiée</p>
+     </div>
     <footer>
         <!--#include file="includes/footer.html" -->
     </footer>
