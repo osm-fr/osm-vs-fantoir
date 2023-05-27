@@ -166,7 +166,7 @@
 	width:100%;
 	height:100%;
 	background-color:lightgray;
-	opacity:0;
+	visibility: hidden;
 	text-align:center;
 }
 #wait_ajax span{
@@ -205,25 +205,21 @@
 /*----------------------------------------------------------------------------------*/
 
 #reponse{
-	position:absolute;
-	top:300px;
+	position: relative;
+	margin-top:220px;
 	width: 100%;
 	font-size:0.9em;
 	z-index:2;
-	height: 500px;
+	height: 70%;
 	overflow-y: auto;
-}
-
-#reponse tr:hover td {
-	background-color: #FCFFB7;
 }
 
 /*----------- LIGNE GRISEE, si statut fantoir pas OK -----------*/
 
 #reponse tr td, 
-#reponse tr td .zone-clic-josm,
-#reponse tr td .zone-clic-adresses,
-#reponse tr td .zone-clic-adresses a {
+#reponse tr td.zone-clic-josm,
+#reponse tr td.zone-clic-adresses,
+#reponse tr td.zone-clic-adresses a {
 	background: #e6e6e6;
 	color: #666;
 }
@@ -233,7 +229,16 @@
 	color: black;
 }
 
-/*----------- ALERTE ANCIENNE COMMUNE -----------*/
+/*--------------- Couleur de ligne au survol -----------------*/
+
+#reponse tr:hover td,
+#reponse tr.statut0:hover td,
+#reponse tr:hover td span.zone-clic-adresses,
+#reponse tr:hover td.zone-clic-adresses a {
+	background-color: #FCFFB7 !important;
+}
+
+/*--------------- ALERTE ANCIENNE COMMUNE --------------------*/
 
 #alerte_commune{
 	position:fixed;
@@ -247,43 +252,6 @@
 #alerte_commune h3{
 	text-align: center;
 }
-
-/*--------------- En-tête colonnes ---------------*/
-
-#rubriques{
-	position:absolute;
-	top:70px;
-	font-size: 0.9em;
-}
-@media only screen and (max-width: 1200px) {
-	#rubriques{font-size: 0.8em;}
-}
-
-#rubriques th{
-	background-color:black;
-	color:white;
-}
-.emphase{
-	color:red;
-	font-size:larger;
-}
-.rubrique{
-	cursor:pointer;
-	width:200px;
-	height:50px;
-	position:relative;
-	color:black;
-	text-align: center;
-	font-size: 0.9em;
-	font-weight: bold;
-	background:white;
-	margin-right:10px;
-}
-
-.rubrique.active{
-	border:3px solid black;
-}
-
 
 
 /*--------------- Contenu tableau ---------------*/

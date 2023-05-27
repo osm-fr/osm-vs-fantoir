@@ -80,7 +80,7 @@
         $('body').css('cursor','progress');
         $('#wait_ajax').empty()
                        .css('z-index','20')
-                       .css('opacity','0.8')
+                       .css('visibility','visible')
                        .append($('<span>').append('Mise à jour BANO en cours...'));
         $.ajax({
             url: "refresh.py?insee="+$('#input_insee')[0].value,
@@ -93,7 +93,7 @@
                 alert('Problème lors de la mise à jour')
             }
             $('body').css('cursor','default');
-            $('#wait_ajax').css('z-index','1').css('opacity','0');
+            $('#wait_ajax').css('z-index','1').css('visibility','hidden');
         })
     }
 
@@ -354,14 +354,17 @@
                         $('#table_pifometre tr:last').append($('<td>'))
                     }
                 }
+
+                //Sticky headers : le tableau scrolle dans son contenant
                 $('#table_pifometre').tablesorter({
-                    widgets: ['stickyHeaders','filter'],
+                    widthFixed : true,
+                    headerTemplate : '{content} {icon}', // Add icon for various themes
+                    widgets: [ 'stickyHeaders', 'filter' ],
                     widgetOptions: {
-                              stickyHeaders_offset : 0,
-                              stickyHeaders_attachTo : '#reponse',
-                              stickyHeaders_zIndex : 10,
-                              stickyHeaders_addResizeEvent : true,
-                                }});
+                      stickyHeaders_attachTo : '#reponse'
+                    }
+                });
+
                 update_menu_filtres()
             })
             window.location.hash="#insee="+$('#input_insee')[0].value
@@ -546,4 +549,4 @@
         })
     </script>
 </body>
-</html>}}
+</html>
