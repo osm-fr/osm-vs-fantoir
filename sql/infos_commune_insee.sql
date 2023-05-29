@@ -1,7 +1,7 @@
 SELECT nom,
 		ST_X(p),
 		ST_Y(p),
-		date_debut,
+		COALESCE(date_debut,'01-10-1970'),
 		commune_composee
 FROM	(SELECT	nom,
 				ST_Centroid(geometrie) p,
@@ -12,7 +12,7 @@ FROM	(SELECT	nom,
                 code_insee = '__code_insee__'
         ORDER BY admin_level
         LIMIT 1)a
-JOIN    (SELECT code_zone,date_debut
+LEFT OUTER JOIN    (SELECT code_zone,date_debut
          FROM batch
          WHERE code_zone = '__code_insee__' AND
                etape = 'rapprochement') r
