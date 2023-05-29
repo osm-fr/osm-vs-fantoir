@@ -246,7 +246,7 @@
                 $('#alerte_commune > .fermer').click(function(){
                     $('#alerte_commune').css('visibility','hidden');
                 })
-                $('#alerte_commune').append($('<h3>').text(nom_commune+' est une ancienne commune. Elle a été incorporée dans ').append($('<a>').attr('href','index.html#insee='+insee_commune_parente).text(nom_commune_parente+'('+insee_commune_parente+')')))
+                $('#alerte_commune').append($('<h3>').text(nom_commune+' est une ancienne commune. Elle a été incorporée dans ').append($('<a>').attr('href','#insee='+insee_commune_parente).text(nom_commune_parente+'('+insee_commune_parente+')')))
             }
             $.ajax({
                 url: "requete_pifometre_voies.py?insee="+$('#input_insee')[0].value
