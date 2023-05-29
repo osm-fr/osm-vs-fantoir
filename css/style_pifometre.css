@@ -319,3 +319,6 @@
 	background-color:#863602 !important;
 	color:white !important;
 }
+#reponse tr.statut0 td.cell_fantoir.annule{
+        background:#FFCF6A;
+}

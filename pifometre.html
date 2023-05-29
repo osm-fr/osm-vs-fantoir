@@ -289,7 +289,8 @@
                     tr_id+=1
 
                     $('#table_pifometre tbody').append($('<tr>').attr('id',tr_id).append($('<td>').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir_affiche)))
-                    
+                    if (annule == 1)
+                        $('#table_pifometre tr:last td:last').addClass('annule').attr('title','FANTOIR annulé, à remplacer dans OSM')
                     //Ajout des classes pour les filtres à chaque ligne
                     if (is_place){
                         $('#table_pifometre'+' tr:last').addClass('lieu_dit')
