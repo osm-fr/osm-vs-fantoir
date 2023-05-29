@@ -102,12 +102,13 @@
             FILTRES[i] = [FILTRES[i][0],FILTRES[i][1],$('#table_pifometre tr.'+FILTRES[i][0]).length,$('#check_'+FILTRES[i][0]).is(':checked')]
         }
     }
+    function reset_filtres(){
+        for (let i = 0; i < FILTRES.length; i++){
+            FILTRES[i] = [FILTRES[i][0],FILTRES[i][1],0,true]
+        }
+        $('#boutons-filtres input').prop('checked',true)
+    }
     function update_menu_filtres(){
-/*        $('#filtres').empty()
-        for (let f of FILTRES){
-            $('#filtres').append($('<input>').attr('type','checkbox').attr('id','check_'+f[0]).attr('checked',true))
-            $('#filtres').append($('<label>').attr('for','check_'+f[0]).text(f[1]))
-        }*/
         $('#boutons-filtres input').click(function(){
             show_mask_lines()
         })
@@ -246,23 +247,30 @@
                 $('#alerte_commune > .fermer').click(function(){
                     $('#alerte_commune').css('visibility','hidden');
                 })
-                $('#alerte_commune').append($('<h3>').text(nom_commune+' est une ancienne commune. Elle a été incorporée dans ').append($('<a>').attr('href','#insee='+insee_commune_parente).text(nom_commune_parente+'('+insee_commune_parente+')')))
+/*                $('#alerte_commune').append($('<h3>').text(nom_commune+' est une ancienne commune. Elle a été incorporée dans ').append($('<a>').attr('href','#insee='+insee_commune_parente).text(nom_commune_parente+'('+insee_commune_parente+')')))
+*/
+                $('#alerte_commune').append($('<h3>').text(nom_commune+' est une ancienne commune. Elle a été incorporée dans ').append($('<span>').text(nom_commune_parente+'('+insee_commune_parente+')')).attr('insee_cible',insee_commune_parente).addClass('lien_commune')
+                    .click(function(){
+                        location.assign(window.location.href.split('#')[0]+'#insee='+$(this).attr('insee_cible'))
+                        start()
+                    }))
             }
             $.ajax({
                 url: "requete_pifometre_voies.py?insee="+$('#input_insee')[0].value
             })
             .done(function( data ) {
+                reset_filtres()
                 $('#table_pifometre').append($('<thead>').append($('<tr>').append($('<th>').append('Code FANTOIR'))))
                 if (commune_composee == 1){
-                    $('#table_pifometre'+' tr').append($('<th>').append('Ancienne commune'))
+                    $('#table_pifometre tr').append($('<th>').append('Ancienne commune'))
                 }
-                $('#table_pifometre'+' tr').append($('<th>').append('Libellé TOPO'))
-                $('#table_pifometre'+' tr').append($('<th>').append('Libellé OSM'))
-                $('#table_pifometre'+' tr').append($('<th>').append('Libellé BAN ou CADASTRE'))
-                $('#table_pifometre'+' tr').append($('<th>').append('Edition'))
-                $('#table_pifometre'+' tr').append($('<th>').append('Statut FANTOIR ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
-                $('#table_pifometre'+' tr').append($('<th>').addClass('string-none').append('Intégrer les adresses'))
-                $('#table_pifometre'+' tr').append($('<th>').append('Qualifier les adresses'))
+                $('#table_pifometre tr').append($('<th>').append('Libellé TOPO'))
+                $('#table_pifometre tr').append($('<th>').append('Libellé OSM'))
+                $('#table_pifometre tr').append($('<th>').append('Libellé BAN ou CADASTRE'))
+                $('#table_pifometre tr').append($('<th>').append('Edition'))
+                $('#table_pifometre tr').append($('<th>').append('Statut FANTOIR ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
+                $('#table_pifometre tr').append($('<th>').addClass('string-none').append('Intégrer les adresses'))
+                $('#table_pifometre tr').append($('<th>').append('Qualifier les adresses'))
                 $('#table_pifometre').append($('<tbody>'))
                 tr_id = 1000
                 for (s=0;s<data.length;s++){
@@ -289,46 +297,47 @@
                     tr_id+=1
 
                     $('#table_pifometre tbody').append($('<tr>').attr('id',tr_id).append($('<td>').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir_affiche)))
-                    if (annule == 1)
+                    if (annule == -1){
                         $('#table_pifometre tr:last td:last').addClass('annule').attr('title','FANTOIR annulé, à remplacer dans OSM')
+                    }
                     //Ajout des classes pour les filtres à chaque ligne
                     if (is_place){
-                        $('#table_pifometre'+' tr:last').addClass('lieu_dit')
+                        $('#table_pifometre tr:last').addClass('lieu_dit')
                     } else {
-                        $('#table_pifometre'+' tr:last').addClass('voie')
+                        $('#table_pifometre tr:last').addClass('voie')
                     }
                     if (nom_osm == undefined) {
-                        $('#table_pifometre'+' tr:last').addClass('nom_a_integrer')
+                        $('#table_pifometre tr:last').addClass('nom_a_integrer')
                     } else {
-                        $('#table_pifometre'+' tr:last').addClass('nom_integre')
+                        $('#table_pifometre tr:last').addClass('nom_integre')
                     } 
                     if (avec_adresses_ban) {
-                        $('#table_pifometre'+' tr:last').addClass('avec_adresses')
+                        $('#table_pifometre tr:last').addClass('avec_adresses')
                     } else {
-                        $('#table_pifometre'+' tr:last').addClass('sans_adresses')
+                        $('#table_pifometre tr:last').addClass('sans_adresses')
                     }
 
                     //Remplissage des cellules avec leur contenu
 
                     // Nom de l'ancienne commune
                     if (commune_composee == 1){
-                        $('#table_pifometre'+' tr:last').append($('<td>').text(nom_ancienne_commune))
+                        $('#table_pifometre tr:last').append($('<td>').text(nom_ancienne_commune))
                     }
                     //Nom Fantoir
-                    $('#table_pifometre'+' tr:last').append($('<td>').text(nom_topo))
+                    $('#table_pifometre tr:last').append($('<td>').text(nom_topo))
                     //Nom OSM
-                    if ($('#table_pifometre'+' tr:last').hasClass('nom_integre')){
-                        $('#table_pifometre'+' tr:last').append($('<td>')
+                    if ($('#table_pifometre tr:last').hasClass('nom_integre')){
+                        $('#table_pifometre tr:last').append($('<td>')
                                                         .append($('<span class="pastille-verte">'))
                                                         .append($('<span>').text(nom_osm)))
                     }
                     else {
-                        $('#table_pifometre'+' tr:last').append($('<td>')
+                        $('#table_pifometre tr:last').append($('<td>')
                                                         .append($('<span class="pastille-orange">'))
                                                         .append($('<span>').text(nom_osm)))
                     }
                     //Nom BAN
-                    $('#table_pifometre'+' tr:last').append($('<td>').text(nom_ban))
+                    $('#table_pifometre tr:last').append($('<td>').text(nom_ban))
                     xmin  = lon-DELTA
                     xmax  = lon+DELTA
                     ymin  = lat-DELTA
@@ -339,7 +348,7 @@
                     if (lon != undefined) {
                         add_josm_link(xmin,xmax,ymin,ymax)
                     } else {
-                        $('#table_pifometre'+' tr:last').append($('<td>'))
+                        $('#table_pifometre tr:last').append($('<td>'))
                     }
                     //Statut FANTOIR
                     add_statut_fantoir(tr_id,fantoir,statut_voie)
@@ -375,14 +384,14 @@
 
     function add_header(){
         $('#table_pifometre').append($('<thead>').append($('<tr>').append($('<th>').append('Code FANTOIR'))))
-        $('#table_pifometre'+' tr').append($('<th>').append('Création TOPO'))
-        $('#table_pifometre'+' tr').append($('<th>').append('Libellé TOPO'))
-        $('#table_pifometre'+' tr').append($('<th>').append('Libellé OSM'))
-        $('#table_pifometre'+' tr').append($('<th>').append('Libellé BAN ou CADASTRE'))
-        $('#table_pifometre'+' tr').append($('<th>').append('Edition'))
-        $('#table_pifometre'+' tr').append($('<th>').append('Statut FANTOIR ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
-        $('#table_pifometre'+' tr').append($('<th>').addClass('string-none').append('Intégrer les adresses'))
-        $('#table_pifometre'+' tr').append($('<th>').append('Qualifier les adresses'))
+        $('#table_pifometre tr').append($('<th>').append('Création TOPO'))
+        $('#table_pifometre tr').append($('<th>').append('Libellé TOPO'))
+        $('#table_pifometre tr').append($('<th>').append('Libellé OSM'))
+        $('#table_pifometre tr').append($('<th>').append('Libellé BAN ou CADASTRE'))
+        $('#table_pifometre tr').append($('<th>').append('Edition'))
+        $('#table_pifometre tr').append($('<th>').append('Statut FANTOIR ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
+        $('#table_pifometre tr').append($('<th>').addClass('string-none').append('Intégrer les adresses'))
+        $('#table_pifometre tr').append($('<th>').append('Qualifier les adresses'))
         $('#table_pifometre').append($('<tbody>'))
     };
     function check_url_for_insee(){
