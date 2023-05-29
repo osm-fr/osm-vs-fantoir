@@ -4,21 +4,19 @@
 import cgi
 import cgitb
 import json
-import sys
 
-import db
+from sql import sql_process
 
 cgitb.enable()
 print("Content-Type: application/json\n")
 
 params = cgi.FieldStorage()
-insee_com = params['insee'].value
+code_insee = params['insee'].value
 statut = params['statut'].value
 fantoir = params['fantoir'].value
 
 try:
-    with db.bano.cursor() as cur:
-        cur.execute(f"INSERT INTO statut_fantoir VALUES ('{fantoir}',{statut},(SELECT EXTRACT(epoch from now())::integer),'{insee_com}');COMMIT;")
+    sql_process('change_statut_fantoir',{'fantoir':fantoir,'statut':statut,'code_insee':code_insee})
 except:
 	statut = -1
 

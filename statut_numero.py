@@ -4,9 +4,7 @@
 import cgi
 import cgitb
 import json
-# import sys
 
-import db
 from sql import sql_process
 
 cgitb.enable()
