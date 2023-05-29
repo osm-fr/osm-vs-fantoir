@@ -82,7 +82,8 @@
 	z-index:5;
 	visibility:hidden;
 }
-#table_communes_voisines table tr td.lien_commune{
+#table_communes_voisines table tr td.lien_commune,
+.lien_commune {
 	color:blue;
 	text-decoration: underline;
 	cursor: pointer;
@@ -184,7 +185,7 @@
 
 #boutons-filtres {
 	display: inline-block;
-	margin-left: 5%;
+	margin-left: 3%;
 	margin-top: 30px;
 	width: 60%;
 	font-size: 0.9em;
@@ -242,21 +243,67 @@
 	background-color: #FCFFB7 !important;
 }
 
-/*--------------- ALERTE ANCIENNE COMMUNE --------------------*/
+/*--------------------------------------------------------------------*/
+/*-------------------- ALERTE ANCIENNE COMMUNE -----------------------*/
+/*--------------------------------------------------------------------*/
 
-#alerte_commune{
-	position:fixed;
-	width:100%;
-	height: 150px;
-	background:#FFCF6A;
-	overflow-y:scroll;
+#alerte_commune {
 	visibility:hidden;
-	z-index: 10;
+	position:fixed;
+	width:45%;
+	right: 7%;
+	height: 100px;
+	line-height: 90px; /* doit être identique à height pour centrer verticalement */
+	padding: 5px;
+	background:#FFDE6A;
+  border-bottom: 4px #FFBB2D solid;
+  border-radius: 8px;
 }
+@media only screen and (max-width: 1900px) {
+	#alerte_commune {
+		right: 3%;
+		line-height:40px;
+	}
+}
+@media only screen and (max-width: 1700px) {
+	#alerte_commune {
+		width: 40%;
+		right: 1%;
+		line-height:40px;
+	}
+}
+
 #alerte_commune h3{
 	text-align: center;
 }
 
+.fermer-alerte {
+	color: black;
+	float: right;
+	margin-top: 10px;
+	margin-right: 10px;
+	height: 30px;
+	line-height: 30px;
+	width: 30px;
+	text-align: center;
+	font-weight: bold;
+	background: orange;
+  border-radius: 6px;
+	cursor:pointer;
+}
+
+@media only screen and (max-width: 1330px) {
+	#topnav .bouton_nav, #topnav .menu_actif {
+		padding: 8px 6px;
+		font-size: 0.8em;
+	}
+}
+@media only screen and (max-width: 1150px) {
+	#topnav .bouton_nav, #topnav .menu_actif {
+		padding: 8px 6px;
+		font-size: 0.75em;
+	}
+}
 
 /*--------------- Contenu tableau ---------------*/
 
