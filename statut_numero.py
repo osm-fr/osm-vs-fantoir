@@ -19,8 +19,8 @@ numero = params['numero'].value
 source = params['source'].value
 
 try:
-    with db.bano.cursor() as cur:
-        cur.execute(f"INSERT INTO statut_numero VALUES ('{numero}','{fantoir}','{source}',{statut},(SELECT EXTRACT(epoch from now())::integer),'{insee_com}');COMMIT;")
+    with db.bano_db.cursor() as cur:
+        cur.execute(f"INSERT INTO statut_numero VALUES ('{numero}','{fantoir}','{source}',{statut},(SELECT EXTRACT(epoch from now())::integer),'{insee_com}');")
 except:
 	statut = -1
 
