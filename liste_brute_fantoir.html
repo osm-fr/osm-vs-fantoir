@@ -3,11 +3,13 @@
 <meta charset="UTF-8">
 <title>Listes FANTOIR par commune</title>
 <script src="js/jquery-3.6.4.min.js"></script>
+<script src="js/tablesorter/jquery.tablesorter.js"></script>
 <script src="js/jquery.tablesorter.combined.min.js"></script>
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
-<link rel="stylesheet" href="css/style_liste_brute_fantoir.css" type="text/css"/>
+<link rel="stylesheet" href="css/style_fantoir_brut.css" type="text/css"/>
 <link rel="stylesheet" href="css/menu.css" type="text/css"/>
-<link rel="stylesheet" href="css/tablesorter.css" type="text/css"/>
+<link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
+
 <script>
 	a_champs_fantoir = ['Rapproché ?','dept','code_insee','fantoir','nature_voie','libelle_voie','caractere_voie','caractere_annul','date_annul','date_creation','type_voie','dernier_mot']
 	function check_url_for_insee(){
@@ -59,16 +61,28 @@
 			for (c=0;c<fantoir.length;c++){
 				$('#listing_fantoir').append($('<tr>'))
 				for (d=0;d<fantoir[c].length;d++){
-					$('tr:last').append($('<td>').attr('title',a_champs_fantoir[d]).append(fantoir[c][d]))
+					$('tr:last').append($('<td>').attr('title',a_champs_fantoir[d]).append($('<span>').append(fantoir[c][d])))
 				}
-				if ($('tr:last td')[0].childNodes[0].data == 'OUI'){
-					$($('tr:last td')[0]).addClass('rapproche')
+
+				if ($('tr:last td span')[0].childNodes[0].data == 'OUI'){
+					$($('tr:last td')[0]).append($('<span>').addClass('pastille-verte')).addClass('rapproche')
 				}
-				if ($('tr:last td')[0].childNodes[0].data == 'QUALIFIÉ'){
-					$($('tr:last td')[0]).addClass('qualifie')
+				else if ($('tr:last td span')[0].childNodes[0].data == 'NON') {
+					$($('tr:last td')[0]).append($('<span>').addClass('pastille-orange'))
+				}
+				else if ($('tr:last td span')[0].childNodes[0].data == 'QUALIFIÉ'){
+					$($('tr:last td')[0]).append($('<span>').addClass('pastille-grise')).addClass('qualifie')
 				}
 			}
-			$('#listing_fantoir').tablesorter();
+            //Sticky headers : le tableau scrolle dans son contenant
+            $('#listing_fantoir').tablesorter({
+                widthFixed : true,
+                headerTemplate : '{content} {icon}', // Add icon for various themes
+                widgets: [ 'stickyHeaders', 'filter' ],
+                widgetOptions: {
+                  stickyHeaders_attachTo : '#reponse'
+                }
+            });
 		})
 		window.location.hash="#insee="+$('#input_insee')[0].value
 		$('body').css('cursor','default');
@@ -97,9 +111,6 @@
 	<div id="reponse">
 		<table id="listing_fantoir" class="tablesorter">
 		</table>
-		<div id="pied_de_page">
-			
-		</div>
 	</div>
 
 	<footer>
