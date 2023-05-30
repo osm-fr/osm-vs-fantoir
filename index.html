@@ -249,7 +249,7 @@
                 })
 /*                $('#alerte_commune').append($('<h3>').text(nom_commune+' est une ancienne commune. Elle a été incorporée dans ').append($('<a>').attr('href','#insee='+insee_commune_parente).text(nom_commune_parente+'('+insee_commune_parente+')')))
 */
-                $('#alerte_commune').append($('<h3>').text(nom_commune+' est une ancienne commune. Elle a été incorporée dans ').append($('<span>').addClass('lien_commune').text(nom_commune_parente+' ('+insee_commune_parente+')')).attr('insee_cible',insee_commune_parente)
+                $('#alerte_commune').append($('<p>').text(nom_commune+' est une ancienne commune. Elle a été incorporée dans ').append($('<span>').addClass('lien_commune').text(nom_commune_parente+' ('+insee_commune_parente+')')).attr('insee_cible',insee_commune_parente)
                     .click(function(){
                         location.assign(window.location.href.split('#')[0]+'#insee='+$(this).attr('insee_cible'))
                         start()
@@ -480,6 +480,7 @@
         <div id="bouton_export_csv" title="Exporter l'onglet courant en CSV"></div>
         <div id="infos_refresh"></div>
         <div id="alerte_commune"></div>
+        <div id="wait_ajax"></div>
         <div id='filtres'></div>
 
         <div id="boutons-filtres">
@@ -545,6 +546,5 @@
     <!--#include file="includes/footer.html" -->
     </footer>
     <div id="josm_target" style="visibility : hidden"></div>
-    <div id="wait_ajax"></div>
 </body>
 </html>
