@@ -65,7 +65,6 @@ SELECT t.fantoir,
        t.caractere_annul,
        COALESCE(place.is_place,false),
        COALESCE(faab.fantoir_avec_adresses_ban,false)
-
 FROM   (SELECT fantoir,
                date_creation,
                date_annul,
@@ -76,7 +75,7 @@ FROM   (SELECT fantoir,
         WHERE  code_insee = '__code_insee__')t
 LEFT OUTER JOIN fantoir_numeros_manquants
 USING (fantoir)
-LEFT OUTER JOIN (SELECT fantoir,
+LEFT OUTER JOIN (SELECT DISTINCT fantoir,
                         nom,
                         lon,
                         lat
@@ -90,7 +89,7 @@ LEFT OUTER JOIN (SELECT DISTINCT fantoir,
                  WHERE  code_insee = '__code_insee__' AND
                         nature IN ('place','lieu-dit')) place
 USING (fantoir)
-LEFT OUTER JOIN (SELECT fantoir,
+LEFT OUTER JOIN (SELECT DISTINCT fantoir,
                         nom,
                         nom_ancienne_commune
                  FROM   nom_fantoir
