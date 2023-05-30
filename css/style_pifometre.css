@@ -160,24 +160,6 @@
 
 /*----------------------------------*/
 
-#wait_ajax{
-	position:fixed;
-	top:60px;
-	z-index:1;
-	width:100%;
-	height:100%;
-	background-color:lightgray;
-	visibility: hidden;
-	text-align:center;
-}
-#wait_ajax span{
-	background-color:black;
-	vertical-align:middle;
-	font-size:30px;
-	line-height:500px;
-	color:white;
-	border:50px solid black;
-}
 
 /*----------------------------------------------------------------------------------*/
 /*------------------------------- BOUTONS FILTRES ----------------------------------*/
@@ -190,6 +172,17 @@
 	width: 60%;
 	font-size: 0.9em;
 }
+@media only screen and (max-width: 1500px) {
+	#boutons-filtres {
+		margin-left: 1%;
+		font-size: 0.8em;
+	}
+}
+@media only screen and (max-width: 1400px) {
+	#boutons-filtres {
+		width: 65%;
+	}
+}
 
 #boutons-filtres div {
 	width: auto;
@@ -200,6 +193,61 @@
 #boutons-filtres ul {
   list-style-type: none;
 }
+
+
+/*---------------------------------------------------------------------------------------*/
+/*------------------ ALERTE MAJ DES DONNEES BANO / ANCIENNE COMMUNE ---------------------*/
+/*---------------------------------------------------------------------------------------*/
+
+#wait_ajax,
+#alerte_commune {
+	visibility:hidden;
+	position:fixed;
+	width:45%;
+	right: 7%;
+	height: 100px;
+	text-align: center;
+	padding: 5px;
+  border-bottom: 4px #3FA4C5 solid;
+  border-radius: 8px;
+}
+
+#wait_ajax {
+	line-height: 90px; /* doit être identique à height pour centrer verticalement */
+	background:lightblue;
+}
+#wait_ajax span{
+	vertical-align:middle;
+	font-size:1.8em;
+	line-height:90px;
+	color:black;
+}
+.fermer-alerte {
+	color: black;
+	float: right;
+	margin-top: 10px;
+	margin-right: 10px;
+	height: 30px;
+	line-height: 30px;
+	width: 30px;
+	text-align: center;
+	font-weight: bold;
+	background: orange;
+  border-radius: 6px;
+	cursor:pointer;
+}
+
+#alerte_commune {
+	line-height: 40px;
+	background:#FFDE6A;
+  border-bottom: #FFBB2D;
+}
+#alerte_commune p {
+	text-align: center;
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
 
 /*----------------------------------------------------------------------------------*/
 /*------------------------------------- REPONSE ------------------------------------*/
@@ -241,68 +289,6 @@
 #reponse tr:hover td span.zone-clic-adresses,
 #reponse tr:hover td.zone-clic-adresses a {
 	background-color: #FCFFB7 !important;
-}
-
-/*--------------------------------------------------------------------*/
-/*-------------------- ALERTE ANCIENNE COMMUNE -----------------------*/
-/*--------------------------------------------------------------------*/
-
-#alerte_commune {
-	visibility:hidden;
-	position:fixed;
-	width:45%;
-	right: 7%;
-	height: 100px;
-	line-height: 90px; /* doit être identique à height pour centrer verticalement */
-	padding: 5px;
-	background:#FFDE6A;
-  border-bottom: 4px #FFBB2D solid;
-  border-radius: 8px;
-}
-@media only screen and (max-width: 1900px) {
-	#alerte_commune {
-		right: 3%;
-		line-height:40px;
-	}
-}
-@media only screen and (max-width: 1700px) {
-	#alerte_commune {
-		width: 40%;
-		right: 1%;
-		line-height:40px;
-	}
-}
-
-#alerte_commune h3{
-	text-align: center;
-}
-
-.fermer-alerte {
-	color: black;
-	float: right;
-	margin-top: 10px;
-	margin-right: 10px;
-	height: 30px;
-	line-height: 30px;
-	width: 30px;
-	text-align: center;
-	font-weight: bold;
-	background: orange;
-  border-radius: 6px;
-	cursor:pointer;
-}
-
-@media only screen and (max-width: 1330px) {
-	#topnav .bouton_nav, #topnav .menu_actif {
-		padding: 8px 6px;
-		font-size: 0.8em;
-	}
-}
-@media only screen and (max-width: 1150px) {
-	#topnav .bouton_nav, #topnav .menu_actif {
-		padding: 8px 6px;
-		font-size: 0.75em;
-	}
 }
 
 /*--------------- Contenu tableau ---------------*/
@@ -368,4 +354,37 @@
 }
 #reponse tr.statut0 td.cell_fantoir.annule{
         background:#FFCF6A;
+}
+
+
+/*---------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------*/
+/*------------------------------------ RESPONSIVE ---------------------------------------*/
+/*---------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------*/
+
+@media only screen and (max-width: 1900px) {
+	#alerte_commune, #wait_ajax {
+		right: 3%;
+	}
+}
+@media only screen and (max-width: 1700px) {
+	#alerte_commune, #wait_ajax {
+		width: 40%;
+		right: 1%;
+		line-height:40px;
+	}
+}
+@media only screen and (max-width: 1400px) {
+	#alerte_commune, #wait_ajax {
+		width: 35%;
+	}
+	#alerte_commune p, #wait_ajax span {
+		font-size: 1em;
+	}
+}
+@media only screen and (max-width: 1300px) {
+	#alerte_commune {
+		line-height:28px;
+	}
 }
