@@ -5,18 +5,18 @@ import cgi
 import cgitb
 import json
 
-from requete_fantoir import get_data_from_bano, get_data_from_bano_cache
+from sql import sql_get_data
 
 cgitb.enable()
 print ("Content-Type: application/json\n\n")
 
 params = cgi.FieldStorage()
-insee_com = params['insee'].value
+code_insee = params['insee'].value
 
-infos_commune = get_data_from_bano_cache('infos_commune_insee',insee_com)
+infos_commune = sql_get_data('infos_commune_insee',{'code_insee':code_insee})
 if infos_commune:
 	nom_commune = infos_commune[0][0]
 else:
 	nom_commune = []
 
-print(json.JSONEncoder().encode([[nom_commune],get_data_from_bano('listing_fantoir',insee_com)]))
+print(json.JSONEncoder().encode([[nom_commune],sql_get_data('listing_fantoir',{'code_insee':code_insee})]))
