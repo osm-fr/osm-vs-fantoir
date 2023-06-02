@@ -160,8 +160,8 @@ def main():
     if modele == 'Relation':
         fantoir_dans_relation = params['fantoir_dans_relation'].value == 'ok'
 
-    # code_insee = '85172'
-    # fantoir = '85172B458'
+    # code_insee = '95633'
+    # fantoir = '956330015'
     # modele = 'Points'
     # modele = 'Relation'
     # modele = 'Place'
@@ -202,7 +202,11 @@ def main():
     if modele == 'Relation':
         xmlResponse.relation['action'] = 'modify'
         xmlResponse = append_single_OSM_addr(xmlResponse,code_insee,fantoir)
-    
+
+        tag_fantoir = xmlResponse.select_one(f'tag[k="ref:FR:FANTOIR"]')
+        if tag_fantoir and fantoir in tag_fantoir['v']:
+            tag_fantoir['v'] = tag_fantoir['v'][0:9]
+
     print(xmlResponse.prettify())
 
 if __name__ == '__main__':
