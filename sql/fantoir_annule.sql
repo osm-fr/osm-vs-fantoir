@@ -1,21 +1,13 @@
-WITH
-f
-AS
-(SELECT  fantoir10,
-         CASE caractere_annul
-             WHEN 'O' THEN 'sans transfert'
-             WHEN 'Q' THEN 'avec transfert'
-         END transfert,
-         to_char(to_date(date_annul,'YYYYDDD'),'YYYY-MM-DD') date_annul
-FROM	fantoir_voie
-where date_annul!='0000000')
-SELECT v.fantoir,
-       v.voie_osm,
-       ST_X(v.geometrie),
-       ST_Y(v.geometrie),
+SELECT DISTINCT p.fantoir,
+       nom,
+       ST_X(geometrie),
+       ST_Y(geometrie),
        date_annul
-FROM   cumul_voies v
-JOIN   f
-ON  v.fantoir=f.fantoir10
-ORDER BY 1
+FROM   bano_points_nommes p
+JOIN   (SELECT  fantoir,
+                TO_CHAR(TO_DATE(date_annul::text,'YYYYMMDD'),'YYYY-MM-DD') date_annul
+FROM   topo
+WHERE  date_annul!= 0)f
+USING  (fantoir)
+ORDER  BY 1
 
