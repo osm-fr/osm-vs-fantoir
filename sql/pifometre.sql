@@ -5,8 +5,8 @@ AS
         fantoir,
         id_statut
 FROM    (SELECT *,
-	    RANK() OVER (PARTITION BY numero,fantoir ORDER BY timestamp_statut DESC) rang
-	    FROM    statut_numero
+            RANK() OVER (PARTITION BY numero,fantoir ORDER BY timestamp_statut DESC) rang
+            FROM    statut_numero
         WHERE   code_insee = '__code_insee__')r
 WHERE   rang = 1),
 
@@ -89,11 +89,16 @@ LEFT OUTER JOIN (SELECT DISTINCT fantoir,
                  WHERE  code_insee = '__code_insee__' AND
                         nature IN ('place','lieu-dit')) place
 USING (fantoir)
-LEFT OUTER JOIN (SELECT DISTINCT fantoir,
+LEFT OUTER JOIN (SELECT fantoir,
                         nom,
                         nom_ancienne_commune
-                 FROM   nom_fantoir
-                 WHERE code_insee = '__code_insee__' AND source != 'OSM') nb
+                        FROM (SELECT fantoir,
+                                     nom,
+                                     nom_ancienne_commune,
+                                     rank() OVER (PARTITION by fantoir order by case when source = 'CADASTRE' then 1 else 2 end) AS rang
+                              FROM   nom_fantoir
+                              WHERE  code_insee = '__code_insee__' AND source != 'OSM') nb
+                        WHERE rang = 1)nb
 USING (fantoir)
 LEFT OUTER JOIN geom_adresses AS g
 USING (fantoir)

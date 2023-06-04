@@ -7,7 +7,6 @@ import json
 import sys
 
 import helpers as hp
-import db
 from sql import sql_get_data
 
 cgitb.enable()
