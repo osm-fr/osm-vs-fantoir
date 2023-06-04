@@ -16,10 +16,9 @@
 	var osm_state
 	function start(){
 		$('body').css('cursor','progress');
-		$('#wait_ajax').empty()
-						.css('z-index','20')
-						.css('opacity','0.8')
-						.append($('<span>').append('Recherche des FANTOIRs annulés...'));
+		$('#wait_ajax').css('visibility','visible')
+						.append($('<p>').append('Chargement des FANTOIRs annulés...'))
+						.append($('<p>').append("(oui, c'est long)"));
 		$.ajax({
 			url: "fantoir_annule.py",
 		})
@@ -29,10 +28,9 @@
 				titre_bandeau = ' code FANTOIR annulé'
 			}
 			$('#bandeau h1').append(data.length+titre_bandeau)
-			$('#wait_ajax').append($('<span>').append("Ok"));
+			$('#wait_ajax').css('visibility','hidden');
 
 			$('body').css('cursor','default');
-			$('#wait_ajax').css('z-index','1').css('opacity','0');
 
 			url_map_org_part1 = 'http://www.openstreetmap.org/'
 			url_map_fr_part1 = 'http://tile.openstreetmap.fr/'
@@ -80,19 +78,17 @@
 				}
 			}
 
-
-            //Sticky headers : le tableau scrolle dans son contenant
-            $('#table_fantoir_annule').tablesorter({
-                widthFixed : true,
-                headerTemplate : '{content} {icon}', // Add icon for various themes
-                widgets: [ 'stickyHeaders', 'filter' ],
-                widgetOptions: {
-                  stickyHeaders_attachTo : '#reponse'
-                }
-            });
+      //Sticky headers : le tableau scrolle dans son contenant
+      $('#table_fantoir_annule').tablesorter({
+          widthFixed : true,
+          headerTemplate : '{content} {icon}', // Add icon for various themes
+          widgets: [ 'stickyHeaders', 'filter' ],
+          widgetOptions: {
+            stickyHeaders_attachTo : '#reponse'
+          }
+      });
 
 		})
-
 
 	};
 	function check_url_for_insee(){
@@ -152,8 +148,11 @@
 	</header>
 
 	<div id="bandeau">
-		<h1></h1>
-		<h4>Liste des codes Fantoir trouvés dans OSM et qui ont été annulés d'après le fichier Fantoir officiel.<br />Cela peut être des noms de voies remplacés par d'autres, des voies en double dont un seul code est conservé...<br />Lors de fusions de communes, celles dont le code Insee disparaît voient leurs codes Fantoir annulés, et remplacés par de nouveaux codes dans la nouvelle commune. Dans ce cas, c'est dans la page de la nouvelle commune qu'il faut chercher le nouveau code Fantoir.</h4>
+		<div id="descriptif">
+			<h1></h1>
+			<h4>Liste des codes Fantoir trouvés dans OSM et qui ont été annulés d'après le fichier Fantoir officiel.<br />Cela peut être des noms de voies remplacés par d'autres, des voies en double dont un seul code est conservé...<br />Lors de fusions de communes, celles dont le code Insee disparaît voient leurs codes Fantoir annulés, et remplacés par de nouveaux codes dans la nouvelle commune. Dans ce cas, c'est dans la page de la nouvelle commune qu'il faut chercher le nouveau code Fantoir.</h4>
+		</div>
+		<div id="wait_ajax"></div>
 	</div>
 
 	<div id="reponse">
@@ -165,7 +164,6 @@
 	</footer>
 
 	<div id="josm_target" style="visibility : hidden"></div>
-	<div id="wait_ajax"></div>
 
 </body>
 </html>
