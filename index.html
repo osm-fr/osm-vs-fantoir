@@ -79,21 +79,19 @@
         }
         $('body').css('cursor','progress');
         $('#wait_ajax').empty()
-                       .css('z-index','20')
-                       .css('visibility','visible')
+                       .css('visibility','visible') 
                        .append($('<span>').append('Mise à jour BANO en cours...'));
         $.ajax({
             url: "refresh.py?insee="+$('#input_insee')[0].value,
         })
         .done(function( data ){
             if (data == '1'){
-                $('#wait_ajax').append($('<span>').append("Ok"));
                 requete_pifometre();
             } else {
                 alert('Problème lors de la mise à jour')
             }
             $('body').css('cursor','default');
-            $('#wait_ajax').css('z-index','1').css('visibility','hidden');
+            $('#wait_ajax').css('visibility','hidden');
         })
     }
 
@@ -227,6 +225,10 @@
                 return 0;
             }
             commune_valide = true;
+            $('#wait_ajax').empty()
+                           .css('visibility','visible')
+                           .append($('<span>').append('Chargement des données...'));
+
             $('#table_infos_commune').append($('<tr>').append($('<td>')).append($('<td>')).append($('<th>').attr('rowspan','4').append($('<h1>').addClass('titre_commune').append((nom_commune)))))
             $('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append('Dernier rapprochement le')).append($('<td>').addClass('cellule_data').append(date_dernier_rapprochement)))
 
@@ -364,6 +366,7 @@
                         $('#table_pifometre tr:last').append($('<td>'))
                     }
                 }
+                $('#wait_ajax').css('visibility','hidden');
 
                 //Sticky headers : le tableau scrolle dans son contenant
                 $('#table_pifometre').tablesorter({
