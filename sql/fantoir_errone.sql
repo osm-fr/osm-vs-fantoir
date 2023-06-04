@@ -2,17 +2,18 @@ WITH
 f
 AS
 (SELECT fantoir
- FROM   cumul_voies
- WHERE fantoir != ''
+ FROM   bano_points_nommes
+ WHERE  fantoir IS NOT NULL AND
+        source = 'OSM'
 EXCEPT
-SELECT  fantoir10
-FROM	fantoir_voie)
-SELECT v.fantoir,
-       v.voie_osm,
-       ST_X(v.geometrie),
-       ST_Y(v.geometrie)
-FROM   cumul_voies v
+SELECT  fantoir
+FROM	 topo)
+SELECT DISTINCT v.fantoir,
+       nom,
+       ST_X(geometrie),
+       ST_Y(geometrie)
+FROM   bano_points_nommes v
 JOIN   f
 USING  (fantoir)
-ORDER BY 1
-
+WHERE  source = 'OSM'
+ORDER BY 1;
