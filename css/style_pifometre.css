@@ -4,26 +4,55 @@
 
 #bandeau{
 	position:fixed;
-	top:60px;
+	top:80px;
 	height: 140px;
 	padding-top:10px;
 	width:100%;
 	z-index:3;
 	background-color:white;
 }
-#bandeau_commune{
-	margin-left:20px;
+
+#alerte-v3 {
+	float: left;
+	margin: 5px 20px;
+	width: 30%;
+	height: 60px;
+	line-height: 0.5em;
+	font-weight: bold;
+	text-align: center;
+	background-color: lightblue;
+	border-bottom: 4px #3FA4C5 solid;
+	border-radius: 8px;
 }
-.titre_commune{
-	margin:0 40px;
+a alerte-v3 p{
+	color: #000;
+}
+#infos_commune{
+	float: left;
+	width: 65%;
+}
+#date-maj {
+	float: left;
+	margin: 0 20px;
+}
+#titre_commune{
+	float: left;
+	max-width: 50%;
+	margin: 0 20px;
+}
+#titre_commune h1 {
+	margin: 0;
 }
 .cellule_intitule{
 	font-size: 0.9em;
-	text-align: right;
 }
 .cellule_data{
 	font-size: 0.9em;
 	font-weight: bold;
+}
+#liens_commune{
+	float: left;
+	margin: 0 20px;
 }
 
 /*------- Petites résolutions d'écran ----------*/
@@ -207,7 +236,7 @@
 
 #reponse{
 	position:absolute;
-	top:240px;
+	top:280px;
 	z-index:2;
 }
 
@@ -230,7 +259,7 @@
 
 #rubriques{
 	position:absolute;
-	top:70px;
+	top:110px;
 	font-size: 0.9em;
 }
 @media only screen and (max-width: 1200px) {
