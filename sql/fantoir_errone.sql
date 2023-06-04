@@ -4,7 +4,8 @@ AS
 (SELECT fantoir
  FROM   bano_points_nommes
  WHERE  fantoir IS NOT NULL AND
-        source = 'OSM'
+        source = 'OSM' AND
+        fantoir not like '%b'
 EXCEPT
 SELECT  fantoir
 FROM	 topo)
