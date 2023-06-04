@@ -16,10 +16,9 @@
 	var osm_state
 	function start(){
 		$('body').css('cursor','progress');
-		$('#wait_ajax').empty()
-						.css('z-index','20')
-						.css('opacity','0.8')
-						.append($('<span>').append('Recherche des FANTOIRs erronés...'));
+		$('#wait_ajax').css('visibility','visible')
+						.append($('<p>').append('Chargement des FANTOIRs erronés...'))
+						.append($('<p>').append("(oui, c'est long)"));
 		$.ajax({
 			url: "fantoir_errone.py",
 		})
@@ -29,10 +28,9 @@
 				titre_bandeau = ' code FANTOIR erroné'
 			}
 			$('#bandeau h1').append(data.length+titre_bandeau)
-			$('#wait_ajax').append($('<span>').append("Ok"));
+			$('#wait_ajax').css('visibility','hidden');
 
 			$('body').css('cursor','default');
-			$('#wait_ajax').css('z-index','1').css('opacity','0');
 
 			url_map_org_part1 = 'http://www.openstreetmap.org/'
 			url_map_fr_part1 = 'http://tile.openstreetmap.fr/'
@@ -46,6 +44,7 @@
 */
 			add_header('table_fantoir_errone',true)
 			table = 'table_fantoir_errone'
+			$('#'+table).append($('<tbody>'))
 			for (l=0;l<data.length;l++){
 				insee = (data[l][0]).substr(0,5)
 				//Fantoir
@@ -76,6 +75,17 @@
 					add_map_link(table,'./liste_brute_fantoir.html#insee='+insee,'Fantoir brut '+insee)
 				}
 			}
+
+	    //Sticky headers : le tableau scrolle dans son contenant
+	    $('#table_fantoir_errone').tablesorter({
+	        widthFixed : true,
+	        headerTemplate : '{content} {icon}', // Add icon for various themes
+	        widgets: [ 'stickyHeaders', 'filter' ],
+	        widgetOptions: {
+	          stickyHeaders_attachTo : '#reponse'
+	        }
+	    });
+
 		})
 	};
 	function check_url_for_insee(){
@@ -112,13 +122,17 @@
 								)
 	}
 	function add_header(table,with_edit_and_map_links){
-		$('#'+table).append($('<tr>').append($('<th>').append('Code FANTOIR')))
+		$('#'+table).append($('<thead>')
+						.append($('<tr>')
+							.append($('<th>').append('Code FANTOIR'))
+						)
+					)
 		$('#'+table+' tr').append($('<th>').append('Voie OSM'))
 		if (with_edit_and_map_links){
 			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Cartes'))
 			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Édition'))
 			$('#'+table+' tr').append($('<th>').attr('colspan','2').append('FANTOIR'))
-		} 
+		}
 	}
 
 </script>
@@ -130,20 +144,15 @@
 	</header>
 		
 	<div id="bandeau">
-		<h1></h1>
-		<h4>Liste des codes Fantoir trouvés dans OSM et inconnus du fichier Fantoir officiel. Ce sont souvent des codes erronés, à cause d'erreurs de frappe : minuscules, inversions de caratères, etc.</h4>
-		<div id="pied_de_page"></div>
+		<div id="descriptif">
+			<h1></h1>
+			<h4>Liste des codes Fantoir trouvés dans OSM et inconnus du fichier Fantoir officiel. Ce sont souvent des codes erronés, à cause d'erreurs de frappe : minuscules, inversions de caratères, etc.</h4>
+		</div>
+		<div id="wait_ajax"></div>
 	</div>
-	
-	<table id="rubriques">
-		<tr>
-			<td class="rubrique" id="rub_adresses_non_match" cible="table_fantoir_errone"></td>
-		</tr>
-	</table>
 
 	<div id="reponse">
-		<table id="table_fantoir_errone" class="table_liste_"></table>
-		<div id="pied_de_page"></div>
+		<table id="table_fantoir_errone" class="tablesorter"></table>
 	</div>
 
 	<footer>
@@ -151,7 +160,6 @@
 	</footer>
 
 	<div id="josm_target" style="visibility : hidden"></div>
-	<div id="wait_ajax"></div>
 
 </body>
 </html>

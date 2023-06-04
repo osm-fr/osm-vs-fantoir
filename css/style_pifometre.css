@@ -260,7 +260,7 @@
 #reponse tr.statut0:hover td,
 #reponse tr:hover td span.zone-clic-adresses,
 #reponse tr:hover td.zone-clic-adresses a {
-	background-color: #FCFFB7 !important;
+	background-color: #FCFFB7 !important; /* jaune clair */
 }
 
 /*--------------- Pastilles, colonne Libelle OSM, correspondant aux filtres ---------------*/
@@ -306,6 +306,10 @@
 	background-color:#D33A8B !important;
 	color:white !important;
 }
+.statut0:hover .zone-clic-adresses.clicked,
+.statut0:hover .zone-clic-adresses.clicked a {
+	color:black !important;
+}
 
 .statut0 .zone-clic-josm{
 	background-color: white !important;
@@ -315,6 +319,10 @@
 	background-color:#863602 !important;
 	color:white !important;
 }
+.statut0:hover .zone-clic-josm.clicked{
+	color:black !important;
+}
+
 #reponse tr.statut0 td.cell_fantoir.annule{
         background:#FFCF6A;
 }
