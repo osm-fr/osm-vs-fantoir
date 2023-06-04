@@ -12,12 +12,12 @@
 <link rel="stylesheet" href="css/menu.css" type="text/css"/>
 <link rel="search" type="application/opensearchdescription+xml" title="Pifomètre BANO" href="opensearch.xml" />
 <script>
-    FILTRES = [["voie"," voies",0,true],
-               ["lieu_dit"," lieux-dits",0,true],
-               ["nom_integre"," rapprochés",0,true],
-               ["nom_a_integrer"," non rapprochés",0,true],
-               ["avec_adresses"," avec adresses",0,true],
-               ["sans_adresses"," sans adresses",0,true]]
+    FILTRES = [["voie",true],
+               ["lieu_dit",true],
+               ["nom_integre",true],
+               ["nom_a_integrer",true],
+               ["avec_adresses",true],
+               ["sans_adresses",true]]
     STATUS_FANTOIR = []
     DELTA = 0.0008
 
@@ -97,18 +97,26 @@
 
     function update_filtres(){
         for (let i = 0; i < FILTRES.length; i++){
-            FILTRES[i] = [FILTRES[i][0],FILTRES[i][1],$('#table_pifometre tr.'+FILTRES[i][0]).length,$('#check_'+FILTRES[i][0]).is(':checked')]
+            FILTRES[i] = [FILTRES[i][0],$('#check_'+FILTRES[i][0]).is(':checked')]
         }
     }
     function reset_filtres(){
         for (let i = 0; i < FILTRES.length; i++){
-            FILTRES[i] = [FILTRES[i][0],FILTRES[i][1],0,true]
+            FILTRES[i] = [FILTRES[i][0],true]
         }
         $('#boutons-filtres input').prop('checked',true)
     }
-    function update_menu_filtres(){
+    function active_menu_filtres(){
         $('#boutons-filtres input').click(function(){
             show_mask_lines()
+            update_menu_filtres()
+        })
+    };
+    function update_menu_filtres(){
+        $('#boutons-filtres li span.control-label').each(function(){
+            total = $('#table_pifometre tr.'+$(this).attr('critere')).length
+            visible = $('#table_pifometre tr:visible.'+$(this).attr('critere')).length
+            $(this).children('span').text(' ('+visible+' / '+total+')')
         })
     };
     function show_mask_lines(){
@@ -116,7 +124,7 @@
         $('#table_pifometre tbody tr').each(function() {
            action = 'donotfilter'
            for (let f of FILTRES){
-                if ($(this).hasClass(f[0]) && f[3] == false){
+                if ($(this).hasClass(f[0]) && f[1] == false){
                     action = 'filter'
                 }
                 $(this).removeClass('filtered')
@@ -378,6 +386,7 @@
                     }
                 });
 
+                active_menu_filtres()
                 update_menu_filtres()
             })
             window.location.hash="#insee="+$('#input_insee')[0].value
@@ -496,13 +505,13 @@
                         <label class="switch is-rounded is-small">
                         <input type="checkbox" id="check_voie" checked>
                         <span class="check is-dark"></span>
-                        <span class="control-label">Voies</span>
+                        <span class="control-label" critere="voie">Voies<span></span></span>
                     </li>
                     <li>
                         <label class="switch is-rounded is-small">
                         <input type="checkbox" id="check_lieu_dit" checked>
                         <span class="check is-dark"></span>
-                        <span class="control-label">Lieux-dits</span>
+                        <span class="control-label" critere="lieu_dit">Lieux-dits<span></span></span>
                     </li>
                 </ul>
             </div>
@@ -512,13 +521,13 @@
                         <label class="switch is-rounded is-small">
                         <input type="checkbox" id="check_nom_integre" checked>
                         <span class="check is-green"></span>
-                        <span class="control-label">Déjà rapproché(e)s dans OSM</span>
+                        <span class="control-label" critere="nom_integre">Déjà rapproché(e)s dans OSM<span></span></span>
                     </li>
                     <li>
                         <label class="switch is-rounded is-small">
                         <input type="checkbox" id="check_nom_a_integrer" checked>
                         <span class="check is-orange"></span>
-                        <span class="control-label">Pas encore rapproché(e)s dans OSM</span>
+                        <span class="control-label" critere="nom_a_integrer">Pas encore rapproché(e)s dans OSM<span></span></span>
                     </li>
                 </ul>
             </div>
@@ -528,13 +537,13 @@
                         <label class="switch is-rounded is-small">
                         <input type="checkbox" id="check_avec_adresses" checked>
                         <span class="check is-purple"></span>
-                        <span class="control-label">Ayant des adresses référencées dans la BAN</span>
+                        <span class="control-label" critere="avec_adresses">Ayant des adresses référencées dans la BAN<span></span></span>
                     </li>
                     <li>
                         <label class="switch is-rounded is-small">
                         <input type="checkbox" id="check_sans_adresses" checked>
                         <span class="check is-dark"></span>
-                        <span class="control-label">Sans adresses</span>
+                        <span class="control-label" critere="sans_adresses">Sans adresses<span></span></span>
                     </li>
                 </ul>
             </div>
