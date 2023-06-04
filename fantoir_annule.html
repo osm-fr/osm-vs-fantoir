@@ -46,6 +46,7 @@
 */
 			add_header('table_fantoir_annule',true)
 			table = 'table_fantoir_annule'
+			$('#'+table).append($('<tbody>'))
 			for (l=0;l<data.length;l++){
 				insee = (data[l][0]).substr(0,5)
 				//Fantoir
@@ -78,7 +79,21 @@
 					add_map_link(table,'./liste_brute_fantoir.html#insee='+insee,'Fantoir brut '+insee)
 				}
 			}
+
+
+            //Sticky headers : le tableau scrolle dans son contenant
+            $('#table_fantoir_annule').tablesorter({
+                widthFixed : true,
+                headerTemplate : '{content} {icon}', // Add icon for various themes
+                widgets: [ 'stickyHeaders', 'filter' ],
+                widgetOptions: {
+                  stickyHeaders_attachTo : '#reponse'
+                }
+            });
+
 		})
+
+
 	};
 	function check_url_for_insee(){
 		pattern_insee = new RegExp('^[0-9][0-9abAB][0-9]{3}$')
@@ -114,7 +129,11 @@
 								)
 	}
 	function add_header(table,with_edit_and_map_links){
-		$('#'+table).append($('<tr>').append($('<th>').append('Code FANTOIR')))
+		$('#'+table).append($('<thead>')
+						.append($('<tr>')
+							.append($('<th>').append('Code FANTOIR'))
+						)
+					)
 		$('#'+table+' tr').append($('<th>').append('Voie OSM'))
 		$('#'+table+' tr').append($('<th>').append('Date d\'annulation'))
 		if (with_edit_and_map_links){
@@ -128,29 +147,25 @@
 </head>
 <body onload="start()">
 
-<header>
-	<!--#include file="includes/menu.html" -->
-</header>
+	<header>
+		<!--#include file="includes/menu.html" -->
+	</header>
 
-<div id="bandeau">
-<h1></h1>
-<h4>Liste des codes Fantoir trouvés dans OSM et qui ont été annulés d'après le fichier Fantoir officiel.<br />Cela peut être des noms de voies remplacés par d'autres, des voies en double dont un seul code est conservé...<br />Lors de fusions de communes, celles dont le code Insee disparaît voient leurs codes Fantoir annulés, et remplacés par de nouveaux codes dans la nouvelle commune. Dans ce cas, c'est dans la page de la nouvelle commune qu'il faut chercher le nouveau code Fantoir.</h4>
-<div id="pied_de_page"></div>
-</div>
-<table id="rubriques">
-	<tr><td class="rubrique" id="rub_adresses_non_match" cible="table_fantoir_annule"></td>
-	</tr>
-</table>
-</div>
+	<div id="bandeau">
+		<h1></h1>
+		<h4>Liste des codes Fantoir trouvés dans OSM et qui ont été annulés d'après le fichier Fantoir officiel.<br />Cela peut être des noms de voies remplacés par d'autres, des voies en double dont un seul code est conservé...<br />Lors de fusions de communes, celles dont le code Insee disparaît voient leurs codes Fantoir annulés, et remplacés par de nouveaux codes dans la nouvelle commune. Dans ce cas, c'est dans la page de la nouvelle commune qu'il faut chercher le nouveau code Fantoir.</h4>
+	</div>
 
-<div id="reponse">
-<table id="table_fantoir_annule" class="table_liste_"></table>
-<div id="pied_de_page"></div>
-</div>
-<footer>
- <!--#include file="includes/footer.html" -->
-</footer>
-<div id="josm_target" style="visibility : hidden"></div>
-<div id="wait_ajax"></div>
+	<div id="reponse">
+		<table id="table_fantoir_annule" class="tablesorter"></table>
+	</div>
+
+	<footer>
+	 <!--#include file="includes/footer.html" -->
+	</footer>
+
+	<div id="josm_target" style="visibility : hidden"></div>
+	<div id="wait_ajax"></div>
+
 </body>
 </html>

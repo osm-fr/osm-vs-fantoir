@@ -1,3 +1,7 @@
+/*-----------------------------------------------------------------------*/
+/*-------------------------------- BANDEAU ------------------------------*/
+/*-----------------------------------------------------------------------*/
+
 #bandeau{
 	top:30px;
 	width:100%;
@@ -13,16 +17,36 @@ h4 {
 	font-size: 0.9em;
 }
 
-/*------------------Tableau de réponse------------------*/
-/*Général*/
-#table_fantoir_annule {
-	font-size: 0.9em;
+/*----------------------------------------------------------------------------------*/
+/*------------------------------------- REPONSE ------------------------------------*/
+/*----------------------------------------------------------------------------------*/
+
+#reponse{
+	position: relative;
+	margin-top:190px;
+	width: 100%;
+	font-size:0.9em;
+	z-index:2;
+	height: 75%;
+	overflow-y: auto;
 }
+
 th {
 	padding-bottom: 10px;
 }
 td {
 	padding:1px 15px;
+}
+
+table.tablesorter tbody td,
+table.tablesorter thead th {
+	padding-left: 1em !important;
+}
+
+/*--------------- Couleur de ligne au survol -----------------*/
+
+#reponse tr:hover td {
+	background-color: #FCFFB7 !important;
 }
 
 /*----- Petites résolutions d'écran -----*/
@@ -42,41 +66,14 @@ td {padding:1px 5px;}
 .cellule_data{
 	font-weight: bold;
 }
-#rubriques{
-	position:absolute;
-	top:160px;
-	margin-left:10px;
-}
-#rubriques th{
-	background-color:black;
-	color:white;
-}
-#reponse{
-	position:absolute;
-	top:180px;
-	margin-left:10px;
-	z-index:2;
-}
+
+
+
 .emphase{
 	color:red;
 	font-size: x-large;
 }
-.rubrique{
-	cursor:pointer;
-	width:200px;
-	height:50px;
-	position:relative;
-	color:black;
-	font-weight: bold;
-	background:white;
-	margin-right:10px;
-}
-.rubrique.active{
-	border:3px solid black;
-}
-.table_liste{
-	display:none;
-}
+
 .zone_click{
 	cursor:pointer;
 	color:blue;
