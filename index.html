@@ -62,12 +62,14 @@
         })
         update_csv_url()
 
-        $('#bouton_refresh').click(function(){
+        $('#bouton_refresh').click(function(event){
                                 refresh();
+                                event.stopPropagation();
                             })
-                            .mouseover(function(){
+                            .mouseover(function(event){
                                 get_osm_state();
                                 refresh_infobulle();
+                                event.stopPropagation();
                             })
                             .mouseout(function(){
                                 $('#refresh_infobulle').hide()
