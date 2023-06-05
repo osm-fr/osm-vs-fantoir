@@ -148,12 +148,20 @@
 /*------------------------------- BOUTONS FILTRES ----------------------------------*/
 /*----------------------------------------------------------------------------------*/
 
+#ligne-afficher {
+	float: left;
+}
+#ligne-boutons-filtres {
+	float: left;
+	clear: both;
+}
+
 #boutons-filtres {
 	display: inline-block;
-	margin-left: 3%;
+	margin-left: 1%;
 	margin-top: 30px;
 	width: 60%;
-	font-size: 0.9em;
+	font-size: 0.8em;
 }
 
 #boutons-filtres div {
@@ -351,14 +359,7 @@
 @media only screen and (max-width: 1500px) {
 	h1 {font-size: 1.6em;}
 	#boutons-filtres {
-		margin-left: 1%;
-		font-size: 0.8em;
-	}
-}
-
-@media only screen and (max-width: 1400px) {
-	#boutons-filtres {
-		width: 65%;
+		font-size: 0.75em;
 	}
 	#alerte_commune, #wait_ajax {
 		width: 35%;
@@ -368,8 +369,17 @@
 	}
 }
 
+@media only screen and (max-width: 1400px) {
+	#boutons-filtres {
+		width: 65%;
+	}
+}
+
 @media only screen and (max-width: 1300px) {
 	h1 {font-size: 1.5em;}
+	#boutons-filtres {
+		font-size: 0.7em;
+	}
 	#alerte_commune {
 		line-height:28px;
 	}
