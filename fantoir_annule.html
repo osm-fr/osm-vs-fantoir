@@ -6,7 +6,7 @@
 <script src="js/tablesorter/jquery.tablesorter.js"></script>
 <script src="js/jquery.tablesorter.combined.min.js"></script>
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
-<link rel="stylesheet" href="css/style_fantoir_annule.css" type="text/css"/>
+<link rel="stylesheet" href="css/style_fantoir_errone_annule.css" type="text/css"/>
 <link rel="stylesheet" href="css/menu.css" type="text/css"/>
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 
@@ -29,6 +29,7 @@
 			}
 			$('#bandeau h1').append(data.length+titre_bandeau)
 			$('#wait_ajax').css('visibility','hidden');
+			$('#bandeau h4').empty().append("Codes trouvés dans OSM mais annulés d'après le fichier Fantoir officiel.<br />Noms de voies remplacés, voies en double dont un seul code est conservé... Pour les communes fusionnées, les nouveaux codes Fantoir sont à retrouver sur la page de la nouvelle commune.")
 
 			$('body').css('cursor','default');
 
@@ -150,7 +151,7 @@
 	<div id="bandeau">
 		<div id="descriptif">
 			<h1></h1>
-			<h4>Liste des codes Fantoir trouvés dans OSM et qui ont été annulés d'après le fichier Fantoir officiel.<br />Cela peut être des noms de voies remplacés par d'autres, des voies en double dont un seul code est conservé...<br />Lors de fusions de communes, celles dont le code Insee disparaît voient leurs codes Fantoir annulés, et remplacés par de nouveaux codes dans la nouvelle commune. Dans ce cas, c'est dans la page de la nouvelle commune qu'il faut chercher le nouveau code Fantoir.</h4>
+			<h4>Liste des codes trouvés dans OSM mais annulés d'après le fichier Fantoir officiel.<br />Cela peut être des noms de voies remplacés par d'autres, des voies en double dont un seul code est conservé...<br />Lors de fusions de communes, celles dont le code Insee disparaît voient leurs codes Fantoir annulés, et remplacés par de nouveaux codes dans la nouvelle commune. Dans ce cas, c'est dans la page de la nouvelle commune qu'il faut chercher le nouveau code Fantoir.</h4>
 		</div>
 		<div id="wait_ajax"></div>
 	</div>
