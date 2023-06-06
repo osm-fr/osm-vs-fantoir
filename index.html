@@ -226,11 +226,11 @@
                  commune_composee] = pifodata
 
             document.title = nom_commune+' - Pifomètre'
-            $('#table_infos_commune').empty()
+            $('#infos_commune').empty()
             $('#alerte_commune').css('visibility','hidden');
 
             if (nom_commune.length == 0){
-                $('#table_infos_commune').append($('<h2>').append('INSEE '+$('#input_insee')[0].value+' : commune inconnue'))
+                $('#infos_commune').append($('<h2>').append('INSEE '+$('#input_insee')[0].value+' : commune inconnue'))
                 $('body').css('cursor','default');
                 return 0;
             }
@@ -239,8 +239,62 @@
                            .css('visibility','visible')
                            .append($('<span>').append('Chargement des données...'));
 
-            $('#table_infos_commune').append($('<tr>').append($('<td>')).append($('<td>')).append($('<th>').attr('rowspan','4').append($('<h1>').addClass('titre_commune').append((nom_commune)))))
-            $('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append('Dernier rapprochement le')).append($('<td>').addClass('cellule_data').append(date_dernier_rapprochement)))
+
+            url_map_org_part1 = 'http://www.openstreetmap.org/'
+            url_bano_part1 = 'http://tile.openstreetmap.fr/~cquest/leaflet/bano.html'
+            url_edit_part1 = 'http://www.openstreetmap.org/edit?editor='
+            delta = 0.0008
+            url_hash_coords = '15/'+lat_commune+'/'+lon_commune
+            url_listing_fantoir = './liste_brute_fantoir.html#insee='+$('#input_insee')[0].value
+
+            $('#infos_commune').append($('<div id="infos_commune_col1">')
+                                    .append($('<div id="date-maj">')
+                                        .append($('<div>').addClass('cellule_intitule').append('<strong>Dernier rapprochement le</strong>'))
+                                        .append($('<div>').addClass('cellule_data').append('&nbsp;').append(date_dernier_rapprochement).append(' (UTC)<br/>'))
+                                    )
+                                    .append($('<div id="liens_commune">').append('<strong>Voir la commune sur :</strong> ')
+                                        .append($('<a>')
+                                            .attr('target','blank')
+                                            .attr('href',url_map_org_part1+'?mlat='+lat_commune+'&mlon='+lon_commune+'#map='+url_hash_coords)
+                                            .text('ORG')
+                                        )
+                                        .append(' / ')
+                                        .append($('<a>')
+                                            .attr('target','blank')
+                                            .attr('href',url_bano_part1+'#'+url_hash_coords)
+                                            .text('BANO')
+                                        )
+                                        .append(' / ')
+                                        .append($('<a>')
+                                            .attr('target','blank')
+                                            .attr('href',url_listing_fantoir)
+                                            .text('FANTOIR')
+                                        )
+                                    )
+                                )
+
+            $('#infos_commune').append($('<div id="titre_commune">').append($('<h1>').append((nom_commune))))
+
+/*            $('#infos_commune').append($('<div id="liens_commune">')
+                                    .append($('<a>')
+                                        .attr('target','blank')
+                                        .attr('href',url_map_org_part1+'?mlat='+lat_commune+'&mlon='+lon_commune+'#map='+url_hash_coords)
+                                        .text('ORG')
+                                    )
+                                    .append(' / ')
+                                    .append($('<a>')
+                                        .attr('target','blank')
+                                        .attr('href',url_bano_part1+'#'+url_hash_coords)
+                                        .text('BANO')
+                                    )
+                                    .append(' / ')
+                                    .append($('<a>')
+                                        .attr('target','blank')
+                                        .attr('href',url_listing_fantoir)
+                                        .text('FANTOIR')
+                                    )
+                                )*/
+
 
             //communes voisines
             $('#table_communes_voisines tr td').empty()
@@ -428,6 +482,13 @@
                                                .attr('target','blank')
                                                .append($('<img>').attr('src','img/export-to-csv-icon-13.jpg')))
     }
+    function add_map_link(table,href,text){
+        $('#'+table+' tr:last').append($('<td>')
+                                    .append($('<a>')
+                                    .attr('href',href)
+                                    .attr('target','blank')
+                                    .text(text)))
+    }
     function get_osm_state(){
         $.ajax({
             url: "osm_state.py",
@@ -474,9 +535,7 @@
     </div>
 
     <div id="bandeau">
-        <div id='bandeau_commune'>
-            <table id="table_infos_commune"></table>
-        </div>
+        <div id="infos_commune"></div>
         <div id="refresh_infobulle"></div>
         <div id="table_communes_voisines">
             <div class="fermer">X</div>
@@ -495,7 +554,6 @@
         <div id="infos_refresh"></div>
         <div id="alerte_commune"></div>
         <div id="wait_ajax"></div>
-        <div id='filtres'></div>
 
         <div id="boutons-filtres">
             <div id="ligne-afficher">
@@ -552,7 +610,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <div id="reponse">
