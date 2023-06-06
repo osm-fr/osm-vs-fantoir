@@ -6,24 +6,36 @@
 	position:fixed;
 	top:60px;
 	height: 140px;
-	padding-top:10px;
+	padding-top:5px;
 	width:100%;
 	z-index:3;
 	background-color:white;
 }
-#bandeau_commune{
-	margin-left:20px;
+#infos_commune{
+	float: left;
+	width: 65%;
+	margin: 15px 0;
 }
-.titre_commune{
-	margin:0 40px;
+
+#infos_commune_col1 {
+	float: left;
 }
-.cellule_intitule{
-	font-size: 0.9em;
-	text-align: right
+#date-maj,
+#liens_commune {
+	margin: 0 20px;
+	line-height: 1.6em;
+	font-size: 0.8em;
 }
-.cellule_data{
-	font-size: 0.9em;
-	font-weight: bold;
+	.cellule_intitule,
+	.cellule_data {
+		float: left;
+	}
+
+#titre_commune{
+	float: left;
+	max-width: 500px;
+	line-height: 2em;
+	margin:0 30px -10px 30px;
 }
 
 /*-----------------------------------------------------------------------*/
@@ -159,7 +171,6 @@
 #boutons-filtres {
 	display: inline-block;
 	margin-left: 1%;
-	margin-top: 30px;
 	width: 60%;
 	font-size: 0.8em;
 }
@@ -184,6 +195,7 @@
 	visibility:hidden;
 	position:fixed;
 	width:45%;
+	top:110px;
 	right: 7%;
 	height: 100px;
 	text-align: center;
@@ -220,7 +232,7 @@
 #alerte_commune {
 	line-height: 40px;
 	background:#FFDE6A;
-  border-bottom: #FFBB2D;
+  border-bottom: 4px #FFBB2D solid;
 }
 #alerte_commune p {
 	text-align: center;
@@ -235,7 +247,7 @@
 
 #reponse{
 	position: relative;
-	margin-top:220px;
+	margin-top:230px;
 	width: 100%;
 	font-size:0.9em;
 	z-index:2;
@@ -387,8 +399,13 @@
 
 @media only screen and (max-width: 1200px) {
 	h1 {font-size: 1.4em;}
-	.cellule_intitule{font-size: 0.7em;}
-	.cellule_data{font-size: 0.7em;}
-	.titre_commune{margin:0 20px;}
+	#titre_commune{margin:0 20px;}
 	#bandeau_commune{margin-left:5px;}
+	#boutons-filtres {width:70%;}
+	#boutons-filtres div {padding: 3px 0;}
+	#alerte_commune, #wait_ajax {
+		width: 23%;
+		right: 1%;
+		line-height:30px;
+	}
 }
