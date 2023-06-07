@@ -136,7 +136,13 @@
             }
        });
     }
-
+    function add_map_link(href,text){
+        $('#table_pifometre tr:last').append($('<td>')
+                                    .append($('<a>')
+                                    .attr('href',href)
+                                    .attr('target','blank')
+                                    .text(text)))
+    }
     function add_josm_link(xl,xr,yb,yt){
         $('#table_pifometre tr:last').append($('<td>')
                                     .addClass('zone-clic-josm')
@@ -312,6 +318,7 @@
                 $('#table_pifometre tr').append($('<th>').append('Libellé TOPO'))
                 $('#table_pifometre tr').append($('<th>').append('Libellé OSM'))
                 $('#table_pifometre tr').append($('<th>').append('Libellé BAN ou CADASTRE'))
+                $('#table_pifometre tr').append($('<th>').append('Carte'))
                 $('#table_pifometre tr').append($('<th>').append('Edition'))
                 $('#table_pifometre tr').append($('<th>').append('Statut FANTOIR ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
                 $('#table_pifometre tr').append($('<th>').addClass('string-none').append('Intégrer les adresses'))
@@ -388,7 +395,13 @@
                     ymin  = lat-DELTA
                     ymax  = lat+DELTA
                     //visu
-    //                add_map_link(table,url_map_org_part1+'#map='+url_hash_coords,'ORG')
+                    //add_map_link(table,url_map_org_part1+'#map='+url_hash_coords,'ORG')
+                    //$('#table_pifometre tr:last').append($('<td>').text('ORG'))
+                    $('#table_pifometre tr:last').append($('<td>')
+                                    .append($('<a>')
+                                    .attr('href',url_map_org_part1+'#map='+'18/'+lat+'/'+lon)
+                                    .attr('target','blank')
+                                    .text('ORG')))
                     //JOSM
                     if (lon != undefined) {
                         add_josm_link(xmin,xmax,ymin,ymax)
@@ -400,7 +413,14 @@
                     //Adresses à integrer
                     if (numeros_a_proposer > 0){
                         add_josm_addr_link($('#input_insee')[0].value,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
-                    } else {
+                    }
+                    else if (numeros_a_proposer == null && avec_adresses_ban){
+                        $('#table_pifometre tr:last').append($('<td>')
+                                                        .append($('<span>').addClass('adresses-integrees').text('✔'))
+                                                        .append($('<span>').text(' Adresses intégrées'))
+                                                    )
+                    }
+                    else {
                         $('#table_pifometre tr:last').append($('<td>'))
                     }
                     if (avec_adresses_ban){
@@ -435,6 +455,7 @@
         $('#table_pifometre tr').append($('<th>').append('Libellé TOPO'))
         $('#table_pifometre tr').append($('<th>').append('Libellé OSM'))
         $('#table_pifometre tr').append($('<th>').append('Libellé BAN ou CADASTRE'))
+        $('#table_pifometre tr').append($('<th>').append('Carte'))
         $('#table_pifometre tr').append($('<th>').append('Edition'))
         $('#table_pifometre tr').append($('<th>').append('Statut FANTOIR ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
         $('#table_pifometre tr').append($('<th>').addClass('string-none').append('Intégrer les adresses'))
@@ -460,14 +481,6 @@
         /*$('#bouton_export_csv').empty()
         $('#bouton_export_csv').append($('<a>').attr('href',"requete_pifometre.py?insee="+$('#input_insee')[0].value+'&format=csv')
                                                .attr('target','blank'))*/
-    }
-
-    function add_map_link(table,href,text){
-        $('#'+table+' tr:last').append($('<td>')
-                                    .append($('<a>')
-                                    .attr('href',href)
-                                    .attr('target','blank')
-                                    .text(text)))
     }
     function get_osm_state(){
         $.ajax({
