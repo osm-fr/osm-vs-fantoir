@@ -136,13 +136,6 @@
             }
        });
     }
-    function add_map_link(href,text){
-        $('#table_pifometre tr:last').append($('<td>')
-                                    .append($('<a>')
-                                    .attr('href',href)
-                                    .attr('target','blank')
-                                    .text(text)))
-    }
     function add_josm_link(xl,xr,yb,yt){
         $('#table_pifometre tr:last').append($('<td>')
                                     .addClass('zone-clic-josm')
@@ -395,8 +388,6 @@
                     ymin  = lat-DELTA
                     ymax  = lat+DELTA
                     //visu
-                    //add_map_link(table,url_map_org_part1+'#map='+url_hash_coords,'ORG')
-                    //$('#table_pifometre tr:last').append($('<td>').text('ORG'))
                     $('#table_pifometre tr:last').append($('<td>')
                                     .append($('<a>')
                                     .attr('href',url_map_org_part1+'#map='+'18/'+lat+'/'+lon)
