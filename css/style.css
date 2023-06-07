@@ -3,6 +3,12 @@ body{
 	    margin: 0;
 	}
 
+button {
+	border: none;
+	background: transparent;
+	margin: 0;
+}
+
 #barre-jaune {
 	position: fixed;
 	z-index: 3;

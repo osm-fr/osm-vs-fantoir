@@ -275,27 +275,6 @@
 
             $('#infos_commune').append($('<div id="titre_commune">').append($('<h1>').append((nom_commune))))
 
-/*            $('#infos_commune').append($('<div id="liens_commune">')
-                                    .append($('<a>')
-                                        .attr('target','blank')
-                                        .attr('href',url_map_org_part1+'?mlat='+lat_commune+'&mlon='+lon_commune+'#map='+url_hash_coords)
-                                        .text('ORG')
-                                    )
-                                    .append(' / ')
-                                    .append($('<a>')
-                                        .attr('target','blank')
-                                        .attr('href',url_bano_part1+'#'+url_hash_coords)
-                                        .text('BANO')
-                                    )
-                                    .append(' / ')
-                                    .append($('<a>')
-                                        .attr('target','blank')
-                                        .attr('href',url_listing_fantoir)
-                                        .text('FANTOIR')
-                                    )
-                                )*/
-
-
             //communes voisines
             $('#table_communes_voisines tr td').empty()
             $('#table_communes_voisines tr td.commune_centre').text(nom_commune)
@@ -477,11 +456,12 @@
         return res
     }
     function update_csv_url(){
-        $('#bouton_export_csv').empty()
+        urlCSV = 'requete_pifometre.py?insee='+$('#input_insee')[0].value+'&format=csv';
+        /*$('#bouton_export_csv').empty()
         $('#bouton_export_csv').append($('<a>').attr('href',"requete_pifometre.py?insee="+$('#input_insee')[0].value+'&format=csv')
-                                               .attr('target','blank')
-                                               .append($('<img>').attr('src','img/export-to-csv-icon-13.jpg')))
+                                               .attr('target','blank'))*/
     }
+
     function add_map_link(table,href,text){
         $('#'+table+' tr:last').append($('<td>')
                                     .append($('<a>')
@@ -548,9 +528,9 @@
             </tbody>
             </table>
         </div>
-        <div id="bouton_communes_voisines" title="Communes voisines"></div>
-        <div id="bouton_refresh"></div>
-        <div id="bouton_export_csv" title="Exporter l'onglet courant en CSV"></div>
+        <button id="bouton_communes_voisines" title="Communes voisines"></button>
+        <button id="bouton_refresh"></button>
+        <button id="bouton_export_csv" title="Exporter l'onglet courant en CSV" onclick="window.open(urlCSV, '_blank');"></button>
         <div id="infos_refresh"></div>
         <div id="alerte_commune"></div>
         <div id="wait_ajax"></div>
