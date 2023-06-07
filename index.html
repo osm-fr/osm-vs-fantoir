@@ -291,8 +291,6 @@
                 $('#alerte_commune > .fermer-alerte').click(function(){
                     $('#alerte_commune').css('visibility','hidden');
                 })
-/*                $('#alerte_commune').append($('<h3>').text(nom_commune+' est une ancienne commune. Elle a été incorporée dans ').append($('<a>').attr('href','#insee='+insee_commune_parente).text(nom_commune_parente+'('+insee_commune_parente+')')))
-*/
                 $('#alerte_commune').append($('<p>').text(nom_commune+' est une ancienne commune. Elle a été incorporée dans ').append($('<span>').addClass('lien_commune').text(nom_commune_parente+' ('+insee_commune_parente+')')).attr('insee_cible',insee_commune_parente)
                     .click(function(){
                         location.assign(window.location.href.split('#')[0]+'#insee='+$(this).attr('insee_cible'))
@@ -304,6 +302,8 @@
             })
             .done(function( data ) {
                 reset_filtres()
+                $('#table_pifometre').trigger("destroy");
+                $('#table_pifometre').empty()
                 $('#table_pifometre').append($('<thead>').append($('<tr>').append($('<th>').append('Code FANTOIR'))))
                 if (commune_composee == 1){
                     $('#table_pifometre tr').append($('<th>').append('Ancienne commune'))
