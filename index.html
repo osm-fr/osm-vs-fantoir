@@ -337,6 +337,7 @@
                     if (caractere_annul == 'B'){
                         fantoir_affiche = 'Voie sans FANTOIR'
                         fantoir_dans_relation = 'ko'
+                        nom_topo = nom_ban.toUpperCase()
                     }
 
                     tr_id+=1
@@ -400,7 +401,11 @@
                         $('#table_pifometre tr:last').append($('<td>'))
                     }
                     //Statut FANTOIR
-                    add_statut_fantoir(tr_id,fantoir,statut_voie)
+                    if (caractere_annul != 'B'){
+                        add_statut_fantoir(tr_id,fantoir,statut_voie)
+                    } else {
+                        $('#table_pifometre tr:last').addClass('statut0').append($('<td>'))
+                    }
                     //Adresses à integrer
                     if (numeros_a_proposer > 0){
                         add_josm_addr_link($('#input_insee')[0].value,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
