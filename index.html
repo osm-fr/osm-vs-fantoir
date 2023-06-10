@@ -156,28 +156,55 @@
 			delta = 0.0008
 
 			document.title = nom_commune+' - Pifomètre'
-			$('#table_infos_commune').empty()
+			$('#infos_commune').empty()
 			$('.rubrique').empty()
 			$('#alerte_commune').css('visibility','hidden');
 
 			if (nom_commune.length == 0){
-				$('#table_infos_commune').append($('<h2>').append('INSEE '+$('#input_insee')[0].value+' : commune inconnue'))
+				$('#infos_commune').append($('<h2>').append('INSEE '+$('#input_insee')[0].value+' : commune inconnue'))
 				$('body').css('cursor','default');
 				return 0;
 			}
 			commune_valide = true;
-			
-			$('#table_infos_commune').append($('<tr>').append($('<td>')).append($('<td>')).append($('<th>').attr('rowspan','4').append($('<h1>').addClass('titre_commune').append((nom_commune)))))
 
-			$('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append('Dernier rapprochement BAN le')).append($('<td>').addClass('cellule_data').append(rappr_cadastre[2])))
-			$('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append('Données OSM en date du')).append($('<td>').addClass('cellule_data').append(rappr_osm[2])))
+			$('#infos_commune').append($('<div id="date-maj">')
+										.append($('<div>').addClass('cellule_intitule').append('Dernier rapprochement BAN le'))
+										.append($('<div>').addClass('cellule_data').append(rappr_cadastre[2]))
+										.append($('<div>').addClass('cellule_intitule').append('Données OSM en date du'))
+										.append($('<div>').addClass('cellule_data').append(rappr_osm[2]))
+										)
+
+			$('#infos_commune').append($('<div id="titre_commune">').append($('<h1>').append((nom_commune))))
+
 			url_hash_coords = '15/'+lat_commune+'/'+lon_commune
 			url_ol_part2 = '?zoom=15&lat='+lat_commune+'&lon='+lon_commune
 			url_listing_fantoir = './liste_brute_fantoir.html#insee='+$('#input_insee')[0].value
-			add_map_link('table_infos_commune',url_map_org_part1+'?mlat='+lat_commune+'&mlon='+lon_commune+'#map='+url_hash_coords,'ORG')
-			add_map_link('table_infos_commune',url_map_fr_part1+url_ol_part2,'FR')
-			add_map_link('table_infos_commune',url_bano_part1+'#'+url_hash_coords,'BANO')
-			add_map_link('table_infos_commune',url_listing_fantoir,'FANTOIR')
+			$('#infos_commune').append($('<div id="liens_commune">')
+									.append($('<a>')
+										.attr('target','blank')
+										.attr('href',url_map_org_part1+'?mlat='+lat_commune+'&mlon='+lon_commune+'#map='+url_hash_coords)
+										.text('ORG')
+									)
+									.append(' / ')
+									.append($('<a>')
+										.attr('target','blank')
+										.attr('href',url_map_fr_part1+url_ol_part2)
+										.text('FR')
+									)
+									.append(' / ')
+									.append($('<a>')
+										.attr('target','blank')
+										.attr('href',url_bano_part1+'#'+url_hash_coords)
+										.text('BANO')
+									)
+									.append(' / ')
+									.append($('<a>')
+										.attr('target','blank')
+										.attr('href',url_listing_fantoir)
+										.text('FANTOIR')
+									)
+								)
+
 			// $('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append('Données OSM en date du')).append($('<td>').addClass('cellule_data').append(cache_hsnr[2])))
 
 			$('#rub_adresses_non_match').empty().text(voies_fantoir_adresses_non_match.length+" voies FANTOIR sans rapprochement OSM")
@@ -509,8 +536,12 @@
 	</div>
 
 	<div id="bandeau">
-		<div id='bandeau_commune'>
-			<table id="table_infos_commune"></table>
+		<a href="/pifometre_v3/index.html">
+			<div id="alerte-v3">
+				<p>Le nouveau Pifomètre est disponible en version bêta.</p><p>Venez l'essayer !</p>
+			</div>
+		</a>
+		<div id='infos_commune'>
 		</div>
 
 		<div id="refresh_infobulle"></div>
