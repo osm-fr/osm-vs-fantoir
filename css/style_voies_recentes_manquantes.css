@@ -1,11 +1,10 @@
 #bandeau{
-	top:60px;
+	top:70px;
 	width:100%;
 	height:70px;
 	z-index:3;
 	position:fixed;
 	background-color:white;
-	border-bottom: 1px solid black;
 }
 h2 {
 	margin: 10px 30px;
@@ -44,7 +43,26 @@ h2 {
 	background-color:green;
 	color:white;
 }
-#wait_ajax{
+#wait_ajax {
+	visibility:visible;
+	float: left;
+	margin: 20px 2% 0 2%;
+	width:45%;
+	height: 100px;
+	text-align: center;
+	padding: 5px;
+	background: url("../img/construction-mur.png") no-repeat lightblue left 5% top 50%;
+	background-size: 90px;
+	border-bottom: 4px #3FA4C5 solid;
+	border-radius: 8px;
+}
+#wait_ajax p {
+	vertical-align:middle;
+	font-size:1.2em;
+	font-weight: bold;
+	color:black;
+}
+/*#wait_ajax{
 	position:fixed;
 	top: 60px;
 	z-index:1;
@@ -61,7 +79,7 @@ h2 {
 	line-height:500px;
 	color:white;
 	border:50px solid black;
-}
+}*/
 
 #table_voies_recentes tr td{
 	background:white;
