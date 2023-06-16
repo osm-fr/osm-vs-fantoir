@@ -391,12 +391,17 @@
                     ymin  = lat-DELTA
                     ymax  = lat+DELTA
                     //visu
-                    $('#table_pifometre tr:last').append($('<td>')
-                                    .append($('<a>')
-                                    .attr('href',url_map_org_part1+'#map='+'18/'+lat+'/'+lon)
-                                    .attr('target','blank')
-                                    .text('ORG')))
-                    //JOSM
+                    if (lat != null || lon != null) {
+                        $('#table_pifometre tr:last').append($('<td>')
+                                        .append($('<a>')
+                                        .attr('href',url_map_org_part1+'#map='+'18/'+lat+'/'+lon)
+                                        .attr('target','blank')
+                                        .text('ORG')))
+                    }
+                    else {
+                        $('#table_pifometre tr:last').append($('<td>'))
+                    }
+                        //JOSM
                     if (lon != undefined) {
                         add_josm_link(xmin,xmax,ymin,ymax)
                     } else {
