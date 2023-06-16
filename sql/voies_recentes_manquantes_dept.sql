@@ -12,30 +12,18 @@ WHERE   rang = 1         AND
 -- Fantoirs éligibles ---------------
 CREATE TEMP TABLE liste_fantoir
 AS
-(SELECT f.fantoir10 as fantoir
-FROM    fantoir_voie f
-WHERE   f.code_dept = '__dept__' and type_voie in ('1','2')
-
-INTERSECT
-
-SELECT  fantoir
-FROM    cumul_adresses
-WHERE   source = 'BAN' and dept = '__dept__'
-
-EXCEPT
-
 (SELECT fantoir
-FROM    cumul_voies
-WHERE   insee_com LIKE '__dept__%'
-UNION
+FROM    topo
+WHERE   code_dep = '__dept__' and type_voie in ('1','2')
+INTERSECT
 SELECT  fantoir
-FROM    statut_fantoir
-UNION
-SELECT  fantoir
-FROM    cumul_adresses
-WHERE   insee_com LIKE '__dept__%'  AND
-        (source='OSM' OR (source='BAN' AND COALESCE(voie_osm,'')!='')))
-);
+FROM    nom_fantoir
+WHERE   source = 'BAN' AND code_insee like '__dept__%'
+EXCEPT
+(SELECT fantoir
+FROM    nom_fantoir
+WHERE   code_insee LIKE '__dept__%' AND
+        source = 'OSM'));
                 
 --top250
 CREATE TEMP TABLE top250
@@ -44,11 +32,11 @@ SELECT l.fantoir,
        code_insee,
        date_creation
 FROM   liste_fantoir l
-JOIN   (SELECT fantoir10 fantoir,
+JOIN   (SELECT fantoir,
                code_insee,
                date_creation
-        FROM   fantoir_voie 
-        WHERE  code_dept = '__dept__') f
+        FROM   topo
+        WHERE  code_dep = '__dept__') f
 USING   (fantoir)
 ORDER BY date_creation DESC
 LIMIT 250;
@@ -58,13 +46,13 @@ LIMIT 250;
 CREATE TEMP TABLE geom
 AS
 (SELECT DISTINCT fantoir,
-        voie_autre,
+        nom_voie,
         FIRST_VALUE(geometrie) OVER(PARTITION BY fantoir) geometrie
-FROM    (SELECT c.fantoir,
-                voie_autre,
+FROM    (SELECT fantoir,
+                nom_voie,
                 geometrie
-        FROM    cumul_adresses c 
-        WHERE   dept = '__dept__' AND
+        FROM    bano_adresses
+        WHERE   code_dept = '__dept__' AND
                 source = 'BAN') g
 JOIN    top250
 USING   (fantoir));
@@ -73,11 +61,11 @@ USING   (fantoir));
 SELECT  co.dep,
         f.code_insee,
         co.libelle,
-        g.voie_autre,
+        g.nom_voie,
         f.fantoir,
         st_x(g.geometrie),
         st_y(g.geometrie),
-        to_char(to_date(f.date_creation,'YYYYDDD'),'YYYY-MM-DD')
+        TO_CHAR(TO_TIMESTAMP(date_creation::text,'YYYYMMDD'),'YYYY-MM-DD')
 FROM    top250 f
 JOIN    geom g
 USING   (fantoir)
