@@ -1,12 +1,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<title>Voies récentes inconnues d'OSM</title>
 <script src="js/jquery-3.6.4.min.js"></script>
+<script src="js/tablesorter/jquery.tablesorter.js"></script>
 <script src="js/jquery.tablesorter.combined.min.js"></script>
-<link rel="stylesheet" href="css/tablesorter.css" type="text/css"/>
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
 <link rel="stylesheet" href="css/style_voies_recentes_manquantes.css" type="text/css"/>
 <link rel="stylesheet" href="css/menu.css" type="text/css"/>
+<link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 
 <script>
 	var menu_labels
@@ -52,12 +54,14 @@
 			$('#input_dept')[0].value = dept
 			requete_voies_dept();
 		}
+
 	}
+
 	function update_csv_url(dept){
 		$('#bouton_export_csv').empty()
    		$('#bouton_export_csv').append($('<a>').attr('href',"voies_recentes_manquantes_dept.py?dept="+dept+'&format=csv')
 			                                   .attr('target','blank')
-			                                   .append($('<img>').attr('src','img/export-to-csv-icon-13.jpg')))
+			                                   .append($('<img>').attr('src','img/export-csv.png')))
 	}
 
 	function requete_voies_dept(){
@@ -69,9 +73,8 @@
 
 			$('body').css('cursor','progress');
 			$('#wait_ajax').empty()
-							.css('z-index','20')
-							.css('opacity','0.8')
-							.append($('<span>').append('Recherche des voies récentes...'));
+							.css('visibility','visible')
+							.append($('<p>').append('Recherche des voies récentes...'));
 			$.ajax({
 				url: "voies_recentes_manquantes_dept.py?dept="+dept,
 			})
@@ -93,9 +96,9 @@
 					//Dept
 					$('#'+table).append($('<tr>').attr('id',data[l][4]).append($('<td>').text(data[l][0])))
 					//Commune (INSEE)
-					$('#'+table+' tr:last').append($('<td>').text(data[l][2]+'('+data[l][1]+')'))
+					$('#'+table+' tr:last').append($('<td>').text(data[l][2]+' ('+data[l][1]+')'))
 					//Fantoir
-					$('#'+table+' tr:last').append($('<td>').text(data[l][4]))
+					$('#'+table+' tr:last').append($('<td>').addClass('cell_fantoir').text(data[l][4]))
 					//Voie
 					$('#'+table+' tr:last').append($('<td>').text(data[l][3]))
 					//Date de création
@@ -112,25 +115,30 @@
 						ytop	= lat+delta
 					//visu
 						add_map_link(table,url_map_org_part1+url_marker+'#map='+url_hash_coords,'ORG')
-						add_map_link(table,url_map_fr_part1+url_ol_part2,'FR')
-						add_map_link(table,url_bano_part1+'#'+url_hash_coords,'BANO')
+						/*add_map_link(table,url_bano_part1+'#'+url_hash_coords,'BANO')*/
 					//JOSM
 						add_josm_link(table,xleft,xright,ybottom,ytop)
-					//ID
-						add_map_link(table,url_edit_part1+'id#map='+url_hash_coords,'ID')
-					//Potlatch
-						add_map_link(table,url_edit_part1+'potlatch2#map='+url_hash_coords,'P2')
 					//Fantoir
 						add_map_link(table,'./index.html#insee='+insee,'Fantoir-OSM '+insee)
 						add_map_link(table,'./liste_brute_fantoir.html#insee='+insee,'Fantoir brut '+insee)
 					}
 				}
-				$('#wait_ajax').css('z-index','1').css('opacity','0');
-				$('#table_voies_recentes').tablesorter();
+				$('#wait_ajax').css('visibility','hidden');
+
+			    //Sticky headers : le tableau scrolle dans son contenant
+			    $('#table_voies_recentes').tablesorter({
+			        widthFixed : true,
+			        headerTemplate : '{content} {icon}', // Add icon for various themes
+			        widgets: [ 'stickyHeaders', 'filter' ],
+			        widgetOptions: {
+			          stickyHeaders_attachTo : '#reponse'
+			        }
+			    });
 			})
 			window.location.hash="#dept="+$('#input_dept')[0].value
 		};
 	}
+
 	function add_map_link(table,href,text){
 		$('#'+table+' tr:last').append($('<td>')
 									.append($('<a>')
@@ -152,13 +160,13 @@
 	}
 	function add_header(table,with_edit_and_map_links){
 		$('#'+table).empty().append($('<thead>').append($('<tr>').append($('<th>').append('Dept'))))
-		$('#'+table+' tr').append($('<th>').append('Commune(INSEE)'))
+		$('#'+table+' tr').append($('<th>').append('Commune (INSEE)'))
 		$('#'+table+' tr').append($('<th>').append('Fantoir'))
 		$('#'+table+' tr').append($('<th>').append('Voie'))
 		$('#'+table+' tr').append($('<th>').append('Date de création'))
 		if (with_edit_and_map_links){
-			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Cartes'))
-			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Édition'))
+			$('#'+table+' tr').append($('<th>').attr('colspan','1').append('Carte'))
+			$('#'+table+' tr').append($('<th>').attr('colspan','1').append('Édition'))
 			$('#'+table+' tr').append($('<th>').attr('colspan','2').append('FANTOIR'))
 		} 
 	}
@@ -179,9 +187,11 @@
 	</div>
 	
 	<div id="bandeau">
-		<h2>Voies récentes selon FANTOIR, connues de la BAN mais pas d'OSM</h2>
-		<div id="wait_ajax"><p>Cette page n'est pas encore fonctionnelle en v3.</p><p><a href="https://bano.openstreetmap.fr/pifometre/voies_recentes_manquantes.html" target="_blank"> Ouvrir les voies récentes manquantes sur Pifomètre actuel</a></p></div>
+		<div id="descriptif">
+			<h1>Voies récentes selon FANTOIR,<br/>connues de la BAN mais pas d'OSM</h1>
+		</div>
 	    <div id="bouton_export_csv" title="Exporter la liste courante en CSV"></div>
+		<div id="wait_ajax"></div>
 	</div>
 
 	<div id="reponse">

@@ -65,14 +65,9 @@
 					ytop	= lat+delta
 				//visu
 					add_map_link(table,url_map_org_part1+'#map='+url_hash_coords,'ORG')
-					add_map_link(table,url_map_fr_part1+url_ol_part2,'FR')
-					add_map_link(table,url_bano_part1+'#'+url_hash_coords,'BANO')
+					/*add_map_link(table,url_bano_part1+'#'+url_hash_coords,'BANO')*/
 				//JOSM
 					add_josm_link(table,xleft,xright,ybottom,ytop)
-				//ID
-					add_map_link(table,url_edit_part1+'id#map='+url_hash_coords,'ID')
-				//Potlatch
-					add_map_link(table,url_edit_part1+'potlatch2#map='+url_hash_coords,'P2')
 				//Fantoir
 					add_map_link(table,'./index.html#insee='+insee,'Fantoir-OSM '+insee)
 					add_map_link(table,'./liste_brute_fantoir.html#insee='+insee,'Fantoir brut '+insee)
@@ -134,8 +129,8 @@
 		$('#'+table+' tr').append($('<th>').append('Voie OSM'))
 		$('#'+table+' tr').append($('<th>').append('Date d\'annulation'))
 		if (with_edit_and_map_links){
-			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Cartes'))
-			$('#'+table+' tr').append($('<th>').attr('colspan','3').append('Édition'))
+			$('#'+table+' tr').append($('<th>').attr('colspan','1').append('Carte'))
+			$('#'+table+' tr').append($('<th>').attr('colspan','1').append('Édition'))
 			$('#'+table+' tr').append($('<th>').attr('colspan','2').append('FANTOIR'))
 		} 
 	}

@@ -67,7 +67,7 @@ td {
 }
 table.tablesorter tbody td,
 table.tablesorter thead th {
-	padding-left: 1em !important;
+	padding-left: 1.4em !important;
 }
 #table_fantoir_errone tr td,
 #table_fantoir_annule tr td {
