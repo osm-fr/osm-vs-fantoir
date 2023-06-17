@@ -1,13 +1,23 @@
+/*-----------------------------------------------------------------------*/
+/*-------------------------------- BANDEAU ------------------------------*/
+/*-----------------------------------------------------------------------*/
+
 #bandeau{
-	top:70px;
-	width:100%;
-	height:70px;
-	z-index:3;
 	position:fixed;
+	top:90px;
+	width:100%;
+	height:110px;
+	margin-left:10px;
+	z-index:3;
 	background-color:white;
 }
-h2 {
-	margin: 10px 30px;
+h1 {
+	font-size: 1.8em;
+}
+#descriptif {
+	float: left;
+	margin:0 2%;
+	width: 45%;
 }
 #bouton_export_csv{
 	position: fixed;
@@ -23,36 +33,20 @@ h2 {
 	height: 50px;
 	width: 50px;
 }
-#reponse{
-	position:absolute;
-	top:120px;
-	z-index:2;
-}
-#pied_de_page{
-	position:relative;
-	width:100%;
-	height:30px;
-	z-index:3;
-}
-.zone_click{
-	cursor:pointer;
-	color:blue;
-	text-decoration: underline;
-}
-.zone_click.clicked{
-	background-color:green;
-	color:white;
-}
+
+/*-----------------------------------------------------*/
+/*----------- ALERTE CHARGEMENT DES DONNEES -----------*/
+/*-----------------------------------------------------*/
+
 #wait_ajax {
 	visibility:visible;
 	float: left;
-	margin: 20px 2% 0 2%;
+	margin: 0 2%;
 	width:45%;
 	height: 100px;
 	text-align: center;
 	padding: 5px;
-	background: url("../img/construction-mur.png") no-repeat lightblue left 5% top 50%;
-	background-size: 90px;
+	background: url("../img/skate.gif") no-repeat lightblue left 5% top 50%;
 	border-bottom: 4px #3FA4C5 solid;
 	border-radius: 8px;
 }
@@ -62,30 +56,92 @@ h2 {
 	font-weight: bold;
 	color:black;
 }
-/*#wait_ajax{
-	position:fixed;
-	top: 60px;
-	z-index:1;
-	width:100%;
-	height:100%;
-	background-color:lightgray;
-	opacity:0;
-	text-align:center;
+
+/*----------------------------------------------------------------------------------*/
+/*------------------------------------- REPONSE ------------------------------------*/
+/*----------------------------------------------------------------------------------*/
+
+#reponse{
+	position:relative;
+	margin-top:200px;
+	width: 100%;
+	font-size:0.9em;
+	z-index:2;
+	height: 75%;
+	overflow-y: auto;
 }
-#wait_ajax span{
-	background-color:black;
-	vertical-align:middle;
-	font-size:30px;
-	line-height:500px;
+th {
+	padding-bottom: 10px;
+}
+td {
+	padding:1px 15px;
+}
+table.tablesorter tbody td,
+table.tablesorter thead th {
+	padding-left: 1.4em !important;
+}
+
+.zone_click{
+	cursor:pointer;
+	color:blue;
+	text-decoration: underline;
+}
+.zone_click.clicked{
+	background-color:green;
 	color:white;
-	border:50px solid black;
-}*/
+}
+
+/*--------------- Couleur de ligne au survol -----------------*/
+
+#reponse tr:hover td {
+	background-color: #FCFFB7 !important;
+}
+
+/*---------- Première colonne avec codes Fantoir --------------*/
+
+.cell_fantoir {
+	font-family: monospace;
+	font-size: 1.3em;
+}
 
 #table_voies_recentes tr td{
 	background:white;
 	color:black;
 	font-weight: normal;
 }
-table.tablesorter thead tr .header {
-	height:40px;
+
+/*-----------------------------------------------------------------------*/
+/*------------------------------- REPONSIF ------------------------------*/
+/*-----------------------------------------------------------------------*/
+
+@media only screen and (max-width: 1200px) {
+	td {padding:1px 5px;}
+}
+
+@media only screen and (max-width: 1070px) {
+	#wait_ajax {
+	background: url("../img/skate.gif") no-repeat lightblue left 1% top 50%;
+	background-size: 60px;
+	}
+	#wait_ajax p {font-size: 1.1em;}
+	h1, h4 {margin: 0}
+}
+
+@media only screen and (max-width: 950px) {
+	#wait_ajax {
+	background: url("../img/skate.gif") no-repeat lightblue left 1% top 70%;
+	background-size: 50px;
+	}
+}
+
+@media only screen and (max-width: 700px) {
+	#wait_ajax {
+	background: url("../img/skate.gif") no-repeat lightblue left 5% top 70%;
+	background-size: 40px;
+	}
+	#wait_ajax p {
+	font-size: 1em;
+	}
+	#bandeau h1 {font-size: 1em;}
+	h4 {font-size: 0.8em;}
 }
