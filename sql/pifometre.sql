@@ -66,7 +66,6 @@ SELECT t.fantoir,
        COALESCE(place.is_place,false),
        COALESCE(faab.fantoir_avec_adresses_ban,false)
 FROM   (SELECT fantoir,
-               date_creation,
                date_annul,
                nature_voie,
                TRIM (BOTH FROM (COALESCE(nature_voie,'')||' '||libelle_voie)) AS nom_topo,
@@ -110,4 +109,5 @@ LEFT OUTER JOIN (SELECT fantoir,id_statut
                         WHERE   code_insee = '__code_insee__')r
                 WHERE   rang = 1) s
 USING (fantoir)
+WHERE NOT (t.date_annul != 0 AND pn.nom IS NULL and nb.nom IS NULL)
 ORDER BY 1
