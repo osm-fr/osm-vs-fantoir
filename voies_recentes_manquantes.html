@@ -97,7 +97,7 @@
 					$('#'+table).append($('<tr>').attr('id',data[l][4]).append($('<td>').text(data[l][0])))
 					//Commune (INSEE)
 					$('#'+table+' tr:last').append($('<td>').text(data[l][2]+' ('+data[l][1]+')'))
-					//Fantoir
+					//Code Fantoir
 					$('#'+table+' tr:last').append($('<td>').addClass('cell_fantoir').text(data[l][4]))
 					//Voie
 					$('#'+table+' tr:last').append($('<td>').text(data[l][3]))
@@ -118,9 +118,9 @@
 						/*add_map_link(table,url_bano_part1+'#'+url_hash_coords,'BANO')*/
 					//JOSM
 						add_josm_link(table,xleft,xright,ybottom,ytop)
-					//Fantoir
-						add_map_link(table,'./index.html#insee='+insee,'Fantoir-OSM '+insee)
-						add_map_link(table,'./liste_brute_fantoir.html#insee='+insee,'Fantoir brut '+insee)
+					//Liens Pifo et Fantoir
+						add_map_link(table,'./index.html#insee='+insee,'Pifomètre ('+insee+')')
+						add_map_link(table,'./liste_brute_fantoir.html#insee='+insee,'Fantoir brut ('+insee+')')
 					}
 				}
 				$('#wait_ajax').css('visibility','hidden');
@@ -148,7 +148,7 @@
 	}
 	function add_josm_link(table,xl,xr,yb,yt){
 		$('#'+table+' tr:last').append($('<td>')
-									.addClass('zone_click')
+									.addClass('zone-clic-josm')
 									.attr('xleft',xl).attr('xright',xr).attr('ybottom',yb).attr('ytop',yt)
 									.text('JOSM')
 									.click(function(){
@@ -167,7 +167,7 @@
 		if (with_edit_and_map_links){
 			$('#'+table+' tr').append($('<th>').attr('colspan','1').append('Carte'))
 			$('#'+table+' tr').append($('<th>').attr('colspan','1').append('Édition'))
-			$('#'+table+' tr').append($('<th>').attr('colspan','2').append('FANTOIR'))
+			$('#'+table+' tr').append($('<th>').attr('colspan','2').append('Voir la commune sur...'))
 		} 
 	}
 </script>

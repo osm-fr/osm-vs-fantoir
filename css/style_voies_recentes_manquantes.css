@@ -76,10 +76,18 @@ th {
 td {
 	padding:1px 15px;
 }
-table.tablesorter tbody td,
+table.tablesorter tbody td:not(.zone-clic-josm),
 table.tablesorter thead th {
-	padding-left: 1.4em !important;
+	padding-left: 1.2em !important;
 }
+
+/*--------------- Couleur de ligne au survol -----------------*/
+
+#reponse tr:hover td {
+	background-color: #FCFFB7;
+}
+
+/*--------------- Liens JOSM etc dans le tableau ---------------*/
 
 .zone_click{
 	cursor:pointer;
@@ -91,23 +99,25 @@ table.tablesorter thead th {
 	color:white;
 }
 
-/*--------------- Couleur de ligne au survol -----------------*/
-
-#reponse tr:hover td {
-	background-color: #FCFFB7 !important;
+.zone-clic-josm {
+	cursor:pointer;
+	font-weight: bold;
+	text-decoration: underline;
+	text-align: center;
+	color:#863602; /* Marron logo JOSM */
 }
+.zone-clic-josm.clicked, #reponse tr:hover td.zone-clic-josm.clicked {
+	background-color:#863602;
+	color: #fff;
+}
+
+
 
 /*---------- Première colonne avec codes Fantoir --------------*/
 
 .cell_fantoir {
 	font-family: monospace;
 	font-size: 1.3em;
-}
-
-#table_voies_recentes tr td{
-	background:white;
-	color:black;
-	font-weight: normal;
 }
 
 /*-----------------------------------------------------------------------*/
