@@ -14,6 +14,7 @@
 <script>
     FILTRES = [["voie",true],
                ["lieu_dit",true],
+               ["osm_hors_fantoir",true],
                ["nom_integre",true],
                ["nom_a_integrer",true],
                ["avec_adresses",true],
@@ -330,8 +331,18 @@
                          statut_voie,
                          numeros_a_proposer,
                          caractere_annul,
-                         is_place,
+                         categorie,
                          avec_adresses_ban] = data[s]
+                    is_voie = false
+                    is_place = false
+                    is_osm_hors_fantoir = false
+                    if (categorie == 0){
+                        is_voie = true;
+                    } else if (categorie == 1){
+                        is_place = true;
+                    } else if (categorie == 2){
+                        is_osm_hors_fantoir = true;
+                    }
                     fantoir_affiche = fantoir
                     fantoir_dans_relation = 'ok'
                     if (caractere_annul == 'B'){
@@ -349,20 +360,26 @@
                         $('#table_pifometre tr:last td:last').addClass('annule').attr('title','FANTOIR annulé, à remplacer dans OSM')
                     }
                     //Ajout des classes pour les filtres à chaque ligne
-                    if (is_place){
-                        $('#table_pifometre tr:last').addClass('lieu_dit')
-                    } else {
+                    if (is_voie) {
                         $('#table_pifometre tr:last').addClass('voie')
                     }
-                    if (nom_osm == undefined) {
-                        $('#table_pifometre tr:last').addClass('nom_a_integrer')
-                    } else {
-                        $('#table_pifometre tr:last').addClass('nom_integre')
+                    if (is_place){
+                        $('#table_pifometre tr:last').addClass('lieu_dit')
                     } 
-                    if (avec_adresses_ban) {
-                        $('#table_pifometre tr:last').addClass('avec_adresses')
-                    } else {
-                        $('#table_pifometre tr:last').addClass('sans_adresses')
+                    if (is_osm_hors_fantoir) {
+                        $('#table_pifometre tr:last').addClass('osm_hors_fantoir')
+                    }
+                    if (!is_osm_hors_fantoir){
+                        if (nom_osm == undefined) {
+                            $('#table_pifometre tr:last').addClass('nom_a_integrer')
+                        } else {
+                            $('#table_pifometre tr:last').addClass('nom_integre')
+                        }
+                        if (avec_adresses_ban) {
+                            $('#table_pifometre tr:last').addClass('avec_adresses')
+                        } else {
+                            $('#table_pifometre tr:last').addClass('sans_adresses')
+                        }
                     }
 
                     //Remplissage des cellules avec leur contenu
@@ -379,9 +396,13 @@
                                                         .append($('<span class="pastille-verte">'))
                                                         .append($('<span>').text(nom_osm)))
                     }
-                    else {
+                    else if ($('#table_pifometre tr:last').hasClass('nom_a_integrer')){
                         $('#table_pifometre tr:last').append($('<td>')
                                                         .append($('<span class="pastille-orange">'))
+                                                        .append($('<span>').text(nom_osm)))
+                    } else {
+                        $('#table_pifometre tr:last').append($('<td>')
+                                                        .append($('<span class="pastille-rouge">'))
                                                         .append($('<span>').text(nom_osm)))
                     }
                     //Nom BAN
@@ -408,7 +429,7 @@
                         $('#table_pifometre tr:last').append($('<td>'))
                     }
                     //Statut FANTOIR
-                    if (caractere_annul != 'B'){
+                    if (caractere_annul != 'B' && is_osm_hors_fantoir == false){
                         add_statut_fantoir(tr_id,fantoir,statut_voie)
                     } else {
                         $('#table_pifometre tr:last').addClass('statut0').append($('<td>'))
@@ -566,6 +587,12 @@
                             <input type="checkbox" id="check_lieu_dit" checked>
                             <span class="check is-dark"></span>
                             <span class="control-label" critere="lieu_dit">Lieux-dits<span></span></span>
+                        </li>
+                        <li>
+                            <label class="switch is-rounded is-small">
+                            <input type="checkbox" id="check_osm_hors_fantoir" checked>
+                            <span class="check is-dark"></span>
+                            <span class="control-label" critere="osm_hors_fantoir">OSM hors FANTOIR<span></span></span>
                         </li>
                     </ul>
                 </div>

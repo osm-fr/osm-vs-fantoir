@@ -63,7 +63,7 @@ SELECT t.fantoir,
        COALESCE(s.id_statut,0),
        a_proposer,
        t.caractere_annul,
-       COALESCE(place.is_place,false),
+       COALESCE(place.is_place,false)::integer,         -- type : voie=0,place=1,OSM hors Fantoir=2
        COALESCE(faab.fantoir_avec_adresses_ban,false)
 FROM   (SELECT fantoir,
                date_annul,
@@ -110,4 +110,31 @@ LEFT OUTER JOIN (SELECT fantoir,id_statut
                 WHERE   rang = 1) s
 USING (fantoir)
 WHERE NOT (t.date_annul != 0 AND pn.nom IS NULL and nb.nom IS NULL)
+
+UNION ALL
+
+SELECT NULL,
+       NULL,
+       NULL,
+       nom,
+       NULL,
+       NULL,
+       lon,
+       lat,
+       0,
+       NULL,
+       NULL,
+       2,
+       NULL
+FROM   (SELECT *
+        FROM   bano_points_nommes
+        WHERE  fantoir IS NULL               AND
+               code_insee = '__code_insee__' AND
+               source = 'OSM'                AND
+               nature = 'centroide') pn
+JOIN   (SELECT geometrie
+        FROM   polygones_insee
+        WHERE  code_insee = '__code_insee__') pl
+ON      ST_Contains(pl.geometrie,pn.geometrie)
+
 ORDER BY 1
