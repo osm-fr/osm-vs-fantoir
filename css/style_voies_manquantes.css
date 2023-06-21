@@ -39,7 +39,7 @@ h1 {
 /*-----------------------------------------------------*/
 
 #wait_ajax {
-	visibility:visible;
+	visibility:hidden;
 	float: left;
 	margin: 0 2%;
 	width:45%;
@@ -87,33 +87,34 @@ table.tablesorter thead th {
 	background-color: #FCFFB7;
 }
 
-/*--------------- Liens JOSM etc dans le tableau ---------------*/
+/*--------------- Liens JOSM et Intégration des adresses ---------------*/
 
-.zone_click{
-	cursor:pointer;
-	color:blue;
-	text-decoration: underline;
-}
-.zone_click.clicked{
-	background-color:green;
-	color:white;
-}
-
-.zone-clic-josm {
+/*------ Général ------*/
+.zone-clic-josm,
+.zone-clic-adresses {
 	cursor:pointer;
 	font-weight: bold;
 	text-decoration: underline;
 	text-align: center;
+}
+
+/*------ Couleurs ------*/
+.zone-clic-josm {
 	color:#863602; /* Marron logo JOSM */
 }
 .zone-clic-josm.clicked, #reponse tr:hover td.zone-clic-josm.clicked {
 	background-color:#863602;
 	color: #fff;
 }
+.zone-clic-adresses {
+	color:#D33A8B; /* Rose adresses */
+}
+.zone-clic-adresses.clicked, #reponse tr:hover td.zone-clic-adresses.clicked {
+	background-color:#D33A8B;
+	color: #fff;
+}
 
-
-
-/*---------- Première colonne avec codes Fantoir --------------*/
+/*---------- Colonne avec codes Fantoir --------------*/
 
 .cell_fantoir {
 	font-family: monospace;
