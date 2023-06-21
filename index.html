@@ -166,23 +166,19 @@
         })))
     }
     function add_josm_addr_link(insee,fantoir,nom_fantoir,nombre,fantoir_dans_relation,is_place){
-        $('#table_pifometre tr:last').append($('<td>'))
-        $('#table_pifometre tr:last td:last').append($('<span>')
-                                    .addClass('zone-clic-adresses')
-                                    .text(nombre > 1 ? nombre+' Points':'1 Point')
-                                    .click(function(){
-                                        stringToRemove = window.location.href.split('/').pop()
-                                        srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele='+((is_place) ? 'Place':'Points');
-                                        $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
-                                        $(this).addClass('clicked');
-                                    })
-                                )
+        $('#table_pifometre tr:last').append($('<td>').addClass('zone-clic-adresses'))
+        $('#table_pifometre tr:last td:last').append($('<span>').text(nombre > 1 ? nombre+' Points':'1 Point'))
+                                            .click(function(){
+                                                stringToRemove = window.location.href.split('/').pop()
+                                                srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele='+((is_place) ? 'Place':'Points');
+                                                $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
+                                                $(this).addClass('clicked');
+                                            })
         if (is_place){
-            $('#table_pifometre tr:last td:last').append($('<span>').text(' (lieu-dit)'))
+            $('#table_pifometre tr:last td:last').attr('colspan','2').append($('<span>').text(' (lieu-dit)'))
         } else {
-            $('#table_pifometre tr:last td:last').append($('<span>').text(' ou '))
-            $('#table_pifometre tr:last td:last').append($('<span>')
-                                        .addClass('zone-clic-adresses')
+            $('#table_pifometre tr:last').append($('<td>').addClass('zone-clic-adresses').append($('<span>'))
+                                        
                                         .text('Relation')
                                         .click(function(){
                                             stringToRemove = window.location.href.split('/').pop()
@@ -194,8 +190,7 @@
         }
     }
     function add_addr_inspector_link(insee,fantoir,source){
-        $('#table_pifometre tr:last')   .append($('<td>')
-                                        .addClass('zone-clic-adresses')
+        $('#table_pifometre tr:last')   .append($('<td>').addClass('zone-clic-adresses')
                                         .append($('<a>').attr('href',"numeros.html?insee="+insee+'&fantoir='+fantoir+'&source='+source+'&tab=0').attr('target',"blank")
                                             .text('Qualifier')
                                         )
@@ -315,7 +310,7 @@
                 $('#table_pifometre tr').append($('<th>').append('Carte'))
                 $('#table_pifometre tr').append($('<th>').append('Edition'))
                 $('#table_pifometre tr').append($('<th>').append('Statut FANTOIR ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
-                $('#table_pifometre tr').append($('<th>').addClass('string-none').append('Intégrer les adresses'))
+                $('#table_pifometre tr').append($('<th>').attr('colspan','2').addClass('string-none').append('Intégrer les adresses'))
                 $('#table_pifometre tr').append($('<th>').append('Qualifier les adresses'))
                 $('#table_pifometre').append($('<tbody>'))
                 tr_id = 1000
@@ -439,13 +434,13 @@
                         add_josm_addr_link($('#input_insee')[0].value,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
                     }
                     else if (numeros_a_proposer == null && avec_adresses_ban){
-                        $('#table_pifometre tr:last').append($('<td>')
+                        $('#table_pifometre tr:last').append($('<td>').attr('colspan','2').addClass('zone-adresses')
                                                         .append($('<span>').addClass('adresses-integrees').text('✔'))
                                                         .append($('<span>').text(' Adresses intégrées'))
                                                     )
                     }
                     else {
-                        $('#table_pifometre tr:last').append($('<td>'))
+                        $('#table_pifometre tr:last').append($('<td>').attr('colspan','2'))
                     }
                     if (avec_adresses_ban){
                         add_addr_inspector_link($('#input_insee')[0].value,fantoir,'BAN')

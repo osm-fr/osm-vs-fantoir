@@ -239,28 +239,20 @@
 	padding-left: 1em;
 }
 
+
 /*----------- LIGNE GRISEE, si statut fantoir pas OK -----------*/
 
-#reponse tr td, 
-#reponse tr td.zone-clic-josm,
-#reponse tr td.zone-clic-adresses,
-#reponse tr td.zone-clic-adresses a {
+#reponse tr:not(.statut0) td, 
+#reponse tr:not(.statut0) td.zone-clic-josm,
+#reponse tr:not(.statut0) td.zone-clic-adresses {
 	background: #e6e6e6;
 	color: #666;
 }
 
-#reponse tr.statut0 td {
-	background: white;
-	color: black;
-}
-
 /*--------------- Couleur de ligne au survol -----------------*/
 
-#reponse tr:hover td,
-#reponse tr.statut0:hover td,
-#reponse tr:hover td span.zone-clic-adresses,
-#reponse tr:hover td.zone-clic-adresses a {
-	background-color: #FCFFB7 !important; /* jaune clair */
+#reponse tr:hover td {
+	background-color: #FCFFB7; /* jaune clair */
 }
 
 /*--------------- Pastilles, colonne Libelle OSM, correspondant aux filtres ---------------*/
@@ -279,11 +271,9 @@
   background-color: #f1AC45;
 }
 
-/*--------------- Liens JOSM et adresses dans le tableau ---------------*/
+/*--------------- Liens JOSM et Intégration des adresses ---------------*/
 
-.zone-clic,
 .zone-clic-adresses,
-.zone-clic-adresses a,
 .zone-clic-josm {
 	cursor:pointer;
 	font-weight: bold;
@@ -291,36 +281,29 @@
 	text-align: center;
 }
 
-.zone-clic.clicked{
-	background-color:green;
+.zone-adresses {
+	text-align: center;
+}
+
+/*------ Couleurs ------*/
+.zone-clic-adresses, .zone-clic-adresses a {
+	background-color: white;
+	color:#D33A8B;
+}
+.zone-clic-adresses.clicked,
+.zone-clic-adresses.clicked a,
+#reponse tr:hover td.zone-clic-adresses.clicked {
+	background-color:#D33A8B ;
 	color:white;
 }
 
-.statut0 .zone-clic-adresses,
-.statut0 .zone-clic-adresses a {
-	background-color: white !important;
-	color:#D33A8B !important;
+.zone-clic-josm{
+	background-color: white;
+	color:#863602; /* Marron logo JOSM */
 }
-.statut0 .zone-clic-adresses.clicked,
-.statut0 .zone-clic-adresses.clicked a {
-	background-color:#D33A8B !important;
-	color:white !important;
-}
-.statut0:hover .zone-clic-adresses.clicked,
-.statut0:hover .zone-clic-adresses.clicked a {
-	color:black !important;
-}
-
-.statut0 .zone-clic-josm{
-	background-color: white !important;
-	color:#863602 !important; /* Marron logo JOSM */
-}
-.statut0 .zone-clic-josm.clicked{
-	background-color:#863602 !important;
-	color:white !important;
-}
-.statut0:hover .zone-clic-josm.clicked{
-	color:black !important;
+.zone-clic-josm.clicked, #reponse tr:hover td.zone-clic-josm.clicked{
+	background-color:#863602;
+	color:white;
 }
 
 #reponse tr.statut0 td.cell_fantoir.annule{
@@ -332,6 +315,7 @@
 }
 
 .adresses-integrees {
+	text-align: center;
 	color:#48c78e !important;
 	font-size: 1.1em;
 	font-weight: bold;
