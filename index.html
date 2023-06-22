@@ -388,16 +388,16 @@
                     //Nom OSM
                     if ($('#table_pifometre tr:last').hasClass('nom_integre')){
                         $('#table_pifometre tr:last').append($('<td>')
-                                                        .append($('<span class="pastille-verte">'))
+                                                        .append($('<span class="pastille-verte" title="Déjà rapproché dans OSM">'))
                                                         .append($('<span>').text(nom_osm)))
                     }
                     else if ($('#table_pifometre tr:last').hasClass('nom_a_integrer')){
                         $('#table_pifometre tr:last').append($('<td>')
-                                                        .append($('<span class="pastille-orange">'))
+                                                        .append($('<span class="pastille-orange" title="Pas encore rapproché dans OSM">'))
                                                         .append($('<span>').text(nom_osm)))
                     } else {
                         $('#table_pifometre tr:last').append($('<td>')
-                                                        .append($('<span class="pastille-rouge">'))
+                                                        .append($('<span class="pastille-bleue" title="Trouvé dans OSM mais inconnu de Fantoir">'))
                                                         .append($('<span>').text(nom_osm)))
                     }
                     //Nom BAN
@@ -568,7 +568,7 @@
             <div id="ligne-afficher">
                 <p><strong>Afficher :</strong></p>
             </div>
-            <div id="ligne-boutons-filtres">
+            <div class="ligne-boutons-filtres">
                 <div>
                     <ul>
                         <li>
@@ -583,12 +583,6 @@
                             <span class="check is-dark"></span>
                             <span class="control-label" critere="lieu_dit">Lieux-dits<span></span></span>
                         </li>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_osm_hors_fantoir" checked>
-                            <span class="check is-dark"></span>
-                            <span class="control-label" critere="osm_hors_fantoir">OSM hors FANTOIR<span></span></span>
-                        </li>
                     </ul>
                 </div>
                 <div>
@@ -597,13 +591,13 @@
                             <label class="switch is-rounded is-small">
                             <input type="checkbox" id="check_nom_integre" checked>
                             <span class="check is-green"></span>
-                            <span class="control-label" critere="nom_integre">Déjà rapproché(e)s dans OSM<span></span></span>
+                            <span class="control-label" critere="nom_integre">Déjà rapprochés dans OSM<span></span></span>
                         </li>
                         <li>
                             <label class="switch is-rounded is-small">
                             <input type="checkbox" id="check_nom_a_integrer" checked>
                             <span class="check is-orange"></span>
-                            <span class="control-label" critere="nom_a_integrer">Pas encore rapproché(e)s dans OSM<span></span></span>
+                            <span class="control-label" critere="nom_a_integrer">Pas encore rapprochés dans OSM<span></span></span>
                         </li>
                     </ul>
                 </div>
@@ -620,6 +614,18 @@
                             <input type="checkbox" id="check_sans_adresses" checked>
                             <span class="check is-dark"></span>
                             <span class="control-label" critere="sans_adresses">Sans adresses<span></span></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="ligne-boutons-filtres">
+                <div>
+                    <ul>
+                        <li>
+                            <label class="switch is-rounded is-small">
+                            <input type="checkbox" id="check_osm_hors_fantoir" checked>
+                            <span class="check is-blue"></span>
+                            <span class="control-label" critere="osm_hors_fantoir">Trouvé dans OSM et inconnu de FANTOIR<span></span></span>
                         </li>
                     </ul>
                 </div>

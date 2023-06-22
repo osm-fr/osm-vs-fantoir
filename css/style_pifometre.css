@@ -143,21 +143,25 @@
 #ligne-afficher {
 	float: left;
 }
-#ligne-boutons-filtres {
+.ligne-boutons-filtres {
 	float: left;
 	clear: both;
 }
 
 #boutons-filtres {
 	display: inline-block;
-	margin-left: 1%;
-	width: 60%;
+	margin-left: 2%;
+	width: 55%;
+	padding: 5px 0.5%;
+	background:#ECF5F9;
+  border-bottom: 2px lightblue solid;
+  border-radius: 6px;
 	font-size: 0.8em;
 }
 
 #boutons-filtres div {
 	width: auto;
-	padding: 3px 5px;
+	padding: 2px;
 	display: inline-block;
 }
 
@@ -174,9 +178,9 @@
 #alerte_commune {
 	visibility:hidden;
 	position:fixed;
-	width:45%;
-	top:110px;
-	right: 7%;
+	width:35%;
+	top:120px;
+	right:2%;
 	height: 100px;
 	text-align: center;
 	padding: 5px;
@@ -227,10 +231,9 @@
 
 #reponse{
 	position: relative;
-	margin-top:230px;
+	margin-top:260px;
 	width: 100%;
 	font-size:0.9em;
-	z-index:2;
 	height: 70%;
 	overflow-y: auto;
 }
@@ -257,19 +260,16 @@
 
 /*--------------- Pastilles, colonne Libelle OSM, correspondant aux filtres ---------------*/
 
-.pastille-verte, .pastille-orange {
+.pastille-verte, .pastille-orange, .pastille-bleue {
   height: 15px;
   width: 15px;
   border-radius: 50%;
   display: inline-block;
   margin: 2px 10px 0 10px;
 }
-.pastille-verte {
-  background-color: #48c78e;
-}
-.pastille-orange {
-  background-color: #f1AC45;
-}
+.pastille-verte {background-color: #48c78e;}
+.pastille-orange {background-color: #f1AC45;}
+.pastille-bleue {background-color: #0457B3;}
 
 /*--------------- Liens JOSM et Intégration des adresses ---------------*/
 
@@ -287,7 +287,6 @@
 
 /*------ Couleurs ------*/
 .zone-clic-adresses, .zone-clic-adresses a {
-	background-color: white;
 	color:#D33A8B;
 }
 .zone-clic-adresses.clicked,
@@ -327,46 +326,34 @@
 /*---------------------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------------------*/
 
-@media only screen and (max-width: 1900px) {
-	#alerte_commune, #wait_ajax {
-		right: 3%;
-	}
-}
-
 @media only screen and (max-width: 1700px) {
-	#alerte_commune, #wait_ajax {
-		width: 40%;
-		right: 1%;
-		line-height:40px;
-	}
-}
-
-@media only screen and (max-width: 1500px) {
-	h1 {font-size: 1.6em;}
 	#boutons-filtres {
-		font-size: 0.75em;
+		font-size: 0.7em;
 	}
 	#alerte_commune, #wait_ajax {
-		width: 35%;
-	}
-	#alerte_commune p, #wait_ajax span {
-		font-size: 1em;
+		font-size: 0.8em;
+		line-height:40px;
 	}
 }
 
 @media only screen and (max-width: 1400px) {
 	#boutons-filtres {
-		width: 65%;
+		width: 60%;
+	}
+	#alerte_commune, #wait_ajax {
+		right: 1%;
 	}
 }
 
 @media only screen and (max-width: 1300px) {
 	h1 {font-size: 1.5em;}
 	#boutons-filtres {
-		font-size: 0.7em;
+		width: 65%;
 	}
-	#alerte_commune {
-		line-height:28px;
+	#alerte_commune, #wait_ajax {
+		width: 30%;
+		font-size: 0.7em;
+		line-height:30px;
 	}
 }
 
@@ -374,11 +361,31 @@
 	h1 {font-size: 1.4em;}
 	#titre_commune{margin:0 20px;}
 	#bandeau_commune{margin-left:5px;}
-	#boutons-filtres {width:70%;}
-	#boutons-filtres div {padding: 3px 0;}
+	#boutons-filtres {
+		width: 70%;
+	}
 	#alerte_commune, #wait_ajax {
-		width: 23%;
-		right: 1%;
-		line-height:30px;
+		width: 25%;
+		line-height:25px;
+	}
+}
+
+@media only screen and (max-width: 1100px) {
+	#boutons-filtres {
+		margin-left: 1%;
+		width: 75%;
+	}
+	#alerte_commune, #wait_ajax {
+		width: 20%;
+		font-size: 0.5em;
+	}
+}
+
+@media only screen and (max-width: 1050px) {
+	#reponse {
+	margin-top:280px;
+	}
+	#infos_commune_col1 {
+		font-size: 0.9em;
 	}
 }
