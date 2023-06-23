@@ -3,16 +3,16 @@
 <meta charset="UTF-8">
 <title>Statistiques de couverture en voies nommées par département</title>
 <script src="js/jquery-3.6.4.min.js"></script>
-<script src="js/jquery.tablesorter.min.js"></script>
+<script src="js/tablesorter/jquery.tablesorter.js"></script>
+<script src="js/jquery.tablesorter.combined.min.js"></script>
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
 <link rel="stylesheet" href="css/style_stats_dept.css" type="text/css"/>
-<link rel="stylesheet" href="css/tablesorter.css" type="text/css"/>
 <link rel="stylesheet" href="css/menu.css" type="text/css"/>
+<link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 
 <script>
-
 	var menu_labels
-	var a_champs_stats = ['Code INSEE','Commune','% addresses certifiées BAN','Voies avec adresses<br/>rapprochées (a)','Toutes voies<br/>rapprochées (b)...','...dont voies rapprochées sur<br/>lieux-dits FANTOIR','Voies FANTOIR (c)','Voies et lieux-dits<br/>FANTOIR (d)','Voies avec adresses /<br/>voies FANTOIR (a/c)<br/>en %','Voies rapprochées /<br/>voies FANTOIR (b/c)<br/>en %','Voies rapprochées /<br/>voies et lieux-dits FANTOIR (b/d)<br/>en %','Adresses OSM','Adresses BAN','Adresses BAN sans voie rapprochées','Adresse BAN avec voie rapprochée<br/>en %','Indice 2020']
+	var a_champs_stats = ['Code INSEE','Commune','% adresses certifiées BAN','Voies avec adresses<br/>rapprochées (a)','Toutes voies<br/>rapprochées (b)...','...dont voies rapprochées sur<br/>lieux-dits Fantoir','Voies Fantoir (c)','Voies et lieux-dits<br/>Fantoir (d)','Voies avec adresses /<br/>voies Fantoir (a/c)<br/>en %','Voies rapprochées /<br/>voies Fantoir (b/c)<br/>en %','Voies rapprochées /<br/>voies et lieux-dits Fantoir (b/d)<br/>en %','Adresses OSM','Adresses BAN','Adresses BAN sans voie rapprochées','Adresse BAN avec voie rapprochée<br/>en %','Indice 2020']
 	function is_valid_dept(d){
 		pattern_dept = new RegExp('^([01]|[3-8])([0-9])$|^2([aAbB]|[1-9])$|^9([0-5]|7[1-4]|76)$')
 		var res
@@ -35,7 +35,7 @@
 		return res
 	}
 	function start(){
-		$('#infobulle_aide').click(function(){
+		$('#bouton_aide').click(function(){
 			$('#aide').css('visibility','visible');
 		})
 		$('#aide > .fermer').click(function(){
@@ -49,10 +49,7 @@
 		}
 	}
 	function update_csv_url(dept){
-		$('#bouton_export_csv').empty()
-   		$('#bouton_export_csv').append($('<a>').attr('href',"stats_dept.py?dept="+dept+'&format=csv')
-			                                   .attr('target','blank')
-			                                   .append($('<img>').attr('src','img/export-to-csv-icon-13.jpg')))
+   		urlCSV = "stats_dept.py?dept="+dept+'&format=csv';
 	}
 	function requete_stats_dept(){
 		if (!is_valid_dept($('#input_dept')[0].value)){
@@ -61,6 +58,10 @@
 		}
 
 		$('body').css('cursor','progress');
+        $('#wait_ajax').empty()
+                        .css('visibility','visible')
+                        .append($('<p>').append('Chargement des statistiques...'));
+
 		update_csv_url($('#input_dept')[0].value)
 		$('#input_dept')[0].value = $('#input_dept')[0].value.toUpperCase()
 		$.ajax({
@@ -68,17 +69,18 @@
 		})
 		.done(function( data ) {
 			nom_dept = data[0][0][1]
-			$('#table_infos_dept').empty()
+			$('#nom_dept').empty()
 			$('#stats_dept').empty().append($('<thead>').append($('<tr>')))
 
 			if (nom_dept.length == 0){
-				$('#table_infos_dept').append($('<h2>').append('dept '+$('#input_dept')[0].value+' : département inconnu'))
+				$('#nom_dept').append('dept '+$('#input_dept')[0].value+' : département inconnu')
 				$('body').css('cursor','default');
+				$('#wait_ajax').css('visibility','hidden');
 				return 0;
 			}
 			document.title = nom_dept+' - Avancement du rapprochement des voies par commune'
 
-			$('#table_infos_dept').append($('<tr>').append($('<th>').append($('<h1>').addClass('titre_dept').append((nom_dept+" ("+$('#input_dept')[0].value+")")))))
+			$('#nom_dept').append((nom_dept+" ("+$('#input_dept')[0].value+")"))
 			stats = data[1]
 			for (c=0;c<a_champs_stats.length;c++){
 				$('#stats_dept > thead > tr:last').append($('<th>').append(a_champs_stats[c]))
@@ -100,9 +102,19 @@
 					$('#stats_dept tr:last td:first').addClass(stats[c][0])
 				}
 			}
-			$('#stats_dept').tablesorter();
+			/*$('#stats_dept').tablesorter();*/
 			$('body').css('cursor','default');
+			$('#wait_ajax').css('visibility','hidden');
 
+            //Sticky headers : le tableau scrolle dans son contenant
+            $('#stats_dept').tablesorter({
+                widthFixed : true,
+                headerTemplate : '{content} {icon}', // Add icon for various themes
+                widgets: [ 'stickyHeaders', 'filter' ],
+                widgetOptions: {
+                  stickyHeaders_attachTo : '#reponse'
+                }
+            });
 
 		})
 		window.location.hash="#dept="+$('#input_dept')[0].value
@@ -123,16 +135,15 @@
 		</form>
 	</div>
 
-<div id="bandeau">
-
-	<h2>Avancement du rapprochement des voies par commune</h2>
-	<div id='bandeau_dept'>
-		<table id="table_infos_dept"></table>
+	<div id="bandeau">
+	    <div id="descriptif">
+			<h1>Avancement du rapprochement des voies par commune</h1>
+			<h2 id="nom_dept"></h2>
+		</div>
+		<button id="bouton_export_csv" title="Exporter le tableau en CSV" onclick="window.open(urlCSV, '_blank');"></button>
+		<button id="bouton_aide" title="Aide"></button>
+		<div id="wait_ajax"></div>
 	</div>
-	<div id="bouton_export_csv" title="Exporter l'onglet courant en CSV"></div>
-	<div id="infobulle_aide" title="Aide">?</div>
-	<div id="wait_ajax"><p>Cette page n'est pas encore fonctionnelle en v3.</p><p><a href="https://bano.openstreetmap.fr/pifometre/stats_dept.html" target="_blank"> Ouvrir les statistiques sur Pifomètre actuel</a></p></div>
-</div>
 
 <div id="reponse">
 	<table id="stats_dept" class="tablesorter"></table>
@@ -143,23 +154,23 @@
 	<h2>Read The F(ANTOIR) Manual</h2>
 	<h3>Tableau</h3>
 	<p>Les en-têtes de colonnes sont cliquables pour trier le tableau.</p>
-	<p>Les liens dans la colonne "Code INSEE" amènent à la page https://bano.openstreetmap.fr/pifometre/ de la commune et s'ouvrent dans le même onglet.</p>
+	<p>Les liens dans la colonne "Code INSEE" amènent à la page <a href="https://bano.openstreetmap.fr/pifometre/">Pifomètre</a> de la commune et s'ouvrent dans le même onglet.</p>
 	<p>Pour chaque commune, les chiffres sont issus des données BANO au moment du chargement de la page.</p>
 	<h3>Description des colonnes</h3>
-	<li>% addresses certifiées BAN</li><p>Pourcentage d'adresses certifiées. Statistique communiquée via la <a href="https://www.data.gouv.fr/fr/datasets/etat-de-la-base-adresse-nationale-par-commune/"> BAN</a>. Information mise à jour chaque jour à minuit.</p>
+	<li>% adresses certifiées BAN</li><p>Pourcentage d'adresses certifiées. Statistique communiquée via la <a href="https://www.data.gouv.fr/fr/datasets/etat-de-la-base-adresse-nationale-par-commune/"> BAN</a>. Information mise à jour chaque jour à minuit.</p>
 	<li>Voies avec adresses rapprochées (a)</li><p>Nombre de voies dont le nom existe dans OSM, dont on connaît le code Fantoir, et pour lesquelles on trouve des adresses, dans OSM, dans la <a href="https://adresse.data.gouv.fr/">Base Adresse Nationale ou une base adresse locale</a></p>
 	<li>Toutes voies rapprochées (b)</li><p>Nombre de voies dont le nom existe dans OSM et dont on connaît le code Fantoir. Le décompte inclut les voies sans adresses.</p>
-	<li>Voies FANTOIR (c)</li><p>Nombre de voies non annulées, de type 1 ou 2 sur la commune, dans FANTOIR.</p>
-	<li>Voies et lieux-dits FANTOIR (d)</li><p>Nombre de voies non annulées, de type 1, 2 ou 3 (lieux-dits) sur la commune, dans FANTOIR.</p>
-	<li>Adresses / voies FANTOIR (a/c) en %</li><p>Pourcentage de voies OSM dont on connaît le code Fantoir, et ayant des adresses, par rapport au nombre de voies de type 1 et 2 au Fantoir</p>
-	<li>Voies / voies FANTOIR (b/c) en %</li><p>Pourcentage de voies OSM dont on connaît le code Fantoir, y compris des voies sans adresses, par rapport au nombre de voies de type 1 et 2 au Fantoir</p>
-	<li>Voies / voies et lieux-dits FANTOIR (b/d) en %</li><p>Pourcentage de voies OSM dont on connaît le code Fantoir, y compris des voies sans adresses, par rapport au nombre de voies de type 1, 2 ou 3 au Fantoir</p>
+	<li>Voies Fantoir (c)</li><p>Nombre de voies non annulées, de type 1 ou 2 sur la commune, dans Fantoir.</p>
+	<li>Voies et lieux-dits Fantoir (d)</li><p>Nombre de voies non annulées, de type 1, 2 ou 3 (lieux-dits) sur la commune, dans Fantoir.</p>
+	<li>Adresses / voies Fantoir (a/c) en %</li><p>Pourcentage de voies OSM dont on connaît le code Fantoir, et ayant des adresses, par rapport au nombre de voies de type 1 et 2 au Fantoir</p>
+	<li>Voies / voies Fantoir (b/c) en %</li><p>Pourcentage de voies OSM dont on connaît le code Fantoir, y compris des voies sans adresses, par rapport au nombre de voies de type 1 et 2 au Fantoir</p>
+	<li>Voies / voies et lieux-dits Fantoir (b/d) en %</li><p>Pourcentage de voies OSM dont on connaît le code Fantoir, y compris des voies sans adresses, par rapport au nombre de voies de type 1, 2 ou 3 au Fantoir</p>
 	<li>Adresses OSM</li><p>Nombre d'adresses presentes dans OSM sur la commune</p>
 	<li>Adresses BAN</li><p>Nombre d'adresses presentes dans la <a href="https://adresse.data.gouv.fr/">Base Adresse Nationale ou une base adresse locale</a> sur la commune</p>
 	<li>Adresses BAN sans voie rapprochées</li><p>Nombre d'adresses présentes dans la <a href="https://adresse.data.gouv.fr/">Base Adresse Nationale ou une base adresse locale</a> sur la commune dont le nom de rue n'existe pas dans OSM</p>
 	<li>Adresse BAN avec voie rapprochée en %</li><p>Pourcentage d'adresses présentes dans la <a href="https://adresse.data.gouv.fr/">Base Adresse Nationale ou une base adresse locale</a> dont le nom de rue existe dans OSM</p>
-	<li>Indice 2020</li><p>((a/c)*(c-a)) + ((b/c)*(c-b)) + ((b/d)* (d-b))</br>qui qualifie mieux la notion déficitaire que le simple ecart relatif (plus le chiffre est gros, plus y a de boulot)</p>
-	<h3>Documentation FANTOIR</h3>
+	<li>Indice 2020</li><p>((a/c)*(c-a)) + ((b/c)*(c-b)) + ((b/d)* (d-b))</br>qui qualifie mieux la notion déficitaire que le simple écart relatif (plus le chiffre est gros, plus y a du boulot)</p>
+	<h3>Documentation Fantoir</h3>
 	<p>Elle est visible dans <a href="https://www.collectivites-locales.gouv.fr/files/files/finances_locales/fantoir/Descriptif_FANTOIR_2016.pdf">ce PDF</a></p>
 </div>
 
