@@ -1,5 +1,5 @@
 WITH
-cog AS  (       SELECT com AS insee_com,
+cog AS  (       SELECT com AS code_insee,
                        libelle
                 FROM   cog_commune c
                 LEFT OUTER JOIN (SELECT comparent FROM cog_commune WHERE dep = '__dept__' AND typecom = 'ARM') p
@@ -9,65 +9,76 @@ cog AS  (       SELECT com AS insee_com,
                        p.comparent IS NULL
                 ORDER BY 1),
 r AS    (       SELECT  (nb_numeros_certifies::decimal * 100 / greatest(nb_numeros::decimal,1.0))::integer AS pct_certifie,
-                        com AS insee_com
+                        code_insee
                 FROM    communes_summary
                 WHERE   dep = '__dept__'),
-a AS (          SELECT  insee_com,
-                        count(distinct fantoir) voies_avec_adresses_rapprochees
-                FROM    cumul_adresses
-                WHERE   insee_com LIKE '__dept__%'      AND
-                                COALESCE(voie_osm,'') != ''
-                GROUP BY insee_com),
-adrOSM AS (     SELECT  insee_com,
-                                count(distinct concat(numero,fantoir,voie_osm)) adresses_OSM
-                FROM    cumul_adresses
-                WHERE   insee_com LIKE '__dept__%' AND
-                source = 'OSM'
-                GROUP BY insee_com),
-adrBAN AS (     SELECT  insee_com,
-                                count(distinct concat(numero,fantoir,voie_autre)) adresses_BAN
-                FROM    cumul_adresses
-                WHERE   insee_com LIKE '__dept__%' AND
+a AS (          SELECT  code_insee,
+                        count(*) voies_avec_adresses_rapprochees
+                FROM    (SELECT fantoir,
+                                code_insee
+                        FROM   bano_adresses
+                        WHERE  code_dept = '__dept__' AND
+                                source = 'BAN'
+                        INTERSECT
+                        SELECT fantoir,
+                               code_insee
+                        FROM   nom_fantoir
+                        WHERE  code_dept = '__dept__' AND
+                               source = 'OSM') a
+                GROUP BY code_insee),
+adrOSM AS (     SELECT  code_insee,
+                        count(*) adresses_OSM
+                FROM    bano_adresses
+                WHERE   code_dept = '__dept__' AND
+                        source = 'OSM'
+                GROUP BY code_insee),
+adrBAN AS (     SELECT  code_insee,
+                        count(*) adresses_BAN
+                FROM    bano_adresses
+                WHERE   code_dept = '__dept__' AND
                         source = 'BAN'
-                GROUP BY insee_com),
-adrnon AS (     SELECT  insee_com,
-                                count(distinct concat(numero,fantoir,voie_autre)) adresses_non_rapprochees
-                FROM    cumul_adresses
-                WHERE   insee_com LIKE '__dept__%' AND COALESCE(voie_osm,'') = ''
-                GROUP BY insee_com),
-v AS (  SELECT  insee_com,
-                count(distinct fantoir) voies_rapprochees
-                FROM    cumul_voies
-                WHERE   insee_com LIKE '__dept__%'         AND
-                        COALESCE(fantoir,'') != '' AND
-                        voie_osm IS NOT NULL
-                GROUP BY insee_com),
-vl AS ( SELECT  c.insee_com,
-                                count(distinct c.fantoir) voies_rapprochees
-                FROM    (SELECT insee_com,
-                        fantoir
-                FROM    cumul_voies
-                WHERE   insee_com LIKE '__dept__%'  AND
-                        COALESCE(fantoir,'') != ''  AND
-                        voie_osm IS NOT NULL) c
-        JOIN    (SELECT fantoir10
-                FROM    fantoir_voie
-                WHERE type_voie = '3') f
-                ON              c.fantoir = f.fantoir10
-                GROUP BY c.insee_com),
-t AS (  SELECT  code_insee AS insee_com,
-                                count(*) voies_fantoir
-                FROM    fantoir_voie
-                WHERE   code_insee LIKE '__dept__%'     AND
-                                type_voie in ('1','2')
                 GROUP BY code_insee),
-f AS (  SELECT  code_insee AS insee_com,
-                                count(*) voies_fantoir
-                FROM    fantoir_voie
-                WHERE   code_insee LIKE '__dept__%'     AND
-                                type_voie in ('1','2','3')
+adrnon AS (     SELECT  code_insee,
+                        count(distinct concat(numero,b.fantoir)) adresses_non_rapprochees
+                FROM    (SELECT code_insee,numero,fantoir
+                        FROM    bano_adresses
+                        WHERE   code_dept = '__dept__' AND
+                                source = 'BAN')b
+                LEFT OUTER JOIN (SELECT fantoir
+                                 FROM   nom_fantoir
+                                 WHERE  source = 'OSM' AND
+                                        code_dept = '__dept__')o
+                USING (fantoir)
+                WHERE o.fantoir IS NULL
                 GROUP BY code_insee),
-i AS (  SELECT  cog.insee_com, --Code INSEE
+v AS (  SELECT          code_insee,
+                        count(distinct fantoir) voies_rapprochees
+                FROM    nom_fantoir
+                WHERE   code_dept = '__dept__'  AND
+                        fantoir IS NOT NULL     AND
+                        nature = 'voie'         AND
+                        source = 'OSM'
+                GROUP BY code_insee),
+vl AS (  SELECT          code_insee,
+                        count(distinct fantoir) voies_rapprochees
+                FROM    nom_fantoir
+                WHERE   code_dept = '__dept__'  AND
+                        fantoir IS NOT NULL     AND
+                        source = 'OSM'
+                GROUP BY code_insee),
+t AS (  SELECT          code_insee,
+                        count(*) voies_fantoir
+                FROM    topo
+                WHERE   code_dep = '__dept__'     AND
+                        type_voie in ('1','2')
+                GROUP BY code_insee),
+f AS (  SELECT          code_insee,
+                        count(*) voies_fantoir
+                FROM    topo
+                WHERE   code_dep = '__dept__'     AND
+                        type_voie in ('1','2','3')
+                GROUP BY code_insee),
+i AS (  SELECT  cog.code_insee, --Code INSEE
                 cog.libelle, --Commune
                 COALESCE(r.pct_certifie,0),
                 COALESCE(a.voies_avec_adresses_rapprochees::integer,0) a, --Voies avec adresses rapprochées (a)
@@ -83,15 +94,15 @@ i AS (  SELECT  cog.insee_com, --Code INSEE
                 COALESCE(adrnon.adresses_non_rapprochees::integer,0), --Adresses sans voie rapprochée
                 COALESCE(((100-adrnon.adresses_non_rapprochees*100/adrBAN.adresses_BAN))::integer,100) --Pourcentage d'adresses avec voie rapprochée
         FROM    cog
-        LEFT OUTER JOIN r USING (insee_com)
-        LEFT OUTER JOIN v USING (insee_com)
-        LEFT OUTER JOIN vl USING (insee_com)
-        LEFT OUTER JOIN a USING (insee_com)
-        LEFT OUTER JOIN adrOSM USING (insee_com)
-        LEFT OUTER JOIN adrBAN USING (insee_com)
-        LEFT OUTER JOIN adrnon USING (insee_com)
-        LEFT OUTER JOIN    t USING (insee_com)
-        JOIN    f USING (insee_com))
+        LEFT OUTER JOIN r USING (code_insee)
+        LEFT OUTER JOIN v USING (code_insee)
+        LEFT OUTER JOIN vl USING (code_insee)
+        LEFT OUTER JOIN a USING (code_insee)
+        LEFT OUTER JOIN adrOSM USING (code_insee)
+        LEFT OUTER JOIN adrBAN USING (code_insee)
+        LEFT OUTER JOIN adrnon USING (code_insee)
+        LEFT OUTER JOIN    t USING (code_insee)
+        JOIN    f USING (code_insee))
 SELECT  i.*,
         CASE
             WHEN c = 0 THEN 0
