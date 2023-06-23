@@ -91,12 +91,11 @@
 				for (d=0;d<stats[c].length;d++){
 					if (d==0){
 						$('#stats_dept tr:last').append($('<td>')
-												.attr('title',(a_champs_stats[d]).replace('<br\/>',' '))
 												.append($('<a>')
 												.attr('href','./index.html#insee='+stats[c][0])
 												.text(stats[c][0])))
 					} else {
-						$('#stats_dept tr:last').append($('<td>').attr('title',(a_champs_stats[d]).replace('<br\/>',' ')).append(stats[c][d]))
+						$('#stats_dept tr:last').append($('<td>').append(stats[c][d]))
 					}
 					// style des cellules de format
 					$('#stats_dept tr:last td:first').addClass(stats[c][0])
