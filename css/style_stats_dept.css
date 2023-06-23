@@ -1,62 +1,35 @@
+/*-----------------------------------------------------------------------*/
+/*-------------------------------- BANDEAU ------------------------------*/
+/*-----------------------------------------------------------------------*/
+
 #bandeau{
-	top:70px;
-	width:100%;
-	height:70px;
-	z-index:3;
 	position:fixed;
+	top:90px;
+	width:100%;
+	height:110px;
+	margin-left:10px;
 	background-color:white;
 }
-h2 {
-	margin: 10px 30px;
+h1 {
+	font-size: 1.8em;
 }
-.titre_dept{
-	margin: 10px 30px;
-}
-#reponse{
-	position:absolute;
-	top:130px;
-	z-index:2;
-}
-#wait_ajax {
-	visibility:visible;
+#descriptif {
 	float: left;
-	margin: 20px 2% 0 2%;
-	width:45%;
-	height: 100px;
-	text-align: center;
-	padding: 5px;
-	background: url("../img/construction-grue.png") no-repeat lightblue left 5% top 50%;
-	background-size: 90px;
-	border-bottom: 4px #3FA4C5 solid;
-	border-radius: 8px;
+	margin:0 2%;
+	width: 45%;
 }
-#wait_ajax p {
-	vertical-align:middle;
-	font-size:1.2em;
-	font-weight: bold;
-	color:black;
+#descriptif h1, #descriptif h2 {
+	margin: 0.5em 0;
 }
-/*#wait_ajax{
-	position:fixed;
-	z-index:1;
-	width:100%;
-	height:100%;
-	background-color:lightgray;
-	opacity:0;
-	text-align:center;
-}
-#wait_ajax span{
-	background-color:black;
-	vertical-align:middle;
-	font-size:30px;
-	line-height:500px;
-	color:white;
-	border:50px solid black;
-}*/
 #bouton_export_csv{
+	cursor: pointer;
 	position: fixed;
-	top: 35px;
+	top: 40px;
 	right: 59px;
+	background: url("../img/export-csv.png") no-repeat top;
+	height: 40px;
+	width: 40px;
+	background-size: 40px;
 }
 #bouton_export_csv a{
 	color: white;
@@ -67,39 +40,73 @@ h2 {
 	height: 50px;
 	width: 50px;
 }
-#infobulle_aide{
+
+
+/*-----------------------------------------------------*/
+/*----------- ALERTE CHARGEMENT DES DONNEES -----------*/
+/*-----------------------------------------------------*/
+
+#wait_ajax {
+	visibility:hidden;
+	float: left;
+	margin: 0 2%;
+	width:45%;
+	height: 100px;
+	text-align: center;
+	padding: 5px;
+	background: url("../img/skate.gif") no-repeat lightblue left 5% top 50%;
+	border-bottom: 4px #3FA4C5 solid;
+	border-radius: 8px;
+}
+#wait_ajax p {
+	vertical-align:middle;
+	font-size:1.2em;
+	font-weight: bold;
+	color:black;
+}
+
+/*----------------------------------------------------------------------------------*/
+/*--------------------------------------- AIDE -------------------------------------*/
+/*----------------------------------------------------------------------------------*/
+#bouton_aide {
+	cursor: pointer;
 	position: fixed;
-	color: red;
-	background: #dddddd;
+	top: 40px;
+	right: 15px;
+	background: url("../img/aide.png") no-repeat lavender center;
+	background-size: 33px;
 	width: 40px;
 	height: 40px;
-	border-radius: 40px;
-	top: 40px;
-	right: 10px;
-	vertical-align: bottom;
-	text-align: center;
-	font-weight: bolder;
-	font-size: 35px;
+	border-bottom: 2px plum solid;
+	border-radius: 6px;
 }
 #aide{
 	position:fixed;
 	top:35px;
-	right:5px;
+	right:10px;
 	width:400px;
 	height:100%;
+	padding: 10px;
+	border-radius: 8px;
 	background-color:lavender;
 	overflow-y:scroll;
 	visibility:hidden;
-	z-index: 10;
+	z-index: 2;
+	font-size: 0.9em;
 }
-.fermer{
-	color: red;
+.fermer {
+	color: black;
 	float: right;
-	border: 1px black solid;
-	width: 20px;
+	margin-top: 10px;
+	margin-right: 10px;
+	height: 30px;
+	line-height: 30px;
+	width: 30px;
 	text-align: center;
-	background: black;
-	font-weight: bolder;
+	font-weight: bold;
+	background: plum;
+  	border-radius: 6px;
+	cursor:pointer;
 }
 #aide h3{
 	margin-top: 30px;
@@ -114,18 +121,74 @@ h2 {
 	margin-bottom: 10px;
 	margin-left: 3px;
 }
-table.tablesorter thead tr .header{
-	//width:150px;
-	height:60px;
+
+/*----------------------------------------------------------------------------------*/
+/*------------------------------------- REPONSE ------------------------------------*/
+/*----------------------------------------------------------------------------------*/
+
+#reponse{
+	position:relative;
+	margin-top:200px;
+	width: 100%;
+	font-size:0.9em;
+	height: 75%;
+	overflow-y: auto;
 }
-table.tablesorter tbody tr td.Raster{
-	color:#ffffff;
-	text-align: center;
-	font-weight:bolder;
-	background: #000000;
+th {
+	padding-bottom: 10px;
+	font-size: 0.8em;
+	hyphens: manual;
 }
-table.tablesorter tbody tr td.Vecteur{
-	text-align: center;
-	font-weight:bolder;
-	background: #ffbb00;
+td {
+	padding:1px 15px;
+}
+table.tablesorter tbody td,
+table.tablesorter thead th {
+	padding-left: 1.2em !important;
+}
+.tablesorter-header {
+	padding:4px 12px 4px 2px !important;
+}
+
+/*--------------- Couleur de ligne au survol -----------------*/
+
+#reponse tr:hover td {
+	background-color: #FCFFB7;
+}
+
+
+/*-----------------------------------------------------------------------*/
+/*------------------------------- REPONSIF ------------------------------*/
+/*-----------------------------------------------------------------------*/
+
+@media only screen and (max-width: 1200px) {
+	td {padding:1px 5px;}
+}
+
+@media only screen and (max-width: 1070px) {
+	#wait_ajax {
+	background: url("../img/skate.gif") no-repeat lightblue left 1% top 50%;
+	background-size: 60px;
+	}
+	#wait_ajax p {font-size: 1.1em;}
+	h1, h4 {margin: 0}
+}
+
+@media only screen and (max-width: 950px) {
+	#wait_ajax {
+	background: url("../img/skate.gif") no-repeat lightblue left 1% top 70%;
+	background-size: 50px;
+	}
+}
+
+@media only screen and (max-width: 700px) {
+	#wait_ajax {
+	background: url("../img/skate.gif") no-repeat lightblue left 5% top 70%;
+	background-size: 40px;
+	}
+	#wait_ajax p {
+	font-size: 1em;
+	}
+	#bandeau h1 {font-size: 1em;}
+	h4 {font-size: 0.8em;}
 }

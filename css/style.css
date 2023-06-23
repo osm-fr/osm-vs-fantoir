@@ -11,7 +11,6 @@ button {
 
 #barre-jaune {
 	position: fixed;
-	z-index: 3;
 	top: 30px;
 	height: 30px;
 	width: 100%;
