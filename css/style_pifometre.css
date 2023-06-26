@@ -271,6 +271,34 @@
 .pastille-orange {background-color: #f1AC45;}
 .pastille-bleue {background-color: #0457B3;}
 
+/*--------------- Changement de statut : validation ---------------*/
+
+td.cell_statut {
+	padding-right: 90px;
+}
+.enregistrement {
+	position: absolute;
+	z-index: 2;
+
+	opacity: 0;
+	transition: opacity 0.5s ease;
+
+	display:inline-block;
+	width: 80px;
+	padding: 2px 1px;
+	margin-left: 2px;
+
+	font-size: 0.8em;
+	font-weight: bold;
+	text-align: center;
+}
+.enregistrement.gris {
+  color: #000;
+}
+.enregistrement.vert {
+  color: #33A672;
+}
+
 /*--------------- Liens JOSM et Intégration des adresses ---------------*/
 
 .zone-clic-adresses,
@@ -334,6 +362,9 @@
 		font-size: 0.8em;
 		line-height:40px;
 	}
+	.tablesorter-default {
+		font-size: 0.9em;
+	}
 }
 
 @media only screen and (max-width: 1400px) {
@@ -342,6 +373,9 @@
 	}
 	#alerte_commune, #wait_ajax {
 		right: 1%;
+	}
+	.tablesorter-default {
+		font-size: 0.8em;
 	}
 }
 

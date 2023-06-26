@@ -150,7 +150,7 @@
     }
     function add_statut_fantoir(id_ligne,fantoir,id_statut){
         $('#table_pifometre tr:last').removeClass(STATUS_FANTOIR).addClass('statut'+id_statut)
-        $('#table_pifometre tr:last').append($('<td>').append($(a_menus_labels[id_statut]).change(function() {
+        $('#table_pifometre tr:last').append($('<td class="cell_statut">').append($(a_menus_labels[id_statut]).change(function() {
             insee = fantoir.substr(0,5);
             statut = $(this)[0].value;
             $.ajax({
@@ -159,6 +159,24 @@
             .done(function( data ) {
                 if(data == statut){
                     $('tr#'+id_ligne).removeClass(STATUS_FANTOIR).addClass('statut'+statut)
+
+                    //Afficher l'infobulle de confirmation
+                    if (statut != '0') {
+                        $('tr#'+id_ligne+' td.cell_statut').append($('<span class="enregistrement gris">').text('✔ Enregistré'));
+                    }
+                    else {
+                        $('tr#'+id_ligne+' td.cell_statut').append($('<span class="enregistrement vert">').text('✔ Enregistré'));
+                    }
+                    setTimeout(function(){
+                        $('tr#'+id_ligne+' td.cell_statut span').css('opacity', '1');
+                        setTimeout(function(){
+                            $('tr#'+id_ligne+' td.cell_statut span').css('opacity', '0');                      
+                        }, 1500);
+                        setTimeout(function(){
+                            $('tr#'+id_ligne+' td.cell_statut span').remove();                
+                        }, 2000);
+                    }, 50);
+
                 } else {
                     alert("Souci lors de la mise à jour du statut. Le nouveau statut n'a pas été pris en compte")
                 }
@@ -525,11 +543,11 @@
         })
         .done(function(data){
             if (data){
-                console.log('Telecommande JOSM OK')
+                console.log('Télécommande JOSM OK')
             }
         })
         .fail(function(data){
-            alert("La telecommande JOSM ne répond pas.\nCertains liens sur la page nécessitent que JOSM soit démarré avec la télécommande activée\n\nPour de l'aide sur la télécommande : https://josm.openstreetmap.de/wiki/Help/Preferences/RemoteControl")
+            alert("La télécommande JOSM ne répond pas.\nCertains liens sur la page nécessitent que JOSM soit démarré avec la télécommande activée\n\nConsulter l'aide sur la télécommande : https://josm.openstreetmap.de/wiki/Help/Preferences/RemoteControl")
         })
     }
 
