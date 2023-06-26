@@ -158,8 +158,8 @@
                                 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',maxZoom: 19}).addTo(map);
                                 $('#bandeau h1').append(data[0][2])
                                 $('#bandeau h2:first').append(data[0][4]+" (").append($('<a>').attr('href','index.html#insee='+insee).append(data[0][5]+")"))
-                                $('#type_voie').append(' (lieu-dit)')
-                                $('#integration').append($('<a>').attr('href', 'http://google.com').append('X points à intégrer'))
+                                /*$('#type_voie').append(' (lieu-dit)')
+                                $('#integration').append($('<a>').attr('href', 'http://google.com').append('X points à intégrer'))*/
                                                 /*.append(add_josm_addr_link(insee,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place))*/
 
                                 $('#table_inspect_adresse').empty().append($('<thead>').append($('<tr>').append($('<th>').append('Source'))))
