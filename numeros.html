@@ -60,6 +60,28 @@
         }
         return res
     }
+
+    function add_josm_addr_link(insee,fantoir,nom_fantoir,nombre,fantoir_dans_relation,is_place){
+        $('#bandeau integration').append($('<span>').text(nombre > 1 ? nombre+' Points':'1 Point'))
+                                                    .click(function(){
+                                                        stringToRemove = window.location.href.split('/').pop()
+                                                        srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele='+((is_place) ? 'Place':'Points');
+                                                        $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
+                                                    })
+        if (is_place){
+            $('#bandeau integration').append($('<span>').text(' (lieu-dit)'))
+        }
+        else {
+            $('#bandeau integration').append($('<span>').text('Relation')
+                                                        .click(function(){
+                                                            stringToRemove = window.location.href.split('/').pop()
+                                                            srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele=Relation&fantoir_dans_relation='+fantoir_dans_relation;
+                                                            $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
+                                                        })
+                                    )
+        }
+    }
+
     function add_statut_numero(id_ligne,numero,statut,insee,fantoir,source){
         $('#table_inspect_adresse tr:last').removeClass().addClass('statut'+statut).attr('numero',numero)
         $('#table_inspect_adresse tr:last').append($('<td>').append($(a_menus_labels[statut]).change(function() {
@@ -69,7 +91,25 @@
             })
             .done(function( data ) {
                 if(data == statut){
-                    $('tr#'+id_ligne).removeClass().addClass('statut'+statut)
+                    $('tr#'+id_ligne).removeClass().addClass('statut'+statut);
+
+                    //Afficher l'infobulle de confirmation
+                    if (statut != '0') {
+                        $('tr#'+id_ligne+' td:last').append($('<span class="enregistrement rose">').text('✔ Enregistré'));
+                    }
+                    else {
+                        $('tr#'+id_ligne+' td:last').append($('<span class="enregistrement bleu">').text('✔ Enregistré'));
+                    }
+                    setTimeout(function(){
+                        $('tr#'+id_ligne+' td:last span').css('opacity', '1');
+                        setTimeout(function(){
+                            $('tr#'+id_ligne+' td:last span').css('opacity', '0');                      
+                        }, 1500);
+                        setTimeout(function(){
+                            $('tr#'+id_ligne+' td:last span').remove();                
+                        }, 2000);
+                    }, 50);
+
                 } else {
                     alert("Souci lors de la mise à jour du statut. Le nouveau statut n'a pas été pris en compte")
                 }
@@ -116,7 +156,12 @@
 
                                 var map = L.map('map').setView([data[0][7], data[0][6]], 18);
                                 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',maxZoom: 19}).addTo(map);
-                                $('#bandeau').append($('<h1>').append(data[0][2])).append(($('<h2>').append(data[0][4]+" ("+data[0][5]+")")))
+                                $('#bandeau h1').append(data[0][2])
+                                $('#bandeau h2:first').append(data[0][4]+" (").append($('<a>').attr('href','index.html#insee='+insee).append(data[0][5]+")"))
+                                $('#type_voie').append(' (lieu-dit)')
+                                $('#integration').append($('<a>').attr('href', 'http://google.com').append('X points à intégrer'))
+                                                /*.append(add_josm_addr_link(insee,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place))*/
+
                                 $('#table_inspect_adresse').empty().append($('<thead>').append($('<tr>').append($('<th>').append('Source'))))
                                 $('#table_inspect_adresse tr').append($('<th>').append('Numéro'))
                                 $('#table_inspect_adresse tr').append($('<th>').append('Statut de l\'adresse'))
@@ -168,6 +213,19 @@
         }
     }
 
+    function check_josm_remote_control(){
+        $.ajax({
+            url: "http://127.0.0.1:8111/version"
+        })
+        .done(function(data){
+            if (data){
+                console.log('Télécommande JOSM OK')
+            }
+        })
+        .fail(function(data){
+            alert("La télécommande JOSM ne répond pas.\nCertains liens sur la page nécessitent que JOSM soit démarré avec la télécommande activée\n\nPour de l'aide sur la télécommande : https://josm.openstreetmap.de/wiki/Help/Preferences/RemoteControl")
+        })
+    }
     
 </script>
 </head>
@@ -183,7 +241,14 @@
     </div>
 
     <div id="bandeau">
-        <!--<div id="lien-retour"><a href="blablabla">Retour à la commune</a></div>-->
+        <div id="nom_rue_et_commune">
+            <h1></h1>
+            <h2></h2>
+        </div>
+        <div id="descriptif">
+            <h2 id="type_voie"></h2>
+            <h3 id="integration"></h3>
+        </div>
     </div>
 
     <div id="reponse">
@@ -197,5 +262,6 @@
     <footer>
         <!--#include file="includes/footer.html" -->
     </footer>
+    <div id="josm_target" style="visibility : hidden"></div>
     </body>
 </html>

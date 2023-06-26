@@ -12,31 +12,33 @@
 	background-color:white;
 }
 
-.titre_commune{
-	margin:0 40px;
+#nom_rue_et_commune {
+	float: left;
 }
-.cellule_intitule{
-	font-size: 0.9em;
-	text-align: right;
+#descriptif {
+	float: left;
+	margin-left: 1em;
+	padding: 0.5em 2em;
 }
-.cellule_data{
-	font-size: 0.9em;
-	font-weight: bold;
+#type_voie {
+	margin-bottom: 1.2em;
+}
+#integration a {
+	color: #D33A8B;
 }
 
 /*------- Petites résolutions d'écran ----------*/
 @media only screen and (max-width: 1500px) {
 	h1 {font-size: 1.6em;}
+	h2 {font-size: 1.4em;}
+	#descriptif{padding: 0}
 }
 @media only screen and (max-width: 1300px) {
 	h1 {font-size: 1.5em;}
 }
 @media only screen and (max-width: 1200px) {
 	h1 {font-size: 1.4em;}
-	.cellule_intitule{font-size: 0.7em;}
-	.cellule_data{font-size: 0.7em;}
-	.titre_commune{margin:0 20px;}
-	#bandeau_commune{margin-left:5px;}
+	#type_voie {margin-bottom: 0.8em;}
 }
 
 
@@ -118,6 +120,30 @@
 	position:fixed;
 	z-index: 24;
 }
+
+.enregistrement {
+    position: relative;
+    z-index: 1;
+
+	opacity: 0;
+    transition: opacity 0.5s ease;
+
+	display:inline-block;
+    width: 120px;
+    padding: 2px;
+    margin-left: 5px;
+
+    font-size: 0.8em;
+    font-weight: bold;
+    text-align: center;
+}
+.enregistrement.rose {
+    color: #AD005E;
+}
+.enregistrement.bleu {
+    color: #349BFF;
+}
+
 
 /*----------- LIGNE GRISEE, si statut adresse pas OK -----------*/
 
