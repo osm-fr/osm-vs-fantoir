@@ -5,7 +5,7 @@
 #bandeau{
 	position:fixed;
 	top:60px;
-	height: 140px;
+	height: 200px;
 	padding-top:5px;
 	width:100%;
 	z-index:3;
@@ -234,7 +234,7 @@
 	margin-top:260px;
 	width: 100%;
 	font-size:0.9em;
-	height: 70%;
+	height: 65%;
 	overflow-y: auto;
 }
 
@@ -362,6 +362,9 @@ td.cell_statut {
 		font-size: 0.8em;
 		line-height:40px;
 	}
+	#reponse {
+		height: 60%;
+	}
 	.tablesorter-default {
 		font-size: 0.9em;
 	}
@@ -382,7 +385,8 @@ td.cell_statut {
 @media only screen and (max-width: 1300px) {
 	h1 {font-size: 1.5em;}
 	#boutons-filtres {
-		width: 65%;
+		margin-left: 1%;
+		width: 67%;
 	}
 	#alerte_commune, #wait_ajax {
 		width: 30%;
@@ -396,7 +400,7 @@ td.cell_statut {
 	#titre_commune{margin:0 20px;}
 	#bandeau_commune{margin-left:5px;}
 	#boutons-filtres {
-		width: 70%;
+		width: 72%;
 	}
 	#alerte_commune, #wait_ajax {
 		width: 25%;
@@ -406,7 +410,6 @@ td.cell_statut {
 
 @media only screen and (max-width: 1100px) {
 	#boutons-filtres {
-		margin-left: 1%;
 		width: 75%;
 	}
 	#alerte_commune, #wait_ajax {
