@@ -65,21 +65,42 @@ th {
 td {
 	padding:1px 15px;
 }
-table.tablesorter tbody td,
+table.tablesorter tbody td:not(.zone-clic-josm):not(.cell_fantoir),
 table.tablesorter thead th {
 	padding-left: 1.4em !important;
-}
-#table_fantoir_errone tr td,
-#table_fantoir_annule tr td {
-	background:white;
-	color:black;
-	font-weight: normal;
 }
 
 /*--------------- Couleur de ligne au survol -----------------*/
 
 #reponse tr:hover td {
-	background-color: #FCFFB7 !important;
+	background-color: #FCFFB7;
+}
+
+/*--------------- Liens JOSM et Intégration des adresses ---------------*/
+
+/*------ Général ------*/
+.zone-clic-josm,
+.zone-clic-adresses {
+	cursor:pointer;
+	font-weight: bold;
+	text-decoration: underline;
+	text-align: center;
+}
+
+/*------ Couleurs ------*/
+.zone-clic-josm {
+	color:#863602; /* Marron logo JOSM */
+}
+.zone-clic-josm.clicked, #reponse tr:hover td.zone-clic-josm.clicked {
+	background-color:#863602;
+	color: #fff;
+}
+.zone-clic-adresses {
+	color:#D33A8B; /* Rose adresses */
+}
+.zone-clic-adresses.clicked, #reponse tr:hover td.zone-clic-adresses.clicked {
+	background-color:#D33A8B;
+	color: #fff;
 }
 
 /*---------- Première colonne avec codes Fantoir --------------*/
@@ -87,6 +108,11 @@ table.tablesorter thead th {
 .cell_fantoir {
 	font-family: monospace;
 	font-size: 1.3em;
+	background: url("../img/warning.png") no-repeat left 8% top 30%; /* #FFCF6A orange clair */
+	background-size: 20px 20px;
+	padding-left: 2.7em !important;
+	font-weight: bold;
+	color: #FF6600;
 }
 
 /*-----------------------------------------------------------------------*/

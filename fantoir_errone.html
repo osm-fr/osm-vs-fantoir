@@ -47,8 +47,17 @@
 			$('#'+table).append($('<tbody>'))
 			for (l=0;l<data.length;l++){
 				insee = (data[l][0]).substr(0,5)
-				//Fantoir
-				$('#'+table).append($('<tr>').attr('id',data[l][0]).append($('<td>').addClass('cell_fantoir').text(data[l][0])))
+				dept = (data[l][0]).substr(0,2)
+
+				//Dept
+				$('#'+table).append($('<tr>').attr('id',data[l][0]).append($('<td>').text(dept)))
+				//Commune (INSEE)
+				$('#'+table+' tr:last').append($('<td>').text(data[l][4]+' ('+insee+')'))
+
+
+				//Code Fantoir
+				$('#'+table+' tr:last').append($('<td>').addClass('cell_fantoir').text(data[l][0]))
+				/*$('#'+table).append($('<tr>').attr('id',data[l][0]).append($('<td>').addClass('cell_fantoir').text(data[l][0])))*/
 				//Nom OSM
 				$('#'+table+' tr:last').append($('<td>').text(data[l][1]))
 				lon = data[l][2]
@@ -66,8 +75,8 @@
 				//JOSM
 					add_josm_link(table,xleft,xright,ybottom,ytop)
 				//Fantoir
-					add_map_link(table,'./index.html#insee='+insee,'Fantoir-OSM '+insee)
-					add_map_link(table,'./liste_brute_fantoir.html#insee='+insee,'Fantoir brut '+insee)
+					add_map_link(table,'./index.html#insee='+insee,'Pifomètre ('+insee+')')
+					add_map_link(table,'./liste_brute_fantoir.html#insee='+insee,'Fantoir brut ('+insee+')')
 				}
 			}
 
@@ -105,8 +114,7 @@
 									.text(text)))	
 	}
 	function add_josm_link(table,xl,xr,yb,yt){
-		$('#'+table+' tr:last').append($('<td>')
-									.addClass('zone_click')
+		$('#'+table+' tr:last').append($('<td>').addClass('zone-clic-josm')
 									.attr('xleft',xl).attr('xright',xr).attr('ybottom',yb).attr('ytop',yt)
 									.text('JOSM')
 									.click(function(){
@@ -117,16 +125,14 @@
 								)
 	}
 	function add_header(table,with_edit_and_map_links){
-		$('#'+table).append($('<thead>')
-						.append($('<tr>')
-							.append($('<th>').append('Code FANTOIR'))
-						)
-					)
+		$('#'+table).append($('<thead>').append($('<tr>').append($('<th>').append('Dept'))))
+		$('#'+table+' tr').append($('<th>').append('Commune (code Insee)'))
+		$('#'+table+' tr').append($('<th>').append('Code Fantoir erroné'))
 		$('#'+table+' tr').append($('<th>').append('Voie OSM'))
 		if (with_edit_and_map_links){
 			$('#'+table+' tr').append($('<th>').attr('colspan','1').append('Carte'))
 			$('#'+table+' tr').append($('<th>').attr('colspan','1').append('Édition'))
-			$('#'+table+' tr').append($('<th>').attr('colspan','2').append('FANTOIR'))
+			$('#'+table+' tr').append($('<th>').attr('colspan','2').append('Voir la commune sur...'))
 		}
 	}
 
