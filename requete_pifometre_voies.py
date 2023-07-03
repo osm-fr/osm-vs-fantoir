@@ -10,7 +10,7 @@ import helpers as hp
 from sql import sql_get_data
 
 def format_csv(data):
-        return ('Code FANTOIR;Libellé TOPO;Libellé OSM;Libellé BAN;Ancienne commune;Lon;Lat\n'+'\n'.join([f"{c[0] if c[0] and c[0][5] != 'b' else ''};{c[2]};{c[3] if c[3] else ''};{c[4] if c[4] else ''};{c[5] if c[5] else ''};{c[6] if c[6] else ''};{c[7] if c[7] else ''}" for c in data]))
+        return ('Code FANTOIR;Date de création;Libellé TOPO;Libellé OSM;Libellé BAN;Ancienne commune;Lon;Lat\n'+'\n'.join([f"{c[0] if c[0] and c[0][6] != 'b' else ''};{c[1]};{c[3]};{c[4] if c[4] else ''};{c[5] if c[5] else ''};{c[6] if c[6] else ''};{c[7] if c[7] else ''};{c[8] if c[8] else ''}" for c in data]))
 
 cgitb.enable()
 
