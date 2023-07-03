@@ -39,20 +39,6 @@
 }
 
 /*-----------------------------------------------------------------------*/
-/*-------------------------- CROIX ROUGE FERMER -------------------------*/
-/*-----------------------------------------------------------------------*/
-
-.fermer{
-	color: red;
-	float: right;
-	border: 1px black solid;
-	width: 20px;
-	text-align: center;
-	background: black;
-	font-weight: bolder;
-}
-
-/*-----------------------------------------------------------------------*/
 /*--------------------------- BOUTONS HAUT DROITE -----------------------*/
 /*-----------------------------------------------------------------------*/
 
@@ -71,28 +57,47 @@
 }
 #table_communes_voisines{
 	position: fixed;
-	border: solid 1px;
-	//height: 100px;
 	top: 40px;
-	right: 119px;
+	right: 190px;
+	padding: 5px;
 	background-color:white;
-	z-index:5;
+	border: solid 1px #64A02E;
+  border-bottom: 2px #64A02E solid; /*vert plus foncé*/
+  border-radius: 6px;
 	visibility:hidden;
 }
 #table_communes_voisines table tr td.lien_commune,
 .lien_commune {
-	color:blue;
+	padding: 4px;
+	color:#436B1F;
+	font-weight: bold;
 	text-decoration: underline;
 	cursor: pointer;
 }
 #table_communes_voisines table tr td.commune_centre{
-	color:black;
+	padding: 0 4px;
+	color:white;
+	background-color: #D96E44;
 	font-weight: bold;
 	text-align: center;
 	text-decoration: none;
+  border-radius: 4px;
 	cursor: default;
-	background-color: lightblue;
 }
+
+.fermer {
+	color: black;
+	float: right;
+	height: 30px;
+	line-height: 30px;
+	width: 30px;
+	text-align: center;
+	font-weight: bold;
+	background: #B2DF8A;
+  border-radius: 4px;
+	cursor:pointer;
+}
+
 /*---------------------------------------------*/
 #bouton_refresh{
 	cursor: pointer;
