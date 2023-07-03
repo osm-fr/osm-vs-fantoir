@@ -8,7 +8,6 @@ import json
 from sql import sql_get_data
 
 params = cgi.FieldStorage()
-# fantoir = params['fantoir'].value
 fantoir = params.getvalue('fantoir') or ''
 
 if len(fantoir) > 9:
@@ -17,8 +16,10 @@ if len(fantoir) > 9:
 if len(fantoir) < 9:
 	fantoir = ''
 
-if not fantoir.isalnum() or not fantoir.isupper():
+fantoir = fantoir.strip().upper()
+if not fantoir.isalnum():
 	fantoir = ''
+
 res = {'departement':'','commune':'','fantoir':'','nature_voie':'','libelle_voie':'','caractere_voie':'','caractere_annul':'','date_annul':'','date_creation':'','type_voie':'','mot_classant':''}
 
 data = sql_get_data('fantoir_detail',{'fantoir':fantoir})
