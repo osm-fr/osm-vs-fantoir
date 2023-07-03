@@ -50,6 +50,7 @@ AS
         source = 'BAN')
 
 SELECT t.fantoir,
+       TO_CHAR(TO_TIMESTAMP(t.date_creation::text,'YYYYMMDD'),'YYYY-MM-DD'),
        CASE t.date_annul
            WHEN 0 THEN '1'
            ELSE -1
@@ -66,6 +67,7 @@ SELECT t.fantoir,
        COALESCE(place.is_place,false)::integer,         -- type : voie=0,place=1,OSM hors Fantoir=2
        COALESCE(faab.fantoir_avec_adresses_ban,false)
 FROM   (SELECT fantoir,
+               date_creation,
                date_annul,
                nature_voie,
                TRIM (BOTH FROM (COALESCE(nature_voie,'')||' '||libelle_voie)) AS nom_topo,
@@ -114,6 +116,7 @@ WHERE NOT (t.date_annul != 0 AND pn.nom IS NULL and nb.nom IS NULL)
 UNION ALL
 
 SELECT NULL,
+       NULL,
        NULL,
        NULL,
        nom,
