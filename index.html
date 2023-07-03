@@ -324,19 +324,21 @@
                 reset_filtres()
                 $('#table_pifometre').trigger("destroy");
                 $('#table_pifometre').empty()
-                $('#table_pifometre').append($('<thead>').append($('<tr>').append($('<th>').append('Code FANTOIR'))))
+                $('#table_pifometre').append($('<thead>').append($('<tr>').append($('<th>').append('Code Fantoir'))))
                 if (commune_composee == 1){
                     $('#table_pifometre tr').append($('<th>').append('Ancienne commune'))
                 }
-                $('#table_pifometre tr').append($('<th>').append('Libellé TOPO'))
+                $('#table_pifometre tr').append($('<th>').append('Création Fantoir'))
+                $('#table_pifometre tr').append($('<th>').append('Libellé Fantoir'))
                 $('#table_pifometre tr').append($('<th>').append('Libellé OSM'))
                 $('#table_pifometre tr').append($('<th>').append('Libellé BAN ou CADASTRE'))
                 $('#table_pifometre tr').append($('<th>').append('Carte'))
                 $('#table_pifometre tr').append($('<th>').append('Edition'))
-                $('#table_pifometre tr').append($('<th>').append('Statut FANTOIR ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
+                $('#table_pifometre tr').append($('<th>').append('Statut Fantoir ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
                 $('#table_pifometre tr').append($('<th>').attr('colspan','2').addClass('string-none').append('Intégrer les adresses'))
                 $('#table_pifometre tr').append($('<th>').append('Qualifier les adresses'))
                 $('#table_pifometre').append($('<tbody>'))
+
                 tr_id = 1000
                 for (s=0;s<data.length;s++){
                     let [fantoir,
@@ -366,7 +368,7 @@
                     fantoir_affiche = fantoir
                     fantoir_dans_relation = 'ok'
                     if (caractere_annul == 'B'){
-                        fantoir_affiche = 'Voie sans FANTOIR'
+                        fantoir_affiche = 'Voie sans Fantoir'
                         fantoir_dans_relation = 'ko'
                         if (nom_ban != null){
                             nom_topo = nom_ban.toUpperCase()
@@ -376,8 +378,12 @@
                     tr_id+=1
 
                     $('#table_pifometre tbody').append($('<tr>').attr('id',tr_id).append($('<td>').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir_affiche)))
+
+                    //Date de création Fantoir 
+                    $('#table_pifometre tr:last').append($('<td>').text(date_creation))
+
                     if (annule == -1){
-                        $('#table_pifometre tr:last td:last').addClass('annule').attr('title','FANTOIR annulé, à remplacer dans OSM')
+                        $('#table_pifometre tr:last td:last').addClass('annule').attr('title','Code Fantoir annulé, à remplacer dans OSM')
                     }
                     //Ajout des classes pour les filtres à chaque ligne
                     if (is_voie) {
@@ -448,7 +454,7 @@
                     } else {
                         $('#table_pifometre tr:last').append($('<td>'))
                     }
-                    //Statut FANTOIR
+                    //Statut Fantoir
                     if (caractere_annul != 'B' && is_osm_hors_fantoir == false){
                         add_statut_fantoir(tr_id,fantoir,statut_voie)
                     } else {
@@ -493,19 +499,6 @@
         })
     };
 
-    function add_header(){
-        $('#table_pifometre').append($('<thead>').append($('<tr>').append($('<th>').append('Code FANTOIR'))))
-        $('#table_pifometre tr').append($('<th>').append('Création TOPO'))
-        $('#table_pifometre tr').append($('<th>').append('Libellé TOPO'))
-        $('#table_pifometre tr').append($('<th>').append('Libellé OSM'))
-        $('#table_pifometre tr').append($('<th>').append('Libellé BAN ou CADASTRE'))
-        $('#table_pifometre tr').append($('<th>').append('Carte'))
-        $('#table_pifometre tr').append($('<th>').append('Edition'))
-        $('#table_pifometre tr').append($('<th>').append('Statut FANTOIR ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
-        $('#table_pifometre tr').append($('<th>').addClass('string-none').append('Intégrer les adresses'))
-        $('#table_pifometre tr').append($('<th>').append('Qualifier les adresses'))
-        $('#table_pifometre').append($('<tbody>'))
-    };
     function check_url_for_insee(){
         pattern_insee = new RegExp('^[0-9][0-9abAB][0-9]{3}$')
         var res
@@ -650,7 +643,7 @@
                             <label class="switch is-rounded is-small">
                             <input type="checkbox" id="check_osm_hors_fantoir" checked>
                             <span class="check is-blue"></span>
-                            <span class="control-label" critere="osm_hors_fantoir">Trouvé dans OSM et inconnu de FANTOIR<span></span></span>
+                            <span class="control-label" critere="osm_hors_fantoir">Trouvé dans OSM et inconnu de Fantoir<span></span></span>
                         </li>
                     </ul>
                 </div>
