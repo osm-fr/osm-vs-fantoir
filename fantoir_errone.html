@@ -46,22 +46,25 @@
 			table = 'table_fantoir_errone'
 			$('#'+table).append($('<tbody>'))
 			for (l=0;l<data.length;l++){
-				insee = (data[l][0]).substr(0,5)
-				dept = (data[l][0]).substr(0,2)
+				let [fantoir,
+					nom,
+					lon,
+					lat,
+					dept,
+					commune] = data[l]
+				insee = fantoir.substr(0,5)
 
 				//Dept
-				$('#'+table).append($('<tr>').attr('id',data[l][0]).append($('<td>').text(dept)))
+				$('#'+table).append($('<tr>').attr('id',fantoir).append($('<td>').text(dept)))
 				//Commune (INSEE)
-				$('#'+table+' tr:last').append($('<td>').text(data[l][4]+' ('+insee+')'))
+				$('#'+table+' tr:last').append($('<td>').text(commune+' ('+insee+')'))
 
 
 				//Code Fantoir
-				$('#'+table+' tr:last').append($('<td>').addClass('cell_fantoir').text(data[l][0]))
-				/*$('#'+table).append($('<tr>').attr('id',data[l][0]).append($('<td>').addClass('cell_fantoir').text(data[l][0])))*/
+				$('#'+table+' tr:last').append($('<td>').addClass('cell_fantoir').text(fantoir))
+
 				//Nom OSM
-				$('#'+table+' tr:last').append($('<td>').text(data[l][1]))
-				lon = data[l][2]
-				lat = data[l][3]
+				$('#'+table+' tr:last').append($('<td>').text(nom))
 				if (lon && lat){
 					url_ol_part2 = '?zoom=18&lat='+lat+'&lon='+lon
 					url_hash_coords = '18/'+lat+'/'+lon
