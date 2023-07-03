@@ -115,7 +115,7 @@ WHERE NOT (t.date_annul != 0 AND pn.nom IS NULL and nb.nom IS NULL)
 
 UNION ALL
 
-SELECT NULL,
+SELECT fantoir,
        NULL,
        NULL,
        NULL,
@@ -130,11 +130,15 @@ SELECT NULL,
        2,
        NULL
 FROM   (SELECT *
-        FROM   bano_points_nommes
-        WHERE  fantoir IS NULL               AND
-               code_insee = '__code_insee__' AND
-               source = 'OSM'                AND
-               nature = 'centroide') pn
+        FROM   (SELECT *
+                FROM   bano_points_nommes
+                WHERE  code_insee = '__code_insee__') b
+               LEFT OUTER JOIN
+               (SELECT fantoir
+                FROM   topo
+                WHERE  code_insee = '__code_insee__') f
+        USING  (fantoir)
+        WHERE  f.fantoir IS NULL) pn
 JOIN   (SELECT geometrie
         FROM   polygones_insee
         WHERE  code_insee = '__code_insee__') pl
