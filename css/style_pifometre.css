@@ -263,7 +263,7 @@
 	background-color: #FCFFB7; /* jaune clair */
 }
 
-/*--------------- Pastilles, colonne Libelle OSM, correspondant aux filtres ---------------*/
+/*--------------- Pastilles correspondant aux filtres ---------------*/
 
 .pastille-verte, .pastille-orange, .pastille-bleue {
   height: 15px;
@@ -275,6 +275,15 @@
 .pastille-verte {background-color: #48c78e;}
 .pastille-orange {background-color: #f1AC45;}
 .pastille-bleue {background-color: #0457B3;}
+
+/*--------------- Pastilles correspondant aux filtres ---------------*/
+
+.no-loca {
+	text-align: center;
+	padding-left: 0 !important;
+	font-weight: bold;
+	color: grey;
+}
 
 /*--------------- Changement de statut : validation ---------------*/
 

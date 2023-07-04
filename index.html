@@ -446,13 +446,13 @@
                                         .text('ORG')))
                     }
                     else {
-                        $('#table_pifometre tr:last').append($('<td>'))
+                        $('#table_pifometre tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('?'))
                     }
                         //JOSM
                     if (lon != undefined) {
                         add_josm_link(xmin,xmax,ymin,ymax)
                     } else {
-                        $('#table_pifometre tr:last').append($('<td>'))
+                        $('#table_pifometre tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('?'))
                     }
                     //Statut Fantoir
                     if (caractere_annul != 'B' && is_osm_hors_fantoir == false){
