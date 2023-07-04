@@ -132,7 +132,8 @@ SELECT fantoir,
 FROM   (SELECT *
         FROM   (SELECT *
                 FROM   bano_points_nommes
-                WHERE  code_insee = '__code_insee__') b
+                WHERE  code_insee = '__code_insee__' AND
+                       source = 'OSM') b
                LEFT OUTER JOIN
                (SELECT fantoir
                 FROM   topo
