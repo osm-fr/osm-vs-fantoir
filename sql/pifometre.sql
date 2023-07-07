@@ -59,8 +59,8 @@ SELECT t.fantoir,
        pn.nom AS nom_osm,
        nb.nom AS nom_ban,
        nb.nom_ancienne_commune,
-       COALESCE(ST_X(g.geometrie),pn.lon,NULL),
-       COALESCE(ST_Y(g.geometrie),pn.lat,NULL),
+       COALESCE(ST_X(g.geometrie),pn.lon,place.lon,NULL),
+       COALESCE(ST_Y(g.geometrie),pn.lat,place.lat,NULL),
        COALESCE(s.id_statut,0),
        a_proposer,
        t.caractere_annul,
@@ -84,11 +84,18 @@ LEFT OUTER JOIN (SELECT DISTINCT fantoir,
                  WHERE  code_insee = '__code_insee__' AND
                         source = 'OSM') pn
 USING (fantoir)
-LEFT OUTER JOIN (SELECT DISTINCT fantoir,
+LEFT OUTER JOIN (SELECT fantoir,
+                        lon,
+                        lat,
                         true AS is_place
-                 FROM   bano_points_nommes
-                 WHERE  code_insee = '__code_insee__' AND
-                        nature IN ('place','lieu-dit')) place
+                 FROM   (SELECT  fantoir,
+                                 lon,
+                                 lat,
+                                 RANK() OVER (PARTITION BY fantoir ORDER BY CASE source WHEN 'OSM' THEN 1 ELSE 2 END) rang
+                        FROM     bano_points_nommes
+                        WHERE    code_insee = '__code_insee__' AND
+                                 nature IN ('place','lieu-dit')) p
+                 WHERE rang = 1) place
 USING (fantoir)
 LEFT OUTER JOIN (SELECT fantoir,
                         nom,
