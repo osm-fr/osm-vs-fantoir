@@ -63,10 +63,10 @@ h1 {
 
 #reponse{
 	position:relative;
-	margin-top:200px;
+	margin-top:240px;
 	width: 100%;
 	font-size:0.9em;
-	height: 75%;
+	height: 70%;
 	overflow-y: auto;
 }
 th {

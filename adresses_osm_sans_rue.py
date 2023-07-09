@@ -16,7 +16,7 @@ format = params.getvalue('format','json')
 
 if format == 'json':
     print("Content-Type: application/json\n")
-    print(json.JSONEncoder().encode(sql_get_data('adresses_osm_sans_rue_dept',{'dept':dept})))
+    print(json.JSONEncoder().encode([sql_get_data('infos_dept',{'dept':dept}),sql_get_data('adresses_osm_sans_rue_dept',{'dept':dept})]))
 
 if format == 'csv':
     print(f'Content-Type: text/csv\nContent-Disposition: Attachment; filename="Dept {dept} - Adresses OSM sans rue.csv"\n')

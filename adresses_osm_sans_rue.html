@@ -7,203 +7,218 @@
 <script src="js/jquery.tablesorter.combined.min.js"></script>
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
 <link rel="stylesheet" href="css/style_voies_manquantes.css" type="text/css"/>
+<link rel="stylesheet" href="css/style_adresses_sans_rue.css" type="text/css"/>
 <link rel="stylesheet" href="css/menu.css" type="text/css"/>
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 
 <script>
-	var menu_labels
-	var commune_valide = false
-	var osm_state
-	var titre = "Adresses OSM sans rue"
-	function is_valid_dept(d){
-		pattern_dept = new RegExp('^([01]|[3-8])([0-9])$|^2([aAbB]|[1-9])$|^9([0-5]|7[1-4]|76)$')
-		res = false
-		if (pattern_dept.test(d)){
-			res = d
-		}
-		return res
-	}
-	function check_url_for_dept(){
-		var res
-		if (window.location.hash){
-			if (window.location.hash.split('dept=')[1]){
-				if (is_valid_dept(window.location.hash.split('dept=')[1].split('&')[0])){
-					res = window.location.hash.split('dept=')[1].split('&')[0]
-				} else {
-//					document.title = titre
-					alert(window.location.hash.split('dept=')[1].split('&')[0]+' n\'est pas un numero de département valide\n\nAbandon')
-				}
-			}
-		}
-		return res
-	}
-	function check_form_for_dept(){
-		res = false
-		if (is_valid_dept($('#input_dept')[0].value)){
-			res = $('#input_dept')[0].value
-		} else {
-			alert($('#input_dept')[0].value+' n\'est pas un numero de département valide\n\nAbandon')
-		}
-		return res
-	}
-	function start(){
-		document.title = titre
-		dept = check_url_for_dept()
-		if (dept){
-			$('#input_dept').empty()
-			$('#input_dept')[0].value = dept
-			requete_voies_dept();
-		}
+    var menu_labels
+    var commune_valide = false
+    var osm_state
+    var titre = "Adresses OSM sans rue"
+    function is_valid_dept(d){
+        pattern_dept = new RegExp('^([01]|[3-8])([0-9])$|^2([aAbB]|[1-9])$|^9([0-5]|7[1-4]|76)$')
+        res = false
+        if (pattern_dept.test(d)){
+            res = d
+        }
+        return res
+    }
+    function check_url_for_dept(){
+        var res
+        if (window.location.hash){
+            if (window.location.hash.split('dept=')[1]){
+                if (is_valid_dept(window.location.hash.split('dept=')[1].split('&')[0])){
+                    res = window.location.hash.split('dept=')[1].split('&')[0]
+                } else {
+//                  document.title = titre
+                    alert(window.location.hash.split('dept=')[1].split('&')[0]+' n\'est pas un numero de département valide\n\nAbandon')
+                }
+            }
+        }
+        return res
+    }
+    function check_form_for_dept(){
+        res = false
+        if (is_valid_dept($('#input_dept')[0].value)){
+            res = $('#input_dept')[0].value
+        } else {
+            alert($('#input_dept')[0].value+' n\'est pas un numero de département valide\n\nAbandon')
+        }
+        return res
+    }
+    function start(){
+        document.title = titre
+        dept = check_url_for_dept()
+        if (dept){
+            $('#input_dept').empty()
+            $('#input_dept')[0].value = dept
+            requete_voies_dept();
+        }
 
-	}
+    }
 
-	function update_csv_url(dept){
-		$('#bouton_export_csv').empty()
-   		$('#bouton_export_csv').append($('<a>').attr('href',"adresses_osm_sans_rue.py?dept="+dept+'&format=csv')
-			                                   .attr('target','blank')
-			                                   .append($('<img>').attr('src','img/export-csv.png')))
-	}
+    function update_csv_url(dept){
+        $('#bouton_export_csv').empty()
+        $('#bouton_export_csv').append($('<a>').attr('href',"adresses_osm_sans_rue.py?dept="+dept+'&format=csv')
+                                               .attr('target','blank')
+                                               .append($('<img>').attr('src','img/export-csv.png')))
+    }
 
-	function requete_voies_dept(){
-		if (check_form_for_dept()){
-			dept = $('#input_dept')[0].value
-			document.title = titre+' ('+dept+')'
+    function requete_voies_dept(){
+        if (check_form_for_dept()){
+            dept = $('#input_dept')[0].value
+            document.title = titre+' ('+dept+')'
 
-			update_csv_url(dept)
+            update_csv_url(dept)
 
-			$('body').css('cursor','progress');
-			$('#wait_ajax').empty()
-							.css('visibility','visible')
-							.append($('<p>').append('Recherche des adresses OSM sans rue ni lieu-dit...'));
-			$.ajax({
-				url: "adresses_osm_sans_rue.py?dept="+dept,
-			})
-			.done(function( data ){
-				$('body').css('cursor','default');
-				$('#table_adresses_osm_sans_rue').empty()
+            $('body').css('cursor','progress');
+            $('#wait_ajax').empty()
+                            .css('visibility','visible')
+                            .append($('<p>').append('Recherche des adresses OSM sans rue ni lieu-dit...'));
+            $.ajax({
+                url: "adresses_osm_sans_rue.py?dept="+dept,
+            })
+            .done(function( data ){
+                $('body').css('cursor','default');
+                $('#table_adresses_osm_sans_rue').empty()
+                numero_dept = data[0][0][0]
+                nom_dept = data[0][0][1]
+                if (nom_dept.length == 0){
+                    $('#bandeau h1').empty().append('dept '+$('#input_dept')[0].value+' : département inconnu')
+                    $('body').css('cursor','default');
+                    $('#wait_ajax').css('visibility','hidden');
+                    return 0;
+                }
+                data = data[1]
+                if (data.length == 1){
+                    titre_bandeau = 'unique adresse OSM sans rue ou lieu-dit'
+                } else {
+                    titre_bandeau = data.length+' adresses OSM sans rue ou lieu-dit' 
+                }
+                $('#bandeau h3').empty().append(nom_dept+' ('+numero_dept+')')
+                $('#bandeau h2').empty().append(titre_bandeau)
 
-				if (data.length == 1){
-					titre_bandeau = 'Unique adresse OSM sans rue ou lieu-dit'
-				} else {
-					titre_bandeau = data.length+' adresses OSM sans rue ou lieu-dit' 
-				}
-    			$('#bandeau h1').empty().append(titre_bandeau)
+                url_map_org_part1 = 'http://www.openstreetmap.org/'
+                url_map_fr_part1 = 'http://tile.openstreetmap.fr/'
+                url_bano_part1 = 'http://tile.openstreetmap.fr/~cquest/leaflet/bano.html'
+                url_edit_part1 = 'http://www.openstreetmap.org/edit?editor='
+                delta = 0.0008
 
-				url_map_org_part1 = 'http://www.openstreetmap.org/'
-				url_map_fr_part1 = 'http://tile.openstreetmap.fr/'
-				url_bano_part1 = 'http://tile.openstreetmap.fr/~cquest/leaflet/bano.html'
-				url_edit_part1 = 'http://www.openstreetmap.org/edit?editor='
-				delta = 0.0008
+                $('#table_adresses_osm_sans_rue').empty().append($('<thead>').append($('<tr>').append($('<th>').append('Dept'))))
+                $('#table_adresses_osm_sans_rue'+' tr').append($('<th>').append('Commune (INSEE)'))
+                $('#table_adresses_osm_sans_rue'+' tr').append($('<th>').append('Fantoir'))
+                $('#table_adresses_osm_sans_rue'+' tr').append($('<th>').append('Voie'))
+                $('#table_adresses_osm_sans_rue'+' tr').append($('<th>').attr('colspan','1').append('Carte'))
+                $('#table_adresses_osm_sans_rue'+' tr').append($('<th>').attr('colspan','1').append('Édition'))
+                $('#table_adresses_osm_sans_rue'+' tr').append($('<th>').attr('colspan','2').append('Voir la commune sur...'))
 
-				$('#table_adresses_osm_sans_rue').empty().append($('<thead>').append($('<tr>').append($('<th>').append('Dept'))))
-				$('#table_adresses_osm_sans_rue'+' tr').append($('<th>').append('Commune (INSEE)'))
-				$('#table_adresses_osm_sans_rue'+' tr').append($('<th>').append('Fantoir'))
-				$('#table_adresses_osm_sans_rue'+' tr').append($('<th>').append('Voie'))
-				$('#table_adresses_osm_sans_rue'+' tr').append($('<th>').attr('colspan','1').append('Carte'))
-				$('#table_adresses_osm_sans_rue'+' tr').append($('<th>').attr('colspan','1').append('Édition'))
-				$('#table_adresses_osm_sans_rue'+' tr').append($('<th>').attr('colspan','2').append('Voir la commune sur...'))
+                $('#table_adresses_osm_sans_rue').append($('<tbody>'))
+                table = 'table_adresses_osm_sans_rue'
+                for (l=0;l<data.length;l++){
+                    let [dept,
+                         insee,
+                         nom_commune,
+                         nom_voie,
+                         fantoir,
+                         lon,
+                         lat,
+                         caractere_annul] = data[l]
+                    fantoir_affiche = fantoir
+                    if (caractere_annul == 'B'){
+                        fantoir_affiche = 'Voie sans Fantoir'
+                    }
 
-				$('#table_adresses_osm_sans_rue').append($('<tbody>'))
-				table = 'table_adresses_osm_sans_rue'
-				for (l=0;l<data.length;l++){
-					let [dept,
-						 insee,
-						 nom_commune,
-						 nom_voie,
-						 fantoir,
-						 lon,
-						 lat] = data[l]
+                    //Dept
+                    $('#table_adresses_osm_sans_rue').append($('<tr>').attr('id',fantoir).append($('<td>').text(dept)))
+                    //Commune (INSEE)
+                    $('#table_adresses_osm_sans_rue tr:last').append($('<td>').text(nom_commune+' ('+insee+')'))
+                    //Code Fantoir
+                    $('#table_adresses_osm_sans_rue tr:last').append($('<td>').addClass('cell_fantoir').text(fantoir_affiche))
+                    //Voie
+                    $('#table_adresses_osm_sans_rue tr:last').append($('<td>').text(nom_voie))
+                    url_marker = '?mlat='+lat+'&mlon='+lon
+                    url_hash_coords = '18/'+lat+'/'+lon
+                    xleft   = lon-delta
+                    xright  = lon+delta
+                    ybottom = lat-delta
+                    ytop    = lat+delta
+                    //visu
+                    add_map_link(table,url_map_org_part1+url_marker+'#map='+url_hash_coords,'ORG')
+                    //JOSM
+                    add_josm_link(table,xleft,xright,ybottom,ytop)
+                    //Liens Pifo et Fantoir
+                    add_map_link(table,'./index.html#insee='+insee,'Pifomètre ('+insee+')')
+                    add_map_link(table,'./liste_brute_fantoir.html#insee='+insee,'Fantoir brut ('+insee+')')
+                }
+                $('#wait_ajax').css('visibility','hidden');
 
-					//Dept
-					$('#table_adresses_osm_sans_rue').append($('<tr>').attr('id',fantoir).append($('<td>').text(dept)))
-					//Commune (INSEE)
-					$('#table_adresses_osm_sans_rue tr:last').append($('<td>').text(nom_commune+' ('+insee+')'))
-					//Code Fantoir
-					$('#table_adresses_osm_sans_rue tr:last').append($('<td>').addClass('cell_fantoir').text(fantoir))
-					//Voie
-					$('#table_adresses_osm_sans_rue tr:last').append($('<td>').text(nom_voie))
-					url_marker = '?mlat='+lat+'&mlon='+lon
-					url_hash_coords = '18/'+lat+'/'+lon
-					xleft	= lon-delta
-					xright	= lon+delta
-					ybottom	= lat-delta
-					ytop	= lat+delta
-					//visu
-					add_map_link(table,url_map_org_part1+url_marker+'#map='+url_hash_coords,'ORG')
-					//JOSM
-					add_josm_link(table,xleft,xright,ybottom,ytop)
-					//Liens Pifo et Fantoir
-					add_map_link(table,'./index.html#insee='+insee,'Pifomètre ('+insee+')')
-					add_map_link(table,'./liste_brute_fantoir.html#insee='+insee,'Fantoir brut ('+insee+')')
-				}
-				$('#wait_ajax').css('visibility','hidden');
+                //Sticky headers : le tableau scrolle dans son contenant
+                $('#table_adresses_osm_sans_rue').tablesorter({
+                    widthFixed : true,
+                    headerTemplate : '{content} {icon}', // Add icon for various themes
+                    widgets: [ 'stickyHeaders', 'filter' ],
+                    widgetOptions: {
+                      stickyHeaders_attachTo : '#reponse'
+                    }
+                });
+            })
+            window.location.hash="#dept="+$('#input_dept')[0].value
+        };
+    }
 
-			    //Sticky headers : le tableau scrolle dans son contenant
-			    $('#table_adresses_osm_sans_rue').tablesorter({
-			        widthFixed : true,
-			        headerTemplate : '{content} {icon}', // Add icon for various themes
-			        widgets: [ 'stickyHeaders', 'filter' ],
-			        widgetOptions: {
-			          stickyHeaders_attachTo : '#reponse'
-			        }
-			    });
-			})
-			window.location.hash="#dept="+$('#input_dept')[0].value
-		};
-	}
-
-	function add_map_link(table,href,text){
-		$('#table_adresses_osm_sans_rue tr:last').append($('<td>')
-									.append($('<a>')
-									.attr('href',href)
-									.attr('target','blank')
-									.text(text)))	
-	}
-	function add_josm_link(table,xl,xr,yb,yt){
-		$('#table_adresses_osm_sans_rue tr:last').append($('<td>')
-									.addClass('zone-clic-josm')
-									.attr('xleft',xl).attr('xright',xr).attr('ybottom',yb).attr('ytop',yt)
-									.text('JOSM')
-									.click(function(){
-										srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xl+'&right='+xr+'&top='+yt+'&bottom='+yb;
-										$('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
-										$(this).addClass('clicked');
-									})
-								)
-	}
+    function add_map_link(table,href,text){
+        $('#table_adresses_osm_sans_rue tr:last').append($('<td>')
+                                    .append($('<a>')
+                                    .attr('href',href)
+                                    .attr('target','blank')
+                                    .text(text)))
+    }
+    function add_josm_link(table,xl,xr,yb,yt){
+        $('#table_adresses_osm_sans_rue tr:last').append($('<td>')
+                                    .addClass('zone-clic-josm')
+                                    .attr('xleft',xl).attr('xright',xr).attr('ybottom',yb).attr('ytop',yt)
+                                    .text('JOSM')
+                                    .click(function(){
+                                        srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xl+'&right='+xr+'&top='+yt+'&bottom='+yb;
+                                        $('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
+                                        $(this).addClass('clicked');
+                                    })
+                                )
+    }
 </script>
 </head>
 <body onload="start()">
 
-	<header>
-		<!--#include file="includes/menu.html" -->
-	</header>
+    <header>
+        <!--#include file="includes/menu.html" -->
+    </header>
 
-	<div id="barre-jaune">
-		<span>Département :</span>
-		<form action="javascript:requete_voies_dept()" autocomplete="on">
-			<input type="text" id="input_dept" placeholder="N° de département"></input>
-			<input type="submit" value="Afficher">
-		</form>
-	</div>
-	
-	<div id="bandeau">
-		<div id="descriptif">
-			<h1>Adresses trouvées dans OSM sans voie ou lieu-dit</h1>
-			<h4>Le nom de ces adresses (<span class="monospace">addr:street</span>, <span class="monospace">addr:place</span> ou <span class="monospace">name</span> dans une relation <span class="monospace">associatedStreet</span>) est introuvable ailleurs dans OSM. C'est le signe qu'il manque ce nom sur une rue, un lieu-dit, une place, un parking, etc.</h4>
-		</div>
-	    <div id="bouton_export_csv" title="Exporter la liste courante en CSV"></div>
-		<div id="wait_ajax"></div>
-	</div>
+    <div id="barre-jaune">
+        <span>Département :</span>
+        <form action="javascript:requete_voies_dept()" autocomplete="on">
+            <input type="text" id="input_dept" placeholder="N° de département"></input>
+            <input type="submit" value="Afficher">
+        </form>
+    </div>
+    <div id="bandeau">
+        <div id="descriptif">
+            <h3></h3>
+            <h2>Adresses trouvées dans OSM sans voie ou lieu-dit</h2>
+            <h4>Le nom de ces adresses (<span class="monospace">addr:street</span>, <span class="monospace">addr:place</span> ou <span class="monospace">name</span> dans une relation <span class="monospace">associatedStreet</span>) est introuvable ailleurs dans OSM. C'est le signe qu'il manque ce nom sur une rue, un lieu-dit, une place, un parking, etc.</h4>
+        </div>
+        <div id="bouton_export_csv" title="Exporter la liste courante en CSV"></div>
+        <div id="wait_ajax"></div>
+    </div>
 
-	<div id="reponse">
-		<table id="table_adresses_osm_sans_rue" class="tablesorter"></table>
-	</div>
+    <div id="reponse">
+        <table id="table_adresses_osm_sans_rue" class="tablesorter"></table>
+    </div>
 
-	<footer>
-	<!--#include file="includes/footer.html" -->
-	</footer>
+    <footer>
+    <!--#include file="includes/footer.html" -->
+    </footer>
 
-	<div id="josm_target" style="visibility : hidden"></div>
+    <div id="josm_target" style="visibility : hidden"></div>
 </body>
 </html>
