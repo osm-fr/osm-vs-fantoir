@@ -82,14 +82,14 @@
             .done(function( data ){
                 $('body').css('cursor','default');
                 $('#table_adresses_osm_sans_rue').empty()
-                numero_dept = data[0][0][0]
-                nom_dept = data[0][0][1]
-                if (nom_dept.length == 0){
-                    $('#bandeau h1').empty().append('dept '+$('#input_dept')[0].value+' : département inconnu')
+                if (data[0].length == 0){
+                    $('#bandeau h2').empty().append('dept '+$('#input_dept')[0].value+' : département inconnu')
                     $('body').css('cursor','default');
                     $('#wait_ajax').css('visibility','hidden');
                     return 0;
                 }
+                numero_dept = data[0][0][0]
+                nom_dept = data[0][0][1]
                 data = data[1]
                 if (data.length == 1){
                     titre_bandeau = 'unique adresse OSM sans rue ou lieu-dit'
