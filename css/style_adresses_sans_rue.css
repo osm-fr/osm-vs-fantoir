@@ -1,0 +1,16 @@
+h2 {
+	font-size: 1.5em;
+	line-height: 0.5em;
+}
+
+h3 {
+	font-size: 1.4em;
+	line-height: 0.5em;
+}
+
+.monospace {
+	background: #EEF;
+	font-family: monospace;
+	font-size: 1.2em;
+	font-weight: normal;
+}
