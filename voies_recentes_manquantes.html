@@ -66,20 +66,23 @@
 
 	function requete_voies_dept(){
 		if (check_form_for_dept()){
-			dept = $('#input_dept')[0].value
-			document.title = titre+' ('+dept+')'
+			numero_dept = $('#input_dept')[0].value
+			document.title = titre+' ('+numero_dept+')'
 
-			update_csv_url(dept)
+			update_csv_url(numero_dept)
 
 			$('body').css('cursor','progress');
 			$('#wait_ajax').empty()
 							.css('visibility','visible')
 							.append($('<p>').append('Recherche des voies récentes...'));
 			$.ajax({
-				url: "voies_recentes_manquantes_dept.py?dept="+dept,
+				url: "voies_recentes_manquantes_dept.py?dept="+numero_dept,
 			})
 			.done(function( data ){
 				$('body').css('cursor','default');
+
+			    $('#bandeau h2').empty().append('nom_dept'+' ('+numero_dept+')')
+
 				$('#table_voies_recentes').empty()
 
 				url_map_org_part1 = 'http://www.openstreetmap.org/'
@@ -179,7 +182,7 @@
 	</header>
 
 	<div id="barre-jaune">
-		<span>Département :</span>
+		<span>Entrez un numéro de département :</span>
 		<form action="javascript:requete_voies_dept()" autocomplete="on">
 			<input type="text" id="input_dept" placeholder="N° de département"></input>
 			<input type="submit" value="Afficher">
@@ -188,6 +191,7 @@
 	
 	<div id="bandeau">
 		<div id="descriptif">
+            <h2></h2>
 			<h1>Voies récentes selon FANTOIR,<br/>connues de la BAN mais pas d'OSM</h1>
 		</div>
 	    <div id="bouton_export_csv" title="Exporter la liste courante en CSV"></div>
