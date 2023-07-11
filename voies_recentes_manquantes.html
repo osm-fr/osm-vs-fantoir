@@ -6,8 +6,7 @@
 <script src="js/tablesorter/jquery.tablesorter.js"></script>
 <script src="js/jquery.tablesorter.combined.min.js"></script>
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
-<link rel="stylesheet" href="css/style_voies_manquantes.css" type="text/css"/>
-<link rel="stylesheet" href="css/menu.css" type="text/css"/>
+<link rel="stylesheet" href="css/responsive.css" type="text/css"/>
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 
 <script>
@@ -182,7 +181,7 @@
 	</header>
 
 	<div id="barre-jaune">
-		<span>Entrez un numéro de département :</span>
+		<span>Département :</span>
 		<form action="javascript:requete_voies_dept()" autocomplete="on">
 			<input type="text" id="input_dept" placeholder="N° de département"></input>
 			<input type="submit" value="Afficher">
@@ -195,7 +194,7 @@
 			<h1>Voies récentes selon FANTOIR,<br/>connues de la BAN mais pas d'OSM</h1>
 		</div>
 	    <div id="bouton_export_csv" title="Exporter la liste courante en CSV"></div>
-		<div id="wait_ajax"></div>
+		<div id="wait_ajax" class="bas"></div>
 	</div>
 
 	<div id="reponse">

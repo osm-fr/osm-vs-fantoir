@@ -6,9 +6,7 @@
 <script src="js/tablesorter/jquery.tablesorter.js"></script>
 <script src="js/jquery.tablesorter.combined.min.js"></script>
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
-<link rel="stylesheet" href="css/style_voies_manquantes.css" type="text/css"/>
-<link rel="stylesheet" href="css/style_adresses_sans_rue.css" type="text/css"/>
-<link rel="stylesheet" href="css/menu.css" type="text/css"/>
+<link rel="stylesheet" href="css/responsive.css" type="text/css"/>
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 
 <script>
@@ -83,7 +81,7 @@
                 $('body').css('cursor','default');
                 $('#table_adresses_osm_sans_rue').empty()
                 if (data[0].length == 0){
-                    $('#bandeau h2').empty().append('dept '+$('#input_dept')[0].value+' : département inconnu')
+                    $('#bandeau h1').empty().append('dept '+$('#input_dept')[0].value+' : département inconnu')
                     $('body').css('cursor','default');
                     $('#wait_ajax').css('visibility','hidden');
                     return 0;
@@ -96,8 +94,8 @@
                 } else {
                     titre_bandeau = data.length+' adresses OSM sans rue ou lieu-dit' 
                 }
-                $('#bandeau h3').empty().append(nom_dept+' ('+numero_dept+')')
-                $('#bandeau h2').empty().append(titre_bandeau)
+                $('#bandeau h2').empty().append(nom_dept+' ('+numero_dept+')')
+                $('#bandeau h1').empty().append(titre_bandeau)
 
                 url_map_org_part1 = 'http://www.openstreetmap.org/'
                 url_map_fr_part1 = 'http://tile.openstreetmap.fr/'
@@ -203,12 +201,12 @@
     </div>
     <div id="bandeau">
         <div id="descriptif">
-            <h3></h3>
-            <h2>Adresses trouvées dans OSM sans voie ou lieu-dit</h2>
-            <h4>Le nom de ces adresses (<span class="monospace">addr:street</span>, <span class="monospace">addr:place</span> ou <span class="monospace">name</span> dans une relation <span class="monospace">associatedStreet</span>) est introuvable ailleurs dans OSM. C'est le signe qu'il manque ce nom sur une rue, un lieu-dit, une place, un parking, etc.</h4>
+            <h2></h2>
+            <h1>Adresses trouvées dans OSM sans voie ou lieu-dit</h1>
+            <h3>Le nom de ces adresses (<span class="monospace">addr:street</span>, <span class="monospace">addr:place</span> ou <span class="monospace">name</span> dans une relation <span class="monospace">associatedStreet</span>) est introuvable ailleurs dans OSM. C'est le signe qu'il manque ce nom sur une rue, un lieu-dit, une place, un parking, etc.</h3>
         </div>
         <div id="bouton_export_csv" title="Exporter la liste courante en CSV"></div>
-        <div id="wait_ajax"></div>
+        <div id="wait_ajax" class="bas"></div>
     </div>
 
     <div id="reponse">

@@ -1,0 +1,70 @@
+/*-----------------------------------------------------------------------*/
+/*------------------------------- REPONSIF ------------------------------*/
+/*-----------------------------------------------------------------------*/
+
+@media only screen and (max-width: 1600px) {
+    #topnav .bouton_nav, #topnav .menu_actif {
+        padding: 6px 10px 7px;
+        font-size: 0.8em;
+    }
+}
+
+@media only screen and (max-width: 1500px) {
+    #descriptif{padding: 0}
+}
+
+@media only screen and (max-width: 1400px) {
+    h1 {font-size: 1.3em;}
+    h2 {font-size: 1.2em;}
+    h3 {font-size: 0.9em;}
+}
+
+@media only screen and (max-width: 1330px) {
+    #topnav .bouton_nav, #topnav .menu_actif {
+        padding: 8px 6px;
+        font-size: 0.75em;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    td {padding:1px 5px;}
+    #type_voie {margin-bottom: 0.8em;}
+}
+
+@media only screen and (max-width: 1120px) {
+    h1 {font-size: 1.2em;}
+    h2 {font-size: 1.1em;}
+    h3 {font-size: 0.8em; margin-bottom: 0}
+    #bandeau {height: 130px;}
+    #topnav {height: 60px;}
+    #barre-jaune {top: 60px;}
+    #bandeau {top:90px}
+}
+
+@media only screen and (max-width: 1070px) {
+    #wait_ajax {
+    background: url("../img/skate.gif") no-repeat lightblue left 1% top 50%;
+    background-size: 60px;
+    }
+    #wait_ajax p {font-size: 1.1em;}
+    h1, h4 {margin: 0}
+}
+
+@media only screen and (max-width: 950px) {
+    #wait_ajax {
+    background: url("../img/skate.gif") no-repeat lightblue left 1% top 70%;
+    background-size: 50px;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    #wait_ajax {
+    background: url("../img/skate.gif") no-repeat lightblue left 5% top 70%;
+    background-size: 40px;
+    }
+    #wait_ajax p {
+    font-size: 1em;
+    }
+    #bandeau h1 {font-size: 1em;}
+    h4 {font-size: 0.8em;}
+}

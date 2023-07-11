@@ -1,13 +1,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>FANTOIRs erronés</title>
+<title>Fantoirs erronés</title>
 <script src="js/jquery-3.6.4.min.js"></script>
 <script src="js/tablesorter/jquery.tablesorter.js"></script>
 <script src="js/jquery.tablesorter.combined.min.js"></script>
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
-<link rel="stylesheet" href="css/style_fantoir_errone_annule.css" type="text/css"/>
-<link rel="stylesheet" href="css/menu.css" type="text/css"/>
+<link rel="stylesheet" href="css/responsive.css" type="text/css"/>
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 
 <script>
@@ -17,17 +16,17 @@
 	function start(){
 		$('body').css('cursor','progress');
 		$('#wait_ajax').css('visibility','visible')
-						.append($('<p>').append('Chargement des FANTOIRs erronés...'))
+						.append($('<p>').append('Chargement des Fantoirs erronés...'))
 						.append($('<p>').append("(oui, c'est long)"));
 		$.ajax({
 			url: "fantoir_errone.py",
 		})
 		.done(function( data ){
-			titre_bandeau = ' codes FANTOIR erronés'
+			titre_bandeau = ' codes Fantoir erronés'
 			if (data.length == 1){
-				titre_bandeau = ' code FANTOIR erroné'
+				titre_bandeau = ' code Fantoir erroné'
 			}
-			$('#bandeau h1').append(data.length+titre_bandeau)
+			$('#bandeau h1').empty().append(data.length+titre_bandeau)
 			$('#wait_ajax').css('visibility','hidden');
 
 			$('body').css('cursor','default');
@@ -39,7 +38,7 @@
 			delta = 0.0008
 
 /*			url_listing_fantoir = './liste_brute_fantoir.html#insee='+$('#input_insee')[0].value
-			add_map_link('table_infos_commune',url_listing_fantoir,'FANTOIR')
+			add_map_link('table_infos_commune',url_listing_fantoir,'Fantoir')
 			$('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append('Données OSM en date du')).append($('<td>').addClass('cellule_data').append(cache_hsnr[2])))
 */
 			add_header('table_fantoir_errone',true)
@@ -61,7 +60,7 @@
 
 
 				//Code Fantoir
-				$('#'+table+' tr:last').append($('<td>').addClass('cell_fantoir').text(fantoir))
+				$('#'+table+' tr:last').append($('<td>').addClass('cell_mauvais_fantoir').text(fantoir))
 
 				//Nom OSM
 				$('#'+table+' tr:last').append($('<td>').text(nom))
@@ -147,15 +146,16 @@
 		<!--#include file="includes/menu.html" -->
 	</header>
 		
-	<div id="bandeau">
+	<div id="bandeau" class="haut">
 		<div id="descriptif">
-			<h1></h1>
-			<h4>Liste des codes Fantoir trouvés dans OSM et inconnus du fichier Fantoir officiel. Ce sont souvent des codes erronés, à cause d'erreurs de frappe : minuscules, inversions de caratères, etc.</h4>
+            <h2>France</h2>
+			<h1>Fantoirs erronés</h1>
+			<h3>Liste des codes Fantoir trouvés dans OSM et inconnus du fichier Fantoir officiel. Ce sont souvent des codes erronés, à cause d'erreurs de frappe : minuscules, inversions de caratères, etc.</h3>
 		</div>
-		<div id="wait_ajax"></div>
+		<div id="wait_ajax" class="bas"></div>
 	</div>
 
-	<div id="reponse">
+	<div id="reponse" class="haut">
 		<table id="table_fantoir_errone" class="tablesorter"></table>
 	</div>
 

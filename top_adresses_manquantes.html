@@ -6,8 +6,7 @@
 <script src="js/tablesorter/jquery.tablesorter.js"></script>
 <script src="js/jquery.tablesorter.combined.min.js"></script>
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
-<link rel="stylesheet" href="css/style_voies_manquantes.css" type="text/css"/>
-<link rel="stylesheet" href="css/menu.css" type="text/css"/>
+<link rel="stylesheet" href="css/responsive.css" type="text/css"/>
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 
 <script>
@@ -48,33 +47,36 @@
     }
     function start(){
         document.title = titre
-        dept = check_url_for_dept()
-        if (dept){
+        numero_dept = check_url_for_dept()
+        if (numero_dept){
             $('#input_dept').empty()
-            $('#input_dept')[0].value = dept
+            $('#input_dept')[0].value = numero_dept
             requete_voies_dept();
         }
     }
     function update_csv_url(dept){
         $('#bouton_export_csv').empty()
-        $('#bouton_export_csv').append($('<a>').attr('href',"requete_par_dept.py?requete=top_adresses_manquantes&cache=False&dept="+dept+'&format=csv')
+        $('#bouton_export_csv').append($('<a>').attr('href',"requete_par_dept.py?requete=top_adresses_manquantes&cache=False&dept="+numero_dept+'&format=csv')
                                                .attr('target','blank')
                                                .append($('<img>').attr('src','img/export-csv.png')))
     }
     function requete_voies_dept(){
         if (check_form_for_dept()){
-            dept = $('#input_dept')[0].value
-            document.title = titre+' ('+dept+')'
-            update_csv_url(dept)
+            numero_dept = $('#input_dept')[0].value
+            document.title = titre+' ('+numero_dept+')'
+            update_csv_url(numero_dept)
             $('body').css('cursor','progress');
             $('#wait_ajax').empty()
                             .css('visibility','visible')
                             .append($('<p>').append('Recherche des voies non rapprochées,<br/>avec beauuuuucoup d\'adresses...'));
             $.ajax({
-                url: "top_adresses_manquantes_dept.py?dept="+dept,
+                url: "top_adresses_manquantes_dept.py?dept="+numero_dept,
             })
             .done(function( data ){
                 $('body').css('cursor','default');
+
+                $('#bandeau h2').empty().append('nom_dept'+' ('+numero_dept+')')
+
                 $('#table_top_adresses').empty()
 
                 url_map_org_part1 = 'http://www.openstreetmap.org/'
@@ -146,7 +148,7 @@
                 });
 
                 })
-            window.location.hash="#dept="+dept
+            window.location.hash="#dept="+numero_dept
         };
     }
     function add_map_link(table,href,text){
@@ -222,10 +224,11 @@
 
     <div id="bandeau">
         <div id="descriptif">
+            <h2></h2>
             <h1>Voies connues de la BAN mais pas d'OSM,<br/>avec beaucoup d'adresses</h1>
         </div>
         <div id="bouton_export_csv" title="Exporter la liste courante en CSV"></div>
-        <div id="wait_ajax"></div>
+        <div id="wait_ajax" class="bas"></div>
     </div>
 
     <div id="reponse">
