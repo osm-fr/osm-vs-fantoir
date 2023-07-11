@@ -9,8 +9,7 @@
 <!-- <script src="js/tablesorter/widgets/widget-filter.min.js"></script> -->
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
-<link rel="stylesheet" href="css/style_numeros.css" type="text/css"/>
-<link rel="stylesheet" href="css/menu.css" type="text/css"/>
+<link rel="stylesheet" href="css/responsive.css" type="text/css"/>
 <!-- leaflet -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
@@ -158,7 +157,7 @@
                                 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',maxZoom: 19}).addTo(map);
                                 $('#bandeau h1').append(data[0][2])
                                 $('#bandeau h2:first').append(data[0][4]+" (").append($('<a>').attr('href','index.html#insee='+insee).append(data[0][5]+")"))
-                                /*$('#type_voie').append(' (lieu-dit)')
+                                /*$('#type_voie').append(' (lieu-dit ou voie)')
                                 $('#integration').append($('<a>').attr('href', 'http://google.com').append('X points à intégrer'))*/
                                                 /*.append(add_josm_addr_link(insee,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place))*/
 
@@ -194,7 +193,7 @@
                                     headerTemplate : '{content} {icon}', // Add icon for various themes
                                     widgets: [ 'stickyHeaders', 'filter' ],
                                     widgetOptions: {
-                                      stickyHeaders_attachTo : '#reponse'
+                                      stickyHeaders_attachTo : '#reponse_numeros'
                                     }
                                 });
 
@@ -241,17 +240,17 @@
     </div>
 
     <div id="bandeau">
-        <div id="nom_rue_et_commune">
-            <h1></h1>
+        <div id="descriptif_col1">
             <h2></h2>
+            <h1></h1>
         </div>
-        <div id="descriptif">
-            <h2 id="type_voie"></h2>
+        <div id="descriptif_col2">
             <h3 id="integration"></h3>
+            <h2 id="type_voie"></h2>
         </div>
     </div>
 
-    <div id="reponse">
+    <div id="reponse_numeros">
         <table id="table_inspect_adresse"></table>
     </div>
      <div id="map"></div>

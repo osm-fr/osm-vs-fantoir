@@ -7,7 +7,7 @@
 <script src="js/jquery.tablesorter.combined.min.js"></script>
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
 <link rel="stylesheet" href="css/style_stats_dept.css" type="text/css"/>
-<link rel="stylesheet" href="css/menu.css" type="text/css"/>
+<link rel="stylesheet" href="css/responsive.css" type="text/css"/>
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 
 <script>
@@ -136,15 +136,15 @@
 
 	<div id="bandeau">
 	    <div id="descriptif">
-			<h1>Avancement du rapprochement des voies par commune</h1>
 			<h2 id="nom_dept"></h2>
+			<h1>Avancement du rapprochement des voies par commune</h1>
 		</div>
 		<button id="bouton_export_csv" title="Exporter le tableau en CSV" onclick="window.open(urlCSV, '_blank');"></button>
 		<button id="bouton_aide" title="Aide"></button>
-		<div id="wait_ajax"></div>
+		<div id="wait_ajax" class="bas"></div>
 	</div>
 
-<div id="reponse">
+<div id="reponse" class="haut">
 	<table id="stats_dept" class="tablesorter"></table>
 </div>
 

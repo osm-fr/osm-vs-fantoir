@@ -1,6 +1,6 @@
 body{
-		font-family: 'Arial', sans serif;
-	    margin: 0;
+	font-family: 'Arial', sans serif;
+    margin: 0;
 	}
 
 button {
@@ -9,34 +9,542 @@ button {
 	margin: 0;
 }
 
-#barre-jaune {
-	position: fixed;
-	top: 30px;
-	height: 30px;
-	width: 100%;
-	padding: 4px 10px 4px 57px;
-	background-color: #faff99;
-	font-family: 'Arial', sans serif;
+h1 {
+	margin: 0;
+	font-size: 1.8em;
+}
+h2 {
+	font-size: 1.4em;
+	line-height: 0.5em;
+}
+h3 {
 	font-size: 0.9em;
-	font-weight: bold;
-	text-transform: uppercase;
+}
+h4 {
+	font-size: 0.9em;
+}
+
+.monospace {
+	background: #EEF;
+	font-family: monospace;
+	font-size: 1.2em;
+	font-weight: normal;
+}
+
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+/*---------------                                                       ---------------*/
+/*---------------                    MENUS DU HAUT                      ---------------*/
+/*---------------                                                       ---------------*/
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+
+
+/*-----------------------------------------------------------------------*/
+/*------------------------------ MENU VERT ------------------------------*/
+/*-----------------------------------------------------------------------*/
+
+#topnav {
+    position: fixed;
+    top:0;
+    overflow: hidden;
+    background:#B1DE89;
+    width: 100%;
+    height: 30px;
+    padding: 0;
+}
+
+#topnav .bouton_nav {
+    float:left;
+    margin: 0;
+    padding: 6px 20px 7px;
+    font-family: 'Arial', sans serif;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #333;
+}
+
+#topnav a:hover {
+    color: #fff;
+    background:#333;
+}
+
+#topnav .menu_actif {
+    float:left;
+    margin: 0;
+    padding: 7px 20px 7px;
+    font-family: 'Arial', sans serif;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #fff;
+    background:#444;
+}
+
+/*-----------------------------------------------------------------------*/
+/*------------------------------ MENU JAUNE -----------------------------*/
+/*-----------------------------------------------------------------------*/
+
+#barre-jaune {
+    position: fixed;
+    top: 30px;
+    width: 100%;
+    height: 24px;
+    box-sizing: initial;
+    padding: 3px 10px;
+    background-color: #faff99;
+    font-family: 'Arial', sans serif;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
 #barre-jaune span {
-	vertical-align: middle;
+    vertical-align: middle;
 }
 
 #barre-jaune form {
-	display: inline;
+    display: inline;
 }
 
 #barre-jaune form input {
-	height:22px;
-	vertical-align: middle;
-	line-height: 1em;
+    height:22px;
+    vertical-align: middle;
+    line-height: 1em;
 }
 
 #barre-jaune input[type="text"] {
     border: 1px solid #777;
     border-radius: 3px;
+}
+
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+/*---------------                                                       ---------------*/
+/*---------------                ENCADRÉ BLEU A DROITE                  ---------------*/
+/*---------------                CHARGEMENT ET ALERTE                   ---------------*/
+/*---------------                                                       ---------------*/
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+
+#wait_ajax {
+	visibility:hidden;
+	float: left;
+	margin: 0 2%;
+	width:45%;
+	height: 100px;
+	text-align: center;
+	padding: 5px;
+	background: url("../img/skate.gif") no-repeat lightblue left 5% top 50%;
+	border-bottom: 4px #3FA4C5 solid;
+	border-radius: 8px;
+}
+#wait_ajax.bas {
+	margin: 20px 2% 0 2%;
+}
+#wait_ajax p {
+	vertical-align:middle;
+	font-size:1.2em;
+	font-weight: bold;
+	color:black;
+}
+
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+/*---------------                                                       ---------------*/
+/*---------------                  BOUTONS A DROITE                     ---------------*/
+/*---------------                                                       ---------------*/
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+
+#bouton_export_csv{
+	cursor: pointer;
+	position: fixed;
+	top: 40px;
+	right: 15px;
+	background: url("../img/export-csv.png") no-repeat top;
+	height: 40px;
+	width: 40px;
+	background-size: 40px;
+}
+
+/*------------------ Voies récentes manquantes + page stats, à moderniser -------------------*/
+
+#bouton_export_csv a{
+	color: white;
+	font-weight: bold;
+	text-decoration: none;
+}
+#bouton_export_csv a img{
+	height: 50px;
+	width: 50px;
+}
+
+/*-------------------------------------------------------------------*/
+/*-------------------------------- AIDE -----------------------------*/
+/*-------------------------------------------------------------------*/
+
+#bouton_aide {
+	cursor: pointer;
+	position: fixed;
+	top: 40px;
+	right: 65px;
+	background: url("../img/aide.png") no-repeat lavender center;
+	background-size: 33px;
+	width: 40px;
+	height: 40px;
+	border-bottom: 2px plum solid;
+	border-radius: 6px;
+}
+#aide{
+	position:fixed;
+	top:35px;
+	right:10px;
+	width:400px;
+	height:100%;
+	padding: 10px;
+	border-radius: 8px;
+	background-color:lavender;
+	overflow-y:scroll;
+	visibility:hidden;
+	font-size: 0.9em;
+}
+.fermer {
+	color: black;
+	float: right;
+	margin-top: 10px;
+	margin-right: 10px;
+	height: 30px;
+	line-height: 30px;
+	width: 30px;
+	text-align: center;
+	font-weight: bold;
+	background: plum;
+  	border-radius: 6px;
+	cursor:pointer;
+}
+#aide h3{
+	margin-top: 30px;
+	margin-left: 10px;
+}
+#aide li{
+	font-weight:bolder;
+	background-color:ivory;
+}
+#aide p{
+	margin-top: 0px;
+	margin-bottom: 10px;
+	margin-left: 3px;
+}
+
+
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+/*---------------                                                       ---------------*/
+/*---------------                       BANDEAU                         ---------------*/
+/*---------------                                                       ---------------*/
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+
+#bandeau{
+	position:fixed;
+	top:60px;
+	padding-top:5px;
+	width:100%;
+}
+
+#bandeau.haut{
+	top:30px;
+}
+
+#infos_commune{
+	float: left;
+	width: 65%;
+	margin: 15px 0;
+}
+
+#titre_commune_inconnue {
+	margin-left: 3em;
+}
+
+#infos_commune_col1 {
+	float: left;
+}
+
+/*Spécifique à la page Fantoir brut*/
+#descriptif #infos_commune_col1 {
+	margin: 15px 0;
+}
+
+#date-maj,
+#liens_commune {
+	clear: both;
+	margin: 0 20px;
+	line-height: 1.6em;
+	font-size: 0.8em;
+}
+.cellule_intitule,
+.cellule_data {
+	float: left;
+}
+
+#infos_commune_col2 {
+	float: left;
+	max-width: 500px;
+	line-height: 2em;
+	margin:0 30px -10px 30px;
+}
+
+/*-------------------------------------------------------------------*/
+/*--------------- DESCRIPTIF PAGES PAR DEPARTEMENT ------------------*/
+/*------ Fantoirs annulés, erronés, Top adresses manquantes ---------*/
+/*--------- Voies récentes manquantes, Adresses sans rue ------------*/
+/*-------------------------------------------------------------------*/
+
+#descriptif {
+	float: left;
+	margin:0 2%;
+	width: 45%;
+}
+
+/*-------------------------------------------------------------------*/
+/*----------------- PAGE QUALIFICATION DES ADRESSES -----------------*/
+/*------ Descriptif de la voie ou du lieu-dit en deux colonnes ------*/
+/*-------------------------------------------------------------------*/
+
+#descriptif_col1 {
+	float: left;
+	margin:0 4%;
+}
+#descriptif_col2 {
+	float: left;
+	margin-left: 1em;
+	padding: 0.5em 2em;
+}
+#type_voie {
+	margin-bottom: 1.2em;
+}
+#integration a {
+	color: #D33A8B;
+}
+
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+/*---------------                                                       ---------------*/
+/*---------------                       RÉPONSE                         ---------------*/
+/*---------------                                                       ---------------*/
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+
+#reponse{
+	position:relative;
+	margin-top:240px;
+	width: 100%;
+	font-size:0.9em;
+	height: 70%;
+	overflow-y: auto;
+}
+#reponse.haut{
+	margin-top:200px;
+	height: 73%;
+}
+
+#reponse.pifo{
+	margin-top:260px;
+	height: 65%;
+}
+
+#reponse_numeros{
+	position: relative;
+	margin-top:200px;
+	width:40%;
+	height:70%;
+	margin-left:10%;
+	overflow-y: auto;
+}
+
+th {
+	padding-bottom: 10px;
+}
+td {
+	padding:1px 15px;
+}
+table.tablesorter tbody td:not(.zone-clic-josm):not(.cell_mauvais_fantoir):not(.zone-clic-adresses),
+table.tablesorter thead th {
+	padding-left: 1.2em;
+}
+
+/*---------------------------------------------------------------*/
+/*----------------------------- SURVOL --------------------------*/
+/*---------------------------------------------------------------*/
+
+#reponse tr:hover td,
+#reponse_numeros tr:hover td,
+#reponse_haut tr:hover td {
+	background-color: #FCFFB7;
+}
+
+/*---------------------------------------------------------------*/
+/*------------------ COLONNE AVEC CODES FANTOIR -----------------*/
+/*---------------------------------------------------------------*/
+
+.cell_fantoir {
+	font-family: monospace;
+	font-size: 1.3em;
+}
+
+.cell_mauvais_fantoir {
+	font-family: monospace;
+	font-size: 1.3em;
+	background: url("../img/warning.png") no-repeat left 8% top 30%;
+	background-size: 20px 20px;
+	padding-left: 2.7em !important;
+	font-weight: bold;
+	color: #FF6600;
+}
+
+#reponse tr.statut0 td.cell_fantoir.annule{
+	background: url("../img/warning.png") no-repeat left 8% top 30%;
+	background-size: 20px 20px;
+	padding-left: 2.5em;
+	font-weight: bold;
+	color: #FF6600;
+}
+
+
+/*---------------------------------------------------------------*/
+/*-------------- PASTILLES CORRESPONDANT AUX FILTRES ------------*/
+/*---------------------------------------------------------------*/
+
+.pastille-verte, .pastille-orange, .pastille-bleue, .pastille-grise {
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 2px 10px 0 10px;
+}
+
+.pastille-verte {background-color: #48c78e;}
+.pastille-orange {background-color: #f1AC45;}
+.pastille-bleue {background-color: #0457B3;}
+.pastille-grise {background-color: lightgrey;}
+
+/*---------------------------------------------------------------*/
+/*--------------------- PICTO PAS DE COORDONNEES ----------------*/
+/*---------------------------------------------------------------*/
+
+.no-loca {
+	text-align: center;
+	padding-left: 0 !important;
+	font-weight: bold;
+	color: grey;
+}
+
+/*---------------------------------------------------------------*/
+/*--------------------- LIENS JOSM et ADRESSES ------------------*/
+/*---------------------------------------------------------------*/
+
+.zone-clic-josm,
+.zone-clic-adresses {
+	cursor:pointer;
+	font-weight: bold;
+	text-decoration: underline;
+	text-align: center;
+}
+
+/*-- Cellules fusionnées pour adresses déjà intégrées --*/
+.zone-adresses {
+	text-align: center;
+}
+
+.adresses-integrees {
+	text-align: center;
+	color:#48c78e !important;
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
+/*--- Couleurs ---*/
+.zone-clic-josm {
+	color:#863602; /*Marron logo JOSM*/
+}
+.zone-clic-josm.clicked,
+#reponse tr:hover td.zone-clic-josm.clicked {
+	background-color:#863602;
+	color: #fff;
+}
+
+.zone-clic-adresses,
+.zone-clic-adresses a {
+	color:#D33A8B; /*Rose adresses*/
+}
+
+.zone-clic-adresses.clicked,
+.zone-clic-adresses.clicked a,
+#reponse tr:hover td.zone-clic-adresses.clicked {
+	background-color:#D33A8B ;
+	color:#fff;
+}
+
+/*---------------------------------------------------------------*/
+/*-------------------- MESSAGE D'ENREGISTREMENT -----------------*/
+/*------------------- Après changement de statut ----------------*/
+/*---------------------------------------------------------------*/
+
+.enregistrement {
+    position: relative;
+    z-index: 1;
+
+	opacity: 0;
+    transition: opacity 0.5s ease;
+
+	display:inline-block;
+    width: 120px;
+    padding: 2px;
+    margin-left: 5px;
+
+    font-size: 0.8em;
+    font-weight: bold;
+    text-align: center;
+}
+.enregistrement.rose {color: #AD005E;}
+.enregistrement.bleu {color: #349BFF;}
+.enregistrement.gris {color: #000;}
+.enregistrement.vert {color: #33A672;}
+
+/*---------------------------------------------------------------*/
+/*---------------------- CARTE DES ADRESSES ---------------------*/
+/*---------------------------------------------------------------*/
+
+#map{
+	width: 500px;
+	height: 500px;
+	position: fixed;
+	top: 200px;
+	left: 55%;
+}
+.map-numero,
+.legende-numero {
+	font-weight: bold;
+	font-size: 1.3em;
+	line-height: 1em;
+	color: #349BFF;
+	background-color: rgba(255, 255, 255, 0.6);
+	width: fit-content !important;
+	padding: 4px;
+	white-space: nowrap;
+	border:  solid 1px;
+}
+.map-numero.anomalie,
+.legende-numero.anomalie {
+	color: #AD005E;
+}
+
+#legende_map {
+	position: fixed;
+	top: 720px;
+	left: 55%;
 }

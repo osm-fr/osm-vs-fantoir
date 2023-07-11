@@ -6,8 +6,7 @@
 <script src="js/tablesorter/jquery.tablesorter.js"></script>
 <script src="js/jquery.tablesorter.combined.min.js"></script>
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
-<link rel="stylesheet" href="css/style_fantoir_brut.css" type="text/css"/>
-<link rel="stylesheet" href="css/menu.css" type="text/css"/>
+<link rel="stylesheet" href="css/responsive.css" type="text/css"/>
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 
 <script>
@@ -42,18 +41,60 @@
 		})
 		.done(function( data ) {
 			nom_commune = data[0][0]
-			$('#table_infos_commune').empty()
+			insee = $('#input_insee')[0].value
+
+			$('#infos_commune_col1').empty();
+			$('#listing_fantoir').trigger("destroy");
 			$('#listing_fantoir').empty().append($('<thead>').append($('<tr>')))
 
+			//Code Insee invalide
 			if (nom_commune.length == 0){
-				$('#table_infos_commune').append($('<h2>').append('INSEE '+$('#input_insee')[0].value+' : commune inconnue'))
+				$('#descriptif h2').text('INSEE '+$('#input_insee')[0].value+' : commune inconnue');
 				$('body').css('cursor','default');
 				return 0;
 			}
+
 			document.title = nom_commune+' - Liste FANTOIR'
 
-			$('#table_infos_commune').append($('<tr>').append($('<th>').append($('<h1>').addClass('titre_commune').append((nom_commune+" ("+$('#input_insee')[0].value+")")))))
+      url_map_org_part1 = 'http://www.openstreetmap.org/'
+      url_listing_fantoir = './liste_brute_fantoir.html#insee='+$('#input_insee')[0].value
+
+      $('#infos_commune_col1').empty()
+      												.append($('<div id="date-maj">')
+                                  .append($('<div>').addClass('cellule_intitule').append('<strong>Code Insee :</strong>'))
+                                  .append($('<div>').addClass('cellule_data').append('&nbsp;').append(insee))
+                              )
+                              .append($('<div id="liens_commune">').append('<strong>Voir la commune sur :</strong> ')
+                                  /*.append($('<a>')
+                                      .attr('target','blank')
+                                      .attr('href',url_map_org_part1+'?mlat='+lat_commune+'&mlon='+lon_commune+'#map='+url_hash_coords)
+                                      .text('ORG')
+                                  )
+                                  .append(' / ')*/
+                                  .append($('<a>')
+                                      .attr('target','blank')
+                                      .attr('href','https://adresse.data.gouv.fr/base-adresse-nationale/'+insee)
+                                      .text('BAN')
+                                  )
+                                  /*.append(' / ')
+                                  .append($('<a>')
+                                      .attr('target','blank')
+                                      .attr('href',url_bano_part1+'#'+url_hash_coords)
+                                      .text('BANO')
+                                  )*/
+                                  .append(' / ')
+                                  .append($('<a>')
+                                      .attr('target','blank')
+                                      .attr('href','index.html#insee='+insee)
+                                      .text('Pifomètre')
+                                  )
+                              )
+                          
+      $('#infos_commune_col2 h2').empty().append(nom_commune)
+      $('#infos_commune_col2 h1').empty().append('Fichier Fantoir brut')
+
 			fantoir = data[1]
+
 			for (c=0;c<a_champs_fantoir.length;c++){
 				$('#listing_fantoir > thead > tr:last').append($('<th>').append(a_champs_fantoir[c]))
 			}
@@ -74,15 +115,17 @@
 					$($('tr:last td')[0]).append($('<span>').addClass('pastille-grise')).addClass('qualifie')
 				}
 			}
-            //Sticky headers : le tableau scrolle dans son contenant
-            $('#listing_fantoir').tablesorter({
-                widthFixed : true,
-                headerTemplate : '{content} {icon}', // Add icon for various themes
-                widgets: [ 'stickyHeaders', 'filter' ],
-                widgetOptions: {
-                  stickyHeaders_attachTo : '#reponse'
-                }
-            });
+
+      //Sticky headers : le tableau scrolle dans son contenant
+      $('#listing_fantoir').tablesorter({
+          widthFixed : true,
+          headerTemplate : '{content} {icon}', // Add icon for various themes
+          widgets: [ 'stickyHeaders', 'filter' ],
+          widgetOptions: {
+            stickyHeaders_attachTo : '#reponse'
+          }
+      });
+
 		})
 		window.location.hash="#insee="+$('#input_insee')[0].value
 		$('body').css('cursor','default');
@@ -103,12 +146,16 @@
 	</div>
 
 	<div id="bandeau">
-		<div id='bandeau_commune'>
-			<table id="table_infos_commune"></table>
+		<div id="descriptif">
+			<div id="infos_commune_col1"></div>
+			<div id="infos_commune_col2">
+				<h2></h2>
+				<h1></h1>
+			</div>
 		</div>
 	</div>
 
-	<div id="reponse">
+	<div id="reponse" class="haut">
 		<table id="listing_fantoir" class="tablesorter">
 		</table>
 	</div>

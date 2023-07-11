@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
 <link rel="stylesheet" href="css/style_pifometre.css" type="text/css"/>
-<link rel="stylesheet" href="css/menu.css" type="text/css"/>
+<link rel="stylesheet" href="css/responsive.css" type="text/css"/>
 <link rel="search" type="application/opensearchdescription+xml" title="Pifomètre BANO" href="opensearch.xml" />
 <script>
     FILTRES = [["voie",true],
@@ -242,7 +242,7 @@
             $('#alerte_commune').css('visibility','hidden');
 
             if (nom_commune.length == 0){
-                $('#infos_commune').append($('<h2>').append('INSEE '+$('#input_insee')[0].value+' : commune inconnue'))
+                $('#infos_commune').append($('<div id="titre_commune_inconnue">').append($('<h1>').append('Code Insee '+$('#input_insee')[0].value+' : commune inconnue')))
                 $('body').css('cursor','default');
                 return 0;
             }
@@ -274,7 +274,7 @@
                                         .append(' / ')
                                         .append($('<a>')
                                             .attr('target','blank')
-                                            .attr('href','https://adresse.data.gouv.fr/commune/'+$('#input_insee')[0].value)
+                                            .attr('href','https://adresse.data.gouv.fr/base-adresse-nationale/'+$('#input_insee')[0].value)
                                             .text('BAN')
                                         )
                                         .append(' / ')
@@ -378,13 +378,13 @@
                     tr_id+=1
 
                     $('#table_pifometre tbody').append($('<tr>').attr('id',tr_id).append($('<td>').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir_affiche)))
-
-                    //Date de création Fantoir 
-                    $('#table_pifometre tr:last').append($('<td>').text(date_creation))
-
                     if (annule == -1){
                         $('#table_pifometre tr:last td:last').addClass('annule').attr('title','Code Fantoir annulé, à remplacer dans OSM')
                     }
+                    
+                    //Date de création Fantoir 
+                    $('#table_pifometre tr:last').append($('<td>').text(date_creation))
+
                     //Ajout des classes pour les filtres à chaque ligne
                     if (is_voie) {
                         $('#table_pifometre tr:last').addClass('voie')
@@ -651,7 +651,7 @@
         </div>
     </div>
 
-    <div id="reponse">
+    <div id="reponse" class="pifo">
         <table id="table_pifometre"></table>
     </div>
     <footer>
