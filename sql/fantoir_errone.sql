@@ -6,7 +6,7 @@ AS
  FROM   bano_points_nommes
  WHERE  fantoir IS NOT NULL AND
         source = 'OSM' AND
-        fantoir not like '%b'
+        fantoir not like '%b%'
 EXCEPT
 SELECT  code_insee,
         fantoir
