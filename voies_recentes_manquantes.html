@@ -29,7 +29,6 @@
 				if (is_valid_dept(window.location.hash.split('dept=')[1].split('&')[0])){
 					res = window.location.hash.split('dept=')[1].split('&')[0]
 				} else {
-//					document.title = titre
 					alert(window.location.hash.split('dept=')[1].split('&')[0]+' n\'est pas un numero de département valide\n\nAbandon')
 				}
 			}
@@ -79,8 +78,9 @@
 			})
 			.done(function( data ){
 				$('body').css('cursor','default');
+                nom_dept = data[0][0][1]
 
-			    $('#bandeau h2').empty().append('nom_dept'+' ('+numero_dept+')')
+			    $('#bandeau h2').empty().append(nom_dept+' ('+numero_dept+')')
 
 				$('#table_voies_recentes').empty()
 
@@ -90,23 +90,37 @@
 				url_edit_part1 = 'http://www.openstreetmap.org/edit?editor='
 				delta = 0.0008
 
-				add_header('table_voies_recentes',true)
+				$('#table_voies_recentes').empty().append($('<thead>').append($('<tr>').append($('<th>').append('Dept'))))
+				$('#table_voies_recentes tr').append($('<th>').append('Commune (INSEE)'))
+				$('#table_voies_recentes tr').append($('<th>').append('Fantoir'))
+				$('#table_voies_recentes tr').append($('<th>').append('Voie'))
+				$('#table_voies_recentes tr').append($('<th>').append('Date de création'))
+				$('#table_voies_recentes tr').append($('<th>').attr('colspan','1').append('Carte'))
+				$('#table_voies_recentes tr').append($('<th>').attr('colspan','1').append('Édition'))
+				$('#table_voies_recentes tr').append($('<th>').attr('colspan','2').append('Voir la commune sur...'))
 				$('#table_voies_recentes').append($('<tbody>'))
 				table = 'table_voies_recentes'
+				data = data[1]
 				for (l=0;l<data.length;l++){
-					insee = (data[l][1])
-					//Dept
-					$('#'+table).append($('<tr>').attr('id',data[l][4]).append($('<td>').text(data[l][0])))
+					let [numero_dept,
+						insee,
+						nom_com,
+						voie,
+						fantoir,
+						lon,
+						lat,
+						date_creation] = data[l]
+
+					$('#table_voies_recentes').append($('<tr>').attr('id',fantoir).append($('<td>').text(numero_dept)))
 					//Commune (INSEE)
-					$('#'+table+' tr:last').append($('<td>').text(data[l][2]+' ('+data[l][1]+')'))
+					$('#table_voies_recentes tr:last').append($('<td>').text(nom_com+' ('+insee+')'))
 					//Code Fantoir
-					$('#'+table+' tr:last').append($('<td>').addClass('cell_fantoir').text(data[l][4]))
+					$('#table_voies_recentes tr:last').append($('<td>').addClass('cell_fantoir').text(fantoir))
 					//Voie
-					$('#'+table+' tr:last').append($('<td>').text(data[l][3]))
+					$('#table_voies_recentes tr:last').append($('<td>').text(voie))
 					//Date de création
-					$('#'+table+' tr:last').append($('<td>').text(data[l][7]))
-					lon = data[l][5]
-					lat = data[l][6]
+					$('#table_voies_recentes tr:last').append($('<td>').text(date_creation))
+
 					if (lon && lat){
 						url_ol_part2 = '?zoom=18&lat='+lat+'&lon='+lon
 						url_marker = '?mlat='+lat+'&mlon='+lon
@@ -142,14 +156,14 @@
 	}
 
 	function add_map_link(table,href,text){
-		$('#'+table+' tr:last').append($('<td>')
+		$('#table_voies_recentes tr:last').append($('<td>')
 									.append($('<a>')
 									.attr('href',href)
 									.attr('target','blank')
 									.text(text)))	
 	}
 	function add_josm_link(table,xl,xr,yb,yt){
-		$('#'+table+' tr:last').append($('<td>')
+		$('#table_voies_recentes tr:last').append($('<td>')
 									.addClass('zone-clic-josm')
 									.attr('xleft',xl).attr('xright',xr).attr('ybottom',yb).attr('ytop',yt)
 									.text('JOSM')
@@ -159,18 +173,6 @@
 										$(this).addClass('clicked');
 									})
 								)
-	}
-	function add_header(table,with_edit_and_map_links){
-		$('#'+table).empty().append($('<thead>').append($('<tr>').append($('<th>').append('Dept'))))
-		$('#'+table+' tr').append($('<th>').append('Commune (INSEE)'))
-		$('#'+table+' tr').append($('<th>').append('Fantoir'))
-		$('#'+table+' tr').append($('<th>').append('Voie'))
-		$('#'+table+' tr').append($('<th>').append('Date de création'))
-		if (with_edit_and_map_links){
-			$('#'+table+' tr').append($('<th>').attr('colspan','1').append('Carte'))
-			$('#'+table+' tr').append($('<th>').attr('colspan','1').append('Édition'))
-			$('#'+table+' tr').append($('<th>').attr('colspan','2').append('Voir la commune sur...'))
-		} 
 	}
 </script>
 </head>
