@@ -379,7 +379,9 @@
 
                     $('#table_pifometre tbody').append($('<tr>').attr('id',tr_id).append($('<td>').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir_affiche)))
                     if (annule == -1){
-                        $('#table_pifometre tr:last td:last').addClass('annule').attr('title','Code Fantoir annulé, à remplacer dans OSM')
+                        $('#table_pifometre tr:last td:last').addClass('cell_mauvais_fantoir').attr('title','Code Fantoir annulé, à remplacer dans OSM')
+                    } else if (fantoir_affiche != null && is_osm_hors_fantoir){
+                        $('#table_pifometre tr:last td:last').addClass('cell_mauvais_fantoir').attr('title','Code Fantoir erroné, à corriger dans OSM')
                     }
                     
                     //Date de création Fantoir 
