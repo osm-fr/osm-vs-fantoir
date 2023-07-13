@@ -5,116 +5,128 @@
 <script src="js/jquery-3.6.4.min.js"></script>
 <script src="js/tablesorter/jquery.tablesorter.js"></script>
 <script src="js/jquery.tablesorter.combined.min.js"></script>
+<script src="js/fonctions.js"></script>
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
 <link rel="stylesheet" href="css/responsive.css" type="text/css"/>
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 
 <script>
-    var menu_labels
-    var commune_valide = false
-    var osm_state
+    var titre = "Codes FANTOIR annulés"
     function start(){
-        $('body').css('cursor','progress');
-        $('#wait_ajax').css('visibility','visible')
-                        .append($('<p>').append('Chargement des Fantoirs annulés...'))
-                        .append($('<p>').append("(oui, c'est long)"));
-        $.ajax({
-            url: "fantoir_annule.py",
-        })
-        .done(function( data ){
-            titre_bandeau = ' codes Fantoir annulés'
-            if (data.length == 1){
-                titre_bandeau = ' code Fantoir annulé'
-            }
-            $('#bandeau h1').empty().append(data.length+titre_bandeau)
-            $('#wait_ajax').css('visibility','hidden');
-            $('#bandeau h4').empty().append("Codes trouvés dans OSM mais annulés d'après le fichier Fantoir officiel.<br />Noms de voies remplacés, voies en double dont un seul code est conservé... Pour les communes fusionnées, les nouveaux codes Fantoir sont à retrouver sur la page de la nouvelle commune.")
+        document.title = titre
+        numero_dept = check_url_for_dept()
+        if (numero_dept){
+            $('#input_dept').empty()
+            $('#input_dept')[0].value = numero_dept
+            requete_fantoir_annule_dept();
+        }
+    }
+    function requete_fantoir_annule_dept(){
+        if (check_form_for_dept()){
+            numero_dept = $('#input_dept')[0].value
+            document.title = titre+' ('+numero_dept+')'
+            // update_csv_url(numero_dept)
 
-            $('body').css('cursor','default');
+            $('body').css('cursor','progress');
+            $('#wait_ajax').css('visibility','visible')
+                            .append($('<p>').append('Chargement des Fantoirs annulés...'))
+            $.ajax({
+                url: "fantoir_annule.py?dept="+numero_dept,
+            })
+            .done(function( data ){
+                nom_dept = data[0][0][1]
+                code_dept = data[0][0][0]
 
-            url_map_org_part1 = 'http://www.openstreetmap.org/'
-            url_map_fr_part1 = 'http://tile.openstreetmap.fr/'
-            url_bano_part1 = 'http://tile.openstreetmap.fr/~cquest/leaflet/bano.html'
-            url_edit_part1 = 'http://www.openstreetmap.org/edit?editor='
-            delta = 0.0008
+                data = data[1]
+                titre_bandeau = ' codes Fantoir annulés'
+                if (data.length < 2){
+                    titre_bandeau = ' code Fantoir annulé'
+                }
+                $('#bandeau h1').empty().append(data.length+titre_bandeau)
 
-            add_header('table_fantoir_annule',true)
-            table = 'table_fantoir_annule'
-            $('#'+table).append($('<tbody>'))
-            for (l=0;l<data.length;l++){
-                let [fantoir,
-                    nom,
-                    lon,
-                    lat,
-                    date_annul,
-                    dept,
-                    commune] = data[l]
-                insee = fantoir.substr(0,5)
 
-                //Dept
-                $('#'+table).append($('<tr>').attr('id',fantoir).append($('<td>').text(dept)))
-                //Commune (Insee)
-                $('#'+table+' tr:last').append($('<td>').text(commune+' ('+insee+')'))
-                //Fantoir
-                $('#'+table+' tr:last').append($('<td>').addClass('cell_mauvais_fantoir').text(fantoir))
-                //Nom OSM
-                $('#'+table+' tr:last').append($('<td>').text(nom))
-                //Date d'annulation
-                $('#'+table+' tr:last').append($('<td>').text(date_annul))
-                if (lon && lat){
+                $('#bandeau h2').empty().append(nom_dept+' ('+numero_dept+')')
+
+                $('#wait_ajax').css('visibility','hidden');
+                $('#bandeau h4').empty().append("Codes trouvés dans OSM mais annulés d'après le fichier Fantoir officiel.<br />Noms de voies remplacés, voies en double dont un seul code est conservé... Pour les communes fusionnées, les nouveaux codes Fantoir sont à retrouver sur la page de la nouvelle commune.")
+
+                url_map_org_part1 = 'http://www.openstreetmap.org/'
+                url_map_fr_part1 = 'http://tile.openstreetmap.fr/'
+                url_bano_part1 = 'http://tile.openstreetmap.fr/~cquest/leaflet/bano.html'
+                url_edit_part1 = 'http://www.openstreetmap.org/edit?editor='
+                delta = 0.0008
+
+                $('#table_fantoir_annule').trigger("destroy");
+                $('#table_fantoir_annule').empty()
+
+                $('#table_fantoir_annule').append($('<thead>').append($('<tr>').append($('<th>').append('Dept'))))
+                $('#table_fantoir_annule tr').append($('<th>').append('Commune (code Insee)'))
+                $('#table_fantoir_annule tr').append($('<th>').append('Code Fantoir annulé'))
+                $('#table_fantoir_annule tr').append($('<th>').append('Voie OSM'))
+                $('#table_fantoir_annule tr').append($('<th>').append('Date d\'annulation'))
+                $('#table_fantoir_annule tr').append($('<th>').attr('colspan','1').append('Carte'))
+                $('#table_fantoir_annule tr').append($('<th>').attr('colspan','1').append('Édition'))
+                $('#table_fantoir_annule tr').append($('<th>').attr('colspan','2').append('Voir la commune sur...'))
+
+                $('#table_fantoir_annule').append($('<tbody>'))
+                for (l=0;l<data.length;l++){
+                    let [fantoir,
+                        nom,
+                        lon,
+                        lat,
+                        date_annul,
+                        dept,
+                        commune] = data[l]
+                    insee = fantoir.substr(0,5)
+
+                    //Dept
+                    $('#table_fantoir_annule').append($('<tr>').attr('id',fantoir).append($('<td>').text(dept)))
+                    //Commune (Insee)
+                    $('#table_fantoir_annule tr:last').append($('<td>').text(commune+' ('+insee+')'))
+                    //Fantoir
+                    $('#table_fantoir_annule tr:last').append($('<td>').addClass('cell_mauvais_fantoir').text(fantoir))
+                    //Nom OSM
+                    $('#table_fantoir_annule tr:last').append($('<td>').text(nom))
+                    //Date d'annulation
+                    $('#table_fantoir_annule tr:last').append($('<td>').text(date_annul))
                     url_ol_part2 = '?zoom=18&lat='+lat+'&lon='+lon
                     url_hash_coords = '18/'+lat+'/'+lon
                     xleft   = lon-delta
                     xright  = lon+delta
                     ybottom = lat-delta
                     ytop    = lat+delta
-                //visu
-                    add_map_link(table,url_map_org_part1+'#map='+url_hash_coords,'ORG')
-                    /*add_map_link(table,url_bano_part1+'#'+url_hash_coords,'BANO')*/
-                //JOSM
-                    add_josm_link(table,xleft,xright,ybottom,ytop)
-                //Fantoir
-                    add_map_link(table,'./index.html#insee='+insee,'Pifomètre ('+insee+')')
-                    add_map_link(table,'./liste_brute_fantoir.html#insee='+insee,'Fantoir brut ('+insee+')')
+                    //visu
+                    add_map_link('table_fantoir_annule',url_map_org_part1+'#map='+url_hash_coords,'ORG')
+                    //JOSM
+                    add_josm_link('table_fantoir_annule',xleft,xright,ybottom,ytop)
+                    //Fantoir
+                    add_map_link('table_fantoir_annule','./index.html#insee='+insee,'Pifomètre ('+insee+')')
+                    add_map_link('table_fantoir_annule','./liste_brute_fantoir.html#insee='+insee,'Fantoir brut ('+insee+')')
                 }
-            }
 
-      //Sticky headers : le tableau scrolle dans son contenant
-      $('#table_fantoir_annule').tablesorter({
-          widthFixed : true,
-          headerTemplate : '{content} {icon}', // Add icon for various themes
-          widgets: [ 'stickyHeaders', 'filter' ],
-          widgetOptions: {
-            stickyHeaders_attachTo : '#reponse'
-          }
-      });
-
-        })
-
-    };
-    function check_url_for_insee(){
-        pattern_insee = new RegExp('^[0-9][0-9abAB][0-9]{3}$')
-        var res
-        if (window.location.hash){
-            if (window.location.hash.split('insee=')[1]){
-                if (pattern_insee.test(window.location.hash.split('insee=')[1].split('&')[0])){
-                    res = window.location.hash.split('insee=')[1].split('&')[0]
-                } else {
-                    alert(window.location.hash.split('insee=')[1].split('&')[0]+' n\'est pas un code INSEE de commune\n\nAbandon')
-                }
-            }
+              //Sticky headers : le tableau scrolle dans son contenant
+                $('#table_fantoir_annule').tablesorter({
+                  widthFixed : true,
+                  headerTemplate : '{content} {icon}', // Add icon for various themes
+                  widgets: [ 'stickyHeaders', 'filter' ],
+                  widgetOptions: {
+                    stickyHeaders_attachTo : '#reponse'
+                  }
+                });
+                window.location.hash="#dept="+code_dept
+                $('body').css('cursor','default');
+            })
         }
-        return res
-    }
+    };
     function add_map_link(table,href,text){
-        $('#'+table+' tr:last').append($('<td>')
+        $('#table_fantoir_annule tr:last').append($('<td>')
                                     .append($('<a>')
                                     .attr('href',href)
                                     .attr('target','blank')
                                     .text(text)))   
     }
     function add_josm_link(table,xl,xr,yb,yt){
-        $('#'+table+' tr:last').append($('<td>')
+        $('#table_fantoir_annule tr:last').append($('<td>')
                                     .addClass('zone-clic-josm')
                                     .attr('xleft',xl).attr('xright',xr).attr('ybottom',yb).attr('ytop',yt)
                                     .text('JOSM')
@@ -125,18 +137,6 @@
                                     })
                                 )
     }
-    function add_header(table,with_edit_and_map_links){
-        $('#'+table).append($('<thead>').append($('<tr>').append($('<th>').append('Dept'))))
-        $('#'+table+' tr').append($('<th>').append('Commune (code Insee)'))
-        $('#'+table+' tr').append($('<th>').append('Code Fantoir annulé'))
-        $('#'+table+' tr').append($('<th>').append('Voie OSM'))
-        $('#'+table+' tr').append($('<th>').append('Date d\'annulation'))
-        if (with_edit_and_map_links){
-            $('#'+table+' tr').append($('<th>').attr('colspan','1').append('Carte'))
-            $('#'+table+' tr').append($('<th>').attr('colspan','1').append('Édition'))
-            $('#'+table+' tr').append($('<th>').attr('colspan','2').append('Voir la commune sur...'))
-        } 
-    }
 
 </script>
 </head>
@@ -146,9 +146,17 @@
         <!--#include file="includes/menu.html" -->
     </header>
 
-    <div id="bandeau" class="haut">
+    <div id="barre-jaune">
+        <span>Département :</span>
+        <form action="javascript:requete_fantoir_annule_dept()" autocomplete="on">
+            <input type="text" id="input_dept" placeholder="N° de département"></input>
+            <input type="submit" value="Afficher">
+        </form>
+    </div>
+
+    <div id="bandeau">
         <div id="descriptif">
-            <h2>France</h2>
+            <h2></h2>
             <h1>Fantoirs annulés</h1>
             <h3>Liste des codes trouvés dans OSM mais annulés d'après le fichier Fantoir officiel.<br />Cela peut être des noms de voies remplacés par d'autres, des voies en double dont un seul code est conservé...<br />Lors de fusions de communes, celles dont le code Insee disparaît voient leurs codes Fantoir annulés, et remplacés par de nouveaux codes dans la nouvelle commune. Dans ce cas, c'est dans la page de la nouvelle commune qu'il faut chercher le nouveau code Fantoir.</h3>
         </div>
