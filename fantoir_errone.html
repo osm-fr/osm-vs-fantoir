@@ -5,165 +5,141 @@
 <script src="js/jquery-3.6.4.min.js"></script>
 <script src="js/tablesorter/jquery.tablesorter.js"></script>
 <script src="js/jquery.tablesorter.combined.min.js"></script>
+<script src="js/fonctions.js"></script>
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
 <link rel="stylesheet" href="css/responsive.css" type="text/css"/>
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 
 <script>
-	var menu_labels
-	var commune_valide = false
-	var osm_state
-	function start(){
-		$('body').css('cursor','progress');
-		$('#wait_ajax').css('visibility','visible')
-						.append($('<p>').append('Chargement des Fantoirs erronés...'))
-						.append($('<p>').append("(oui, c'est long)"));
-		$.ajax({
-			url: "fantoir_errone.py",
-		})
-		.done(function( data ){
-			titre_bandeau = ' codes Fantoir erronés'
-			if (data.length == 1){
-				titre_bandeau = ' code Fantoir erroné'
-			}
-			$('#bandeau h1').empty().append(data.length+titre_bandeau)
-			$('#wait_ajax').css('visibility','hidden');
+    var titre = "Codes FANTOIR erronés"
+    function start(){
+        document.title = titre
+        numero_dept = check_url_for_dept()
+        if (numero_dept){
+            $('#input_dept').empty()
+            $('#input_dept')[0].value = numero_dept
+            requete_fantoir_errone_dept();
+        }
+    }
+    function requete_fantoir_errone_dept(){
+        if (check_form_for_dept()){
+            numero_dept = $('#input_dept')[0].value
+            document.title = titre+' ('+numero_dept+')'
 
-			$('body').css('cursor','default');
+            $('body').css('cursor','progress');
+            $('#wait_ajax').css('visibility','visible')
+                            .append($('<p>').append('Chargement des Fantoirs erronés...'))
+            $.ajax({
+                url: "fantoir_errone.py?dept="+numero_dept,
+            })
+            .done(function( data ){
+                nom_dept = data[0][0][1]
+                code_dept = data[0][0][0]
 
-			url_map_org_part1 = 'http://www.openstreetmap.org/'
-			url_map_fr_part1 = 'http://tile.openstreetmap.fr/'
-			url_bano_part1 = 'http://tile.openstreetmap.fr/~cquest/leaflet/bano.html'
-			url_edit_part1 = 'http://www.openstreetmap.org/edit?editor='
-			delta = 0.0008
+                data = data[1]
+                titre_bandeau = ' codes Fantoir erronés'
+                if (data.length < 2){
+                    titre_bandeau = ' code Fantoir erroné'
+                }
+                $('#bandeau h1').empty().append(data.length+titre_bandeau)
+                $('#bandeau h2').empty().append(nom_dept+' ('+numero_dept+')')
 
-/*			url_listing_fantoir = './liste_brute_fantoir.html#insee='+$('#input_insee')[0].value
-			add_map_link('table_infos_commune',url_listing_fantoir,'Fantoir')
-			$('#table_infos_commune').append($('<tr>').append($('<td>').addClass('cellule_intitule').append('Données OSM en date du')).append($('<td>').addClass('cellule_data').append(cache_hsnr[2])))
-*/
-			add_header('table_fantoir_errone',true)
-			table = 'table_fantoir_errone'
-			$('#'+table).append($('<tbody>'))
-			for (l=0;l<data.length;l++){
-				let [fantoir,
-					nom,
-					lon,
-					lat,
-					dept,
-					commune] = data[l]
-				insee = fantoir.substr(0,5)
+                $('#wait_ajax').css('visibility','hidden');
 
-				//Dept
-				$('#'+table).append($('<tr>').attr('id',fantoir).append($('<td>').text(dept)))
-				//Commune (INSEE)
-				$('#'+table+' tr:last').append($('<td>').text(commune+' ('+insee+')'))
+                url_map_org_part1 = 'http://www.openstreetmap.org/'
+                delta = 0.0008
 
+                $('#table_fantoir_errone').trigger("destroy");
+                $('#table_fantoir_errone').empty()
 
-				//Code Fantoir
-				$('#'+table+' tr:last').append($('<td>').addClass('cell_mauvais_fantoir').text(fantoir))
+                $('#table_fantoir_errone').append($('<thead>').append($('<tr>').append($('<th>').append('Dept'))))
+                $('#table_fantoir_errone tr').append($('<th>').append('Commune (code Insee)'))
+                $('#table_fantoir_errone tr').append($('<th>').append('Code Fantoir erroné'))
+                $('#table_fantoir_errone tr').append($('<th>').append('Voie OSM'))
+                $('#table_fantoir_errone tr').append($('<th>').attr('colspan','1').append('Carte'))
+                $('#table_fantoir_errone tr').append($('<th>').attr('colspan','1').append('Édition'))
+                $('#table_fantoir_errone tr').append($('<th>').attr('colspan','2').append('Voir la commune sur...'))
 
-				//Nom OSM
-				$('#'+table+' tr:last').append($('<td>').text(nom))
-				if (lon && lat){
-					url_ol_part2 = '?zoom=18&lat='+lat+'&lon='+lon
-					url_hash_coords = '18/'+lat+'/'+lon
-					xleft	= lon-delta
-					xright	= lon+delta
-					ybottom	= lat-delta
-					ytop	= lat+delta
-				//visu
-					add_map_link(table,url_map_org_part1+'#map='+url_hash_coords,'ORG')
-					/*add_map_link(table,url_bano_part1+'#'+url_hash_coords,'BANO')*/
-				//JOSM
-					add_josm_link(table,xleft,xright,ybottom,ytop)
-				//Fantoir
-					add_map_link(table,'./index.html#insee='+insee,'Pifomètre ('+insee+')')
-					add_map_link(table,'./liste_brute_fantoir.html#insee='+insee,'Fantoir brut ('+insee+')')
-				}
-			}
+                $('#table_fantoir_errone').append($('<tbody>'))
+                for (l=0;l<data.length;l++){
+                    let [fantoir,
+                        nom,
+                        lon,
+                        lat,
+                        dept,
+                        commune] = data[l]
+                    insee = fantoir.substr(0,5)
 
-	    //Sticky headers : le tableau scrolle dans son contenant
-	    $('#table_fantoir_errone').tablesorter({
-	        widthFixed : true,
-	        headerTemplate : '{content} {icon}', // Add icon for various themes
-	        widgets: [ 'stickyHeaders', 'filter' ],
-	        widgetOptions: {
-	          stickyHeaders_attachTo : '#reponse'
-	        }
-	    });
+                    //Dept
+                    $('#table_fantoir_errone').append($('<tr>').attr('id',fantoir).append($('<td>').text(dept)))
+                    //Commune (INSEE)
+                    $('#table_fantoir_errone tr:last').append($('<td>').text(commune+' ('+insee+')'))
+                    //Code Fantoir
+                    $('#table_fantoir_errone tr:last').append($('<td>').addClass('cell_mauvais_fantoir').text(fantoir))
+                    //Nom OSM
+                    $('#table_fantoir_errone tr:last').append($('<td>').text(nom))
+                    url_hash_coords = '18/'+lat+'/'+lon
+                    xleft   = lon-delta
+                    xright  = lon+delta
+                    ybottom = lat-delta
+                    ytop    = lat+delta
+                    //visu
+                    add_map_link('table_fantoir_errone',url_map_org_part1+'#map='+url_hash_coords,'ORG')
+                    //JOSM
+                    add_josm_link('table_fantoir_errone',xleft,xright,ybottom,ytop)
+                    //Fantoir
+                    add_map_link('table_fantoir_errone','./index.html#insee='+insee,'Pifomètre ('+insee+')')
+                    add_map_link('table_fantoir_errone','./liste_brute_fantoir.html#insee='+insee,'Fantoir brut ('+insee+')')
+                }
 
-		})
-	};
-	function check_url_for_insee(){
-		pattern_insee = new RegExp('^[0-9][0-9abAB][0-9]{3}$')
-		var res
-		if (window.location.hash){
-			if (window.location.hash.split('insee=')[1]){
-				if (pattern_insee.test(window.location.hash.split('insee=')[1].split('&')[0])){
-					res = window.location.hash.split('insee=')[1].split('&')[0]
-				} else {
-					alert(window.location.hash.split('insee=')[1].split('&')[0]+' n\'est pas un code INSEE de commune\n\nAbandon')
-				}
-			}
-		}
-		return res
-	}
-	function add_map_link(table,href,text){
-		$('#'+table+' tr:last').append($('<td>')
-									.append($('<a>')
-									.attr('href',href)
-									.attr('target','blank')
-									.text(text)))	
-	}
-	function add_josm_link(table,xl,xr,yb,yt){
-		$('#'+table+' tr:last').append($('<td>').addClass('zone-clic-josm')
-									.attr('xleft',xl).attr('xright',xr).attr('ybottom',yb).attr('ytop',yt)
-									.text('JOSM')
-									.click(function(){
-										srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xl+'&right='+xr+'&top='+yt+'&bottom='+yb;
-										$('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
-										$(this).addClass('clicked');
-									})
-								)
-	}
-	function add_header(table,with_edit_and_map_links){
-		$('#'+table).append($('<thead>').append($('<tr>').append($('<th>').append('Dept'))))
-		$('#'+table+' tr').append($('<th>').append('Commune (code Insee)'))
-		$('#'+table+' tr').append($('<th>').append('Code Fantoir erroné'))
-		$('#'+table+' tr').append($('<th>').append('Voie OSM'))
-		if (with_edit_and_map_links){
-			$('#'+table+' tr').append($('<th>').attr('colspan','1').append('Carte'))
-			$('#'+table+' tr').append($('<th>').attr('colspan','1').append('Édition'))
-			$('#'+table+' tr').append($('<th>').attr('colspan','2').append('Voir la commune sur...'))
-		}
-	}
-
+                //Sticky headers : le tableau scrolle dans son contenant
+                $('#table_fantoir_errone').tablesorter({
+                    widthFixed : true,
+                    headerTemplate : '{content} {icon}', // Add icon for various themes
+                    widgets: [ 'stickyHeaders', 'filter' ],
+                    widgetOptions: {
+                      stickyHeaders_attachTo : '#reponse'
+                    }
+                });
+                window.location.hash="#dept="+code_dept
+                $('body').css('cursor','default');
+            })
+        }
+    };
 </script>
 </head>
 <body onload="start()">
 
-	<header>
-		<!--#include file="includes/menu.html" -->
-	</header>
-		
-	<div id="bandeau" class="haut">
-		<div id="descriptif">
-            <h2>France</h2>
-			<h1>Fantoirs erronés</h1>
-			<h3>Liste des codes Fantoir trouvés dans OSM et inconnus du fichier Fantoir officiel. Ce sont souvent des codes erronés, à cause d'erreurs de frappe : minuscules, inversions de caratères, etc.</h3>
-		</div>
-		<div id="wait_ajax" class="bas"></div>
-	</div>
+    <header>
+        <!--#include file="includes/menu.html" -->
+    </header>
 
-	<div id="reponse" class="haut">
-		<table id="table_fantoir_errone" class="tablesorter"></table>
-	</div>
+    <div id="barre-jaune">
+        <span>Département :</span>
+        <form action="javascript:requete_fantoir_errone_dept()" autocomplete="on">
+            <input type="text" id="input_dept" placeholder="N° de département"></input>
+            <input type="submit" value="Afficher">
+        </form>
+    </div>
 
-	<footer>
-		<!--#include file="includes/footer.html" -->
-	</footer>
+    <div id="bandeau">
+        <div id="descriptif">
+            <h2></h2>
+            <h1>Fantoirs erronés</h1>
+            <h3>Liste des codes Fantoir trouvés dans OSM et inconnus du fichier Fantoir officiel. Ce sont souvent des codes erronés, à cause d'erreurs de frappe : minuscules, inversions de caratères, etc.</h3>
+        </div>
+        <div id="wait_ajax" class="bas"></div>
+    </div>
 
-	<div id="josm_target" style="visibility : hidden"></div>
+    <div id="reponse" class="haut">
+        <table id="table_fantoir_errone" class="tablesorter"></table>
+    </div>
+
+    <footer>
+        <!--#include file="includes/footer.html" -->
+    </footer>
+
+    <div id="josm_target" style="visibility : hidden"></div>
 
 </body>
 </html>

@@ -42,3 +42,21 @@
         }
         return res
     }
+    function add_map_link(table,href,text){
+        $('#'+table+' tr:last').append($('<td>')
+                                    .append($('<a>')
+                                    .attr('href',href)
+                                    .attr('target','blank')
+                                    .text(text)))
+    }
+    function add_josm_link(table,xl,xr,yb,yt){
+        $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-josm')
+                                    .attr('xleft',xl).attr('xright',xr).attr('ybottom',yb).attr('ytop',yt)
+                                    .text('JOSM')
+                                    .click(function(){
+                                        srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xl+'&right='+xr+'&top='+yt+'&bottom='+yb;
+                                        $('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
+                                        $(this).addClass('clicked');
+                                    })
+                                )
+    }

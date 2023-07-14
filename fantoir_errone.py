@@ -7,8 +7,9 @@ import json
 
 from sql import sql_get_data
 
-data = sql_get_data('fantoir_errone',{})
+params = cgi.FieldStorage()
+dept = params['dept'].value
 
 print("Content-Type: application/json\n")
 
-print(json.JSONEncoder().encode(data))
+print(json.JSONEncoder().encode([sql_get_data('infos_dept',{'dept':dept}),sql_get_data('fantoir_errone_dept',{'dept':dept})]))

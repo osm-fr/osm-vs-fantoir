@@ -25,7 +25,6 @@
         if (check_form_for_dept()){
             numero_dept = $('#input_dept')[0].value
             document.title = titre+' ('+numero_dept+')'
-            // update_csv_url(numero_dept)
 
             $('body').css('cursor','progress');
             $('#wait_ajax').css('visibility','visible')
@@ -43,17 +42,12 @@
                     titre_bandeau = ' code Fantoir annulé'
                 }
                 $('#bandeau h1').empty().append(data.length+titre_bandeau)
-
-
                 $('#bandeau h2').empty().append(nom_dept+' ('+numero_dept+')')
-
-                $('#wait_ajax').css('visibility','hidden');
                 $('#bandeau h4').empty().append("Codes trouvés dans OSM mais annulés d'après le fichier Fantoir officiel.<br />Noms de voies remplacés, voies en double dont un seul code est conservé... Pour les communes fusionnées, les nouveaux codes Fantoir sont à retrouver sur la page de la nouvelle commune.")
 
+                $('#wait_ajax').css('visibility','hidden');
+
                 url_map_org_part1 = 'http://www.openstreetmap.org/'
-                url_map_fr_part1 = 'http://tile.openstreetmap.fr/'
-                url_bano_part1 = 'http://tile.openstreetmap.fr/~cquest/leaflet/bano.html'
-                url_edit_part1 = 'http://www.openstreetmap.org/edit?editor='
                 delta = 0.0008
 
                 $('#table_fantoir_annule').trigger("destroy");
@@ -89,7 +83,6 @@
                     $('#table_fantoir_annule tr:last').append($('<td>').text(nom))
                     //Date d'annulation
                     $('#table_fantoir_annule tr:last').append($('<td>').text(date_annul))
-                    url_ol_part2 = '?zoom=18&lat='+lat+'&lon='+lon
                     url_hash_coords = '18/'+lat+'/'+lon
                     xleft   = lon-delta
                     xright  = lon+delta
@@ -118,26 +111,6 @@
             })
         }
     };
-    function add_map_link(table,href,text){
-        $('#table_fantoir_annule tr:last').append($('<td>')
-                                    .append($('<a>')
-                                    .attr('href',href)
-                                    .attr('target','blank')
-                                    .text(text)))   
-    }
-    function add_josm_link(table,xl,xr,yb,yt){
-        $('#table_fantoir_annule tr:last').append($('<td>')
-                                    .addClass('zone-clic-josm')
-                                    .attr('xleft',xl).attr('xright',xr).attr('ybottom',yb).attr('ytop',yt)
-                                    .text('JOSM')
-                                    .click(function(){
-                                        srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xl+'&right='+xr+'&top='+yt+'&bottom='+yb;
-                                        $('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
-                                        $(this).addClass('clicked');
-                                    })
-                                )
-    }
-
 </script>
 </head>
 <body onload="start()">
