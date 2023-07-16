@@ -4,6 +4,7 @@
 <title>Pifomètre</title>
 <script src="js/jquery-3.6.4.min.js"></script>
 <script src="js/jquery.tablesorter.combined.min.js"></script>
+<script src="js/fonctions.js"></script>
 <link rel="stylesheet" href="css/bulma/bulma.min.css" type="text/css"/>
 <link rel="stylesheet" href="css/bulma/main.min.css" type="text/css"/>
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
@@ -135,18 +136,6 @@
                 }
             }
        });
-    }
-    function add_josm_link(xl,xr,yb,yt){
-        $('#table_pifometre tr:last').append($('<td>')
-                                    .addClass('zone-clic-josm')
-                                    .attr('xleft',xl).attr('xright',xr).attr('ybottom',yb).attr('ytop',yt)
-                                    .text('JOSM')
-                                    .click(function(){
-                                        srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xl+'&right='+xr+'&top='+yt+'&bottom='+yb;
-                                        $('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
-                                        $(this).addClass('clicked');
-                                    })
-                                )
     }
     function add_statut_fantoir(id_ligne,fantoir,id_statut){
         $('#table_pifometre tr:last').removeClass(STATUS_FANTOIR).addClass('statut'+id_statut)
@@ -452,7 +441,7 @@
                     }
                         //JOSM
                     if (lon != undefined) {
-                        add_josm_link(xmin,xmax,ymin,ymax)
+                        add_josm_link('table_pifometre',xmin,xmax,ymin,ymax)
                     } else {
                         $('#table_pifometre tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('?'))
                     }
@@ -500,21 +489,6 @@
             $('body').css('cursor','default');
         })
     };
-
-    function check_url_for_insee(){
-        pattern_insee = new RegExp('^[0-9][0-9abAB][0-9]{3}$')
-        var res
-        if (window.location.hash){
-            if (window.location.hash.split('insee=')[1].split('&')[0]){
-                if (pattern_insee.test(window.location.hash.split('insee=')[1].split('&')[0])){
-                    res = window.location.hash.split('insee=')[1].split('&')[0]
-                } else {
-                    alert(window.location.hash.split('insee=')[1].split('&')[0]+' n\'est pas un code INSEE de commune\n\nAbandon')
-                }
-            }
-        }
-        return res
-    }
     function update_csv_url(){
         urlCSV = 'requete_pifometre_voies.py?insee='+$('#input_insee')[0].value+'&format=csv';
     }
@@ -533,20 +507,6 @@
                             .append($('<span>').append(osm_state+' (UTC)'))
                             .show()
     }
-    function check_josm_remote_control(){
-        $.ajax({
-            url: "http://127.0.0.1:8111/version"
-        })
-        .done(function(data){
-            if (data){
-                console.log('Télécommande JOSM OK')
-            }
-        })
-        .fail(function(data){
-            alert("La télécommande JOSM ne répond pas.\nCertains liens sur la page nécessitent que JOSM soit démarré avec la télécommande activée\n\nConsulter l'aide sur la télécommande : https://josm.openstreetmap.de/wiki/Help/Preferences/RemoteControl")
-        })
-    }
-
 </script>
 </head>
 

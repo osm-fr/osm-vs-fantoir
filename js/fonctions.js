@@ -32,7 +32,7 @@
         pattern_insee = new RegExp('^[0-9][0-9abAB][0-9]{3}$')
         var res
         if (window.location.hash){
-            if (window.location.hash.split('insee=')[1]){
+            if (window.location.hash.split('insee=')[1].split('&')[0]){
                 if (pattern_insee.test(window.location.hash.split('insee=')[1].split('&')[0])){
                     res = window.location.hash.split('insee=')[1].split('&')[0]
                 } else {
@@ -59,4 +59,17 @@
                                         $(this).addClass('clicked');
                                     })
                                 )
+    }
+    function check_josm_remote_control(){
+        $.ajax({
+            url: "http://127.0.0.1:8111/version"
+        })
+        .done(function(data){
+            if (data){
+                console.log('Télécommande JOSM OK')
+            }
+        })
+        .fail(function(data){
+            alert("La télécommande JOSM ne répond pas.\nCertains liens sur la page nécessitent que JOSM soit démarré avec la télécommande activée\n\nPour de l'aide sur la télécommande : https://josm.openstreetmap.de/wiki/Help/Preferences/RemoteControl")
+        })
     }
