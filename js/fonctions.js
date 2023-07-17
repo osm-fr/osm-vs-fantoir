@@ -73,3 +73,64 @@
             alert("La télécommande JOSM ne répond pas.\nCertains liens sur la page nécessitent que JOSM soit démarré avec la télécommande activée\n\nPour de l'aide sur la télécommande : https://josm.openstreetmap.de/wiki/Help/Preferences/RemoteControl")
         })
     }
+    function get_labels_statut_fantoir(){
+        STATUS_FANTOIR = []
+        a_menus_labels = []
+        $.ajax({
+            url: "labels_statut_fantoir.py",
+            async: false
+        })
+        .done(function( data ) {
+            for (c=0;c<data.length;c++){
+                menu_labels = '<select>'
+                id_label = 0
+                for (i=0;i<data.length;i++){
+                    if (c!=i){
+                        menu_labels+='<option value='+data[i][0]+'>'+data[i][1]+'</option>'
+                    } else {
+                        menu_labels+='<option value='+data[i][0]+' selected>'+data[i][1]+'</option>'
+                        id_label = data[i][0]
+                    }
+                }
+                STATUS_FANTOIR.push('statut'+c)
+                menu_labels+='</select>'
+                a_menus_labels[id_label] = menu_labels
+            }
+        })
+        return [a_menus_labels,STATUS_FANTOIR]
+    }
+    function add_statut_fantoir(table,id_ligne,fantoir,id_statut){
+        $('#'+table+' tr:last').removeClass(STATUS_FANTOIR).addClass('statut'+id_statut)
+        $('#'+table+' tr:last').append($('<td class="cell_statut">').append($(a_menus_labels[id_statut]).change(function() {
+            insee = fantoir.substr(0,5);
+            statut = $(this)[0].value;
+            $.ajax({
+                url: "statut_fantoir.py?insee="+insee+"&fantoir="+fantoir+"&statut="+statut
+            })
+            .done(function( data ) {
+                if(data == statut){
+                    $('tr#'+id_ligne).removeClass(STATUS_FANTOIR).addClass('statut'+statut)
+
+                    //Afficher l'infobulle de confirmation
+                    if (statut != '0') {
+                        $('tr#'+id_ligne+' td.cell_statut').append($('<span class="enregistrement gris">').text('✔ Enregistré'));
+                    }
+                    else {
+                        $('tr#'+id_ligne+' td.cell_statut').append($('<span class="enregistrement vert">').text('✔ Enregistré'));
+                    }
+                    setTimeout(function(){
+                        $('tr#'+id_ligne+' td.cell_statut span').css('opacity', '1');
+                        setTimeout(function(){
+                            $('tr#'+id_ligne+' td.cell_statut span').css('opacity', '0');
+                        }, 1500);
+                        setTimeout(function(){
+                            $('tr#'+id_ligne+' td.cell_statut span').remove();
+                        }, 2000);
+                    }, 50);
+
+                } else {
+                    alert("Souci lors de la mise à jour du statut. Le nouveau statut n'a pas été pris en compte")
+                }
+            })
+        })))
+    }
