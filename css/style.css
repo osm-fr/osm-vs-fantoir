@@ -388,6 +388,18 @@ table.tablesorter thead th {
 }
 
 /*---------------------------------------------------------------*/
+/*------------------- LIGNE GRISÉE STATUT PAS OK ----------------*/
+/*---------------------------------------------------------------*/
+
+#reponse tr:not(.statut0) td, 
+#reponse tr:not(.statut0) td.zone-clic-josm,
+#reponse tr:not(.statut0) td.zone-clic-adresses,
+#reponse_numeros tr:not(.statut0) td {
+	background: #e6e6e6;
+	color: #666;
+}
+
+/*---------------------------------------------------------------*/
 /*------------------ COLONNE AVEC CODES FANTOIR -----------------*/
 /*---------------------------------------------------------------*/
 
@@ -495,20 +507,32 @@ table.tablesorter thead th {
 /*---------------------------------------------------------------*/
 
 .enregistrement {
-    position: relative;
-    z-index: 1;
-
 	opacity: 0;
     transition: opacity 0.5s ease;
 
 	display:inline-block;
-    width: 120px;
-    padding: 2px;
-    margin-left: 5px;
 
     font-size: 0.8em;
     font-weight: bold;
     text-align: center;
+}
+
+.enregistrement.numeros {
+    position: relative;
+    z-index: 1;
+
+    width: 120px;
+    padding: 2px;
+    margin-left: 5px;
+}
+
+.enregistrement.voies {
+	position: absolute;
+	z-index: 2;
+
+	width: 80px;
+	padding: 2px 1px;
+	margin-left: 2px;
 }
 .enregistrement.rose {color: #AD005E;}
 .enregistrement.bleu {color: #349BFF;}

@@ -113,10 +113,10 @@
 
                     //Afficher l'infobulle de confirmation
                     if (statut != '0') {
-                        $('tr#'+id_ligne+' td.cell_statut').append($('<span class="enregistrement gris">').text('✔ Enregistré'));
+                        $('tr#'+id_ligne+' td.cell_statut').append($('<span class="enregistrement voies gris">').text('✔ Enregistré'));
                     }
                     else {
-                        $('tr#'+id_ligne+' td.cell_statut').append($('<span class="enregistrement vert">').text('✔ Enregistré'));
+                        $('tr#'+id_ligne+' td.cell_statut').append($('<span class="enregistrement voies vert">').text('✔ Enregistré'));
                     }
                     setTimeout(function(){
                         $('tr#'+id_ligne+' td.cell_statut span').css('opacity', '1');
