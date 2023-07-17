@@ -188,32 +188,11 @@
 /*------------------------------------- REPONSE ------------------------------------*/
 /*----------------------------------------------------------------------------------*/
 
-
-
-/*----------- LIGNE GRISEE, si statut fantoir pas OK -----------*/
-
-#reponse tr:not(.statut0) td, 
-#reponse tr:not(.statut0) td.zone-clic-josm,
-#reponse tr:not(.statut0) td.zone-clic-adresses {
-	background: #e6e6e6;
-	color: #666;
-}
-
 /*--------------- Changement de statut : validation ---------------*/
 
 td.cell_statut {
 	padding-right: 90px;
 }
-.enregistrement {
-	position: absolute;
-	z-index: 2;
-
-	width: 80px;
-	padding: 2px 1px;
-	margin-left: 2px;
-}
-
-
 
 /*---------------------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------------------*/

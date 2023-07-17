@@ -94,10 +94,10 @@
 
                     //Afficher l'infobulle de confirmation
                     if (statut != '0') {
-                        $('tr#'+id_ligne+' td:last').append($('<span class="enregistrement rose">').text('✔ Enregistré'));
+                        $('tr#'+id_ligne+' td:last').append($('<span class="enregistrement numeros rose">').text('✔ Enregistré'));
                     }
                     else {
-                        $('tr#'+id_ligne+' td:last').append($('<span class="enregistrement bleu">').text('✔ Enregistré'));
+                        $('tr#'+id_ligne+' td:last').append($('<span class="enregistrement numeros bleu">').text('✔ Enregistré'));
                     }
                     setTimeout(function(){
                         $('tr#'+id_ligne+' td:last span').css('opacity', '1');
