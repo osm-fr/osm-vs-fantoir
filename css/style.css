@@ -399,6 +399,11 @@ table.tablesorter thead th {
 	color: #666;
 }
 
+#reponse #listing_fantoir tr td {
+	background: #fff;
+	color: #000;
+}
+
 /*---------------------------------------------------------------*/
 /*------------------ COLONNE AVEC CODES FANTOIR -----------------*/
 /*---------------------------------------------------------------*/
