@@ -328,7 +328,7 @@ h4 {
 	margin-bottom: 1.2em;
 }
 #integration a {
-	color: #D33A8B;
+	color: #EC0080;
 }
 
 /*-------------------------------------------------------------------------------------*/
@@ -391,9 +391,9 @@ table.tablesorter thead th {
 /*------------------- LIGNE GRISÉE STATUT PAS OK ----------------*/
 /*---------------------------------------------------------------*/
 
-#reponse tr:not(.statut0) td, 
-#reponse tr:not(.statut0) td.zone-clic-josm,
-#reponse tr:not(.statut0) td.zone-clic-adresses,
+#reponse #table_pifometre tr:not(.statut0) td, 
+#reponse #table_pifometre tr:not(.statut0) td.zone-clic-josm,
+#reponse #table_pifometre tr:not(.statut0) td.zone-clic-adresses,
 #reponse_numeros tr:not(.statut0) td {
 	background: #e6e6e6;
 	color: #666;
@@ -431,17 +431,20 @@ table.tablesorter thead th {
 /*-------------- PASTILLES CORRESPONDANT AUX FILTRES ------------*/
 /*---------------------------------------------------------------*/
 
-.pastille-verte, .pastille-orange, .pastille-bleue, .pastille-grise {
+.pastille-verte, .pastille-grise, .pastille-orange, .pastille-bleue {
   height: 15px;
   width: 15px;
-  border-radius: 50%;
   display: inline-block;
   margin: 2px 10px 0 10px;
 }
 
-.pastille-verte {background-color: #48c78e;}
-.pastille-orange {background-color: #f1AC45;}
-.pastille-bleue {background-color: #0457B3;}
+.pastille-verte {border-radius: 50%;}
+.pastille-orange {border-radius: 10%;}
+.pastille-bleue, .pastille-grise {border-radius: 30%;}
+
+.pastille-verte {background-color: #00A779;}
+.pastille-orange {background-color: #EFA500;}
+.pastille-bleue {background-color: #56B4E9;}
 .pastille-grise {background-color: lightgrey;}
 
 /*---------------------------------------------------------------*/
@@ -491,13 +494,13 @@ table.tablesorter thead th {
 
 .zone-clic-adresses,
 .zone-clic-adresses a {
-	color:#D33A8B; /*Rose adresses*/
+	color:#EC0080; /*Rose adresses*/
 }
 
 .zone-clic-adresses.clicked,
 .zone-clic-adresses.clicked a,
 #reponse tr:hover td.zone-clic-adresses.clicked {
-	background-color:#D33A8B ;
+	background-color:#EC0080 ;
 	color:#fff;
 }
 
@@ -534,8 +537,8 @@ table.tablesorter thead th {
 	padding: 2px 1px;
 	margin-left: 2px;
 }
-.enregistrement.rose {color: #AD005E;}
-.enregistrement.bleu {color: #349BFF;}
+.enregistrement.rose {color: #EC0080;}
+.enregistrement.bleu {color: #56B4E9;}
 .enregistrement.gris {color: #000;}
 .enregistrement.vert {color: #33A672;}
 
@@ -553,18 +556,26 @@ table.tablesorter thead th {
 .map-numero,
 .legende-numero {
 	font-weight: bold;
-	font-size: 1.3em;
+	font-size: 1.2em;
 	line-height: 1em;
-	color: #349BFF;
+	color: #56B4E9; /*bleu*/
 	background-color: rgba(255, 255, 255, 0.6);
 	width: fit-content !important;
-	padding: 4px;
+	padding: 5px;
 	white-space: nowrap;
 	border:  solid 1px;
+	border-radius: 45%;
 }
 .map-numero.anomalie,
 .legende-numero.anomalie {
-	color: #AD005E;
+	color: #EC0080; /*rose*/
+	border-radius: 8%;
+}
+.map-numero.integre,
+.legende-numero.integre {
+	color: #009E73; /*vert*/
+	font-size: 1.1em;
+	border:none;
 }
 
 #legende_map {
