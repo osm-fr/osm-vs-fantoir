@@ -40,6 +40,15 @@
                 }
             }
         }
+        if (window.location.search && res == undefined){
+            if (window.location.search.split('insee=')[1].split('&')[0]){
+                if (pattern_insee.test(window.location.search.split('insee=')[1].split('&')[0])){
+                    res = window.location.search.split('insee=')[1].split('&')[0]
+                } else {
+                    alert(window.location.search.split('insee=')[1].split('&')[0]+' n\'est pas un code INSEE de commune\n\nAbandon')
+                }
+            }
+        }
         return res
     }
     function add_map_link(table,href,text){

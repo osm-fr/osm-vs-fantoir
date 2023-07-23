@@ -5,8 +5,7 @@
 <script src="js/jquery-3.6.4.min.js"></script>
 <script src="js/tablesorter/jquery.tablesorter.js"></script>
 <script src="js/jquery.tablesorter.combined.min.js"></script>
-<!-- <script src="js/tablesorter/parsers/parser-input-select.min.js"></script> -->
-<!-- <script src="js/tablesorter/widgets/widget-filter.min.js"></script> -->
+<script src="js/fonctions.js"></script>
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
 <link rel="stylesheet" href="css/responsive.css" type="text/css"/>
@@ -19,20 +18,6 @@
    crossorigin=""></script>
 <script>
     var menu_labels
-    function check_url_for_insee(){
-        pattern_insee = new RegExp('^[0-9][0-9abAB][0-9]{3}$')
-        var res
-        if (window.location.search){
-            if (window.location.search.split('insee=')[1].split('&')[0]){
-                if (pattern_insee.test(window.location.search.split('insee=')[1].split('&')[0])){
-                    res = window.location.search.split('insee=')[1].split('&')[0]
-                } else {
-                    alert(window.location.search.split('insee=')[1].split('&')[0]+' n\'est pas un code INSEE de commune\n\nAbandon')
-                }
-            }
-        }
-        return res
-    }
     function check_url_for_fantoir(){
         pattern_fantoir = new RegExp('^[0-9][0-9abAB][0-9]{3}[0-9|a-z|A-Z]{4}$')
         var res
@@ -141,8 +126,6 @@
         insee = check_url_for_insee()
         fantoir = check_url_for_fantoir()
         source = check_url_for_source()
-        //$('#lien-retour').empty().append($('<a>').attr('href','pifometre.html#insee='+insee).append('<< Retour à la commune'))
-        global_ligne_id = 1000;
 
         $.ajax({
             url: "requete_inspect_numeros.py?insee="+insee+"&fantoir="+fantoir
@@ -166,24 +149,27 @@
                                 $('#table_inspect_adresse tr').append($('<th>').append('Statut de l\'adresse'))
                                 $('#table_inspect_adresse').append($('<tbody>'))
                                 for (l=0;l<data.length;l++){
-                                    source = data[l][0]
-                                    numero = data[l][1]
-                                    statut = data[l][3]
-                                    lon = data[l][6]
-                                    lat = data[l][7]
-                                    $('#table_inspect_adresse tbody:last').append($('<tr>').attr('id',global_ligne_id).append($('<td>').text(source)))
+                                    let[source,
+                                        numero,
+                                        nom_voie,
+                                        statut,
+                                        nom_commune,
+                                        code_insee,
+                                        lon,
+                                        lat] = data[l]
+
+                                    $('#table_inspect_adresse tbody:last').append($('<tr>').attr('id',l).append($('<td>').text(source)))
                                     $('#table_inspect_adresse tr:last').append($('<td>').text(numero));
 
-                                    add_statut_numero(global_ligne_id,numero,statut,insee,fantoir,source)
+                                    add_statut_numero(l,numero,statut,insee,fantoir,source)
 
-                                    var myIcon = L.divIcon({className: 'map-numero ligne'+global_ligne_id,html:'<span>'+numero+'</span>'});
+                                    var myIcon = L.divIcon({className: 'map-numero ligne'+l,html:'<span>'+numero+'</span>'});
                                     L.marker([lat, lon],{icon: myIcon}).addTo(map)
                                     min_lon = Math.min(min_lon,lon);
                                     max_lon = Math.max(max_lon,lon);
                                     min_lat = Math.min(min_lat,lat);
                                     max_lat = Math.max(max_lat,lat);
 
-                                    global_ligne_id+=1
                                 }
                                 $('#table_inspect_adresse').trigger("resetToLoadState");
                                 
