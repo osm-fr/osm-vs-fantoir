@@ -58,6 +58,7 @@ SELECT t.fantoir,
        nom_topo,
        pn.nom AS nom_osm,
        nb.nom AS nom_ban,
+       nb.source AS source_nom,
        nb.nom_ancienne_commune,
        COALESCE(ST_X(g.geometrie),pn.lon,place.lon,NULL),
        COALESCE(ST_Y(g.geometrie),pn.lat,place.lat,NULL),
@@ -99,14 +100,16 @@ LEFT OUTER JOIN (SELECT fantoir,
 USING (fantoir)
 LEFT OUTER JOIN (SELECT fantoir,
                         nom,
-                        nom_ancienne_commune
-                        FROM (SELECT fantoir,
-                                     nom,
-                                     nom_ancienne_commune,
-                                     rank() OVER (PARTITION by fantoir order by case when source = 'CADASTRE' then 1 else 2 end) AS rang
-                              FROM   nom_fantoir
-                              WHERE  code_insee = '__code_insee__' AND source != 'OSM') nb
-                        WHERE rang = 1)nb
+                        nom_ancienne_commune,
+                        source
+                FROM    (SELECT fantoir,
+                                nom,
+                                nom_ancienne_commune,
+                                source,
+                                rank() OVER (PARTITION by fantoir order by case when source = 'CADASTRE' then 1 else 2 end) AS rang
+                        FROM   nom_fantoir
+                        WHERE  code_insee = '__code_insee__' AND source != 'OSM') nb
+                WHERE rang = 1)nb
 USING (fantoir)
 LEFT OUTER JOIN geom_adresses AS g
 USING (fantoir)
@@ -127,6 +130,7 @@ SELECT fantoir,
        NULL,
        NULL,
        nom,
+       NULL,
        NULL,
        NULL,
        lon,
