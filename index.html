@@ -285,6 +285,7 @@
                          nom_topo,
                          nom_osm,
                          nom_ban,
+                         source_nom_ban,
                          nom_ancienne_commune,
                          lon,
                          lat,
@@ -355,7 +356,15 @@
                         $('#'+table+' tr:last').append($('<td>').text(nom_ancienne_commune))
                     }
                     //Nom Fantoir
-                    $('#'+table+' tr:last').append($('<td>').text(nom_topo))
+                    if (is_place){
+                        $('#'+table+' tr:last').append($('<td>')
+                                                    .append($('<img>').attr('src','img/lieudit.png').attr('width','20px').attr('title','Lieu-dit'))
+                                                    .append($('<span>').text(' '+nom_topo)))
+                    }
+                    else 
+                        $('#'+table+' tr:last').append($('<td>')
+                                                    .append($('<img>').attr('src','img/voie.png').attr('title','Voie'))
+                                                    .append($('<span>').text(' '+nom_topo)))
                     //Nom OSM
                     if ($('#'+table+' tr:last').hasClass('nom_integre')){
                         $('#'+table+' tr:last').append($('<td>')
@@ -371,13 +380,23 @@
                                                         .append($('<span class="pastille-bleue" title="Trouvé dans OSM mais inconnu de Fantoir">'))
                                                         .append($('<span>').text(nom_osm)))
                     }
-                    //Nom BAN
-                    $('#'+table+' tr:last').append($('<td>').text(nom_ban))
+                    //Nom BAN ou Cadastre
+                    if (source_nom_ban == 'CADASTRE') {
+                        $('#'+table+' tr:last').append($('<td>').append($('<span class="picto cadastre" title="Nom provenant du cadastre">'))
+                                                                .append($('<span>').text(nom_ban)))
+                    }
+                    else if (source_nom_ban == 'BAN') {
+                        $('#'+table+' tr:last').append($('<td>').append($('<span class="picto ban" title="Nom provenant de la BAN">'))
+                                                                .append($('<span>').text(nom_ban)))
+                    }
+                    else $('#'+table+' tr:last').append($('<td>').text(nom_ban))
+
+                    //visu
                     xmin  = lon-DELTA
                     xmax  = lon+DELTA
                     ymin  = lat-DELTA
                     ymax  = lat+DELTA
-                    //visu
+
                     if (lat != null || lon != null) {
                         $('#'+table+' tr:last').append($('<td>')
                                         .append($('<a>')
@@ -386,13 +405,13 @@
                                         .text('ORG')))
                     }
                     else {
-                        $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('?'))
+                        $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('x'))
                     }
                         //JOSM
                     if (lon != undefined) {
                         add_josm_link(table,xmin,xmax,ymin,ymax)
                     } else {
-                        $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('?'))
+                        $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('x'))
                     }
                     //Statut Fantoir
                     if (caractere_annul != 'B' && is_osm_hors_fantoir == false){
