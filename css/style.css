@@ -426,12 +426,11 @@ table.tablesorter thead th {
 	color: #FF6600;
 }
 
-
 /*---------------------------------------------------------------*/
 /*-------------- PASTILLES CORRESPONDANT AUX FILTRES ------------*/
 /*---------------------------------------------------------------*/
 
-.pastille-verte, .pastille-grise, .pastille-orange, .pastille-bleue {
+.pastille-verte, .pastille-grise, .pastille-bleue {
   height: 15px;
   width: 15px;
   display: inline-block;
@@ -439,13 +438,41 @@ table.tablesorter thead th {
 }
 
 .pastille-verte {border-radius: 50%;}
-.pastille-orange {border-radius: 10%;}
 .pastille-bleue, .pastille-grise {border-radius: 30%;}
+.pastille-orange {
+	height: 13px;
+	width: 13px;
+	display: inline-block;
+	margin: 2px 10px 0 10px;
+	-ms-transform: rotate(45deg); /* Internet Explorer */
+	-moz-transform: rotate(45deg); /* Firefox */
+	-webkit-transform: rotate(45deg); /* Safari et Chrome */
+	-o-transform: rotate(45deg); /* Opera */
+	margin: 3px 10px 0 10px;
+}
 
 .pastille-verte {background-color: #00A779;}
 .pastille-orange {background-color: #EFA500;}
 .pastille-bleue {background-color: #56B4E9;}
 .pastille-grise {background-color: lightgrey;}
+
+
+/*---------------------------------------------------------------*/
+/*------------------ PICTO SOURCE BAN ou CADASTRE ---------------*/
+/*---------------------------------------------------------------*/
+
+.picto {
+  height: 16px;
+  width: 16px;
+  display: inline-block;
+  margin: 2px 5px 0 5px;
+}
+.picto.cadastre {
+  background: url("../img/cadastre.png") no-repeat;
+}
+.picto.ban {
+  background: url("../img/ban.png") no-repeat;
+}
 
 /*---------------------------------------------------------------*/
 /*--------------------- PICTO PAS DE COORDONNEES ----------------*/
