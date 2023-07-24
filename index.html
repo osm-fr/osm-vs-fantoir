@@ -271,7 +271,7 @@
                 $('#'+table+' tr').append($('<th>').append('Libellé OSM'))
                 $('#'+table+' tr').append($('<th>').append('Libellé BAN ou CADASTRE'))
                 $('#'+table+' tr').append($('<th>').append('Carte'))
-                $('#'+table+' tr').append($('<th>').append('Edition'))
+                $('#'+table+' tr').append($('<th>').attr('colspan','2').append('Edition'))
                 $('#'+table+' tr').append($('<th>').append('Statut Fantoir ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
                 $('#'+table+' tr').append($('<th>').attr('colspan','2').addClass('string-none').append('Intégrer les adresses'))
                 $('#'+table+' tr').append($('<th>').append('Qualifier les adresses'))
@@ -425,6 +425,12 @@
                     //--- JOSM ---
                     if (lon != undefined) {
                         add_josm_link(table,xmin,xmax,ymin,ymax)
+                    } else {
+                        $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('x'))
+                    }
+                    //--- iD ---
+                    if (lon != undefined) {
+                        add_map_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
                     } else {
                         $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('x'))
                     }
