@@ -274,17 +274,18 @@ h4 {
 	float: left;
 }
 
-/*Spécifique à la page Fantoir brut*/
+/*Spécifique aux pages Fantoir brut et Numéros*/
 #descriptif #infos_commune_col1 {
 	margin: 15px 0;
 }
 
 #date-maj,
-#liens_commune {
+#liens_commune,
+#liens_voie {
 	clear: both;
 	margin: 0 20px;
 	line-height: 1.6em;
-	font-size: 0.8em;
+	font-size: 0.9em;
 }
 .cellule_intitule,
 .cellule_data {
@@ -372,7 +373,7 @@ th {
 td {
 	padding:1px 15px;
 }
-table.tablesorter tbody td:not(.zone-clic-josm):not(.cell_mauvais_fantoir):not(.zone-clic-adresses),
+table.tablesorter tbody td:not(.zone-clic-josm):not(.zone-clic-id):not(.cell_mauvais_fantoir):not(.zone-clic-adresses),
 table.tablesorter thead th {
 	padding-left: 1.2em;
 }
@@ -393,6 +394,7 @@ table.tablesorter thead th {
 
 #reponse #table_pifometre tr:not(.statut0) td, 
 #reponse #table_pifometre tr:not(.statut0) td.zone-clic-josm,
+#reponse #table_pifometre tr:not(.statut0) td.zone-clic-id,
 #reponse #table_pifometre tr:not(.statut0) td.zone-clic-adresses,
 #reponse_numeros tr:not(.statut0) td {
 	background: #e6e6e6;
@@ -490,6 +492,7 @@ table.tablesorter thead th {
 /*---------------------------------------------------------------*/
 
 .zone-clic-josm,
+.zone-clic-id,
 .zone-clic-adresses {
 	cursor:pointer;
 	font-weight: bold;
@@ -510,14 +513,17 @@ table.tablesorter thead th {
 }
 
 /*--- Couleurs ---*/
-.zone-clic-josm {
-	color:#863602; /*Marron logo JOSM*/
-}
+.zone-clic-josm {color:#863602; /*Marron logo JOSM*/}
+
 .zone-clic-josm.clicked,
 #reponse tr:hover td.zone-clic-josm.clicked {
 	background-color:#863602;
 	color: #fff;
 }
+
+.zone-clic-id a {color:#777;} /*Gris*/
+.zone-clic-id.clicked, #reponse tr:hover td.zone-clic-id.clicked {background-color:#777;}
+.zone-clic-id.clicked a {color: #fff;}
 
 .zone-clic-adresses,
 .zone-clic-adresses a {

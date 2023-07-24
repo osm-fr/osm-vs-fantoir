@@ -46,22 +46,28 @@
     }
 
     function add_josm_addr_link(insee,fantoir,nom_fantoir,nombre,fantoir_dans_relation,is_place){
-        $('#integration').append($('<span>').addClass('zone-clic-adresses').text(nombre > 1 ? nombre+' Points':'1 Point'))
-                                                    .click(function(){
-                                                        stringToRemove = window.location.href.split('/').pop()
-                                                        srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele='+((is_place) ? 'Place':'Points');
-                                                        $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
-                                                    })
+        //Nb de points
+        $('#liens_voie').append($('<span>').addClass('zone-clic-adresses')
+                            .append($('<span>').text(nombre > 1 ? nombre+' Points':'1 Point'))
+                        )
         if (is_place){
-            $('#integration').append($('<span>').text(' (lieu-dit)'))
+            $('#liens_voie .zone-clic-adresses').append($('<span>').text(' (lieu-dit)'))
         }
-        else {
-            $('#integration').append($('<span>').addClass('zone-clic-adresses').text('Relation')
-                                                        .click(function(){
-                                                            stringToRemove = window.location.href.split('/').pop()
-                                                            srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele=Relation&fantoir_dans_relation='+fantoir_dans_relation;
-                                                            $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
-                                                        })
+        //Ajouter lien
+        $('#liens_voie .zone-clic-adresses').click(function(){
+                                                stringToRemove = window.location.href.split('/').pop()
+                                                srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele='+((is_place) ? 'Place':'Points');
+                                                $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
+                                            })
+        //Ou relation si c'est une voie
+        if (!is_place){
+            $('#liens_voie').append($('<span>').text(' ou '))
+            $('#liens_voie').append($('<span>').addClass('zone-clic-adresses').text('Relation')
+                                                .click(function(){
+                                                    stringToRemove = window.location.href.split('/').pop()
+                                                    srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele=Relation&fantoir_dans_relation='+fantoir_dans_relation;
+                                                    $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
+                                                })
                                     )
         }
     }
@@ -143,13 +149,45 @@
 
                                 var map = L.map('map').setView([data[0][7], data[0][6]], 18);
                                 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',maxZoom: 19}).addTo(map);
-                                $('#bandeau h1').append(nom_voie)
-                                $('#bandeau h2:first').append(data[0][4]+" (").append($('<a>').attr('href','index.html#insee='+insee).append(data[0][5]+")"))
+
+                                // INFOS 1e COLONNE : Liens commune, intégration adresses
+                                $('#infos_commune_col1').empty()
+                                                    .append($('<div id="date-maj">')
+                                                      .append($('<div>').addClass('cellule_intitule').append('<strong>Code Insee :</strong>'))
+                                                      .append($('<div>').addClass('cellule_data').append('&nbsp;').append(insee))
+                                                    )
+                                .append($('<div id="liens_commune">').append('<strong>Voir la commune sur :</strong> ')
+                                  /*.append($('<a>')
+                                      .attr('target','blank')
+                                      .attr('href',url_map_org_part1+'?mlat='+lat_commune+'&mlon='+lon_commune+'#map='+url_hash_coords)
+                                      .text('ORG')
+                                  )
+                                  .append(' / ')*/
+                                  .append($('<a>')
+                                      .attr('target','blank')
+                                      .attr('href','https://adresse.data.gouv.fr/base-adresse-nationale/'+insee)
+                                      .text('BAN')
+                                  )
+                                  .append(' / ')
+                                  .append($('<a>')
+                                      .attr('target','blank')
+                                      .attr('href','index.html#insee='+insee)
+                                      .text('Pifomètre')
+                                  )
+                                )
+
+                                .append($('<div id="liens_voie">').append('<strong>Intégrer les adresses :</strong> '))
+
+                                // INFOS 2e COLONNE : Nom voie, type voie, commune
+                                $('#infos_commune_col2 h2').empty().append(data[0][4])
+                                $('#infos_commune_col2 h1').empty().append(nom_voie)
+                                
                                 if (is_place==true){
-                                    $('#type_voie').append('lieu-dit')
+                                   $('#infos_commune_col2 h1').append(' (lieu-dit)')
                                 } else {
-                                    $('#type_voie').append('voie')
+                                   $('#infos_commune_col2 h1').append(' (voie)')
                                 }
+
                                 add_josm_addr_link(insee,fantoir,nom_fantoir,numeros_a_proposer,true,is_place)
                                 $('#table_inspect_adresse').empty().append($('<thead>').append($('<tr>').append($('<th>').append('Source'))))
                                 $('#table_inspect_adresse tr').append($('<th>').append('Numéro'))
@@ -219,14 +257,21 @@
     </div>
 
     <div id="bandeau">
-        <div id="descriptif_col1">
+        <div id="descriptif">
+            <div id="infos_commune_col1"></div>
+            <div id="infos_commune_col2">
+                <h2></h2>
+                <h1></h1>
+            </div>
+        </div>
+<!--         <div id="descriptif_col1">
             <h2></h2>
             <h1></h1>
         </div>
         <div id="descriptif_col2">
             <h3 id="integration"></h3>
             <h2 id="type_voie"></h2>
-        </div>
+        </div> -->
     </div>
 
     <div id="reponse_numeros">

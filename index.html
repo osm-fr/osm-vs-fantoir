@@ -430,7 +430,7 @@
                     }
                     //--- iD ---
                     if (lon != undefined) {
-                        add_map_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
+                        add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
                     } else {
                         $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('x'))
                     }

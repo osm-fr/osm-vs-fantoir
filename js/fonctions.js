@@ -51,12 +51,15 @@
         }
         return res
     }
-    function add_map_link(table,href,text){
-        $('#'+table+' tr:last').append($('<td>')
-                                    .append($('<a>')
-                                    .attr('href',href)
-                                    .attr('target','blank')
-                                    .text(text)))
+    function add_id_link(table,href,text){
+        $('#'+table+' tr:last')     .append($('<td>').addClass('zone-clic-id')
+                                        .append($('<a>').attr('href',href).attr('target',"blank")                                    
+                                            .text(text)
+                                        )
+                                        .click(function(){
+                                            $(this).addClass('clicked');
+                                        })
+                                    )
     }
     function add_josm_link(table,xl,xr,yb,yt){
         $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-josm')
