@@ -263,10 +263,10 @@
                 $('#'+table).trigger("destroy");
                 $('#'+table).empty()
                 $('#'+table).append($('<thead>').append($('<tr>').append($('<th>').append('Code Fantoir'))))
+                $('#'+table+' tr').append($('<th>').append('Création Fantoir'))
                 if (commune_composee == 1){
                     $('#'+table+' tr').append($('<th>').append('Ancienne commune'))
                 }
-                $('#'+table+' tr').append($('<th>').append('Création Fantoir'))
                 $('#'+table+' tr').append($('<th>').append('Libellé Fantoir'))
                 $('#'+table+' tr').append($('<th>').append('Libellé OSM'))
                 $('#'+table+' tr').append($('<th>').append('Libellé BAN ou CADASTRE'))
