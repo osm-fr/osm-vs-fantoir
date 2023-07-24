@@ -13,9 +13,8 @@ from sql import sql_get_data
 params = cgi.FieldStorage()
 # insee = '95219'
 # fantoir = '952191024'
-# dept = '92'
 insee = params['insee'].value
 fantoir = params['fantoir'].value
 
 print("Content-Type: application/json\n")
-print(json.JSONEncoder().encode(sql_get_data('inspect_numeros',{'code_insee':insee,'fantoir':fantoir})))
+print(json.JSONEncoder().encode([sql_get_data('inspect_numeros_metadonnees',{'fantoir':fantoir})[0],sql_get_data('inspect_numeros',{'code_insee':insee,'fantoir':fantoir})]))

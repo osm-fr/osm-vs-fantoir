@@ -46,17 +46,17 @@
     }
 
     function add_josm_addr_link(insee,fantoir,nom_fantoir,nombre,fantoir_dans_relation,is_place){
-        $('#bandeau integration').append($('<span>').text(nombre > 1 ? nombre+' Points':'1 Point'))
+        $('#integration').append($('<span>').addClass('zone-clic-adresses').text(nombre > 1 ? nombre+' Points':'1 Point'))
                                                     .click(function(){
                                                         stringToRemove = window.location.href.split('/').pop()
                                                         srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele='+((is_place) ? 'Place':'Points');
                                                         $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
                                                     })
         if (is_place){
-            $('#bandeau integration').append($('<span>').text(' (lieu-dit)'))
+            $('#integration').append($('<span>').text(' (lieu-dit)'))
         }
         else {
-            $('#bandeau integration').append($('<span>').text('Relation')
+            $('#integration').append($('<span>').addClass('zone-clic-adresses').text('Relation')
                                                         .click(function(){
                                                             stringToRemove = window.location.href.split('/').pop()
                                                             srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele=Relation&fantoir_dans_relation='+fantoir_dans_relation;
@@ -131,6 +131,11 @@
             url: "requete_inspect_numeros.py?insee="+insee+"&fantoir="+fantoir
         })
         .done(function( data ) {
+                                let[nom_fantoir,
+                                    is_place,
+                                    numeros_a_proposer] = data[0]
+                                data = data[1]
+                                nom_voie = data[0][2];
                                 min_lon = data[0][6];
                                 max_lon = data[0][6];
                                 min_lat = data[0][7];
@@ -138,12 +143,14 @@
 
                                 var map = L.map('map').setView([data[0][7], data[0][6]], 18);
                                 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',maxZoom: 19}).addTo(map);
-                                $('#bandeau h1').append(data[0][2])
+                                $('#bandeau h1').append(nom_voie)
                                 $('#bandeau h2:first').append(data[0][4]+" (").append($('<a>').attr('href','index.html#insee='+insee).append(data[0][5]+")"))
-                                /*$('#type_voie').append(' (lieu-dit ou voie)')
-                                $('#integration').append($('<a>').attr('href', 'http://google.com').append('X points à intégrer'))*/
-                                                /*.append(add_josm_addr_link(insee,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place))*/
-
+                                if (is_place==true){
+                                    $('#type_voie').append('lieu-dit')
+                                } else {
+                                    $('#type_voie').append('voie')
+                                }
+                                add_josm_addr_link(insee,fantoir,nom_fantoir,numeros_a_proposer,true,is_place)
                                 $('#table_inspect_adresse').empty().append($('<thead>').append($('<tr>').append($('<th>').append('Source'))))
                                 $('#table_inspect_adresse tr').append($('<th>').append('Numéro'))
                                 $('#table_inspect_adresse tr').append($('<th>').append('Statut de l\'adresse'))
