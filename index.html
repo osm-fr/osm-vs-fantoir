@@ -296,6 +296,7 @@
                          avec_adresses_ban] = data[s]
                     is_voie = false
                     is_place = false
+                    has_code_fantoir = true
                     is_osm_hors_fantoir = false
                     if (categorie == 0){
                         is_voie = true;
@@ -307,24 +308,28 @@
                     fantoir_affiche = fantoir
                     fantoir_dans_relation = 'ok'
                     if (caractere_annul == 'B'){
+                        has_code_fantoir = false
                         fantoir_affiche = 'Voie sans Fantoir'
                         fantoir_dans_relation = 'ko'
-                        if (nom_ban != null){
-                            nom_topo = nom_ban.toUpperCase()
-                        }
                     }
 
                     tr_id+=1
 
-                    $('#'+table+' tbody').append($('<tr>').attr('id',tr_id).append($('<td>').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir_affiche)))
+
+                    // REMPLISSAGE CELLULES
+
+                    //--- Code Fantoir ---
+                    if (has_code_fantoir) {
+                        $('#'+table+' tbody').append($('<tr>').attr('id',tr_id).append($('<td>').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir_affiche)))                    
+                    }
+                    else {
+                        $('#'+table+' tbody').append($('<tr>').attr('id',tr_id).append($('<td>').attr('colspan','3').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir_affiche))) 
+                    }
                     if (annule == -1){
                         $('#'+table+' tr:last td:last').addClass('cell_mauvais_fantoir').attr('title','Code Fantoir annulé, à remplacer dans OSM')
                     } else if (fantoir_affiche != null && is_osm_hors_fantoir){
                         $('#'+table+' tr:last td:last').addClass('cell_mauvais_fantoir').attr('title','Code Fantoir erroné, à corriger dans OSM')
                     }
-                    
-                    //Date de création Fantoir 
-                    $('#'+table+' tr:last').append($('<td>').text(date_creation))
 
                     //Ajout des classes pour les filtres à chaque ligne
                     if (is_voie) {
@@ -348,24 +353,39 @@
                             $('#'+table+' tr:last').addClass('sans_adresses')
                         }
                     }
+                    
+                    //--- Date de création Fantoir ---
+                    if (has_code_fantoir) {
+                        $('#'+table+' tr:last').append($('<td>').text(date_creation))
+                    }
 
-                    //Remplissage des cellules avec leur contenu
-
-                    // Nom de l'ancienne commune
+                    //--- Nom de l'ancienne commune ---
                     if (commune_composee == 1){
                         $('#'+table+' tr:last').append($('<td>').text(nom_ancienne_commune))
                     }
-                    //Nom Fantoir
-                    if (is_place){
+
+                    //--- Nom Fantoir ---
+                    if (is_place && has_code_fantoir){
                         $('#'+table+' tr:last').append($('<td>')
                                                     .append($('<img>').attr('src','img/lieudit.png').attr('width','20px').attr('title','Lieu-dit'))
                                                     .append($('<span>').text(' '+nom_topo)))
                     }
-                    else 
+                    else if (is_voie && has_code_fantoir){
                         $('#'+table+' tr:last').append($('<td>')
                                                     .append($('<img>').attr('src','img/voie.png').attr('title','Voie'))
                                                     .append($('<span>').text(' '+nom_topo)))
-                    //Nom OSM
+                    }
+                    else if (is_osm_hors_fantoir){
+                        $('#'+table+' tr:last').append($('<td>'))
+                    }
+                    else if (!has_code_fantoir) {
+                        
+                    }
+                    else {
+                         $('#'+table+' tr:last').append($('<td>').append($('<span>').text('what is ce cas')))
+                    }
+
+                    //--- Nom OSM ---
                     if ($('#'+table+' tr:last').hasClass('nom_integre')){
                         $('#'+table+' tr:last').append($('<td>')
                                                         .append($('<span class="pastille-verte" title="Déjà rapproché dans OSM">'))
@@ -380,7 +400,7 @@
                                                         .append($('<span class="pastille-bleue" title="Trouvé dans OSM mais inconnu de Fantoir">'))
                                                         .append($('<span>').text(nom_osm)))
                     }
-                    //Nom BAN ou Cadastre
+                    //--- Nom BAN ou Cadastre ---
                     if (source_nom_ban == 'CADASTRE') {
                         $('#'+table+' tr:last').append($('<td>').append($('<span class="picto cadastre" title="Nom provenant du cadastre">'))
                                                                 .append($('<span>').text(nom_ban)))
@@ -391,7 +411,7 @@
                     }
                     else $('#'+table+' tr:last').append($('<td>').text(nom_ban))
 
-                    //visu
+                    //--- Visu ---
                     xmin  = lon-DELTA
                     xmax  = lon+DELTA
                     ymin  = lat-DELTA
@@ -407,19 +427,21 @@
                     else {
                         $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('x'))
                     }
-                        //JOSM
+
+                    //--- JOSM ---
                     if (lon != undefined) {
                         add_josm_link(table,xmin,xmax,ymin,ymax)
                     } else {
                         $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('x'))
                     }
-                    //Statut Fantoir
+
+                    //--- Statut Fantoir ---
                     if (caractere_annul != 'B' && is_osm_hors_fantoir == false){
                         add_statut_fantoir(table,tr_id,fantoir,statut_voie)
                     } else {
                         $('#'+table+' tr:last').addClass('statut0').append($('<td>'))
                     }
-                    //Adresses à integrer
+                    //--- Adresses à integrer ----
                     if (numeros_a_proposer > 0){
                         add_josm_addr_link($('#input_insee')[0].value,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
                     }
@@ -432,7 +454,9 @@
                     else {
                         $('#'+table+' tr:last').append($('<td>').attr('colspan','2'))
                     }
-                    if (avec_adresses_ban){
+
+                    //--- Qualification des adresses ---
+                    if (avec_adresses_ban && has_code_fantoir){
                         add_addr_inspector_link($('#input_insee')[0].value,fantoir,'BAN')
                     } else {
                         $('#'+table+' tr:last').append($('<td>'))
