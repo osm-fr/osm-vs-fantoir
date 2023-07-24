@@ -398,7 +398,6 @@ table.tablesorter thead th {
 #reponse #table_pifometre tr:not(.statut0) td.zone-clic-adresses,
 #reponse_numeros tr:not(.statut0) td {
 	background: #e6e6e6;
-	color: #666;
 }
 
 /*---------------------------------------------------------------*/
