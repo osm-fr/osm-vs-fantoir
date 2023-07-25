@@ -7,7 +7,10 @@ SELECT a.source,
        ST_X(geometrie),
        ST_Y(geometrie)
 FROM   bano_adresses a
-JOIN   cog_commune cog
+JOIN   (SELECT *
+       FROM    cog_commune
+       WHERE   typecom != 'COMD' AND
+               com = '__code_insee__') cog
 ON     code_insee = com
 JOIN   (SELECT fantoir,
                nom
