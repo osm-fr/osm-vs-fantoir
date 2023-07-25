@@ -51,6 +51,13 @@
         }
         return res
     }
+    function add_map_link(table,href,text){
+        $('#'+table+' tr:last').append($('<td>')
+                                    .append($('<a>')
+                                    .attr('href',href)
+                                    .attr('target','blank')
+                                    .text(text)))
+    }
     function add_id_link(table,href,text){
         $('#'+table+' tr:last')     .append($('<td>').addClass('zone-clic-id')
                                         .append($('<a>').attr('href',href).attr('target',"blank")                                    
