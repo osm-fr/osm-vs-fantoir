@@ -45,9 +45,9 @@ GROUP BY 1)
 
 SELECT  TRIM (BOTH FROM (COALESCE(nature_voie,'')||' '||libelle_voie)) AS nom,
         COALESCE(is_place,false) AS is_place,
-        a_proposer
+        COALESCE(a_proposer,0)
 FROM    (SELECT * FROM topo WHERE fantoir = '__fantoir__') f
-JOIN    fantoir_numeros_manquants
+LEFT OUTER JOIN    fantoir_numeros_manquants
 USING  (fantoir)
 LEFT OUTER JOIN   is_place
 USING  (fantoir);
