@@ -188,7 +188,12 @@
                                    $('#infos_commune_col2 h1').append(' (voie)')
                                 }
 
-                                add_josm_addr_link(insee,fantoir,nom_fantoir,numeros_a_proposer,true,is_place)
+                                if (numeros_a_proposer > 0){
+                                    add_josm_addr_link(insee,fantoir,nom_fantoir,numeros_a_proposer,true,is_place)
+                                } else {
+                                    $('#liens_voie').append($('<span>').addClass('adresses-integrees').text('✔'))
+                                                        .append($('<span>').text(' Adresses intégrées'))
+                                }
                                 $('#table_inspect_adresse').empty().append($('<thead>').append($('<tr>').append($('<th>').append('Source'))))
                                 $('#table_inspect_adresse tr').append($('<th>').append('Numéro'))
                                 $('#table_inspect_adresse tr').append($('<th>').append('Statut de l\'adresse'))
