@@ -72,12 +72,12 @@
         }
     }
 
-    function add_statut_numero(id_ligne,numero,statut,insee,fantoir,source){
+    function add_statut_numero(id_ligne,numero,statut,insee,fantoir){
         $('#table_inspect_adresse tr:last').removeClass().addClass('statut'+statut).attr('numero',numero)
         $('#table_inspect_adresse tr:last').append($('<td>').append($(a_menus_labels[statut]).change(function() {
             statut = $(this)[0].value;
             $.ajax({
-                url: "statut_numero.py?insee="+insee+"&fantoir="+fantoir+"&statut="+statut+"&numero="+numero+"&source="+source
+                url: "statut_numero.py?insee="+insee+"&fantoir="+fantoir+"&statut="+statut+"&numero="+numero+"&source=BAN"
             })
             .done(function( data ) {
                 if(data == statut){
@@ -139,15 +139,16 @@
         .done(function( data ) {
                                 let[nom_fantoir,
                                     is_place,
-                                    numeros_a_proposer] = data[0]
+                                    numeros_a_proposer,
+                                    nom_commune,
+                                    nom_voie] = data[0]
                                 data = data[1]
-                                nom_voie = data[0][2];
-                                min_lon = data[0][6];
-                                max_lon = data[0][6];
-                                min_lat = data[0][7];
-                                max_lat = data[0][7];
+                                min_lon = data[0][1] == undefined ? data[0][4]:data[0][1];
+                                max_lon = min_lon;
+                                min_lat = data[0][2] == undefined ? data[0][5]:data[0][2];
+                                max_lat = min_lat;
 
-                                var map = L.map('map').setView([data[0][7], data[0][6]], 18);
+                                var map = L.map('map').setView([min_lat, min_lon], 18);
                                 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',maxZoom: 19}).addTo(map);
 
                                 // INFOS 1e COLONNE : Liens commune, intégration adresses
@@ -179,7 +180,7 @@
                                 .append($('<div id="liens_voie">').append('<strong>Intégrer les adresses :</strong> '))
 
                                 // INFOS 2e COLONNE : Nom voie, type voie, commune
-                                $('#infos_commune_col2 h2').empty().append(data[0][4])
+                                $('#infos_commune_col2 h2').empty().append(nom_commune)
                                 $('#infos_commune_col2 h1').empty().append(nom_voie)
                                 
                                 if (is_place==true){
@@ -194,32 +195,49 @@
                                     $('#liens_voie').append($('<span>').addClass('adresses-integrees').text('✔'))
                                                         .append($('<span>').text(' Adresses intégrées'))
                                 }
-                                $('#table_inspect_adresse').empty().append($('<thead>').append($('<tr>').append($('<th>').append('Source'))))
-                                $('#table_inspect_adresse tr').append($('<th>').append('Numéro'))
-                                $('#table_inspect_adresse tr').append($('<th>').append('Statut de l\'adresse'))
+                                $('#table_inspect_adresse').empty().append($('<thead>').append($('<tr>').append($('<th>').append('Numéro'))))
+                                $('#table_inspect_adresse tr').append($('<th>').append('Intégration ?'))
+                                $('#table_inspect_adresse tr').append($('<th>').append('Statut de l\'adresse BAN'))
                                 $('#table_inspect_adresse').append($('<tbody>'))
                                 for (l=0;l<data.length;l++){
-                                    let[source,
-                                        numero,
-                                        nom_voie,
+                                    let[numero,
+                                        lon_ban,
+                                        lat_ban,
                                         statut,
-                                        nom_commune,
-                                        code_insee,
-                                        lon,
-                                        lat] = data[l]
+                                        lon_osm,
+                                        lat_osm] = data[l]
 
-                                    $('#table_inspect_adresse tbody:last').append($('<tr>').attr('id',l).append($('<td>').text(source)))
-                                    $('#table_inspect_adresse tr:last').append($('<td>').text(numero));
+                                    $('#table_inspect_adresse tbody:last').append($('<tr>').attr('id',l).append($('<td>').text(numero)))
+                                    if (lon_ban != undefined && lon_osm != undefined){
+                                        $('#table_inspect_adresse tr:last').append($('<td>').text('vert'));
+                                    } else if (lon_ban != undefined){
+                                        $('#table_inspect_adresse tr:last').append($('<td>').text('orange'));
+                                    } else if (lon_osm != undefined){
+                                        $('#table_inspect_adresse tr:last').append($('<td>').text('bleu'));
+                                    }
 
-                                    add_statut_numero(l,numero,statut,insee,fantoir,source)
+                                    add_statut_numero(l,numero,statut,insee,fantoir)
 
-                                    var myIcon = L.divIcon({className: 'map-numero ligne'+l,html:'<span>'+numero+'</span>'});
-                                    L.marker([lat, lon],{icon: myIcon}).addTo(map)
-                                    min_lon = Math.min(min_lon,lon);
-                                    max_lon = Math.max(max_lon,lon);
-                                    min_lat = Math.min(min_lat,lat);
-                                    max_lat = Math.max(max_lat,lat);
-
+                                    if (lon_ban != undefined){
+                                        var myIcon = L.divIcon({className: 'map-numero ligne'+l,html:'<span>'+numero+'</span>'});
+                                        L.marker([lat_ban, lon_ban],{icon: myIcon}).addTo(map)
+                                        min_lon = Math.min(min_lon,lon_ban);
+                                        max_lon = Math.max(max_lon,lon_ban);
+                                        min_lat = Math.min(min_lat,lat_ban);
+                                        max_lat = Math.max(max_lat,lat_ban);
+                                    }
+                                    if (lon_osm != undefined){
+                                        var myIcon = L.divIcon({className: 'map-numero ligne'+l,html:'<span>'+numero+' oSM </span>'});
+                                        L.marker([lat_osm, lon_osm],{icon: myIcon}).addTo(map)
+                                        min_lon = Math.min(min_lon,lon_osm);
+                                        max_lon = Math.max(max_lon,lon_osm);
+                                        min_lat = Math.min(min_lat,lat_osm);
+                                        max_lat = Math.max(max_lat,lat_osm);
+                                    }
+                                    $('#table_inspect_adresse tr:last').hover(function() {
+                                        $('.map-numero.ligne'+$(this).attr('id')).addClass('numero-over')},
+                                        function() {
+                                            $('.map-numero.ligne'+$(this).attr('id')).removeClass('numero-over')});
                                 }
                                 $('#table_inspect_adresse').trigger("resetToLoadState");
                                 
@@ -249,7 +267,9 @@
     }
     
 </script>
-</head>
+<style>
+        .numero-over {color: red;}
+</style></head>
 
 <body onload="start()">
 

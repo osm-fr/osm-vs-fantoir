@@ -45,8 +45,31 @@ GROUP BY 1)
 
 SELECT  TRIM (BOTH FROM (COALESCE(nature_voie,'')||' '||libelle_voie)) AS nom,
         COALESCE(is_place,false) AS is_place,
-        COALESCE(a_proposer,0)
+        COALESCE(a_proposer,0),
+        cog.libelle,
+        n.nom
 FROM    (SELECT * FROM topo WHERE fantoir = '__fantoir__') f
+JOIN   (SELECT *
+       FROM    cog_commune
+       WHERE   typecom != 'COMD' AND
+               com = SUBSTR('__fantoir__',1,5)) cog
+ON     code_insee = com
+JOIN   (SELECT fantoir,
+               nom
+        FROM   nom_fantoir
+        WHERE fantoir = '__fantoir__'
+        ORDER BY
+            CASE source
+                WHEN 'OSM' THEN 1
+                ELSE 2
+            END,
+            CASE nature
+                WHEN 'voie' THEN 1
+                WHEN 'lieu-dit' THEN 2
+                ELSE 3
+            END
+        LIMIT 1) n
+USING (fantoir)
 LEFT OUTER JOIN    fantoir_numeros_manquants
 USING  (fantoir)
 LEFT OUTER JOIN   is_place

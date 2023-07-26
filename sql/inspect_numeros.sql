@@ -1,41 +1,26 @@
-SELECT a.source,
-       a.numero,
-       n.nom,
+SELECT COALESCE(b.numero,o.numero),
+       ST_X(b.geometrie),
+       ST_Y(b.geometrie),
        COALESCE(s.id_statut,0),
-       cog.libelle,
-       a.code_insee,
-       ST_X(geometrie),
-       ST_Y(geometrie)
-FROM   bano_adresses a
-JOIN   (SELECT *
-       FROM    cog_commune
-       WHERE   typecom != 'COMD' AND
-               com = '__code_insee__') cog
-ON     code_insee = com
-JOIN   (SELECT fantoir,
-               nom
-        FROM   nom_fantoir
-        WHERE fantoir = '__fantoir__'
-        ORDER BY
-            CASE source
-                WHEN 'OSM' THEN 1
-                ELSE 2
-            END,
-            CASE nature
-                WHEN 'voie' THEN 1
-                WHEN 'lieu-dit' THEN 2
-                ELSE 3
-            END
-        LIMIT 1) n
-USING (fantoir)
+       ST_X(o.geometrie),
+       ST_Y(o.geometrie)
+FROM   (SELECT *
+       FROM    bano_adresses
+       WHERE   code_insee = '__code_insee__' AND
+               fantoir    = '__fantoir__' AND
+               source     = 'BAN') b
+FULL OUTER JOIN   (SELECT numero,
+                          geometrie
+                  FROM    bano_adresses
+                  WHERE   code_insee = '__code_insee__' AND
+                          fantoir    = '__fantoir__' AND
+                          source     = 'OSM') o
+USING (numero)
 LEFT OUTER JOIN (SELECT numero,fantoir,source,id_statut
                 FROM    (SELECT  *,rank() OVER (PARTITION BY numero,fantoir,source ORDER BY timestamp_statut DESC) rang
                          FROM    statut_numero
                          WHERE   code_insee = '__code_insee__' AND
-                                 fantoir = '__fantoir__')r
+                                 fantoir = '__fantoir__') r
                 WHERE   rang = 1) s
-USING (numero,fantoir,source)
-WHERE a.code_insee = '__code_insee__' AND
-      a.fantoir = '__fantoir__' AND
-      a.source = 'BAN'
-ORDER BY numero;
+USING (numero,fantoir)
+ORDER BY 1;
