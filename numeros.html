@@ -20,6 +20,31 @@
    crossorigin=""></script>
 <script>
     var menu_labels
+    FILTRES = [["numero_ban",true],
+               ["numero_osm",true]]
+    function update_filtres(){
+        for (let i = 0; i < FILTRES.length; i++){
+            FILTRES[i] = [FILTRES[i][0],$('#check_'+FILTRES[i][0]).is(':checked')]
+        }
+    }
+    function active_menu_filtres(){
+        $('#boutons-filtres input').click(function(){
+            show_mask_map_icon()
+        })
+    };
+    function show_mask_map_icon(){
+        update_filtres()
+        $('.map_numero').each(function() {
+           for (let f of FILTRES){
+                if ($(this).hasClass(f[0]) && f[1] == false){
+                    $(this).css('display','none')
+                } else if ($(this).hasClass(f[0]) && f[1] == true) {
+                    $(this).css('display','block')
+                }
+            }
+       });
+    }
+
     function check_url_for_fantoir(){
         pattern_fantoir = new RegExp('^[0-9][0-9abAB][0-9]{3}[0-9|a-z|A-Z]{4}$')
         var res
@@ -73,7 +98,6 @@
                                     )
         }
     }
-
     function add_statut_numero(id_ligne,numero,statut,insee,fantoir){
         $('#table_inspect_adresse tr:last').removeClass().addClass('statut'+statut).attr('numero',numero)
         $('#table_inspect_adresse tr:last').append($('<td>').append($(a_menus_labels[statut]).change(function() {
@@ -269,7 +293,7 @@
                                 });
 
                                 map.fitBounds([[min_lat,min_lon],[max_lat,max_lon]]);
-
+                                active_menu_filtres()
                                 refresh();
                             })
     }
@@ -311,13 +335,13 @@
                     <ul>
                         <li>
                             <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_voie" checked>
+                            <input type="checkbox" id="check_numero_osm" checked>
                             <span class="check is-dark"></span>
                             <span class="control-label" critere="OSM">Adresses sur OSM<span></span></span>
                         </li>
                         <li>
                             <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_lieu_dit" checked>
+                            <input type="checkbox" id="check_numero_ban" checked>
                             <span class="check is-dark"></span>
                             <span class="control-label" critere="BAN">Adresses dans la BAN<span></span></span>
                         </li>
