@@ -299,16 +299,71 @@ h4 {
 	margin:0 30px -10px 30px;
 }
 
+
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+/*---------------                                                       ---------------*/
+/*---------------                   BOUTONS FILTRES                     ---------------*/
+/*---------------                   PIFO ET NUMEROS                     ---------------*/
+/*---------------                                                       ---------------*/
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+
+#boutons-filtres {
+	display: inline-block;
+	padding: 0.6%;
+	background:#ECF5F9;
+	border-bottom: 2px lightblue solid;
+	border-radius: 6px;
+	font-size: 0.8em;
+}
+
+#boutons-filtres.pifo {
+	margin-left: 2%;
+	width: 55%;
+}
+#boutons-filtres.page_numeros {
+	width: 25%;
+	margin:10px 0 0 20px;
+}
+
+#boutons-filtres div {
+	width: auto;
+	display: inline-block;
+}
+
+#boutons-filtres ul {
+  list-style-type: none;
+  margin:0;
+}
+
+#boutons-filtres ul li {
+  margin: 0.2em 0;
+}
+
+#ligne-afficher, p#ligne-afficher {
+	float: left;
+	margin:0;
+	font-weight: bold;
+}
+
+.ligne-boutons-filtres {
+	float: left;
+	clear: both;
+}
+
+
 /*-------------------------------------------------------------------*/
 /*--------------- DESCRIPTIF PAGES PAR DEPARTEMENT ------------------*/
 /*------ Fantoirs annulés, erronés, Top adresses manquantes ---------*/
 /*--------- Voies récentes manquantes, Adresses sans rue ------------*/
+/*--------------------------- Page numéros --------------------------*/
 /*-------------------------------------------------------------------*/
 
 #descriptif {
 	float: left;
 	margin:0 2%;
-	width: 45%;
+	width: 50%;
 }
 
 /*-------------------------------------------------------------------*/
@@ -360,7 +415,7 @@ h4 {
 
 #reponse_numeros{
 	position: relative;
-	margin-top:200px;
+	margin-top:180px;
 	width:40%;
 	height:70%;
 	margin-left:10%;
@@ -582,32 +637,55 @@ table.tablesorter thead th {
 	width: 500px;
 	height: 500px;
 	position: fixed;
-	top: 200px;
+	top: 210px;
 	left: 55%;
 }
-.map-numero,
-.legende-numero {
+.map_numero,
+.legende_numero {
 	font-weight: bold;
 	font-size: 1.2em;
 	line-height: 1em;
 	color: #56B4E9; /*bleu*/
 	background-color: rgba(255, 255, 255, 0.6);
 	width: fit-content !important;
+	min-width: 20px;
 	padding: 5px;
+	text-align: center;
 	white-space: nowrap;
 	border:  solid 1px;
 	border-radius: 45%;
 }
-.map-numero.anomalie,
-.legende-numero.anomalie {
+.map_numero.anomalie,
+.legende_numero.anomalie {
 	color: #EC0080; /*rose*/
 	border-radius: 8%;
 }
-.map-numero.integre,
-.legende-numero.integre {
+.map_numero.integre,
+.legende_numero.integre {
 	color: #009E73; /*vert*/
 	font-size: 1.1em;
 	border:none;
+	border-radius: unset;
+}
+
+.numero_ban .map_numero_hover, .numero_ban .map_numero_hovers.integre {
+	position: relative;
+	top: -35px;
+	left: -8px;
+	width: 20px;
+	height: 20px;
+	background: url("../img/pin-ban.png") no-repeat;
+	background-size: 25px;
+}
+
+.numero_osm .map_numero_hover, .numero_osm .map_numero_hovers.integre {
+	position: relative;
+	top: -35px;
+	left: -8px;
+	width: 20px;
+	height: 20px;
+	background: url("../img/pin-osm.png") no-repeat;
+	background-size: 25px;
 }
 
 #legende_map {
