@@ -6,6 +6,8 @@
 <script src="js/tablesorter/jquery.tablesorter.js"></script>
 <script src="js/jquery.tablesorter.combined.min.js"></script>
 <script src="js/fonctions.js"></script>
+<link rel="stylesheet" href="css/bulma/bulma.min.css" type="text/css"/>
+<link rel="stylesheet" href="css/bulma/main.min.css" type="text/css"/>
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
 <link rel="stylesheet" href="css/responsive.css" type="text/css"/>
@@ -195,9 +197,13 @@
                                     $('#liens_voie').append($('<span>').addClass('adresses-integrees').text('✔'))
                                                         .append($('<span>').text(' Adresses intégrées'))
                                 }
-                                $('#table_inspect_adresse').empty().append($('<thead>').append($('<tr>').append($('<th>').append('Numéro'))))
-                                $('#table_inspect_adresse tr').append($('<th>').append('Intégration ?'))
-                                $('#table_inspect_adresse tr').append($('<th>').append('Statut de l\'adresse BAN'))
+                                $('#table_inspect_adresse').empty() .append($('<thead>')
+                                                                        .append($('<tr>')
+                                                                            .append($('<th>').append('Numéro'))
+                                                                            .append($('<th>').append('Statut de l\'adresse BAN'))
+                                                                        )
+                                                                    )
+
                                 $('#table_inspect_adresse').append($('<tbody>'))
                                 for (l=0;l<data.length;l++){
                                     let[numero,
@@ -207,19 +213,26 @@
                                         lon_osm,
                                         lat_osm] = data[l]
 
-                                    $('#table_inspect_adresse tbody:last').append($('<tr>').attr('id',l).append($('<td>').text(numero)))
+                                    $('#table_inspect_adresse tbody:last').append($('<tr>').attr('id',l))
+
                                     if (lon_ban != undefined && lon_osm != undefined){
-                                        $('#table_inspect_adresse tr:last').append($('<td>').text('vert'));
+                                        $('#table_inspect_adresse tr:last').append($('<td>')
+                                                                        .append($('<span class="pastille-verte" title="Intégrée dans OSM">'))
+                                                                        .append($('<span>').text(numero)));
                                     } else if (lon_ban != undefined){
-                                        $('#table_inspect_adresse tr:last').append($('<td>').text('orange'));
+                                        $('#table_inspect_adresse tr:last').append($('<td>')
+                                                                        .append($('<span class="pastille-orange" title="Pas encore intégrée dans OSM">'))
+                                                                        .append($('<span>').text(numero)));
                                     } else if (lon_osm != undefined){
-                                        $('#table_inspect_adresse tr:last').append($('<td>').text('bleu'));
+                                        $('#table_inspect_adresse tr:last').append($('<td>')
+                                                                        .append($('<span class="pastille-bleue" title="Trouvée dans OSM et inconnue de la BAN">'))
+                                                                        .append($('<span>').text(numero)));
                                     }
 
                                     add_statut_numero(l,numero,statut,insee,fantoir)
 
                                     if (lon_ban != undefined){
-                                        var myIcon = L.divIcon({className: 'map-numero ligne'+l,html:'<span>'+numero+'</span>'});
+                                        var myIcon = L.divIcon({className: 'map_numero numero_ban ligne'+l,html:'<span>'+numero+'</span>'});
                                         L.marker([lat_ban, lon_ban],{icon: myIcon}).addTo(map)
                                         min_lon = Math.min(min_lon,lon_ban);
                                         max_lon = Math.max(max_lon,lon_ban);
@@ -227,17 +240,21 @@
                                         max_lat = Math.max(max_lat,lat_ban);
                                     }
                                     if (lon_osm != undefined){
-                                        var myIcon = L.divIcon({className: 'map-numero ligne'+l,html:'<span>'+numero+' oSM </span>'});
+                                        var myIcon = L.divIcon({className: 'map_numero numero_osm integre ligne'+l,html:'<span>'+numero+'</span>'});
                                         L.marker([lat_osm, lon_osm],{icon: myIcon}).addTo(map)
                                         min_lon = Math.min(min_lon,lon_osm);
                                         max_lon = Math.max(max_lon,lon_osm);
                                         min_lat = Math.min(min_lat,lat_osm);
                                         max_lat = Math.max(max_lat,lat_osm);
                                     }
+
                                     $('#table_inspect_adresse tr:last').hover(function() {
-                                        $('.map-numero.ligne'+$(this).attr('id')).addClass('numero-over')},
-                                        function() {
-                                            $('.map-numero.ligne'+$(this).attr('id')).removeClass('numero-over')});
+                                        $('.map_numero.ligne'+$(this).attr('id')).append($('<div class="map_numero_hover"></div>'))
+
+                                    },function() {
+                                            $('.map_numero_hover').remove()
+                                        });
+
                                 }
                                 $('#table_inspect_adresse').trigger("resetToLoadState");
                                 
@@ -258,18 +275,15 @@
     }
 
     function refresh(){
-        $('.map-numero').removeClass('anomalie');
+        $('.map_numero').removeClass('anomalie');
         for (i=1;i<a_menus_labels.length;i++){
             $('.statut'+i).each(function(){
-                $('.map-numero.ligne'+$(this).attr('id')).addClass('anomalie')
+                $('.map_numero.ligne'+$(this).attr('id')).addClass('anomalie')
             })
         }
     }
-    
 </script>
-<style>
-        .numero-over {color: red;}
-</style></head>
+</head>
 
 <body onload="start()">
 
@@ -289,14 +303,29 @@
                 <h1></h1>
             </div>
         </div>
-<!--         <div id="descriptif_col1">
-            <h2></h2>
-            <h1></h1>
+
+        <div id="boutons-filtres" class="page_numeros">
+            <p id="ligne-afficher">Afficher :</p>
+            <div class="ligne-boutons-filtres">
+                <div>
+                    <ul>
+                        <li>
+                            <label class="switch is-rounded is-small">
+                            <input type="checkbox" id="check_voie" checked>
+                            <span class="check is-dark"></span>
+                            <span class="control-label" critere="OSM">Adresses sur OSM<span></span></span>
+                        </li>
+                        <li>
+                            <label class="switch is-rounded is-small">
+                            <input type="checkbox" id="check_lieu_dit" checked>
+                            <span class="check is-dark"></span>
+                            <span class="control-label" critere="BAN">Adresses dans la BAN<span></span></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-        <div id="descriptif_col2">
-            <h3 id="integration"></h3>
-            <h2 id="type_voie"></h2>
-        </div> -->
+
     </div>
 
     <div id="reponse_numeros">
@@ -304,9 +333,9 @@
     </div>
      <div id="map"></div>
      <div id="legende_map">
-         <p><span class="legende-numero integre">Vert</span> : ✔ Adresses intégrées dans OSM (bientôt disponible)</p>
-         <p><span class="legende-numero">Bleu</span> : Adresses prêtes à intégrer</p>
-         <p><span class="legende-numero anomalie">Rose</span> : Adresses avec anomalie identifiée</p>
+         <p><span class="legende_numero integre">Vert</span> : ✔ Adresses intégrées dans OSM</p>
+         <p><span class="legende_numero">Bleu</span> : Adresses BAN prêtes à intégrer</p>
+         <p><span class="legende_numero anomalie">Rose</span> : Adresses BAN avec anomalie identifiée</p>
      </div>
     <footer>
         <!--#include file="includes/footer.html" -->

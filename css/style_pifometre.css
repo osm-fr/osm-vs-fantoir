@@ -95,40 +95,6 @@
 
 
 
-/*----------------------------------------------------------------------------------*/
-/*------------------------------- BOUTONS FILTRES ----------------------------------*/
-/*----------------------------------------------------------------------------------*/
-
-#ligne-afficher {
-	float: left;
-}
-.ligne-boutons-filtres {
-	float: left;
-	clear: both;
-}
-
-#boutons-filtres {
-	display: inline-block;
-	margin-left: 2%;
-	width: 55%;
-	padding: 5px 0.5%;
-	background:#ECF5F9;
-  border-bottom: 2px lightblue solid;
-  border-radius: 6px;
-	font-size: 0.8em;
-}
-
-#boutons-filtres div {
-	width: auto;
-	padding: 2px;
-	display: inline-block;
-}
-
-#boutons-filtres ul {
-  list-style-type: none;
-}
-
-
 /*---------------------------------------------------------------------------------------*/
 /*------------------ ALERTE MAJ DES DONNEES BANO / ANCIENNE COMMUNE ---------------------*/
 /*---------------------------------------------------------------------------------------*/
