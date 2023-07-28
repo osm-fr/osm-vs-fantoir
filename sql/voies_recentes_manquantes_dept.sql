@@ -1,7 +1,8 @@
 -- statut FANTOIR ---------------------
 CREATE TEMP TABLE statut_fantoir
 AS
-(SELECT fantoir
+(SELECT fantoir,
+        id_statut
 FROM    (SELECT *,
         RANK() OVER(PARTITION BY fantoir ORDER BY timestamp_statut DESC,id_statut DESC) rang
 FROM    statut_fantoir
@@ -65,7 +66,8 @@ SELECT  co.dep,
         f.fantoir,
         st_x(g.geometrie),
         st_y(g.geometrie),
-        TO_CHAR(TO_TIMESTAMP(date_creation::text,'YYYYMMDD'),'YYYY-MM-DD')
+        TO_CHAR(TO_TIMESTAMP(date_creation::text,'YYYYMMDD'),'YYYY-MM-DD'),
+        COALESCE(id_statut,0)
 FROM    top250 f
 JOIN    geom g
 USING   (fantoir)
@@ -76,4 +78,6 @@ JOIN    (SELECT libelle,
          WHERE  dep = '__dept__' AND
                 typecom in ('COM','ARM')) co
 ON      co.com = f.code_insee
+LEFT OUTER JOIN statut_fantoir
+USING   (fantoir)
 ORDER BY date_creation DESC,3,4;
