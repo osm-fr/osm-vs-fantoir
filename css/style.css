@@ -134,7 +134,7 @@ h4 {
 	visibility:hidden;
 	float: left;
 	margin: 0 2%;
-	width:45%;
+	width:40%;
 	height: 100px;
 	text-align: center;
 	padding: 5px;
@@ -150,6 +150,65 @@ h4 {
 	font-size:1.2em;
 	font-weight: bold;
 	color:black;
+}
+
+/*-----------------------------------------------*/
+/*----------------- VERSION PIFO ----------------*/
+/*-----------------------------------------------*/
+
+#wait_ajax.pifo,
+#alerte_commune {
+	visibility:hidden;
+	position:fixed;
+	width:35%;
+	top:120px;
+	right:2%;
+	height: 100px;
+	text-align: center;
+	padding: 5px;
+  border-bottom: 4px #3FA4C5 solid;
+  border-radius: 8px;
+}
+
+#wait_ajax.pifo {
+	line-height: 90px; /* doit être identique à height pour centrer verticalement */
+	background:lightblue;
+}
+#wait_ajax.pifo span{
+	vertical-align:middle;
+	font-size:1.8em;
+	line-height:90px;
+	color:black;
+}
+
+/*---------------------------------------------------*/
+/*------------ ALERTE COMMUNE FUSIONNEE -------------*/
+/*---------------------------------------------------*/
+
+#alerte_commune {
+	line-height: 40px;
+	background:#FFDE6A;
+  border-bottom: 4px #FFBB2D solid;
+}
+#alerte_commune p {
+	text-align: center;
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+.fermer-alerte {
+	color: black;
+	float: right;
+	margin-top: 10px;
+	margin-right: 10px;
+	height: 30px;
+	line-height: 30px;
+	width: 30px;
+	text-align: center;
+	font-weight: bold;
+	background: orange;
+  border-radius: 6px;
+	cursor:pointer;
 }
 
 /*-------------------------------------------------------------------------------------*/
@@ -184,6 +243,100 @@ h4 {
 }
 
 /*-------------------------------------------------------------------*/
+/*--------------------- PIFO : COMMUNES VOISINES --------------------*/
+/*-------------------------------------------------------------------*/
+
+#bouton_communes_voisines{
+	cursor: pointer;
+	position: fixed;
+	top: 40px;
+	right: 115px;
+	background-image: url("../img/communes_voisines.png");
+	background-size: 40px 40px;
+	width: 40px;
+	height: 40px;
+	border-bottom: 2px #64A02E solid; /*vert plus foncé*/
+	border-radius: 6px;
+}
+#table_communes_voisines{
+	position: fixed;
+	top: 40px;
+	right: 190px;
+	padding: 5px;
+	background-color:white;
+	border: solid 1px #64A02E;
+	border-bottom: 2px #64A02E solid; /*vert plus foncé*/
+	border-radius: 6px;
+	visibility:hidden;
+}
+#table_communes_voisines table tr td.lien_commune,
+.lien_commune {
+	padding: 4px;
+	color:#436B1F;
+	font-weight: bold;
+	text-decoration: underline;
+	cursor: pointer;
+}
+#table_communes_voisines table tr td.commune_centre{
+	padding: 0 4px;
+	color:white;
+	background-color: #D96E44;
+	font-weight: bold;
+	text-align: center;
+	text-decoration: none;
+	border-radius: 4px;
+	cursor: default;
+}
+
+#table_communes_voisines .fermer {
+	color: black;
+	float: right;
+	height: 30px;
+	line-height: 30px;
+	width: 30px;
+	text-align: center;
+	font-weight: bold;
+	background: #B2DF8A;
+  border-radius: 4px;
+	cursor:pointer;
+}
+
+/*-------------------------------------------------------------------*/
+/*-------------------------- PIFO : REFRESH -------------------------*/
+/*-------------------------------------------------------------------*/
+
+#bouton_refresh{
+	cursor: pointer;
+	position: fixed;
+	top: 40px;
+	right: 65px;
+	background: url("../img/refresh-black.png") no-repeat lightblue center;
+	background-size: 33px;
+	width: 40px;
+	height: 40px;
+	border-bottom: 2px #3FA4C5 solid;
+	border-radius: 6px;
+}
+#refresh_infobulle{
+	position: fixed;
+	width: 250px;
+	height: 56px;
+	top: 90px;
+	right: 20px;
+	border: 1px grey solid;
+	border-radius: 5px;
+	padding: 5px;
+	display:none;
+	z-index: 5;
+	background-color: white;
+	font: 0.9em Arial,Sans-serif;
+	text-align: right;
+}
+#refresh_infobulle span{
+	font-weight: bold;
+}
+
+/*-------------------------------------------------------------------*/
 /*-------------------------------- AIDE -----------------------------*/
 /*-------------------------------------------------------------------*/
 
@@ -199,7 +352,7 @@ h4 {
 	border-bottom: 2px plum solid;
 	border-radius: 6px;
 }
-#aide{
+#aide_stats {
 	position:fixed;
 	top:35px;
 	right:10px;
@@ -212,7 +365,7 @@ h4 {
 	visibility:hidden;
 	font-size: 0.9em;
 }
-.fermer {
+#aide_stats .fermer {
 	color: black;
 	float: right;
 	margin-top: 10px;
@@ -226,15 +379,16 @@ h4 {
   	border-radius: 6px;
 	cursor:pointer;
 }
-#aide h3{
+
+#aide_stats h3{
 	margin-top: 30px;
 	margin-left: 10px;
 }
-#aide li{
+#aide_stats li{
 	font-weight:bolder;
 	background-color:ivory;
 }
-#aide p{
+#aide_stats p{
 	margin-top: 0px;
 	margin-bottom: 10px;
 	margin-left: 3px;
@@ -323,8 +477,9 @@ h4 {
 	width: 55%;
 }
 #boutons-filtres.page_numeros {
+	float: right;
 	width: 25%;
-	margin:10px 0 0 20px;
+	margin:10px 150px 0 0;
 }
 
 #boutons-filtres div {
@@ -364,6 +519,10 @@ h4 {
 	float: left;
 	margin:0 2%;
 	width: 50%;
+}
+
+#descriptif.page_numeros {
+	width: 90%;
 }
 
 /*-------------------------------------------------------------------*/
@@ -447,10 +606,10 @@ table.tablesorter thead th {
 /*------------------- LIGNE GRISÉE STATUT PAS OK ----------------*/
 /*---------------------------------------------------------------*/
 
-#reponse #table_pifometre tr:not(.statut0) td, 
-#reponse #table_pifometre tr:not(.statut0) td.zone-clic-josm,
+#reponse table.avec_statuts tr:not(.statut0) td, 
+/*#reponse #table_pifometre tr:not(.statut0) td.zone-clic-josm,
 #reponse #table_pifometre tr:not(.statut0) td.zone-clic-id,
-#reponse #table_pifometre tr:not(.statut0) td.zone-clic-adresses,
+#reponse #table_pifometre tr:not(.statut0) td.zone-clic-adresses,*/
 #reponse_numeros tr:not(.statut0) td {
 	background: #e6e6e6;
 }
@@ -595,6 +754,11 @@ table.tablesorter thead th {
 /*-------------------- MESSAGE D'ENREGISTREMENT -----------------*/
 /*------------------- Après changement de statut ----------------*/
 /*---------------------------------------------------------------*/
+
+/*Place laissée pour le message*/
+td.cell_statut {
+	padding-right: 90px;
+}
 
 .enregistrement {
 	opacity: 0;

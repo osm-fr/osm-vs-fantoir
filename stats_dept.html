@@ -5,10 +5,10 @@
 <script src="js/jquery-3.6.4.min.js"></script>
 <script src="js/tablesorter/jquery.tablesorter.js"></script>
 <script src="js/jquery.tablesorter.combined.min.js"></script>
+<link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
 <link rel="stylesheet" href="css/style_stats_dept.css" type="text/css"/>
 <link rel="stylesheet" href="css/responsive.css" type="text/css"/>
-<link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 
 <script>
 	var menu_labels
@@ -36,10 +36,10 @@
 	}
 	function start(){
 		$('#bouton_aide').click(function(){
-			$('#aide').css('visibility','visible');
+			$('#aide_stats').css('visibility','visible');
 		})
-		$('#aide > .fermer').click(function(){
-			$('#aide').css('visibility','hidden');
+		$('#aide_stats > .fermer').click(function(){
+			$('#aide_stats').css('visibility','hidden');
 		})
 		dept = check_url_for_dept()
 		if (dept){
@@ -148,7 +148,7 @@
 	<table id="stats_dept" class="tablesorter"></table>
 </div>
 
-<div id="aide">
+<div id="aide_stats">
 	<div class="fermer">X</div>
 	<h2>Read The F(ANTOIR) Manual</h2>
 	<h3>Tableau</h3>
