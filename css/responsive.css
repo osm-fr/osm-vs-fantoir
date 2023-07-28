@@ -2,6 +2,22 @@
 /*------------------------------- REPONSIF ------------------------------*/
 /*-----------------------------------------------------------------------*/
 
+@media only screen and (max-width: 1700px) {
+    #boutons-filtres.pifo {
+        font-size: 0.7em;
+    }
+    #alerte_commune, #wait_ajax.pifo {
+        font-size: 0.8em;
+        line-height:40px;
+    }
+    #reponse.pifo {
+        height: 60%;
+    }
+    .tablesorter-default {
+        font-size: 0.9em;
+    }
+}
+
 @media only screen and (max-width: 1600px) {
     #topnav .bouton_nav, #topnav .menu_actif {
         padding: 6px 10px 7px;
@@ -11,12 +27,25 @@
 
 @media only screen and (max-width: 1500px) {
     #descriptif{padding: 0}
+    #boutons-filtres.page_numeros {
+        margin:10px 50px 0 0;
+    }
 }
 
 @media only screen and (max-width: 1400px) {
     h1 {font-size: 1.3em;}
     h2 {font-size: 1.2em;}
     h3 {font-size: 0.9em;}
+
+    #boutons-filtres.pifo {
+        width: 60%;
+    }
+    #alerte_commune, #wait_ajax.pifo {
+        right: 1%;
+    }
+    .tablesorter-default {
+        font-size: 0.8em;
+    }
 }
 
 @media only screen and (max-width: 1330px) {
@@ -24,11 +53,31 @@
         padding: 8px 6px;
         font-size: 0.75em;
     }
+    h1 {font-size: 1.5em;}
+    #boutons-filtres.pifo {
+        margin-left: 1%;
+        width: 67%;
+    }
+    #alerte_commune, #wait_ajax.pifo {
+        width: 30%;
+        font-size: 0.7em;
+        line-height:30px;
+    }
 }
 
 @media only screen and (max-width: 1200px) {
     td {padding:1px 5px;}
+    h1 {font-size: 1.4em;}
     #type_voie {margin-bottom: 0.8em;}
+    #titre_commune{margin:0 20px;}
+    #bandeau_commune{margin-left:5px;}
+    #boutons-filtres.pifo {
+        width: 72%;
+    }
+    #alerte_commune, #wait_ajax.pifo {
+        width: 25%;
+        line-height:25px;
+    }
 }
 
 @media only screen and (max-width: 1120px) {
@@ -41,6 +90,16 @@
     #bandeau {top:90px}
 }
 
+@media only screen and (max-width: 1100px) {
+    #boutons-filtres.pifo {
+        width: 75%;
+    }
+    #alerte_commune, #wait_ajax.pifo {
+        width: 20%;
+        font-size: 0.5em;
+    }
+}
+
 @media only screen and (max-width: 1070px) {
     #wait_ajax {
     background: url("../img/skate.gif") no-repeat lightblue left 1% top 50%;
@@ -48,6 +107,15 @@
     }
     #wait_ajax p {font-size: 1.1em;}
     h1, h4 {margin: 0}
+}
+
+@media only screen and (max-width: 1050px) {
+    #reponse.pifo {
+    margin-top:280px;
+    }
+    #infos_commune_col1 {
+        font-size: 0.9em;
+    }
 }
 
 @media only screen and (max-width: 950px) {
