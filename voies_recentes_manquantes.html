@@ -50,6 +50,7 @@
 			})
 			.done(function( data ){
 				$('body').css('cursor','default');
+				// numero_dept = data[0][0][0]
                 nom_dept = data[0][0][1]
 
 			    $('#bandeau h2').empty().append(nom_dept+' ('+numero_dept+')')
@@ -62,8 +63,7 @@
 				url_edit_part1 = 'http://www.openstreetmap.org/edit?editor='
 				delta = 0.0008
 
-				$('#'+table).empty().append($('<thead>').append($('<tr>').append($('<th>').append('Dept'))))
-				$('#'+table+' tr').append($('<th>').append('Commune (INSEE)'))
+				$('#'+table).empty().append($('<thead>').append($('<tr>').append($('<th>').append('Commune (INSEE)'))))
 				$('#'+table+' tr').append($('<th>').append('Fantoir'))
 				$('#'+table+' tr').append($('<th>').append('Voie'))
 				$('#'+table+' tr').append($('<th>').append('Date de création'))
@@ -75,8 +75,7 @@
 
 				data = data[1]
 				for (l=0;l<data.length;l++){
-					let [numero_dept,
-						insee,
+					let [insee,
 						nom_com,
 						voie,
 						fantoir,
@@ -85,9 +84,25 @@
 						date_creation,
 						id_statut] = data[l]
 
-					$('#'+table).append($('<tr>').attr('id',l).addClass('statut'+id_statut).append($('<td>').text(numero_dept)))
+                    fantoir_affiche = fantoir
+                    fantoir_dans_relation = 'ok'
+                    has_fantoir = true
+                    if (fantoir[5] == 'b'){
+                        fantoir_affiche = 'Voie sans FANTOIR'
+                        fantoir_dans_relation = 'ko'
+                        has_fantoir = false
+                    }
+
+					url_marker = '?mlat='+lat+'&mlon='+lon
+					url_hash_coords = '18/'+lat+'/'+lon
+					xleft	= lon-delta
+					xright	= lon+delta
+					ybottom	= lat-delta
+					ytop	= lat+delta
+
+					$('#'+table).append($('<tr>').attr('id',l).addClass('statut'+id_statut).append($('<td>').text(nom_com+' ('+insee+')')))
 					//Commune (INSEE)
-					$('#'+table+' tr:last').append($('<td>').text(nom_com+' ('+insee+')'))
+					// $('#'+table+' tr:last').append($('<td>').text(nom_com+' ('+insee+')'))
 					//Code Fantoir
 					$('#'+table+' tr:last').append($('<td>').addClass('cell_fantoir').text(fantoir))
 					//Voie
@@ -95,26 +110,21 @@
 					//Date de création
 					$('#'+table+' tr:last').append($('<td>').text(date_creation))
 
-					if (lon && lat){
-						url_marker = '?mlat='+lat+'&mlon='+lon
-						url_hash_coords = '18/'+lat+'/'+lon
-						xleft	= lon-delta
-						xright	= lon+delta
-						ybottom	= lat-delta
-						ytop	= lat+delta
 					//visu
-						add_map_link(table,url_map_org_part1+url_marker+'#map='+url_hash_coords,'ORG')
-						/*add_map_link(table,url_bano_part1+'#'+url_hash_coords,'BANO')*/
+					add_map_link(table,url_map_org_part1+url_marker+'#map='+url_hash_coords,'ORG')
 					//JOSM
-						add_josm_link(table,xleft,xright,ybottom,ytop)
+					add_josm_link(table,xleft,xright,ybottom,ytop)
                     //--- iD ---
-                        add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
+                    add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
 					// Statut
-						add_statut_fantoir(table,l,fantoir,id_statut)
+                    if (has_fantoir){
+                        add_statut_fantoir(table,l,fantoir,id_statut)
+                    } else {
+                        $('#'+table+' tr:last').addClass('statut_vide').append($('<td>'))
+                    }
 					//Liens Pifo et Fantoir
-						add_map_link(table,'./index.html#insee='+insee,'Pifomètre')
-						add_map_link(table,'./liste_brute_fantoir.html#insee='+insee,'Fantoir brut')
-					}
+					add_map_link(table,'./index.html#insee='+insee,'Pifomètre')
+					add_map_link(table,'./liste_brute_fantoir.html#insee='+insee,'Fantoir brut')
 				}
 				$('#wait_ajax').css('visibility','hidden');
 

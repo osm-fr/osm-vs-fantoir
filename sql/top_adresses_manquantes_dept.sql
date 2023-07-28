@@ -32,7 +32,8 @@ LIMIT 200),
 -- statut FANTOIR ---------------------
 latest_statut
 AS
-(SELECT fantoir
+(SELECT fantoir,
+        id_statut
 FROM    (SELECT s.*,
                 RANK() OVER(PARTITION BY s.fantoir ORDER BY timestamp_statut DESC,id_statut DESC) rang
          FROM    statut_fantoir s
@@ -50,22 +51,35 @@ FROM    bano_adresses c
 JOIN    max
 USING   (fantoir))
 -- Assemblage -------------------------
-SELECT cog.dep,
-       cog.com,
+SELECT cog.code_insee,
        cog.libelle,
        max.nom_voie,
        max.fantoir,
        st_x(geom.geometrie),
        st_y(geom.geometrie),
-       max.a_proposer
+       max.a_proposer,
+       COALESCE(id_statut,0),
+       COALESCE(is_place,false)
 FROM   max
-JOIN   cog_commune cog
-ON     code_insee = com
+JOIN   (SELECT libelle,
+               com AS code_insee,
+               dep
+       FROM    cog_commune
+       WHERE   dep = '__dept__' AND
+               typecom in ('COM','ARM')) cog
+USING  (code_insee)
 JOIN   geom
 USING  (fantoir)
 LEFT OUTER JOIN latest_statut l
-ON     max.fantoir = l.fantoir
-WHERE  l.fantoir IS NULL      AND
-       cog.dep = '__dept__'
+USING  (fantoir)
+LEFT OUTER JOIN (SELECT fantoir,
+                        true AS is_place
+                 FROM   (SELECT  fantoir,
+                                 RANK() OVER (PARTITION BY fantoir ORDER BY CASE source WHEN 'OSM' THEN 1 ELSE 2 END) rang
+                        FROM     nom_fantoir
+                        WHERE    code_dept = '__dept__' AND
+                                 nature IN ('place','lieu-dit')) p
+                 WHERE rang = 1) place
+USING (fantoir)
 ORDER BY a_proposer DESC
 LIMIT 200;

@@ -25,7 +25,7 @@ EXCEPT
 FROM    nom_fantoir
 WHERE   code_insee LIKE '__dept__%' AND
         source = 'OSM'));
-                
+
 --top250
 CREATE TEMP TABLE top250
 as
@@ -59,8 +59,7 @@ JOIN    top250
 USING   (fantoir));
 
 -- Assemblage -------------------------
-SELECT  co.dep,
-        f.code_insee,
+SELECT  f.code_insee,
         co.libelle,
         g.nom_voie,
         f.fantoir,
@@ -72,8 +71,7 @@ FROM    top250 f
 JOIN    geom g
 USING   (fantoir)
 JOIN    (SELECT libelle,
-                com,
-                dep
+                com
          FROM   cog_commune
          WHERE  dep = '__dept__' AND
                 typecom in ('COM','ARM')) co

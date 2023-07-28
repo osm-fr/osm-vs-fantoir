@@ -606,10 +606,7 @@ table.tablesorter thead th {
 /*------------------- LIGNE GRISÉE STATUT PAS OK ----------------*/
 /*---------------------------------------------------------------*/
 
-#reponse table.avec_statuts tr:not(.statut0) td, 
-/*#reponse #table_pifometre tr:not(.statut0) td.zone-clic-josm,
-#reponse #table_pifometre tr:not(.statut0) td.zone-clic-id,
-#reponse #table_pifometre tr:not(.statut0) td.zone-clic-adresses,*/
+#reponse table.avec_statuts tr:not(.statut0):not(.statut_vide) td,
 #reponse_numeros tr:not(.statut0) td {
 	background: #e6e6e6;
 }

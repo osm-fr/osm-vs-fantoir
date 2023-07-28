@@ -79,6 +79,29 @@
                                     })
                                 )
     }
+    function add_josm_addr_link(table,insee,fantoir,nom_fantoir,nombre,fantoir_dans_relation,is_place){
+        $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-adresses'))
+        $('#'+table+' tr:last td:last').append($('<span>').text(nombre > 1 ? nombre+' Points':'1 Point'))
+                                            .click(function(){
+                                                stringToRemove = window.location.href.split('/').pop()
+                                                srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele='+((is_place) ? 'Place':'Points');
+                                                $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
+                                                $(this).addClass('clicked');
+                                            })
+        if (is_place){
+            $('#'+table+' tr:last td:last').attr('colspan','2').append($('<span>').text(' (lieu-dit)'))
+        } else {
+            $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-adresses').append($('<span>'))
+                                        .text('Relation')
+                                        .click(function(){
+                                            stringToRemove = window.location.href.split('/').pop()
+                                            srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele=Relation&fantoir_dans_relation='+fantoir_dans_relation;
+                                            $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
+                                            $(this).addClass('clicked');
+                                        })
+                                    )
+        }
+    }
     function check_josm_remote_control(){
         $.ajax({
             url: "http://127.0.0.1:8111/version"

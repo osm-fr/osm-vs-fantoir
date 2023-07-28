@@ -9,7 +9,6 @@
 <link rel="stylesheet" href="css/bulma/main.min.css" type="text/css"/>
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
-<link rel="stylesheet" href="css/style_pifometre.css" type="text/css"/>
 <link rel="stylesheet" href="css/responsive.css" type="text/css"/>
 <link rel="search" type="application/opensearchdescription+xml" title="Pifomètre BANO" href="opensearch.xml" />
 <script>
@@ -120,30 +119,6 @@
                 }
             }
        });
-    }
-    function add_josm_addr_link(insee,fantoir,nom_fantoir,nombre,fantoir_dans_relation,is_place){
-        $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-adresses'))
-        $('#'+table+' tr:last td:last').append($('<span>').text(nombre > 1 ? nombre+' Points':'1 Point'))
-                                            .click(function(){
-                                                stringToRemove = window.location.href.split('/').pop()
-                                                srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele='+((is_place) ? 'Place':'Points');
-                                                $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
-                                                $(this).addClass('clicked');
-                                            })
-        if (is_place){
-            $('#'+table+' tr:last td:last').attr('colspan','2').append($('<span>').text(' (lieu-dit)'))
-        } else {
-            $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-adresses').append($('<span>'))
-                                        
-                                        .text('Relation')
-                                        .click(function(){
-                                            stringToRemove = window.location.href.split('/').pop()
-                                            srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele=Relation&fantoir_dans_relation='+fantoir_dans_relation;
-                                            $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
-                                            $(this).addClass('clicked');
-                                        })
-                                    )
-        }
     }
     function add_addr_inspector_link(insee,fantoir,source){
         $('#'+table+' tr:last')   .append($('<td>').addClass('zone-clic-adresses')
@@ -443,7 +418,7 @@
                     }
                     //--- Adresses à integrer ----
                     if (numeros_a_proposer > 0){
-                        add_josm_addr_link($('#input_insee')[0].value,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
+                        add_josm_addr_link(table,$('#input_insee')[0].value,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
                     }
                     else if (numeros_a_proposer == null && avec_adresses_ban){
                         $('#'+table+' tr:last').append($('<td>').attr('colspan','2').addClass('zone-adresses')
