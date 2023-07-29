@@ -11,78 +11,79 @@
 <link rel="stylesheet" href="css/responsive.css" type="text/css"/>
 
 <script>
-	var menu_labels
+    var menu_labels
     var table = 'table_voies_recentes'
-	var titre = "Voies récentes inconnues d'OSM"
+    var titre = "Voies récentes inconnues d'OSM"
+    var offset
 
-	function start(){
-		document.title = titre
+    function start(){
+        document.title = titre
         let [a_menus_labels,STATUS_FANTOIR] = get_labels_statut_fantoir()
-		dept = check_url_for_dept()
-		if (dept){
-			$('#input_dept').empty()
-			$('#input_dept')[0].value = dept
-			requete_voies_dept();
-		}
+        dept = check_url_for_dept()
+        if (dept){
+            $('#input_dept').empty()
+            $('#input_dept')[0].value = dept
+            requete_voies_dept();
+        }
+    }
 
-	}
+    function update_csv_url(dept){
+        $('#bouton_export_csv').empty()
+        $('#bouton_export_csv').append($('<a>').attr('href',"voies_recentes_manquantes_dept.py?dept="+dept+'&format=csv')
+                                               .attr('target','blank')
+                                               .append($('<img>').attr('src','img/export-csv.png')))
+    }
 
-	function update_csv_url(dept){
-		$('#bouton_export_csv').empty()
-   		$('#bouton_export_csv').append($('<a>').attr('href',"voies_recentes_manquantes_dept.py?dept="+dept+'&format=csv')
-			                                   .attr('target','blank')
-			                                   .append($('<img>').attr('src','img/export-csv.png')))
-	}
+    function requete_voies_dept(){
+        if (check_form_for_dept()){
+            numero_dept = $('#input_dept')[0].value
+            document.title = titre+' ('+numero_dept+')'
+            offset = check_url_for_offset()
 
-	function requete_voies_dept(){
-		if (check_form_for_dept()){
-			numero_dept = $('#input_dept')[0].value
-			document.title = titre+' ('+numero_dept+')'
+            update_csv_url(numero_dept)
 
-			update_csv_url(numero_dept)
-
-			$('body').css('cursor','progress');
-			$('#wait_ajax').empty()
-							.css('visibility','visible')
-							.append($('<p>').append('Recherche des voies récentes...'));
-			$.ajax({
-				url: "voies_recentes_manquantes_dept.py?dept="+numero_dept,
-			})
-			.done(function( data ){
-				$('body').css('cursor','default');
-				// numero_dept = data[0][0][0]
+            $('body').css('cursor','progress');
+            $('#wait_ajax').empty()
+                            .css('visibility','visible')
+                            .append($('<p>').append('Recherche des voies récentes...'));
+            $.ajax({
+                url: "voies_recentes_manquantes_dept.py?dept="+numero_dept+'&offset='+offset,
+            })
+            .done(function( data ){
+                $('body').css('cursor','default');
+                // numero_dept = data[0][0][0]
                 nom_dept = data[0][0][1]
 
-			    $('#bandeau h2').empty().append(nom_dept+' ('+numero_dept+')')
+                $('#bandeau h2').empty().append(nom_dept+' ('+numero_dept+')')
 
-				$('#'+table).empty()
+                $('#'+table).empty()
 
-				url_map_org_part1 = 'http://www.openstreetmap.org/'
-				url_map_fr_part1 = 'http://tile.openstreetmap.fr/'
-				url_bano_part1 = 'http://tile.openstreetmap.fr/~cquest/leaflet/bano.html'
-				url_edit_part1 = 'http://www.openstreetmap.org/edit?editor='
-				delta = 0.0008
+                url_map_org_part1 = 'http://www.openstreetmap.org/'
+                url_map_fr_part1 = 'http://tile.openstreetmap.fr/'
+                url_bano_part1 = 'http://tile.openstreetmap.fr/~cquest/leaflet/bano.html'
+                url_edit_part1 = 'http://www.openstreetmap.org/edit?editor='
+                delta = 0.0008
 
-				$('#'+table).empty().append($('<thead>').append($('<tr>').append($('<th>').append('Commune (INSEE)'))))
-				$('#'+table+' tr').append($('<th>').append('Fantoir'))
-				$('#'+table+' tr').append($('<th>').append('Voie'))
-				$('#'+table+' tr').append($('<th>').append('Date de création'))
-				$('#'+table+' tr').append($('<th>').attr('colspan','1').append('Carte'))
-				$('#'+table+' tr').append($('<th>').attr('colspan','2').append('Édition'))
+                $('#'+table).empty().append($('<thead>').append($('<tr>').append($('<th>').append('Commune (INSEE)'))))
+                $('#'+table+' tr').append($('<th>').append('Fantoir'))
+                $('#'+table+' tr').append($('<th>').append('Voie'))
+                $('#'+table+' tr').append($('<th>').append('Date de création'))
+                $('#'+table+' tr').append($('<th>').attr('colspan','1').append('Carte'))
+                $('#'+table+' tr').append($('<th>').attr('colspan','2').append('Édition'))
                 $('#'+table+' tr').append($('<th>').append('Statut Fantoir ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
-				$('#'+table+' tr').append($('<th>').attr('colspan','2').append('Voir la commune sur...'))
-				$('#'+table).append($('<tbody>'))
+                $('#'+table+' tr').append($('<th>').attr('colspan','2').append('Voir la commune sur...'))
+                $('#'+table).append($('<tbody>'))
 
-				data = data[1]
-				for (l=0;l<data.length;l++){
-					let [insee,
-						nom_com,
-						voie,
-						fantoir,
-						lon,
-						lat,
-						date_creation,
-						id_statut] = data[l]
+                data = data[1]
+                for (l=0;l<data.length;l++){
+                    let [insee,
+                        nom_com,
+                        voie,
+                        fantoir,
+                        lon,
+                        lat,
+                        date_creation,
+                        id_statut] = data[l]
 
                     fantoir_affiche = fantoir
                     fantoir_dans_relation = 'ok'
@@ -93,87 +94,82 @@
                         has_fantoir = false
                     }
 
-					url_marker = '?mlat='+lat+'&mlon='+lon
-					url_hash_coords = '18/'+lat+'/'+lon
-					xleft	= lon-delta
-					xright	= lon+delta
-					ybottom	= lat-delta
-					ytop	= lat+delta
+                    url_marker = '?mlat='+lat+'&mlon='+lon
+                    url_hash_coords = '18/'+lat+'/'+lon
+                    xleft   = lon-delta
+                    xright  = lon+delta
+                    ybottom = lat-delta
+                    ytop    = lat+delta
 
-					$('#'+table).append($('<tr>').attr('id',l).addClass('statut'+id_statut).append($('<td>').text(nom_com+' ('+insee+')')))
-					//Commune (INSEE)
-					// $('#'+table+' tr:last').append($('<td>').text(nom_com+' ('+insee+')'))
-					//Code Fantoir
-					$('#'+table+' tr:last').append($('<td>').addClass('cell_fantoir').text(fantoir))
-					//Voie
-					$('#'+table+' tr:last').append($('<td>').text(voie))
-					//Date de création
-					$('#'+table+' tr:last').append($('<td>').text(date_creation))
+                    $('#'+table).append($('<tr>').attr('id',l).addClass('statut'+id_statut).append($('<td>').text(nom_com+' ('+insee+')')))
+                    //Commune (INSEE)
+                    // $('#'+table+' tr:last').append($('<td>').text(nom_com+' ('+insee+')'))
+                    //Code Fantoir
+                    $('#'+table+' tr:last').append($('<td>').addClass('cell_fantoir').text(fantoir))
+                    //Voie
+                    $('#'+table+' tr:last').append($('<td>').text(voie))
+                    //Date de création
+                    $('#'+table+' tr:last').append($('<td>').text(date_creation))
 
-					//visu
-					add_map_link(table,url_map_org_part1+url_marker+'#map='+url_hash_coords,'ORG')
-					//JOSM
-					add_josm_link(table,xleft,xright,ybottom,ytop)
+                    //visu
+                    add_map_link(table,url_map_org_part1+url_marker+'#map='+url_hash_coords,'ORG')
+                    //JOSM
+                    add_josm_link(table,xleft,xright,ybottom,ytop)
                     //--- iD ---
                     add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
-					// Statut
+                    // Statut
                     if (has_fantoir){
                         add_statut_fantoir(table,l,fantoir,id_statut)
                     } else {
                         $('#'+table+' tr:last').addClass('statut_vide').append($('<td>'))
                     }
-					//Liens Pifo et Fantoir
-					add_map_link(table,'./index.html#insee='+insee,'Pifomètre')
-					add_map_link(table,'./liste_brute_fantoir.html#insee='+insee,'Fantoir brut')
-				}
-				$('#wait_ajax').css('visibility','hidden');
+                    //Liens Pifo et Fantoir
+                    add_map_link(table,'./index.html#insee='+insee,'Pifomètre')
+                    add_map_link(table,'./liste_brute_fantoir.html#insee='+insee,'Fantoir brut')
+                }
+                $('#wait_ajax').css('visibility','hidden');
 
-			    //Sticky headers : le tableau scrolle dans son contenant
-			    $('#'+table).tablesorter({
-			        widthFixed : true,
-			        headerTemplate : '{content} {icon}', // Add icon for various themes
-			        widgets: [ 'stickyHeaders', 'filter' ],
-			        widgetOptions: {
-			          stickyHeaders_attachTo : '#reponse'
-			        }
-			    });
-			})
-			window.location.hash="#dept="+$('#input_dept')[0].value
-		};
-	}
+                //Sticky headers : le tableau scrolle dans son contenant
+                $('#'+table).tablesorter({
+                    widthFixed : true,
+                    headerTemplate : '{content} {icon}', // Add icon for various themes
+                    widgets: [ 'stickyHeaders', 'filter' ],
+                    widgetOptions: {
+                      stickyHeaders_attachTo : '#reponse'
+                    }
+                });
+            })
+
+            history.replaceState("", "", window.location.pathname+"?dept="+numero_dept+'&offset='+offset);
+        };
+    }
 </script>
 </head>
 <body onload="start()">
-
-	<header>
-		<!--#include file="includes/menu.html" -->
-	</header>
-
-	<div id="barre-jaune">
-		<span>Département :</span>
-		<form action="javascript:requete_voies_dept()" autocomplete="on">
-			<input type="text" id="input_dept" placeholder="N° de département"></input>
-			<input type="submit" value="Afficher">
-		</form>
-	</div>
-	
-	<div id="bandeau">
-		<div id="descriptif">
+    <header>
+        <!--#include file="includes/menu.html" -->
+    </header>
+    <div id="barre-jaune">
+        <span>Département :</span>
+        <form action="javascript:requete_voies_dept(offset)" autocomplete="on">
+            <input type="text" id="input_dept" placeholder="N° de département"></input>
+            <input type="submit" value="Afficher">
+        </form>
+    </div>
+    <div id="bandeau">
+        <div id="descriptif">
             <h2></h2>
-			<h1>Voies récentes selon FANTOIR,<br/>connues de la BAN mais pas d'OSM</h1>
-		</div>
-	    <div id="bouton_export_csv" title="Exporter la liste courante en CSV"></div>
-		<div id="wait_ajax" class="bas"></div>
-	</div>
-
-	<div id="reponse">
-		<table id="table_voies_recentes" class="tablesorter avec_statuts"></table>
-	</div>
-
-	<footer>
-	<!--#include file="includes/footer.html" -->
-	</footer>
-
-	<div id="josm_target" style="visibility : hidden"></div>
+            <h1>Voies récentes selon FANTOIR,<br/>connues de la BAN mais pas d'OSM</h1>
+        </div>
+        <div id="bouton_export_csv" title="Exporter la liste courante en CSV"></div>
+        <div id="wait_ajax" class="bas"></div>
+    </div>
+    <div id="reponse">
+        <table id="table_voies_recentes" class="tablesorter avec_statuts"></table>
+    </div>
+    <footer>
+    <!--#include file="includes/footer.html" -->
+    </footer>
+    <div id="josm_target" style="visibility : hidden"></div>
 </body>
 </html>

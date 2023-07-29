@@ -10,10 +10,35 @@
         var res
         if (window.location.hash){
             if (window.location.hash.split('dept=')[1]){
-                if (is_valid_dept(window.location.hash.split('dept=')[1].split('&')[0])){
-                    res = window.location.hash.split('dept=')[1].split('&')[0]
-                } else {
-                    alert(window.location.hash.split('dept=')[1].split('&')[0]+' n\'est pas un numero de département valide\n\nAbandon')
+                if (window.location.hash.split('dept=')[1].split('&')[0]){
+                    if (is_valid_dept(window.location.hash.split('dept=')[1].split('&')[0])){
+                        res = window.location.hash.split('dept=')[1].split('&')[0]
+                    }
+                }
+            }
+        }
+        if (window.location.search && res==undefined){
+            if (window.location.search.split('dept=')[1]){
+                if (window.location.search.split('dept=')[1].split('&')[0]){
+                    if (is_valid_dept(window.location.search.split('dept=')[1].split('&')[0])){
+                        res = window.location.search.split('dept=')[1].split('&')[0]
+                    }
+                }
+            }
+        }
+        if ((window.location.hash.split('dept=')[1] || window.location.search.split('dept=')[1]) && res == undefined){
+            alert("Aucun numéro de département valide trouvé dans l'URL\n\nAbandon")
+        }
+        return res
+    }
+    function check_url_for_offset(){
+        var res = 0
+        if (window.location.search){
+            if (window.location.search.split('offset=')[1]){
+                if (window.location.search.split('offset=')[1].split('&')[0]){
+                    if (Number.isInteger(window.location.search.split('offset=')[1].split('&')[0])){
+                        res = window.location.search.split('offset=')[1].split('&')[0]
+                    }
                 }
             }
         }
