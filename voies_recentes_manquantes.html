@@ -14,7 +14,7 @@
     var menu_labels
     var table = 'table_voies_recentes'
     var titre = "Voies récentes inconnues d'OSM"
-    var offset
+    var nb_lignes_par_page = 250
 
     function start(){
         document.title = titre
@@ -47,14 +47,22 @@
                             .css('visibility','visible')
                             .append($('<p>').append('Recherche des voies récentes...'));
             $.ajax({
-                url: "voies_recentes_manquantes_dept.py?dept="+numero_dept+'&offset='+offset,
+                url: "voies_recentes_manquantes_dept.py?dept="+numero_dept+'&offset='+offset+'&limit='+nb_lignes_par_page,
             })
             .done(function( data ){
                 $('body').css('cursor','default');
                 // numero_dept = data[0][0][0]
-                nom_dept = data[0][0][1]
+                nom_dept = data[0][1]
+                offset_max = data[0][2]
+
+                if (offset_max == 1){
+                    titre_bandeau = ' unique voie <br/>connue de la BAN mais pas d\'OSM' 
+                } else {
+                    titre_bandeau = offset_max+' voies récentes selon Fantoir,<br/>connues de la BAN mais pas d\'OSM' 
+                }
 
                 $('#bandeau h2').empty().append(nom_dept+' ('+numero_dept+')')
+                $('#bandeau h1').empty().append(titre_bandeau)
 
                 $('#'+table).empty()
 
@@ -138,9 +146,27 @@
                       stickyHeaders_attachTo : '#reponse'
                     }
                 });
-            })
+
+                //---PAGINATION---
+                $('.pagination').append($('<p>').text('Pages :'))
+
+                //Page précédente
+                if (offset>0) {
+                    $('.pagination').append($('<a title="Page précédente" href="'+window.location.pathname+"?dept="+numero_dept+'&offset='+(parseFloat(offset)-nb_lignes_par_page)+'"><div id="prec">&laquo;</div></a>'))
+                }
+
+                //Page active
+                $('.pagination').append($('<div>'+(offset/nb_lignes_par_page+1)+'</div>').addClass('active'))
+
+                //Page suivante
+                if (offset_max-offset>nb_lignes_par_page) {
+                    $('.pagination').append($('<a title="Page suivante" href="'+window.location.pathname+"?dept="+numero_dept+'&offset='+(parseFloat(offset)+nb_lignes_par_page)+'"><div id="suiv">&raquo;</div></a>'))
+                }
+
+            })//fin fonction done
 
             history.replaceState("", "", window.location.pathname+"?dept="+numero_dept+'&offset='+offset);
+
         };
     }
 </script>
@@ -163,6 +189,7 @@
         </div>
         <div id="bouton_export_csv" title="Exporter la liste courante en CSV"></div>
         <div id="wait_ajax" class="bas"></div>
+        <div class="pagination"></div>
     </div>
     <div id="reponse">
         <table id="table_voies_recentes" class="tablesorter avec_statuts"></table>
