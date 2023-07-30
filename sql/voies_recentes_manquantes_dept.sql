@@ -26,8 +26,8 @@ FROM    nom_fantoir
 WHERE   code_insee LIKE '__dept__%' AND
         source = 'OSM'));
 
---top250
-CREATE TEMP TABLE top250
+--top_res
+CREATE TEMP TABLE top_res
 as
 SELECT l.fantoir,
        code_insee,
@@ -41,7 +41,7 @@ JOIN   (SELECT fantoir,
 USING   (fantoir)
 ORDER BY date_creation DESC
 OFFSET __offset__
-LIMIT 250;
+LIMIT __limit__;
 
 -- Géometrie des voies BAN ----
 -- 1 point adresse arbitraire ---------
@@ -56,7 +56,7 @@ FROM    (SELECT fantoir,
         FROM    bano_adresses
         WHERE   code_dept = '__dept__' AND
                 source = 'BAN') g
-JOIN    top250
+JOIN    top_res
 USING   (fantoir));
 
 -- Assemblage -------------------------
@@ -69,7 +69,7 @@ SELECT  f.code_insee,
         TO_CHAR(TO_TIMESTAMP(date_creation::text,'YYYYMMDD'),'YYYY-MM-DD'),
         COALESCE(id_statut,0),
         nb_ligne_total
-FROM    top250 f
+FROM    top_res f
 JOIN    geom g
 USING   (fantoir)
 JOIN    (SELECT libelle,

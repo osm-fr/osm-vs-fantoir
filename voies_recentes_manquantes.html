@@ -29,7 +29,7 @@
 
     function update_csv_url(dept){
         $('#bouton_export_csv').empty()
-        $('#bouton_export_csv').append($('<a>').attr('href',"voies_recentes_manquantes_dept.py?dept="+dept+'&format=csv')
+        $('#bouton_export_csv').append($('<a>').attr('href',"voies_recentes_manquantes_dept.py?dept="+dept+'&format=csv&offset='+offset+'&limit='+nb_lignes_par_page,)
                                                .attr('target','blank')
                                                .append($('<img>').attr('src','img/export-csv.png')))
     }
@@ -53,18 +53,19 @@
                 $('body').css('cursor','default');
                 // numero_dept = data[0][0][0]
                 nom_dept = data[0][1]
-                offset_max = data[0][2]
+                nb_lignes_total = data[0][2]
 
-                if (offset_max == 1){
-                    titre_bandeau = ' unique voie <br/>connue de la BAN mais pas d\'OSM' 
+                if (nb_lignes_total == 1){
+                    titre_bandeau = " unique voie <br/>connue de la BAN mais pas d'OSM"
                 } else {
-                    titre_bandeau = offset_max+' voies récentes selon Fantoir,<br/>connues de la BAN mais pas d\'OSM' 
+                    titre_bandeau = nb_lignes_total+" voies récentes selon Fantoir,<br/>connues de la BAN mais pas d'OSM"
                 }
 
                 $('#bandeau h2').empty().append(nom_dept+' ('+numero_dept+')')
                 $('#bandeau h1').empty().append(titre_bandeau)
 
                 $('#'+table).empty()
+                $('.pagination').empty()
 
                 url_map_org_part1 = 'http://www.openstreetmap.org/'
                 url_map_fr_part1 = 'http://tile.openstreetmap.fr/'
@@ -159,7 +160,7 @@
                 $('.pagination').append($('<div>'+(offset/nb_lignes_par_page+1)+'</div>').addClass('active'))
 
                 //Page suivante
-                if (offset_max-offset>nb_lignes_par_page) {
+                if (nb_lignes_total-offset>nb_lignes_par_page) {
                     $('.pagination').append($('<a title="Page suivante" href="'+window.location.pathname+"?dept="+numero_dept+'&offset='+(parseFloat(offset)+nb_lignes_par_page)+'"><div id="suiv">&raquo;</div></a>'))
                 }
 
@@ -177,7 +178,7 @@
     </header>
     <div id="barre-jaune">
         <span>Département :</span>
-        <form action="javascript:requete_voies_dept(offset)" autocomplete="on">
+        <form action="javascript:requete_voies_dept()" autocomplete="on">
             <input type="text" id="input_dept" placeholder="N° de département"></input>
             <input type="submit" value="Afficher">
         </form>

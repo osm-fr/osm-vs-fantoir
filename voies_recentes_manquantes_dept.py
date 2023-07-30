@@ -13,9 +13,10 @@ def format_csv(fetch):
 params = cgi.FieldStorage()
 dept = params['dept'].value
 offset = params['offset'].value
+limit = params.getvalue('limit','250')
 format = params.getvalue('format','json')
 
-data_voies = sql_get_data('voies_recentes_manquantes_dept',{'dept':dept,'offset':offset})
+data_voies = sql_get_data('voies_recentes_manquantes_dept',{'dept':dept,'offset':offset,'limit':limit})
 nb_lignes = data_voies[0][-1]
 data_voies = [a[0:-1] for a in data_voies]
 
