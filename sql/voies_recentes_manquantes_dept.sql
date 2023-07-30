@@ -40,6 +40,7 @@ JOIN   (SELECT fantoir,
         WHERE  code_dep = '__dept__') f
 USING   (fantoir)
 ORDER BY date_creation DESC
+OFFSET __offset__
 LIMIT 250;
 
 -- Géometrie des voies BAN ----
@@ -66,7 +67,8 @@ SELECT  f.code_insee,
         st_x(g.geometrie),
         st_y(g.geometrie),
         TO_CHAR(TO_TIMESTAMP(date_creation::text,'YYYYMMDD'),'YYYY-MM-DD'),
-        COALESCE(id_statut,0)
+        COALESCE(id_statut,0),
+        nb_ligne_total
 FROM    top250 f
 JOIN    geom g
 USING   (fantoir)
@@ -78,4 +80,5 @@ JOIN    (SELECT libelle,
 ON      co.com = f.code_insee
 LEFT OUTER JOIN statut_fantoir
 USING   (fantoir)
+CROSS JOIN (SELECT count(*) AS nb_ligne_total FROM liste_fantoir) lf
 ORDER BY date_creation DESC,3,4;

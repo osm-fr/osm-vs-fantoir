@@ -36,7 +36,7 @@
         if (window.location.search){
             if (window.location.search.split('offset=')[1]){
                 if (window.location.search.split('offset=')[1].split('&')[0]){
-                    if (Number.isInteger(window.location.search.split('offset=')[1].split('&')[0])){
+                    if (Number.isInteger(Number.parseInt(window.location.search.split('offset=')[1].split('&')[0]))){
                         res = window.location.search.split('offset=')[1].split('&')[0]
                     }
                 }
