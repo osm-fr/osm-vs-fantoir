@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Voies inconnues d'OSM avec un maximum d'adresses</title>
+<title>Voies avec adresses inconnues d'OSM</title>
 <script src="js/jquery-3.6.4.min.js"></script>
 <script src="js/tablesorter/jquery.tablesorter.js"></script>
 <script src="js/jquery.tablesorter.combined.min.js"></script>
@@ -13,7 +13,8 @@
 <script>
     var menu_labels
     var table = 'table_top_adresses'
-    var titre = "Voies inconnues d'OSM avec un maximum d'adresses"
+    var titre = "Voies avec adresses inconnues d'OSM"
+    var nb_lignes_par_page = 250
 
     function start(){
         document.title = titre
@@ -27,7 +28,7 @@
     }
     function update_csv_url(dept){
         $('#bouton_export_csv').empty()
-        $('#bouton_export_csv').append($('<a>').attr('href',"requete_par_dept.py?requete=top_adresses_manquantes&cache=False&dept="+numero_dept+'&format=csv')
+        $('#bouton_export_csv').append($('<a>').attr('href',"requete_par_dept.py?requete=top_adresses_manquantes&cache=False&dept="+numero_dept+'&format=csv&offset='+offset+'&limit='+nb_lignes_par_page)
                                                .attr('target','blank')
                                                .append($('<img>').attr('src','img/export-csv.png')))
     }
@@ -35,21 +36,33 @@
         if (check_form_for_dept()){
             numero_dept = $('#input_dept')[0].value
             document.title = titre+' ('+numero_dept+')'
+            offset = check_url_for_offset()
+
             update_csv_url(numero_dept)
+
             $('body').css('cursor','progress');
             $('#wait_ajax').empty()
                             .css('visibility','visible')
-                            .append($('<p>').append('Recherche des voies non rapprochées,<br/>avec beauuuuucoup d\'adresses...'));
+                            .append($('<p>').append("Recherche des voies non rapprochées,<br/>avec beauuuuucoup d'adresses..."));
             $.ajax({
-                url: "top_adresses_manquantes_dept.py?dept="+numero_dept,
+                url: "top_adresses_manquantes_dept.py?dept="+numero_dept+'&offset='+offset+'&limit='+nb_lignes_par_page
             })
             .done(function( data ){
                 $('body').css('cursor','default');
-                nom_dept = data[0][0][1]
+                nom_dept = data[0][1]
+                nb_lignes_total = data[0][2]
+
+                if (nb_lignes_total == 1){
+                    titre_bandeau = " unique voie avec adresses inconnue d'OSM"
+                } else {
+                    titre_bandeau = nb_lignes_total+" voies avec adresses inconnues d'OSM"
+                }
 
                 $('#bandeau h2').empty().append(nom_dept+' ('+numero_dept+')')
+                $('#bandeau h1').empty().append(titre_bandeau)
 
                 $('#'+table).empty()
+                $('.pagination').empty()
 
                 url_map_org_part1 = 'http://www.openstreetmap.org/'
                 url_map_fr_part1 = 'http://tile.openstreetmap.fr/'
@@ -131,19 +144,32 @@
                       stickyHeaders_attachTo : '#reponse'
                     }
                 });
+                //---PAGINATION---
+                $('.pagination').append($('<p>').text('Pages :'))
 
-                })
-            window.location.hash="#dept="+numero_dept
+                //Page précédente
+                if (offset>0) {
+                    $('.pagination').append($('<a title="Page précédente" href="'+window.location.pathname+"?dept="+numero_dept+'&offset='+(parseFloat(offset)-nb_lignes_par_page)+'"><div id="prec">&laquo;</div></a>'))
+                }
+
+                //Page active
+                $('.pagination').append($('<div>'+(Math.floor(offset/nb_lignes_par_page)+1)+'</div>').addClass('active'))
+
+                //Page suivante
+                if (nb_lignes_total-offset>nb_lignes_par_page) {
+                    $('.pagination').append($('<a title="Page suivante" href="'+window.location.pathname+"?dept="+numero_dept+'&offset='+(parseFloat(offset)+nb_lignes_par_page)+'"><div id="suiv">&raquo;</div></a>'))
+                }
+
+            })
+            history.replaceState("", "", window.location.pathname+"?dept="+numero_dept+'&offset='+offset);
         };
     }
 </script>
 </head>
 <body onload="start()">
-
     <header>
         <!--#include file="includes/menu.html" -->
     </header>
-
     <div id="barre-jaune">
         <span>Département :</span>
         <form action="javascript:requete_voies_dept()" autocomplete="on">
@@ -151,20 +177,18 @@
             <input type="submit" value="Afficher">
         </form>
     </div>
-
     <div id="bandeau">
         <div id="descriptif">
             <h2></h2>
-            <h1>Voies connues de la BAN mais pas d'OSM,<br/>avec beaucoup d'adresses</h1>
+            <h1>Voies avec adresses inconnues d'OSM</h1>
         </div>
         <div id="bouton_export_csv" title="Exporter la liste courante en CSV"></div>
         <div id="wait_ajax" class="bas"></div>
+        <div class="pagination"></div>
     </div>
-
     <div id="reponse">
         <table id="table_top_adresses" class="tablesorter avec_statuts"></table>
     </div>
-
     <footer>
     <!--#include file="includes/footer.html" -->
     </footer>

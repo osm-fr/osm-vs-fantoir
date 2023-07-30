@@ -12,12 +12,18 @@ def format_csv(fetch):
 
 params = cgi.FieldStorage()
 dept = params['dept'].value
+offset = params['offset'].value
+limit = params.getvalue('limit','250')
 format = params.getvalue('format','json')
+
+data_voies = sql_get_data('top_adresses_manquantes_dept',{'dept':dept,'offset':offset,'limit':limit})
+nb_lignes = data_voies[0][-1]
+data_voies = [a[0:-1] for a in data_voies]
 
 if format == 'json':
     print("Content-Type: application/json\n")
-    print(json.JSONEncoder().encode([sql_get_data('infos_dept',{'dept':dept}),sql_get_data('top_adresses_manquantes_dept',{'dept':dept})]))
+    print(json.JSONEncoder().encode([(sql_get_data('infos_dept',{'dept':dept}))[0]+(nb_lignes,),data_voies]))
 
 if format == 'csv':
     print(f'Content-Type: text/csv\nContent-Disposition: Attachment; filename="Dept {dept} - top adresses manquantes.csv"\n')
-    print(format_csv(sql_get_data('top_adresses_manquantes_dept',{'dept':dept})))
+    print(format_csv(data_voies))

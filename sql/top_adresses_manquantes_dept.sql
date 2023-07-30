@@ -2,19 +2,17 @@ WITH
 -- Fantoir --
 fantoir
 AS
-(SELECT code_insee,
-        fantoir
+(SELECT fantoir
 FROM    bano_adresses
-WHERE   nom_voie IS NOT NULL AND
-        fantoir IS NOT NULL AND
-        source != 'OSM' AND
+WHERE   nom_voie IS NOT NULL   AND
+        fantoir  IS NOT NULL   AND
+        source   != 'OSM'      AND
         code_dept = '__dept__'
 EXCEPT
-(SELECT code_insee,
-        fantoir
+(SELECT fantoir
 FROM    nom_fantoir
 WHERE   code_dept = '__dept__' AND
-        source = 'OSM')),
+        source    = 'OSM')),
 -- Voies avec max adresses ---------------
 max
 AS
@@ -25,10 +23,10 @@ AS
 FROM    bano_adresses c
 JOIN    fantoir
 USING   (fantoir)
---WHERE   c.voie_autre IS NOT NULL
 GROUP BY 1,2,3
 ORDER BY 4 DESC
-LIMIT 200),
+OFFSET __offset__
+LIMIT __limit__),
 -- statut FANTOIR ---------------------
 latest_statut
 AS
@@ -59,7 +57,8 @@ SELECT cog.code_insee,
        st_y(geom.geometrie),
        max.a_proposer,
        COALESCE(id_statut,0),
-       COALESCE(is_place,false)
+       COALESCE(is_place,false),
+       nb_ligne_total
 FROM   max
 JOIN   (SELECT libelle,
                com AS code_insee,
@@ -81,5 +80,6 @@ LEFT OUTER JOIN (SELECT fantoir,
                                  nature IN ('place','lieu-dit')) p
                  WHERE rang = 1) place
 USING (fantoir)
-ORDER BY a_proposer DESC
-LIMIT 200;
+CROSS JOIN (SELECT count(*) AS nb_ligne_total FROM fantoir) lf
+ORDER BY a_proposer DESC;
+--LIMIT __limit__;
