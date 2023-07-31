@@ -10,7 +10,11 @@ import helpers as hp
 from sql import sql_get_data
 
 def format_csv(data):
-        return ('Code FANTOIR;Date de création;Libellé TOPO;Libellé OSM;Libellé BAN ou CADASTRE;Source du nom;Ancienne commune;Lon;Lat\n'+'\n'.join([f"{c[0] if c[0] and c[0][6] != 'b' else ''};{c[1]};{c[3]};{c[4] if c[4] else ''};{c[5] if c[5] else ''};{c[6] if c[6] else ''};{c[7] if c[7] else ''};{c[8] if c[8] else ''};{c[9] if c[9] else ''}" for c in data]))
+    labels = hp.get_dict_labels()
+
+    return ('Code FANTOIR;Date de création;Statut FANTOIR;Libellé TOPO;Libellé OSM;Libellé BAN ou CADASTRE;Source du nom;Ancienne commune;Lon;Lat\n'+'\n'.join([f"{c[0] if c[0] and c[0][6] != 'b' else ''};{c[1]};{labels[c[10]]};{c[3]};{c[4] if c[4] else ''};{c[5] if c[5] else ''}; {c[6] if c[6] else ''};{c[7] if c[7] else ''};{c[8] if c[8] else ''};{c[9] if c[9] else ''}" for c in data]))
+
+# {labels[c[10]] if c[10] else ''
 
 cgitb.enable()
 
