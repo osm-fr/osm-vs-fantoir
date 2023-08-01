@@ -19,6 +19,7 @@
    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
    crossorigin=""></script>
 <script>
+    table = 'table_inspect_adresse'
     var menu_labels
     FILTRES = [["numero_ban",true],
                ["numero_osm",true]]
@@ -30,6 +31,14 @@
     function active_menu_filtres(){
         $('#boutons-filtres input').click(function(){
             show_mask_map_icon()
+            update_menu_filtres()
+        })
+    };
+    function update_menu_filtres(){
+        $('#boutons-filtres li span.control-label').each(function(){
+            total = $('#map .map_numero.'+$(this).attr('critere')).length
+            visible = $('#map .map_numero:visible.'+$(this).attr('critere')).length
+            $(this).children('span').text(' ('+visible+' / '+total+')')
         })
     };
     function show_mask_map_icon(){
@@ -44,7 +53,6 @@
             }
        });
     }
-
     function check_url_for_fantoir(){
         pattern_fantoir = new RegExp('^[0-9][0-9abAB][0-9]{3}[0-9|a-z|A-Z]{4}$')
         var res
@@ -99,8 +107,8 @@
         }
     }
     function add_statut_numero(id_ligne,numero,statut,insee,fantoir){
-        $('#table_inspect_adresse tr:last').removeClass().addClass('statut'+statut).attr('numero',numero)
-        $('#table_inspect_adresse tr:last').append($('<td>').append($(a_menus_labels[statut]).change(function() {
+        $('#'+table+' tr:last').removeClass().addClass('statut'+statut).attr('numero',numero)
+        $('#'+table+' tr:last').append($('<td>').append($(a_menus_labels[statut]).change(function() {
             statut = $(this)[0].value;
             $.ajax({
                 url: "statut_numero.py?insee="+insee+"&fantoir="+fantoir+"&statut="+statut+"&numero="+numero+"&source=BAN"
@@ -221,14 +229,14 @@
                                     $('#liens_voie').append($('<span>').addClass('adresses-integrees').text('✔'))
                                                         .append($('<span>').text(' Adresses intégrées'))
                                 }
-                                $('#table_inspect_adresse').empty() .append($('<thead>')
+                                $('#'+table).empty() .append($('<thead>')
                                                                         .append($('<tr>')
                                                                             .append($('<th>').append('Numéro'))
                                                                             .append($('<th>').append('Statut de l\'adresse BAN'))
                                                                         )
                                                                     )
 
-                                $('#table_inspect_adresse').append($('<tbody>'))
+                                $('#'+table).append($('<tbody>'))
                                 for (l=0;l<data.length;l++){
                                     let[numero,
                                         lon_ban,
@@ -237,23 +245,33 @@
                                         lon_osm,
                                         lat_osm] = data[l]
 
-                                    $('#table_inspect_adresse tbody:last').append($('<tr>').attr('id',l))
+                                    $('#'+table+' tbody:last').append($('<tr>').attr('id',l))
 
                                     if (lon_ban != undefined && lon_osm != undefined){
-                                        $('#table_inspect_adresse tr:last').append($('<td>')
+                                        $('#'+table+' tr:last').append($('<td>')
                                                                         .append($('<span class="pastille-verte" title="Intégrée dans OSM">'))
                                                                         .append($('<span>').text(numero)));
                                     } else if (lon_ban != undefined){
-                                        $('#table_inspect_adresse tr:last').append($('<td>')
+                                        $('#'+table+' tr:last').append($('<td>')
                                                                         .append($('<span class="pastille-orange" title="Pas encore intégrée dans OSM">'))
                                                                         .append($('<span>').text(numero)));
                                     } else if (lon_osm != undefined){
-                                        $('#table_inspect_adresse tr:last').append($('<td>')
+                                        $('#'+table+' tr:last').append($('<td>')
                                                                         .append($('<span class="pastille-bleue" title="Trouvée dans OSM et inconnue de la BAN">'))
                                                                         .append($('<span>').text(numero)));
                                     }
 
                                     add_statut_numero(l,numero,statut,insee,fantoir)
+
+                                    // classes pour les filtres
+                                    if (lon_ban != undefined && lon_osm != undefined){
+                                        $('#'+table+' tr:last').addClass('numero_ban numero_osm')
+                                    } else if (lon_ban != undefined){
+                                        $('#'+table+' tr:last').addClass('numero_ban')
+                                    } else if (lon_osm != undefined){
+                                        $('#'+table+' tr:last').addClass('numero_osm')
+                                    }
+
 
                                     if (lon_ban != undefined){
                                         var myIcon = L.divIcon({className: 'map_numero numero_ban ligne'+l,html:'<span>'+numero+'</span>'});
@@ -272,7 +290,7 @@
                                         max_lat = Math.max(max_lat,lat_osm);
                                     }
 
-                                    $('#table_inspect_adresse tr:last').hover(function() {
+                                    $('#'+table+' tr:last').hover(function() {
                                         $('.map_numero.ligne'+$(this).attr('id')).append($('<div class="map_numero_hover"></div>'))
 
                                     },function() {
@@ -280,10 +298,10 @@
                                         });
 
                                 }
-                                $('#table_inspect_adresse').trigger("resetToLoadState");
+                                $('#'+table).trigger("resetToLoadState");
                                 
                                 //Sticky headers : le tableau scrolle dans son contenant
-                                $('#table_inspect_adresse').tablesorter({
+                                $('#'+table).tablesorter({
                                     widthFixed : true,
                                     headerTemplate : '{content} {icon}', // Add icon for various themes
                                     widgets: [ 'stickyHeaders', 'filter' ],
@@ -294,6 +312,7 @@
 
                                 map.fitBounds([[min_lat,min_lon],[max_lat,max_lon]]);
                                 active_menu_filtres()
+                                update_menu_filtres()
                                 refresh();
                             })
     }
@@ -336,13 +355,13 @@
                                 <label class="switch is-rounded is-small">
                                 <input type="checkbox" id="check_numero_osm" checked>
                                 <span class="check is-dark"></span>
-                                <span class="control-label" critere="OSM">Adresses sur OSM<span></span></span>
+                                <span class="control-label" critere="numero_osm">Adresses sur OSM<span></span></span>
                             </li>
                             <li>
                                 <label class="switch is-rounded is-small">
                                 <input type="checkbox" id="check_numero_ban" checked>
                                 <span class="check is-dark"></span>
-                                <span class="control-label" critere="BAN">Adresses dans la BAN<span></span></span>
+                                <span class="control-label" critere="numero_ban">Adresses dans la BAN<span></span></span>
                             </li>
                         </ul>
                     </div>
