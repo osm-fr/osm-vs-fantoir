@@ -22,7 +22,13 @@
     table = 'table_inspect_adresse'
     var menu_labels
     FILTRES = [["numero_ban",true],
-               ["numero_osm",true]]
+               ["numero_osm",true],
+               ["en_commun",true],
+               ["ban_seulement",true],
+               ["osm_seulement",true],
+               ["pair",true],
+               ["impair",true]
+               ]
     function update_filtres(){
         for (let i = 0; i < FILTRES.length; i++){
             FILTRES[i] = [FILTRES[i][0],$('#check_'+FILTRES[i][0]).is(':checked')]
@@ -44,12 +50,16 @@
     function show_mask_map_icon(){
         update_filtres()
         $('.map_numero').each(function() {
-           for (let f of FILTRES){
+            action = 'donotfilter'
+            for (let f of FILTRES){
                 if ($(this).hasClass(f[0]) && f[1] == false){
-                    $(this).css('display','none')
-                } else if ($(this).hasClass(f[0]) && f[1] == true) {
-                    $(this).css('display','block')
+                    action = 'filter'
                 }
+            }
+            if (action == 'filter'){
+                $(this).css('display','none')
+            } else {
+                $(this).css('display','block')
             }
        });
     }
@@ -244,6 +254,7 @@
                                         statut,
                                         lon_osm,
                                         lat_osm] = data[l]
+                                    parite = Number.parseInt(numero) % 2 == 0 ? 'pair':'impair';
 
                                     $('#'+table+' tbody:last').append($('<tr>').attr('id',l))
 
@@ -263,26 +274,29 @@
 
                                     add_statut_numero(l,numero,statut,insee,fantoir)
 
-                                    // classes pour les filtres
-                                    if (lon_ban != undefined && lon_osm != undefined){
-                                        $('#'+table+' tr:last').addClass('numero_ban numero_osm')
-                                    } else if (lon_ban != undefined){
-                                        $('#'+table+' tr:last').addClass('numero_ban')
-                                    } else if (lon_osm != undefined){
-                                        $('#'+table+' tr:last').addClass('numero_osm')
-                                    }
 
-
-                                    if (lon_ban != undefined){
-                                        var myIcon = L.divIcon({className: 'map_numero numero_ban ligne'+l,html:'<span>'+numero+'</span>'});
+                                    if (lon_ban != undefined && lon_osm!= undefined){
+                                        var myIcon = L.divIcon({className: 'map_numero numero_ban en_commun ligne'+l+' '+parite,html:'<span>'+numero+'</span>'});
                                         L.marker([lat_ban, lon_ban],{icon: myIcon}).addTo(map)
                                         min_lon = Math.min(min_lon,lon_ban);
                                         max_lon = Math.max(max_lon,lon_ban);
                                         min_lat = Math.min(min_lat,lat_ban);
                                         max_lat = Math.max(max_lat,lat_ban);
-                                    }
-                                    if (lon_osm != undefined){
-                                        var myIcon = L.divIcon({className: 'map_numero numero_osm integre ligne'+l,html:'<span>'+numero+'</span>'});
+                                        var myIcon = L.divIcon({className: 'map_numero numero_osm en_commun ligne'+l+' '+parite,html:'<span>'+numero+'</span>'});
+                                        L.marker([lat_osm, lon_osm],{icon: myIcon}).addTo(map)
+                                        min_lon = Math.min(min_lon,lon_osm);
+                                        max_lon = Math.max(max_lon,lon_osm);
+                                        min_lat = Math.min(min_lat,lat_osm);
+                                        max_lat = Math.max(max_lat,lat_osm);
+                                    } else  if (lon_ban != undefined){
+                                        var myIcon = L.divIcon({className: 'map_numero numero_ban ban_seulement ligne'+l+' '+parite,html:'<span>'+numero+'</span>'});
+                                        L.marker([lat_ban, lon_ban],{icon: myIcon}).addTo(map)
+                                        min_lon = Math.min(min_lon,lon_ban);
+                                        max_lon = Math.max(max_lon,lon_ban);
+                                        min_lat = Math.min(min_lat,lat_ban);
+                                        max_lat = Math.max(max_lat,lat_ban);
+                                    } else if (lon_osm != undefined){
+                                        var myIcon = L.divIcon({className: 'map_numero numero_osm osm_seulement ligne'+l+' '+parite,html:'<span>'+numero+'</span>'});
                                         L.marker([lat_osm, lon_osm],{icon: myIcon}).addTo(map)
                                         min_lon = Math.min(min_lon,lon_osm);
                                         max_lon = Math.max(max_lon,lon_osm);
@@ -292,10 +306,9 @@
 
                                     $('#'+table+' tr:last').hover(function() {
                                         $('.map_numero.ligne'+$(this).attr('id')).append($('<div class="map_numero_hover"></div>'))
-
                                     },function() {
                                             $('.map_numero_hover').remove()
-                                        });
+                                    });
 
                                 }
                                 $('#'+table).trigger("resetToLoadState");
@@ -355,13 +368,51 @@
                                 <label class="switch is-rounded is-small">
                                 <input type="checkbox" id="check_numero_osm" checked>
                                 <span class="check is-dark"></span>
-                                <span class="control-label" critere="numero_osm">Adresses sur OSM<span></span></span>
+                                <span class="control-label" critere="numero_osm">Adresses OSM<span></span></span>
                             </li>
                             <li>
                                 <label class="switch is-rounded is-small">
                                 <input type="checkbox" id="check_numero_ban" checked>
                                 <span class="check is-dark"></span>
-                                <span class="control-label" critere="numero_ban">Adresses dans la BAN<span></span></span>
+                                <span class="control-label" critere="numero_ban">Adresses BAN<span></span></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul>
+                            <li>
+                                <label class="switch is-rounded is-small">
+                                <input type="checkbox" id="check_en_commun" checked>
+                                <span class="check is-dark"></span>
+                                <span class="control-label" critere="en_commun">Adresses communes BAN-OSM<span></span></span>
+                            </li>
+                            <li>
+                                <label class="switch is-rounded is-small">
+                                <input type="checkbox" id="check_ban_seulement" checked>
+                                <span class="check is-dark"></span>
+                                <span class="control-label" critere="ban_seulement">Adresses non integrées<span></span></span>
+                            </li>
+                            <li>
+                                <label class="switch is-rounded is-small">
+                                <input type="checkbox" id="check_osm_seulement" checked>
+                                <span class="check is-dark"></span>
+                                <span class="control-label" critere="osm_seulement">Adresses hors BAN<span></span></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul>
+                            <li>
+                                <label class="switch is-rounded is-small">
+                                <input type="checkbox" id="check_pair" checked>
+                                <span class="check is-dark"></span>
+                                <span class="control-label" critere="pair">Numéros pairs<span></span></span>
+                            </li>
+                            <li>
+                                <label class="switch is-rounded is-small">
+                                <input type="checkbox" id="check_impair" checked>
+                                <span class="check is-dark"></span>
+                                <span class="control-label" critere="impair">Numéros impairs<span></span></span>
                             </li>
                         </ul>
                     </div>
