@@ -150,18 +150,24 @@
 
                 //---PAGINATION---
                 $('.pagination').append($('<p>').text('Pages :'))
-
+                
+                //Première page
+                if (offset>0) {
+                    $('.pagination').append($('<a title="Première page" href="'+window.location.pathname+"?dept="+numero_dept+'&offset=0"><div id="prem">&laquo;</div></a>'))
+                }
                 //Page précédente
                 if (offset>0) {
-                    $('.pagination').append($('<a title="Page précédente" href="'+window.location.pathname+"?dept="+numero_dept+'&offset='+(parseFloat(offset)-nb_lignes_par_page)+'"><div id="prec">&laquo;</div></a>'))
+                    $('.pagination').append($('<a title="Page précédente" href="'+window.location.pathname+"?dept="+numero_dept+'&offset='+(parseFloat(offset)-nb_lignes_par_page)+'"><div>&lsaquo;</div></a>'))
                 }
-
                 //Page active
                 $('.pagination').append($('<div>'+(offset/nb_lignes_par_page+1)+'</div>').addClass('active'))
-
                 //Page suivante
                 if (nb_lignes_total-offset>nb_lignes_par_page) {
-                    $('.pagination').append($('<a title="Page suivante" href="'+window.location.pathname+"?dept="+numero_dept+'&offset='+(parseFloat(offset)+nb_lignes_par_page)+'"><div id="suiv">&raquo;</div></a>'))
+                    $('.pagination').append($('<a title="Page suivante" href="'+window.location.pathname+"?dept="+numero_dept+'&offset='+(parseFloat(offset)+nb_lignes_par_page)+'"><div>&rsaquo;</div></a>'))
+                }
+                //Dernière page
+                if (nb_lignes_total-offset>nb_lignes_par_page) {
+                    $('.pagination').append($('<a title="Dernière page" href="'+window.location.pathname+"?dept="+numero_dept+'&offset='+nb_lignes_par_page*Math.floor(nb_lignes_total/nb_lignes_par_page)+'"><div id="dern">&raquo;</div></a>'))
                 }
 
             })//fin fonction done
