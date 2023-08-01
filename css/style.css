@@ -611,12 +611,16 @@ h4 {
 
 .pagination div:hover:not(.active) {background-color: #ddd;}
 
-.pagination div#prec {
+.pagination div:first-child {
+	font-weight: bold;
+}
+
+.pagination div#prem {
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
 }
 
-.pagination div#suiv {
+.pagination div#dern {
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
 }
