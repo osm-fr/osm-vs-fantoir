@@ -17,6 +17,9 @@ h2 {
 	font-size: 1.4em;
 	line-height: 0.5em;
 }
+.page_numeros h2 {
+	line-height: 0.1em;
+}
 h3 {
 	font-size: 0.9em;
 }
@@ -456,10 +459,11 @@ h4 {
 #liens_commune,
 #liens_voie {
 	clear: both;
-	margin: 0 20px;
+	margin: 0;
 	line-height: 1.6em;
 	font-size: 0.9em;
 }
+
 .cellule_intitule,
 .cellule_data {
 	float: left;
@@ -470,6 +474,11 @@ h4 {
 	max-width: 500px;
 	line-height: 2em;
 	margin:0 30px -10px 30px;
+}
+.page_numeros #infos_commune_col2 {
+	max-width: 400px;
+	margin:0;
+	margin-left: 15px;
 }
 
 
@@ -496,9 +505,9 @@ h4 {
 	width: 55%;
 }
 #boutons-filtres.page_numeros {
-	float: right;
-	width: 25%;
-	margin:10px 150px 0 0;
+	float: left;
+	margin:1% 0 0 2%;
+	padding: 10px 0 10px 10px;
 }
 
 #boutons-filtres div {
@@ -509,6 +518,9 @@ h4 {
 #boutons-filtres ul {
   list-style-type: none;
   margin:0;
+}
+#boutons-filtres.page_numeros ul {
+  padding: 0 20px 0 0;
 }
 
 #boutons-filtres ul li {
@@ -525,7 +537,12 @@ h4 {
 	float: left;
 	clear: both;
 }
-
+.ligne-boutons-filtres p {
+	font-weight: bold;
+}
+.page_numeros .ligne-boutons-filtres p {
+	margin:0;
+}
 
 /*-------------------------------------------------------------------*/
 /*--------------- DESCRIPTIF PAGES PAR DEPARTEMENT ------------------*/
@@ -541,7 +558,9 @@ h4 {
 }
 
 #descriptif.page_numeros {
-	width: 90%;
+	width: 44%;
+	margin-right: 0;
+	white-space: normal;
 }
 
 /*-------------------------------------------------------------------*/
@@ -626,6 +645,20 @@ h4 {
 }
 
 /*------------------------------------------------------*/
+/*--------------------- PAGE NUMEROS -------------------*/
+/*------------------ TABLEAU ET CARTE ------------------*/
+/*------------------------------------------------------*/
+
+#reponse_et_map {
+	position:relative;
+	margin-top:310px;
+	margin-left: 2%;
+	width: 100%;
+	height:65%;
+	overflow-y: auto;
+}
+
+/*------------------------------------------------------*/
 /*----------------------- TABLEAU ----------------------*/
 /*------------------------------------------------------*/
 
@@ -641,19 +674,15 @@ h4 {
 	margin-top:200px;
 	height: 73%;
 }
-
 #reponse.pifo{
-	margin-top:260px;
+	margin-top:265px;
 	height: 65%;
 }
-
-#reponse_numeros{
-	position: relative;
-	margin-top:180px;
+#reponse.page_numeros{
+	float: left;
+	margin:0;
 	width:40%;
-	height:70%;
-	margin-left:10%;
-	overflow-y: auto;
+	height: 90%;
 }
 
 th {
@@ -681,8 +710,7 @@ table.tablesorter thead th {
 /*------------------- LIGNE GRISÉE STATUT PAS OK ----------------*/
 /*---------------------------------------------------------------*/
 
-#reponse table.avec_statuts tr:not(.statut0):not(.statut_vide) td,
-#reponse_numeros tr:not(.statut0) td {
+#reponse table.avec_statuts tr:not(.statut0):not(.statut_vide) td {
 	background: #e6e6e6;
 }
 
@@ -870,41 +898,70 @@ td.cell_statut {
 /*---------------------------------------------------------------*/
 
 #map{
+  	float: left;
+	margin-left: 50px;
 	width: 500px;
 	height: 500px;
-	position: fixed;
-	top: 210px;
-	left: 55%;
 }
+.leaflet-tile-pane{
+	filter: grayscale(100%);
+	-webkit-filter: grayscale(100%);
+}
+#legende_map {
+	float: left;
+	font-size: 0.8em;
+	line-height: 1em;
+	margin: 10px;
+}
+
+/*Style commun des numéros*/
 .map_numero,
 .legende_numero {
 	font-weight: bold;
-	font-size: 1.2em;
+	font-size: 1.1em;
 	line-height: 1em;
-	color: #56B4E9; /*bleu*/
-	background-color: rgba(255, 255, 255, 0.6);
+	background-color: rgba(255, 255, 255, 0.7);
 	width: fit-content !important;
 	min-width: 20px;
 	padding: 5px;
 	text-align: center;
 	white-space: nowrap;
-	border:  solid 1px;
-	border-radius: 45%;
-}
-.map_numero.anomalie,
-.legende_numero.anomalie {
-	color: #EC0080; /*rose*/
-	border-radius: 8%;
-}
-.map_numero.integre,
-.legende_numero.integre {
-	color: #009E73; /*vert*/
-	font-size: 1.1em;
-	border:none;
-	border-radius: unset;
+	border: solid 1px;
 }
 
-.numero_ban .map_numero_hover, .numero_ban .map_numero_hovers.integre {
+.legende_numero.en_commun, .legende_numero.en_commun, 
+.legende_numero.osm_seulement, .legende_numero.ban_seulement,
+.legende_numero.anomalie  {
+	border: none;
+} 
+
+
+/*Nouveaux styles*/
+.numero_osm {
+	border-radius: 50%;
+}
+.numero_ban {
+	border-radius: 0%;
+}
+
+.en_commun {
+	color: #009E73; /*vert*/
+	/*border: dotted 1px;*/
+}
+.osm_seulement {
+	color: #56B4E9; /*bleu*/
+	/*background-color: rgba(86, 120, 233, 0.2);*/
+}
+.ban_seulement {
+	color: #EFA500; /*orange*/
+}
+
+.numero_ban.anomalie,
+.legende_numero.anomalie {
+	color: #EC0080; /*rose*/
+}
+
+.numero_ban .map_numero_hover {
 	position: relative;
 	top: -35px;
 	left: -8px;
@@ -914,18 +971,12 @@ td.cell_statut {
 	background-size: 25px;
 }
 
-.numero_osm .map_numero_hover, .numero_osm .map_numero_hovers.integre {
+.numero_osm .map_numero_hover {
 	position: relative;
 	top: -35px;
 	left: -8px;
 	width: 20px;
 	height: 20px;
-	background: url("../img/pin-osm.png") no-repeat;
+	background: url("../img/pin-bleu.png") no-repeat;
 	background-size: 25px;
-}
-
-#legende_map {
-	position: fixed;
-	top: 720px;
-	left: 55%;
 }
