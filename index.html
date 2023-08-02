@@ -291,6 +291,11 @@
 
                     tr_id+=1
 
+                    // Doublons de vrais FANTOIRs détectés à tort en pseudo-FANTOIRs BAN => masqués
+                    if (!has_code_fantoir && nom_ban == undefined){
+                        continue;
+                    }
+
 
                     // REMPLISSAGE CELLULES
 
