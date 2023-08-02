@@ -44,6 +44,10 @@
         $('#boutons-filtres li span.control-label').each(function(){
             total = $('#map .map_numero.'+$(this).attr('critere')).length
             visible = $('#map .map_numero:visible.'+$(this).attr('critere')).length
+            if ($(this).attr('critere')=='en_commun') {
+                total=total/2
+                visible=visible/2
+            }
             $(this).children('span').text(' ('+visible+' / '+total+')')
         })
     };
@@ -197,11 +201,15 @@
 
                                 // INFOS 1e COLONNE : Liens commune, intégration adresses
                                 $('#infos_commune_col1').empty()
-                                                    .append($('<div id="date-maj">')
+                                                    /*.append($('<div id="date-maj">')
                                                       .append($('<div>').addClass('cellule_intitule').append('<strong>Code Insee :</strong>'))
                                                       .append($('<div>').addClass('cellule_data').append('&nbsp;').append(insee))
-                                                    )
-                                .append($('<div id="liens_commune">').append('<strong>Voir la commune sur :</strong> ')
+                                                    )*/
+                                .append($('<div id="liens_commune">')
+                                    .append('<strong>Code Insee :</strong>')
+                                    .append('&nbsp;').append(insee+'. ')
+                                                    
+                                    .append('<strong>Voir la commune sur :</strong> ')
                                   /*.append($('<a>')
                                       .attr('target','blank')
                                       .attr('href',url_map_org_part1+'?mlat='+lat_commune+'&mlon='+lon_commune+'#map='+url_hash_coords)
@@ -319,7 +327,7 @@
                                     headerTemplate : '{content} {icon}', // Add icon for various themes
                                     widgets: [ 'stickyHeaders', 'filter' ],
                                     widgetOptions: {
-                                      stickyHeaders_attachTo : '#reponse_numeros'
+                                      stickyHeaders_attachTo : '#reponse'
                                     }
                                 });
 
@@ -347,11 +355,7 @@
         <!--#include file="includes/menu.html" -->
     </header>
 
-    <div id="barre-jaune">
-        <span>> Qualification des anomalies des numéros d'adresse</span>
-    </div>
-
-    <div id="bandeau">
+    <div id="bandeau" class="haut">
         <div id="descriptif" class="page_numeros">
             <div id="infos_commune_col1"></div>
             <div id="infos_commune_col2">
@@ -359,78 +363,89 @@
                 <h1></h1>
             </div>
 
-            <div id="boutons-filtres" class="page_numeros">
-                <p id="ligne-afficher">Afficher :</p>
-                <div class="ligne-boutons-filtres">
-                    <div>
-                        <ul>
-                            <li>
-                                <label class="switch is-rounded is-small">
-                                <input type="checkbox" id="check_numero_osm" checked>
-                                <span class="check is-dark"></span>
-                                <span class="control-label" critere="numero_osm">Adresses OSM<span></span></span>
-                            </li>
-                            <li>
-                                <label class="switch is-rounded is-small">
-                                <input type="checkbox" id="check_numero_ban" checked>
-                                <span class="check is-dark"></span>
-                                <span class="control-label" critere="numero_ban">Adresses BAN<span></span></span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div>
-                        <ul>
-                            <li>
-                                <label class="switch is-rounded is-small">
-                                <input type="checkbox" id="check_en_commun" checked>
-                                <span class="check is-dark"></span>
-                                <span class="control-label" critere="en_commun">Adresses communes BAN-OSM<span></span></span>
-                            </li>
-                            <li>
-                                <label class="switch is-rounded is-small">
-                                <input type="checkbox" id="check_ban_seulement" checked>
-                                <span class="check is-dark"></span>
-                                <span class="control-label" critere="ban_seulement">Adresses non integrées<span></span></span>
-                            </li>
-                            <li>
-                                <label class="switch is-rounded is-small">
-                                <input type="checkbox" id="check_osm_seulement" checked>
-                                <span class="check is-dark"></span>
-                                <span class="control-label" critere="osm_seulement">Adresses hors BAN<span></span></span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div>
-                        <ul>
-                            <li>
-                                <label class="switch is-rounded is-small">
-                                <input type="checkbox" id="check_pair" checked>
-                                <span class="check is-dark"></span>
-                                <span class="control-label" critere="pair">Numéros pairs<span></span></span>
-                            </li>
-                            <li>
-                                <label class="switch is-rounded is-small">
-                                <input type="checkbox" id="check_impair" checked>
-                                <span class="check is-dark"></span>
-                                <span class="control-label" critere="impair">Numéros impairs<span></span></span>
-                            </li>
-                        </ul>
-                    </div>
+        <div id="boutons-filtres" class="page_numeros">
+            <p id="ligne-afficher">Afficher sur la carte :</p>
+            <div class="ligne-boutons-filtres">
+                <div>
+                    <p>Source</p>
+                    <ul>
+                        <li>
+                            <label class="switch is-rounded is-small">
+                            <input type="checkbox" id="check_numero_osm" checked>
+                            <span class="check is-dark"></span>
+                            <span class="control-label" critere="numero_osm">Adresses OSM<span></span></span>
+                        </li>
+                        <li>
+                            <label class="switch is-rounded is-small">
+                            <input type="checkbox" id="check_numero_ban" checked>
+                            <span class="check is-dark"></span>
+                            <span class="control-label" critere="numero_ban">Adresses BAN<span></span></span>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <ul>
+                        <li>
+                            <label class="switch is-rounded is-small">
+                            <input type="checkbox" id="check_en_commun" checked>
+                            <span class="check is-green"></span>
+                            <span class="control-label" critere="en_commun">Adresses rapprochées BAN-OSM<span></span></span>
+                        </li>
+                        <li>
+                            <label class="switch is-rounded is-small">
+                            <input type="checkbox" id="check_ban_seulement" checked>
+                            <span class="check is-orange"></span>
+                            <span class="control-label" critere="ban_seulement">Adresses BAN non integrées<span></span></span>
+                        </li>
+                        <li>
+                            <label class="switch is-rounded is-small">
+                            <input type="checkbox" id="check_osm_seulement" checked>
+                            <span class="check is-blue"></span>
+                            <span class="control-label" critere="osm_seulement">Adresses OSM hors BAN<span></span></span>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <ul>
+                        <li>
+                            <label class="switch is-rounded is-small">
+                            <input type="checkbox" id="check_pair" checked>
+                            <span class="check is-dark"></span>
+                            <span class="control-label" critere="pair">Numéros pairs<span></span></span>
+                        </li>
+                        <li>
+                            <label class="switch is-rounded is-small">
+                            <input type="checkbox" id="check_impair" checked>
+                            <span class="check is-dark"></span>
+                            <span class="control-label" critere="impair">Numéros impairs<span></span></span>
+                        </li>
+                    </ul>
                 </div>
             </div>
+        </div> 
 
         </div>
+
+
+        <div id="legende_map">
+             <p><span class="legende_numero numero_osm">Rond</span> : Adresses venant d'OSM</p>
+             <p><span class="legende_numero numero_ban">Carré</span> : Adresses venant de la BAN</p>
+             <p><span class="legende_numero anomalie">Rose</span> : Adresses BAN avec anomalie identifiée</p>
+             <p><span class="legende_numero en_commun">Vert</span> : ✔ Adresses rapprochées BAN-OSM</p>
+             <p><span class="legende_numero ban_seulement">Orange</span> : Adresses de la BAN non intégrées sur OSM</p>
+             <p><span class="legende_numero osm_seulement">Bleu</span> : Adresses trouvées sur OSM mais inconnues de la BAN</p>
+
+         </div> 
+
     </div>
 
-    <div id="reponse_numeros">
-        <table id="table_inspect_adresse"></table>
-    </div>
-     <div id="map"></div>
-     <div id="legende_map">
-         <p><span class="legende_numero integre">Vert</span> : ✔ Adresses intégrées dans OSM</p>
-         <p><span class="legende_numero">Bleu</span> : Adresses BAN "ok"</p>
-         <p><span class="legende_numero anomalie">Rose</span> : Adresses BAN avec anomalie identifiée</p>
+    <div id="reponse_et_map">
+        <div id="reponse" class="page_numeros">
+            <table id="table_inspect_adresse" class="avec_statuts"></table>
+        </div>
+        <div id="map"></div>
      </div>
+     
     <footer>
         <!--#include file="includes/footer.html" -->
     </footer>
