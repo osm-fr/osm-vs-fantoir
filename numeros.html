@@ -280,15 +280,20 @@
                                                                         .append($('<span class="pastille-bleue" title="Trouvée dans OSM et inconnue de la BAN">'))
                                                                         .append($('<span>').text(numero)));
                                     }
+
+                                    //---COLONNE STATUT---
                                     if (lon_ban != undefined){
                                         add_statut_numero(l,numero,statut,insee,fantoir)
                                     } else {
                                         $('#'+table+' tr:last').addClass('statut_vide').append($('<td>'))
                                     }
-                                    $('#'+table+' tr:last').append($('<td>').click(function(){
-                                        map.setView([lat_ban == undefined ? lat_osm:lat_ban,lon_ban == undefined ? lon_osm:lon_ban],19)
-                                    })
-                                                                            .append($('<span>').text('X')))
+
+                                    //---COLONNE ZOOMER---
+                                    $('#'+table+' tr:last').append($('<td class="zoom">')
+                                                            .click(function(){
+                                                                map.setView([lat_ban == undefined ? lat_osm:lat_ban,lon_ban == undefined ? lon_osm:lon_ban],19)
+                                                            })
+                                                            )
 
                                     if (lon_ban != undefined && lon_osm!= undefined){
                                         var myIcon = L.divIcon({className: 'map_numero numero_ban en_commun ligne'+l+' '+parite,html:'<span>'+numero+'</span>'});
