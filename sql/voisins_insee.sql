@@ -3,7 +3,9 @@ AS
 (SELECT geometrie,
         ST_Centroid(geometrie) gcentre
 FROM    polygones_insee
-WHERE   code_insee = '__code_insee__'),
+WHERE   code_insee = '__code_insee__'
+ORDER BY admin_level
+LIMIT 1),
 v
 AS
 (SELECT code_insee,
