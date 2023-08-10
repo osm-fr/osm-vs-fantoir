@@ -247,6 +247,18 @@ h4 {
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
 
+#bouton_v2 {
+	cursor: pointer;
+	position: fixed;
+	top: 40px;
+	right: 165px;
+	background: url("../img/bouton_v2.png") #cacaca no-repeat center;
+	width: 40px;
+	height: 40px;
+	border-bottom: 2px #8f8f8f solid; /*gris*/
+	border-radius: 6px;
+}
+
 #bouton_export_csv{
 	cursor: pointer;
 	position: fixed;
