@@ -44,13 +44,19 @@ h4 {
 
 #aide_contenu {
 	margin: 50px 2% 0 2%;
+	font-size: 0.9em;
 }
-
-#aide_contenu img, #aide_contenu p {
-	float: left;
+#aide_contenu h2 {
+	font-size: 1.6em;
 }
-
-.aide_para {
+#aide_contenu h3 {
+	font-size: 1.3em;
+}
+#aide_contenu p img {
+    display: inline-block;
+    vertical-align: middle;
+}
+#aide_contenu .titre_para {
 	font-weight: bold;
 }
 
@@ -450,7 +456,6 @@ h4 {
 	float: left;
 }
 
-/*Spécifique aux pages Fantoir brut et Numéros*/
 #descriptif #infos_commune_col1 {
 	margin: 15px 0;
 }
@@ -544,13 +549,6 @@ h4 {
 	margin:0;
 }
 
-/*-------------------------------------------------------------------*/
-/*--------------- DESCRIPTIF PAGES PAR DEPARTEMENT ------------------*/
-/*------ Fantoirs annulés, erronés, Top adresses manquantes ---------*/
-/*--------- Voies récentes manquantes, Adresses sans rue ------------*/
-/*--------------------------- Page numéros --------------------------*/
-/*-------------------------------------------------------------------*/
-
 #descriptif {
 	float: left;
 	margin:0 2%;
@@ -561,6 +559,10 @@ h4 {
 	width: 44%;
 	margin-right: 0;
 	white-space: normal;
+}
+
+#descriptif.pifo #infos_commune_col2 h1 {
+	margin:revert;
 }
 
 /*-------------------------------------------------------------------*/
