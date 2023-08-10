@@ -151,11 +151,11 @@
                  commune_composee] = pifodata
 
             document.title = nom_commune+' - Pifomètre'
-            $('#infos_commune').empty()
+            $('#descriptif').empty()
             $('#alerte_commune').css('visibility','hidden');
 
             if (nom_commune.length == 0){
-                $('#infos_commune').append($('<div id="titre_commune_inconnue">').append($('<h1>').append('Code Insee '+$('#input_insee')[0].value+' : commune inconnue')))
+                $('#descriptif').append($('<div id="titre_commune_inconnue">').append($('<h1>').append('Code Insee '+$('#input_insee')[0].value+' : commune inconnue')))
                 $('body').css('cursor','default');
                 return 0;
             }
@@ -173,7 +173,7 @@
             url_hash_coords = '15/'+lat_commune+'/'+lon_commune
             url_listing_fantoir = './liste_brute_fantoir.html?insee='+$('#input_insee')[0].value
 
-            $('#infos_commune').append($('<div id="infos_commune_col1">')
+            $('#descriptif').append($('<div id="infos_commune_col1">')
                                     .append($('<div id="date-maj">')
                                         .append($('<div>').addClass('cellule_intitule').append('<strong>Dernier rapprochement le</strong>'))
                                         .append($('<div>').addClass('cellule_data').append('&nbsp;').append(date_dernier_rapprochement).append(' (UTC)<br/>'))
@@ -206,7 +206,7 @@
                                    .text('FANTOIR')
                                )
 
-            $('#infos_commune').append($('<div id="titre_commune">').append($('<h1>').append((nom_commune))))
+            $('#descriptif').append($('<div id="infos_commune_col2">').append($('<h1>').append((nom_commune))))
 
             //communes voisines
             $('#table_communes_voisines tr td').empty()
@@ -495,7 +495,7 @@
     </div>
 
     <div id="bandeau">
-        <div id="infos_commune"></div>
+        <div id="descriptif" class ="pifo"></div>
         <div id="refresh_infobulle"></div>
         <div id="table_communes_voisines">
             <div class="fermer">X</div>
