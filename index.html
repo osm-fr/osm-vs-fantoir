@@ -171,7 +171,7 @@
             url_edit_part1 = 'http://www.openstreetmap.org/edit?editor='
             delta = 0.0008
             url_hash_coords = '15/'+lat_commune+'/'+lon_commune
-            url_listing_fantoir = './liste_brute_fantoir.html#insee='+$('#input_insee')[0].value
+            url_listing_fantoir = './liste_brute_fantoir.html?insee='+$('#input_insee')[0].value
 
             $('#descriptif').append($('<div id="infos_commune_col1">')
                                     .append($('<div id="date-maj">')
@@ -212,11 +212,10 @@
             $('#table_communes_voisines tr td').empty()
             $('#table_communes_voisines tr td.commune_centre').text(nom_commune)
             for (v in communes_voisines){
-                $('#table_communes_voisines tr td#'+(communes_voisines[v])[0]).text(communes_voisines[v][2]).attr('insee_cible',communes_voisines[v][1]).addClass('lien_commune')
-                    .click(function(){
-                    location.assign(window.location.href.split('#')[0]+'#insee='+$(this).attr('insee_cible'))
-                    start()
-                })
+                $('#table_communes_voisines tr td#'+(communes_voisines[v])[0]).append($('<a>')
+                                                                              .addClass('lien_commune')
+                                                                                  .attr('href',window.location.href.split('?')[0]+'?insee='+communes_voisines[v][1])
+                                                                                  .text(communes_voisines[v][2]))
             }
             if (insee_commune_parente){
                 $('#alerte_commune').empty();
@@ -225,11 +224,10 @@
                 $('#alerte_commune > .fermer-alerte').click(function(){
                     $('#alerte_commune').css('visibility','hidden');
                 })
-                $('#alerte_commune').append($('<p>').text(nom_commune+' est une ancienne commune. Elle a été incorporée dans ').append($('<span>').addClass('lien_commune').text(nom_commune_parente+' ('+insee_commune_parente+')')).attr('insee_cible',insee_commune_parente)
-                    .click(function(){
-                        location.assign(window.location.href.split('#')[0]+'#insee='+$(this).attr('insee_cible'))
-                        start()
-                    }))
+                $('#alerte_commune').append($('<p>').text(nom_commune+' est une ancienne commune. Elle a été incorporée dans ')
+                                    .append($('<a>').addClass('lien_commune')
+                                                    .attr('href',window.location.href.split('?')[0]+'?insee='+insee_commune_parente)
+                                                    .text(nom_commune_parente+' ('+insee_commune_parente+')')))
             }
             $.ajax({
                 url: "requete_pifometre_voies.py?insee="+$('#input_insee')[0].value
@@ -424,7 +422,7 @@
                     }
                     //--- Adresses à integrer ----
                     if (numeros_a_proposer > 0){
-                        add_josm_addr_link(table,$('#input_insee')[0].value,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
+                        add_josm_addr_link(table,$('#input_insee')[0].value,nom_commune,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
                     }
                     else if (numeros_a_proposer == null && avec_adresses_ban){
                         $('#'+table+' tr:last').append($('<td>').attr('colspan','2').addClass('zone-adresses')
@@ -458,7 +456,7 @@
                 active_menu_filtres()
                 update_menu_filtres()
             })
-            window.location.hash="#insee="+$('#input_insee')[0].value
+            history.replaceState("", "", window.location.pathname+"?insee="+$('#input_insee')[0].value)
             $('body').css('cursor','default');
         })
     };
