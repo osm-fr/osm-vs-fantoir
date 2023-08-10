@@ -104,7 +104,7 @@
                                     })
                                 )
     }
-    function add_josm_addr_link(table,insee,fantoir,nom_fantoir,nombre,fantoir_dans_relation,is_place){
+    function add_josm_addr_link(table,insee,nom_commune,fantoir,nom_fantoir,nombre,fantoir_dans_relation,is_place){
         $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-adresses'))
         $('#'+table+' tr:last td:last').append($('<span>').text(nombre > 1 ? nombre+' Points':'1 Point'))
                                             .click(function(){

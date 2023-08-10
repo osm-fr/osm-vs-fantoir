@@ -5,26 +5,27 @@
 <script src="js/jquery-3.6.4.min.js"></script>
 <script src="js/tablesorter/jquery.tablesorter.js"></script>
 <script src="js/jquery.tablesorter.combined.min.js"></script>
+<script src="js/fonctions.js"></script>
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
 <link rel="stylesheet" href="css/responsive.css" type="text/css"/>
 
 <script>
 	a_champs_fantoir = ['Rapproché ?','dept','code_insee','fantoir','nature_voie','libelle_voie','caractere_voie','caractere_annul','date_annul','date_creation','type_voie','dernier_mot']
-	function check_url_for_insee(){
-		pattern_insee = new RegExp('^[0-9][0-9abAB][0-9]{3}$')
-		var res
-		if (window.location.hash){
-			if (window.location.hash.split('insee=')[1]){
-				if (pattern_insee.test(window.location.hash.split('insee=')[1].split('&')[0])){
-					res = window.location.hash.split('insee=')[1].split('&')[0]
-				} else {
-					alert(window.location.hash.split('insee=')[1].split('&')[0]+' n\'est pas un code INSEE de commune\n\nAbandon')
-				}
-			}
-		}
-		return res
-	}
+	// function check_url_for_insee(){
+	// 	pattern_insee = new RegExp('^[0-9][0-9abAB][0-9]{3}$')
+	// 	var res
+	// 	if (window.location.hash){
+	// 		if (window.location.hash.split('insee=')[1]){
+	// 			if (pattern_insee.test(window.location.hash.split('insee=')[1].split('&')[0])){
+	// 				res = window.location.hash.split('insee=')[1].split('&')[0]
+	// 			} else {
+	// 				alert(window.location.hash.split('insee=')[1].split('&')[0]+' n\'est pas un code INSEE de commune\n\nAbandon')
+	// 			}
+	// 		}
+	// 	}
+	// 	return res
+	// }
 	function start(){
 		insee = check_url_for_insee()
 		if (insee){
@@ -127,7 +128,7 @@
       });
 
 		})
-		window.location.hash="#insee="+$('#input_insee')[0].value
+    history.replaceState("", "", window.location.pathname+"?insee="+$('#input_insee')[0].value)
 		$('body').css('cursor','default');
 	}
 </script>
