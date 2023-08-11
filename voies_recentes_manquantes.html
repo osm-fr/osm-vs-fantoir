@@ -13,7 +13,7 @@
 <script>
     var menu_labels
     var table = 'table_voies_recentes'
-    var titre = "Voies récentes inconnues d'OSM"
+    var titre = "Voies inconnues d'OSM"
     var nb_lignes_par_page = 250
 
     function start(){
@@ -45,7 +45,7 @@
             $('body').css('cursor','progress');
             $('#wait_ajax').empty()
                             .css('visibility','visible')
-                            .append($('<p>').append('Recherche des voies récentes...'));
+                            .append($('<p>').append('Recherche des voies manquantes...'));
             $.ajax({
                 url: "voies_recentes_manquantes_dept.py?dept="+numero_dept+'&offset='+offset+'&limit='+nb_lignes_par_page,
             })
@@ -56,9 +56,9 @@
                 nb_lignes_total = data[0][2]
 
                 if (nb_lignes_total == 1){
-                    titre_bandeau = " unique voie <br/>connue de la BAN mais pas d'OSM"
+                    titre_bandeau = " unique voie connue de la BAN ou de Fantoir<br/>mais pas d'OSM"
                 } else {
-                    titre_bandeau = nb_lignes_total+" voies récentes selon Fantoir,<br/>connues de la BAN mais pas d'OSM"
+                    titre_bandeau = nb_lignes_total+" voies connues de la BAN ou de Fantoir mais pas d'OSM,<br/>classées par date"
                 }
 
                 $('#bandeau h2').empty().append(nom_dept+' ('+numero_dept+')')
@@ -192,7 +192,7 @@
     <div id="bandeau">
         <div id="descriptif">
             <h2></h2>
-            <h1>Voies récentes selon FANTOIR,<br/>connues de la BAN mais pas d'OSM</h1>
+            <h1>Voies connues de la BAN ou de Fantoir mais pas d'OSM,<br/>classées par date</h1>
         </div>
         <div id="bouton_export_csv" title="Exporter la liste courante en CSV"></div>
         <div id="wait_ajax" class="bas"></div>
