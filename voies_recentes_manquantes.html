@@ -123,7 +123,7 @@
                     //visu
                     add_map_link(table,url_map_org_part1+url_marker+'#map='+url_hash_coords,'ORG')
                     //JOSM
-                    add_josm_link(table,xleft,xright,ybottom,ytop)
+                    add_josm_link(table,xleft,xright,ybottom,ytop,insee,nom_com)
                     //--- iD ---
                     add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
                     // Statut
@@ -133,8 +133,8 @@
                         $('#'+table+' tr:last').addClass('statut_vide').append($('<td>'))
                     }
                     //Liens Pifo et Fantoir
-                    add_map_link(table,'./index.html#insee='+insee,'Pifomètre')
-                    add_map_link(table,'./liste_brute_fantoir.html#insee='+insee,'Fantoir brut')
+                    add_map_link(table,'./index.html?insee='+insee,'Pifomètre')
+                    add_map_link(table,'./liste_brute_fantoir.html?insee='+insee,'Fantoir brut')
                 }
                 $('#wait_ajax').css('visibility','hidden');
 

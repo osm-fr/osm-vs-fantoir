@@ -403,7 +403,7 @@
 
                     //--- JOSM ---
                     if (lon != undefined) {
-                        add_josm_link(table,xmin,xmax,ymin,ymax)
+                        add_josm_link(table,xmin,xmax,ymin,ymax,insee,nom_commune)
                     } else {
                         $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('x'))
                     }

@@ -23,11 +23,11 @@
 				url: "insee_from_coords.py?lat="+lat+"&lon="+lon
 			})
 			.done(function( data ) {
-                window.location.replace('index.html#insee='+data[0]+'&from=josm')
+                window.location.replace('index.html?insee='+data[0]+'&from=josm')
 			})
 
 		} else {
-            window.location.replace('index.html#insee=404')
+            window.location.replace('index.html?insee=404')
 		}
 	}
 </script>

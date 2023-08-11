@@ -127,7 +127,7 @@
                     //visu
                     add_map_link(table,url_map_org_part1+url_marker+'#map='+url_hash_coords,'ORG')
                     //JOSM
-                    add_josm_link(table,xleft,xright,ybottom,ytop)
+                    add_josm_link(table,xleft,xright,ybottom,ytop,insee,nom_commune)
                     //Statut Fantoir
                     if (caractere_annul != 'B'){
                         add_statut_fantoir('table_adresses_osm_sans_rue',l,fantoir,statut_fantoir)
@@ -135,8 +135,8 @@
                         $('#'+table+' tr:last').addClass('statut0').append($('<td>'))
                     }
                     //Liens Pifo et Fantoir
-                    add_map_link(table,'./index.html#insee='+insee,'Pifomètre ('+insee+')')
-                    add_map_link(table,'./liste_brute_fantoir.html#insee='+insee,'Fantoir brut ('+insee+')')
+                    add_map_link(table,'./index.html?insee='+insee,'Pifomètre ('+insee+')')
+                    add_map_link(table,'./liste_brute_fantoir.html?insee='+insee,'Fantoir brut ('+insee+')')
                 }
                 $('#wait_ajax').css('visibility','hidden');
 

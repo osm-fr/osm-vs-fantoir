@@ -93,12 +93,12 @@
                                         })
                                     )
     }
-    function add_josm_link(table,xl,xr,yb,yt){
+    function add_josm_link(table,xl,xr,yb,yt,insee,nom_commune){
         $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-josm')
                                     .attr('xleft',xl).attr('xright',xr).attr('ybottom',yb).attr('ytop',yt)
                                     .text('JOSM')
                                     .click(function(){
-                                        srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xl+'&right='+xr+'&top='+yt+'&bottom='+yb;
+                                        srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xl+'&right='+xr+'&top='+yt+'&bottom='+yb+'&changeset_tags='+get_changeset_tags_noms(insee,nom_commune);
                                         $('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
                                         $(this).addClass('clicked');
                                     })
@@ -109,7 +109,7 @@
         $('#'+table+' tr:last td:last').append($('<span>').text(nombre > 1 ? nombre+' Points':'1 Point'))
                                             .click(function(){
                                                 stringToRemove = window.location.href.split('/').pop()
-                                                srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele='+((is_place) ? 'Place':'Points');
+                                                srcURL = 'http://127.0.0.1:8111/import?changeset_tags='+get_changeset_tags_addr(insee,nom_commune)+'&new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele='+((is_place) ? 'Place':'Points');
                                                 $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
                                                 $(this).addClass('clicked');
                                             })
@@ -120,12 +120,18 @@
                                         .text('Relation')
                                         .click(function(){
                                             stringToRemove = window.location.href.split('/').pop()
-                                            srcURL = 'http://127.0.0.1:8111/import?new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele=Relation&fantoir_dans_relation='+fantoir_dans_relation;
+                                            srcURL = 'http://127.0.0.1:8111/import?changeset_tags='+get_changeset_tags_addr(insee,nom_commune)+'&new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele=Relation&fantoir_dans_relation='+fantoir_dans_relation;
                                             $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
                                             $(this).addClass('clicked');
                                         })
                                     )
         }
+    }
+    function get_changeset_tags_addr(insee,nom_commune){
+        return "source=https://bano.openstreetmap.fr/pifometre/index.html?insee="+insee+"%7Chashtags=%23BANO %23Pifometre%7Ccomment="+nom_commune+" ("+insee+") - Intégration d'adresses"
+    }
+    function get_changeset_tags_noms(insee,nom_commune){
+        return "source=https://bano.openstreetmap.fr/pifometre/index.html?insee="+insee+"%7Chashtags=%23BANO %23Pifometre%7Ccomment="+nom_commune+" ("+insee+") - Intégration de noms de voies et lieux-dits"
     }
     function check_josm_remote_control(){
         $.ajax({

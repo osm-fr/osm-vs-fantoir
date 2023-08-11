@@ -58,7 +58,7 @@
 			document.title = nom_commune+' - Liste FANTOIR'
 
       url_map_org_part1 = 'http://www.openstreetmap.org/'
-      url_listing_fantoir = './liste_brute_fantoir.html#insee='+$('#input_insee')[0].value
+      url_listing_fantoir = './liste_brute_fantoir.html?insee='+$('#input_insee')[0].value
 
       $('#infos_commune_col1').empty()
       												.append($('<div id="date-maj">')
@@ -86,7 +86,7 @@
                                   .append(' / ')
                                   .append($('<a>')
                                       .attr('target','blank')
-                                      .attr('href','index.html#insee='+insee)
+                                      .attr('href','index.html?insee='+insee)
                                       .text('Pifomètre')
                                   )
                               )
