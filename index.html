@@ -160,6 +160,7 @@
                 return 0;
             }
             commune_valide = true;
+            code_insee = $('#input_insee')[0].value
             update_csv_url()
             $('#wait_ajax').empty()
                            .css('visibility','visible')
@@ -403,7 +404,7 @@
 
                     //--- JOSM ---
                     if (lon != undefined) {
-                        add_josm_link(table,xmin,xmax,ymin,ymax,insee,nom_commune)
+                        add_josm_link(table,xmin,xmax,ymin,ymax,code_insee,nom_commune)
                     } else {
                         $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('x'))
                     }

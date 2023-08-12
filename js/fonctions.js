@@ -128,10 +128,10 @@
         }
     }
     function get_changeset_tags_addr(insee,nom_commune){
-        return "source=https://bano.openstreetmap.fr/pifometre/index.html?insee="+insee+"%7Chashtags=%23BANO %23Pifometre%7Ccomment="+nom_commune+" ("+insee+") - Intégration d'adresses"
+        return "source=https://bano.openstreetmap.fr/pifometre/index.html?insee="+insee+"%7Chashtags=%23BANO %23Pifometre%7Ccomment=Intégration d'adresses - "+nom_commune+" ("+insee+")"
     }
     function get_changeset_tags_noms(insee,nom_commune){
-        return "source=https://bano.openstreetmap.fr/pifometre/index.html?insee="+insee+"%7Chashtags=%23BANO %23Pifometre%7Ccomment="+nom_commune+" ("+insee+") - Intégration de noms de voies et lieux-dits"
+        return "source=https://bano.openstreetmap.fr/pifometre/index.html?insee="+insee+"%7Chashtags=%23BANO %23Pifometre%7Ccomment=Intégration de noms de voies et lieux-dits - "+nom_commune+" ("+insee+")"
     }
     function check_josm_remote_control(){
         $.ajax({
