@@ -51,6 +51,7 @@ h4 {
 }
 #aide_contenu h3 {
 	font-size: 1.3em;
+	color: darkgreen;
 }
 #aide_contenu p img {
     display: inline-block;
@@ -58,6 +59,11 @@ h4 {
 }
 #aide_contenu .titre_para {
 	font-weight: bold;
+}
+.aide_capture {
+	width: 600px;
+	border: 2px solid #B1DE89;
+	padding: 5px;
 }
 
 /*-------------------------------------------------------------------------------------*/
@@ -251,7 +257,7 @@ h4 {
 	cursor: pointer;
 	position: fixed;
 	top: 40px;
-	right: 165px;
+	right: 215px;
 	background: url("../img/bouton_v2.png") #cacaca no-repeat center;
 	width: 40px;
 	height: 40px;
@@ -263,7 +269,7 @@ h4 {
 	cursor: pointer;
 	position: fixed;
 	top: 40px;
-	right: 15px;
+	right: 65px;
 	background: url("../img/export-csv.png") no-repeat top;
 	height: 40px;
 	width: 40px;
@@ -290,7 +296,7 @@ h4 {
 	cursor: pointer;
 	position: fixed;
 	top: 40px;
-	right: 115px;
+	right: 165px;
 	background-image: url("../img/communes_voisines.png");
 	background-size: 40px 40px;
 	width: 40px;
@@ -349,7 +355,7 @@ h4 {
 	cursor: pointer;
 	position: fixed;
 	top: 40px;
-	right: 65px;
+	right: 115px;
 	background: url("../img/refresh-black.png") no-repeat lightblue center;
 	background-size: 33px;
 	width: 40px;
@@ -384,14 +390,15 @@ h4 {
 	cursor: pointer;
 	position: fixed;
 	top: 40px;
-	right: 65px;
-	background: url("../img/aide.png") no-repeat lavender center;
+	right: 20px;
+	background: url("../img/aide.png") no-repeat pink center;
 	background-size: 33px;
 	width: 40px;
 	height: 40px;
-	border-bottom: 2px plum solid;
+	border-bottom: 2px violet solid;
 	border-radius: 6px;
 }
+
 #aide_stats {
 	position:fixed;
 	top:35px;
@@ -400,7 +407,7 @@ h4 {
 	height:100%;
 	padding: 10px;
 	border-radius: 8px;
-	background-color:lavender;
+	background-color:#FFE1E6; /*rose léger*/
 	overflow-y:scroll;
 	visibility:hidden;
 	font-size: 0.9em;
@@ -415,7 +422,7 @@ h4 {
 	width: 30px;
 	text-align: center;
 	font-weight: bold;
-	background: plum;
+	background: violet;
   	border-radius: 6px;
 	cursor:pointer;
 }
