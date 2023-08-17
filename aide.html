@@ -1,0 +1,76 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Pifomètre - Aide</title>
+<script src="js/jquery-3.6.4.min.js"></script>
+<link rel="stylesheet" href="css/style.css" type="text/css"/>
+<link rel="stylesheet" href="css/responsive.css" type="text/css"/>
+</head>
+
+<body>
+	<header>
+		<!--#include file="includes/menu.html" -->
+	</header>
+
+<div id="aide_contenu">
+	<h1>Aide</h1>
+
+	<h2>Pifomètre</h2>
+	<h3>(Page d'Interconnexion Fantoir-OSM pour Minimiser l'Enorme Tas des Rues Egarées)</h3>
+
+	<p><a href="img/aide/aide_pifo_page.png" ><img src="img/aide/aide_pifo_page.png"/ class="aide_capture"></a></p>
+
+	<p><span class="titre_para">1. Sélection de la commune.</span> Sélection de la commune par code Insee. Pour les codes des communes en Corse, 'a' et 'b' sont compris (exemple: Ajaccio -> 2A004).</p>
+	<p><span class="titre_para">2. Date du dernier rapprochement</span> entre les données OpenStreetMap et Fantoir au sein de <abbr title="Base Adresses Nationale Ouverte">BANO</abbr>.</p>
+
+	<h3>Les boutons</h3>
+	<p><span class="titre_para">3. Communes voisines.</span> Affiche des liens vers les pages Pifomètre des communes environnantes.</p>
+	<p><!-- <img src="img/aide/capture-refresh.png"/> --> <span class="titre_para">4. Mise à jour.</span> Au survol du bouton, une infobulle indique l'heure des dernières données OSM permettant de mettre à jour <abbr title="Base Adresses Nationale Ouverte">BANO</abbr>.
+	<br/>Cliquer sur le bouton force la mise à jour de <abbr title="Base Adresses Nationale Ouverte">BANO</abbr> sur la commune. Par défaut, une mise à jour est faite toutes les nuits. </p>
+	<p><!-- <img src="img/aide/capture-export.png"/>  --><span class="titre_para">5. Export CSV.</span> Télécharge un fichier CSV avec tout le tableau Pifomètre de la commune affichée.</p>
+
+	<h3>6. Les filtres</h3>
+
+	<p><span class="titre_para">Voies et lieux-dits</span> Pour choisir d'afficher uniquement les voies, ou uniquement les lieux-dits, ou les deux.</p>
+	<p><span class="titre_para">Rapprochement</span>
+	<br/>• Le filtre vert permet d'afficher ou non les voies/lieux-dits provenant de Fantoir, de la <abbr title="Base Adresses Nationale">BAN</abbr> ou du Cadastre et ayant trouvé une correspondance (par leur nom ou leur code Fantoir) avec un endroit dans OSM.
+	<br/>• Le filtre orange permet d'afficher ou non les voies/lieux-dits provenant de Fantoir, de la <abbr title="Base Adresses Nationale">BAN</abbr> ou du Cadastre et n'ayant pas trouvé d'endroit correspondant dans OSM.</p>
+
+	<p><span class="titre_para">Filtre bleu</span> Apparaissent ici les lieux «trouvés dans OSM et inconnus de Fantoir». Cette liste remonte les noms d'endroits (rues, lieux-dits, cimetières, écoles, parkings...) qui pourraient avoir une correspondance dans Fantoir mais qui n'en ont pas trouvé – soit parce qu'il n'y a rien de correspondant dans le Fantoir de la commune, soit parce qu'il y a une erreur à identifier et corriger dans OSM (orthographe...).</p>
+
+	<p><span class="titre_para">Adresses</span>
+	<br/>• Le filtre rose permet d'afficher ou non les voies/lieux-dits ayant des adresses référencées dans la <abbr title="Base Adresses Nationale">BAN</abbr>.
+	<br/>• Le filtre gris permet d'afficher ou non les voies/lieux-dits n'ayant pas d'adresses référencées dans la <abbr title="Base Adresses Nationale">BAN</abbr>.</p>
+
+	<h3>Le tableau</h3>
+	<p><span class="titre_para">7. Code Fantoir.</span> Code de la voie ou du lieu-dit trouvé dans le ficher Fantoir de la commune. Le code comporte 9 caractères pour préparer le format du futur <a href="https://www.data.gouv.fr/fr/datasets/objet-disparition-des-fichiers-fantoir-fimoca-et-fimoct-en-juillet-2023-mise-en-place-des-fichiers-topo-structures-uamissions-competences-et-acheminement/">fichier Topo</a>, successeur du fichier Fantoir encore non publié à ce jour (août 2023).</p>
+
+	<p><span class="titre_para">8. Création Fantoir.</span> Date de création du code Fantoir (1 janvier 1987 pour les plus anciens).</p>
+
+	<p><span class="titre_para">9. Libellé Fantoir.</span> Nom lié au code Fantoir selon le fichier Fantoir de la commune.</p>
+
+	<p><span class="titre_para" >10. Libellé OSM.</span> Nom trouvé dans OpenStreetMap. Il peut provenir d'une voie (<span class="monospace">highway</span>), d'un lieu-dit (<span class="monospace">place</span>) ou d'une adresse (<span class="monospace">addr:street</span> ou <span class="monospace">addr:place</span>).
+	<br/>Si le nom OSM correspond à un nom de voie ou lieu-dit trouvé dans Fantoir, il est accompagné d'une pastille ronde et verte : on dit qu'il est «rapproché».
+	<br/>Si aucun nom dans OSM ne correspond à la voie ou au lieu-dit trouvé dans Fantoir, s'affiche juste une pastille orange en forme de losange.
+	</p>
+
+	<p><span class="titre_para">11. Libellé <abbr title="Base Adresses Nationale">BAN</abbr> ou Cadastre.</span> Nom trouvé dans la <abbr title="Base Adresses Nationale">BAN</abbr> pour les voies, ou dans le Cadastre pour les lieux-dits. La source est précisée sur chaque ligne avec un pictogramme <img src="img/ban.png"/> BAN ou <img src="img/cadastre.png"/> Cadastre.</p>
+
+	<p><span class="titre_para">12. Carte.</span> Lien vers la carte Openstreetmap.org centrée sur la voie ou le lieu-dit.</p>
+
+	<p><span class="titre_para">13. Édition.</span> Liens ouvrant l'éditeur en ligne iD centré sur la voie ou le lieu-dit, ou le chargeant dans <abbr title="le logiciel JOSM">JOSM</abbr> s'il est déjà ouvert.</p>
+
+	<p><span class="titre_para">14. Statut Fantoir.</span> Liste des «anomalies» que peut comporter une voie ou un lieu-dit venant de Fantoir. Statut attribué à chaque voie ou lieu-dit disposant d'un code Fantoir, pour indiquer un éventuel problème empêchant ou non le rapprochement avec OSM. </p>
+
+	<p><span class="titre_para">15. Intégrer les adresses.</span> Liens permettant d'intégrer dans OpenStreetMap les adresses affectées à cette voie ou ce lieu-dit selon la <abbr title="Base Adresses Nationale">BAN</abbr>. Le nombre affiché correspond au nombre de numéros d'adresses recensés par la <abbr title="Base Adresses Nationale">BAN</abbr> et non encore présents dans OSM.
+	<br/>Cliquer sur le lien ouvre un nouveau calque sur <abbr title="le logiciel JOSM">JOSM</abbr>, comportant lesdites adresses soit sous forme de points (<span class="monospace">addr:housenumber</span> et <span class="monospace">addr:street</span> ou <span class="monospace">addr:place</span>) soit par relation <span class="monospace">associatedStreet</span>.
+	<br/>Si toutes les adresses recensées par la <abbr title="Base Adresses Nationale">BAN</abbr> sont déjà existantes dans OSM, cette colonne affiche «✔ Adresses intégrées».</p>
+
+	<p><span class="titre_para">16. Qualifier les adresses.</span> Liens vers la page de qualification des adresses. Cette page affiche une carte de la voie ou du lieu-dit, avec les adresses déjà présentes dans OSM, les adresses venant de la <abbr title="Base Adresses Nationale">BAN</abbr> pas encore intégrées dans OSM, et un tableau listant les adresses et leurs anomalies éventuelles (sur le même modèle que les «statuts Fantoir».
+
+	<p>&nbsp;</p>
+
+</div>
+
+</body>
+</html>
