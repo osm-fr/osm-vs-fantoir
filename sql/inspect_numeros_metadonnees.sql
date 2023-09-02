@@ -41,13 +41,27 @@ AS
 (SELECT fantoir,
         count(*) AS a_proposer
 FROM    diff_numero_fantoir
-GROUP BY 1)
+GROUP BY 1),
+
+nom_rapproche
+AS
+(SELECT '__fantoir__' AS fantoir,
+        1::boolean AS rapproche
+FROM    nom_fantoir
+WHERE   fantoir = '__fantoir__' AND
+        source = 'OSM'
+UNION ALL
+SELECT  '__fantoir__' AS fantoir,
+        0::boolean
+ORDER BY 1 DESC
+LIMIT 1)
 
 SELECT  TRIM (BOTH FROM (COALESCE(nature_voie,'')||' '||libelle_voie)) AS nom,
         COALESCE(is_place,false) AS is_place,
         COALESCE(a_proposer,0),
         cog.libelle,
-        n.nom
+        n.nom,
+        rapproche
 FROM    (SELECT * FROM topo WHERE fantoir = '__fantoir__') f
 JOIN   (SELECT *
        FROM    cog_commune
@@ -69,6 +83,8 @@ JOIN   (SELECT fantoir,
                 ELSE 3
             END
         LIMIT 1) n
+USING (fantoir)
+JOIN  nom_rapproche
 USING (fantoir)
 LEFT OUTER JOIN    fantoir_numeros_manquants
 USING  (fantoir)
