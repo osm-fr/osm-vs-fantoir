@@ -10,8 +10,22 @@
                 "Map tiles by ",
             "note":
                 "https://a.piano.tiles.quaidorsay.fr/en/{z}/{x}/{y}.png"
+        },
+        "adresses": {
+        "type": "geojson",
+        "data": {"type": "FeatureCollection",
+                          "features": []
+                }
+        },
+        "polygones_convexhull": {
+        "type": "geojson",
+        "data": {"type": "FeatureCollection",
+                          "features": []
+                }
         }
     },
+    "glyphs": "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
+    "sprite": "https://demotiles.maplibre.org/styles/osm-bright-gl-style/sprite",
     "layers": [
         {
             "id": "simple-tiles",
@@ -19,6 +33,53 @@
             "source": "raster-tiles",
             "minzoom": 0,
             "maxzoom": 22
+        },
+        {
+            "id": "BAN",
+            "source": "adresses",
+            "type": "symbol",
+            "filter":["==",["get", "source"], "BAN"],
+            "layout": {
+                "text-field": ["get", "numero"],
+                "text-variable-anchor": ["top", "left"],
+                "text-radial-offset": 0.5,
+                "text-justify": "auto",
+                "icon-image":"circle_11"
+                },
+            "paint": {
+                "text-color": ["case",
+                                ["boolean",["get","rapproche"]],"blue",
+                                "red"],
+                "icon-color": ["case",
+                                ["boolean",["get","rapproche"]],"blue",
+                                "red"]
+            }
+        },
+        {
+            "id": "OSM",
+            "source": "adresses",
+            "type": "symbol",
+            "filter":["==",["get", "source"], "OSM"],
+            "layout": {
+                "text-field": ["get", "numero"],
+                "text-variable-anchor": ["bottom", "right"],
+                "text-radial-offset": 0.5,
+                "text-justify": "auto",
+                "icon-image":"circle_11"
+                },
+            "paint": {
+                "text-color": "green",
+                "icon-color": "green"
+            }
+        },
+        {
+            "id": "polygones",
+            "source": "polygones_convexhull",
+            "type": "fill",
+            "paint": {
+                "fill-outline-color":"red"
+            }
+
         }
     ]
 }

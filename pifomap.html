@@ -30,6 +30,11 @@
 
     DELTA = 0.0008
 
+    EMPTY_GEOJSON = {'type': 'FeatureCollection',
+                          'features': []}
+
+    // $('#reponse').append($('<div>').attr('id','map'))
+
     // const map = new maplibregl.Map({
     //     container: 'map',
     //     style:'./pifomap.style',
@@ -40,17 +45,18 @@
     var table = 'table_pifometre'
 
     function start(){
-        // const map = new maplibregl.Map({
-        //     container: 'map',
-        //     style:'./pifomap.style',
-        //     center: [0,0],
-        //     zoom: 15
-        // });
+        map = new maplibregl.Map({
+            container: 'map',
+            style:'./pifomap.style',
+            center: [0,0],
+            zoom: 15
+        });
 
         $('#table_communes_voisines').css('visibility','hidden');
         $('#table_communes_voisines table tr td').empty()
                                                  .removeAttr('insee_cible')
                                                  .unbind('click');
+
 
         let [a_menus_labels,STATUS_FANTOIR] = get_labels_statut_fantoir()
 
@@ -61,6 +67,9 @@
             $('#input_insee')[0].value = insee
             requete_pifometre()
         }
+        $('#bouton_rendu_bano').on("click",function(){
+            rendu_bano(insee)
+        })
         $('#bouton_communes_voisines').click(function(){
             $('#table_communes_voisines').css('visibility','visible');
         })
@@ -102,7 +111,19 @@
             $('#wait_ajax').css('visibility','hidden');
         })
     }
+    function rendu_bano(insee){
+        $('#wait_ajax').empty()
+                       .css('visibility','visible') 
+                       .append($('<span>').append('Rendu BANO en cours...'));
+        $.ajax({
+            url: "numeros_pour_rendu_commune.py?insee="+insee,
+        })
+        .done(function( data ){
 
+            $('body').css('cursor','default');
+            $('#wait_ajax').css('visibility','hidden');
+        })   
+    }
     function update_filtres(){
         for (let i = 0; i < FILTRES.length; i++){
             FILTRES[i] = [FILTRES[i][0],$('#check_'+FILTRES[i][0]).is(':checked')]
@@ -153,7 +174,74 @@
                                         })
                                         )
     };
-    function build_popup(popup){
+    // function get_geojson_addr(numero,lon,lat,source,rapproche){
+    function get_geojson_poly(geom,props){
+        return ({'type': 'Feature',
+                        'properties': props,
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': [lon,lat]
+                        }})
+    }
+    function get_geojson_addr(lon,lat,props){
+        return ({'type': 'Feature',
+                        'properties': props,
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': [lon,lat]
+                        }})
+    }
+    function affichage_des_numeros(fantoir,map){
+        min_lon = 180
+        max_lon = -180
+        min_lat = 90
+        max_lat = -90
+        data = map.getSource('adresses')._data
+        $.ajax({
+            url: "requete_inspect_numeros.py?insee="+code_insee+'&fantoir='+fantoir
+        })
+        .done(function( ndata ) {
+            let [metadata,
+                numdata] = ndata
+            console.log(metadata)
+            let [nom_topo,
+                is_place,
+                numeros_a_proposer,
+                nom_commune,
+                nom,
+                rapproche] = metadata
+            // console.log(numdata)
+            for (s=0;s<numdata.length;s++){
+                 [numero,
+                     lon_ban,
+                     lat_ban,
+                     statut,
+                     lon_osm,
+                     lat_osm] = numdata[s]
+                if (lon_ban){
+                    data.features.push(get_geojson_addr(lon_ban,lat_ban,{'numero':numero,'source':'BAN','rapproche':rapproche}))
+                    min_lon = Math.min(min_lon,lon_ban);
+                    max_lon = Math.max(max_lon,lon_ban);
+                    min_lat = Math.min(min_lat,lat_ban);
+                    max_lat = Math.max(max_lat,lat_ban);
+                    console.log(numero,lon_ban,lat_ban,'BAN',rapproche)
+                }
+                if (lon_osm){
+                    data.features.push(get_geojson_addr(lon_osm,lat_osm,{'numero':numero,'source':'OSM','rapproche':rapproche}))
+                    min_lon = Math.min(min_lon,lon_osm);
+                    max_lon = Math.max(max_lon,lon_osm);
+                    min_lat = Math.min(min_lat,lat_osm);
+                    max_lat = Math.max(max_lat,lat_osm);
+                    // console.log(numero,'OSM')
+                }
+            }
+            // d.features.push(nums)
+            map.getSource('adresses').setData(data)
+            map.fitBounds([[min_lon,min_lat],[max_lon,max_lat]]);
+            map.redraw()
+        })
+    }
+    function build_popup(popup,map){
         divid = $('.maplibregl-popup-content .data_popup').not('.deja_ouvert').attr('id')
         div_classes = $('.maplibregl-popup-content .data_popup').attr('class')
         fantoir = $('.maplibregl-popup-content .data_popup').attr('fantoir')
@@ -166,6 +254,10 @@
             $('#'+divid).append($('<a>').attr('href','numeros.html?insee='+code_insee+'&fantoir='+fantoir)
                                          .attr('target','blank')
                                          .text('inspecter'))
+            $('#'+divid).append($('<div>').on("click",function(){
+                affichage_des_numeros(fantoir,map)
+            })
+                                         .text('afficher les numéros'))
         } else {
             $('#'+divid).append($('<span>').text('Sans adresses'))
         }
@@ -183,6 +275,8 @@
             url: "requete_pifometre_commune.py?insee="+$('#input_insee')[0].value
         })
         .done(function( pifodata ) {
+            // if (map){
+            // }
             let [nom_commune,
                  lon_commune,
                  lat_commune,
@@ -272,12 +366,14 @@
                                                     .attr('href',window.location.href.split('?')[0]+'?insee='+insee_commune_parente)
                                                     .text(nom_commune_parente+' ('+insee_commune_parente+')')))
             }
-            const map = new maplibregl.Map({
-                container: 'map',
-                style:'./pifomap.style',
-                center: [lon_commune,lat_commune],
-                zoom: 15
-            });
+            // const map = new maplibregl.Map({
+            //     container: 'map',
+            //     style:'./pifomap.style',
+            //     center: [lon_commune,lat_commune],
+            //     zoom: 15
+            // });
+            map.addControl(new maplibregl.NavigationControl());
+            // map.getSource('adresses').setData(EMPTY_GEOJSON)
 
             $.ajax({
                 url: "requete_pifometre_voies.py?insee="+code_insee+"&format=json"
@@ -381,7 +477,7 @@
                     new maplibregl.Marker({element: el})
                         .setLngLat([lon,lat])
                         .setPopup(new maplibregl.Popup().setHTML(html)
-                                                        .on('open', function(){build_popup($(this))}))
+                                                        .on('open', function(){build_popup($(this),map)}))
                         .addTo(map);
 
                     min_lon = Math.min(min_lon,lon);
@@ -747,7 +843,7 @@
             </div>
         </div>
     </div>
-
+    <div id="bouton_rendu_bano" style="position:relative;top:100px;left:900px">Rendu BANO</div>
     <div id="reponse" class="pifo">
         <div id="map"></div>
     </div>
@@ -755,6 +851,5 @@
     <!--#include file="includes/footer.html" -->
     </footer>
     <div id="josm_target" style="visibility : hidden"></div>
-    <div id="popup_parser" style="visibility : hidden"></div>
 </body>
 </html>
