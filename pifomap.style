@@ -11,6 +11,12 @@
             "note":
                 "https://a.piano.tiles.quaidorsay.fr/en/{z}/{x}/{y}.png"
         },
+        "points_nommes": {
+        "type": "geojson",
+        "data": {"type": "FeatureCollection",
+                          "features": []
+                }
+        },
         "adresses": {
         "type": "geojson",
         "data": {"type": "FeatureCollection",
@@ -33,6 +39,40 @@
             "source": "raster-tiles",
             "minzoom": 0,
             "maxzoom": 22
+        },
+        {
+            "id": "points_nommes_rapproches",
+            "source": "points_nommes",
+            "filter":["==",["get", "rapproche"],true],
+            "type": "symbol",
+            "layout": {
+                "text-field": ["get", "numero"],
+                "text-variable-anchor": ["bottom", "right"],
+                "text-radial-offset": 0.5,
+                "text-justify": "auto",
+                "icon-image":"circle_11"
+                },
+            "paint": {
+                "text-color": "green",
+                "icon-color": "#00ff00"
+            }
+        },
+        {
+            "id": "points_nommes_non_rapproches",
+            "source": "points_nommes",
+            "filter":["==",["get", "rapproche"],false],
+            "type": "symbol",
+            "layout": {
+                "text-field": ["get", "numero"],
+                "text-variable-anchor": ["bottom", "right"],
+                "text-radial-offset": 0.5,
+                "text-justify": "auto",
+                "icon-image":"circle_stroked_11"
+                },
+            "paint": {
+                "text-color": "green",
+                "icon-color": "green"
+            }
         },
         {
             "id": "BAN",
@@ -75,11 +115,16 @@
         {
             "id": "polygones",
             "source": "polygones_convexhull",
-            "type": "fill",
+            "type": "line",
+            "layout": {
+                "line-join":"round",
+                "line-cap":"round"
+            },
             "paint": {
-                "fill-outline-color":"red"
+                "line-color":"red",
+                "line-width":10,
+                "line-opacity":0.25
             }
-
         }
     ]
 }
