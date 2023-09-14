@@ -111,18 +111,18 @@
             $('#wait_ajax').css('visibility','hidden');
         })
     }
-    function rendu_bano(insee){
-        $('#wait_ajax').empty()
-                       .css('visibility','visible') 
-                       .append($('<span>').append('Rendu BANO en cours...'));
-        $.ajax({
-            url: "numeros_pour_rendu_commune.py?insee="+insee,
-        })
-        .done(function( data ){
-            $('body').css('cursor','default');
-            $('#wait_ajax').css('visibility','hidden');
-        })   
-    }
+    // function rendu_bano(insee){
+    //     $('#wait_ajax').empty()
+    //                    .css('visibility','visible') 
+    //                    .append($('<span>').append('Rendu BANO en cours...'));
+    //     $.ajax({
+    //         url: "numeros_pour_rendu_commune.py?insee="+insee,
+    //     })
+    //     .done(function( data ){
+    //         $('body').css('cursor','default');
+    //         $('#wait_ajax').css('visibility','hidden');
+    //     })   
+    // }
     function update_filtres(){
         for (let i = 0; i < FILTRES.length; i++){
             FILTRES[i] = [FILTRES[i][0],$('#check_'+FILTRES[i][0]).is(':checked')]
@@ -180,7 +180,7 @@
                         'geometry': geom})
     }
     function get_geojson_point(lon,lat,props){
-        console.log(props)
+        // console.log(props)
         return ({'type': 'Feature',
                         'properties': props,
                         'geometry': {
@@ -196,20 +196,39 @@
             url: "numeros_pour_rendu_commune.py?insee="+insee,
         })
         .done(function( data ){
+            let [polydata,
+                pointdata] = data
+
             res = EMPTY_GEOJSON
-            for (s=0;s<data.length;s++){
+            for (s=0;s<polydata.length;s++){
                 let [fantoir,
                     nom_ban,
-                    poly] = data[s]
-                // poly = eval(poly)
+                    poly] = polydata[s]
                 if (poly.type == 'Polygon'){
                     res.features.push(get_geojson_poly(poly,{'fantoir':fantoir,'nom':nom_ban}))
-                } else {
-                    // console.log(poly)
+                } 
+            }
+            map.getSource('polygones_convexhull').setData(res)
+
+            res = EMPTY_GEOJSON
+            for (s=0;s<pointdata.length;s++){
+                 [nom,
+                  fantoir,
+                  numero,
+                  lon_ban,
+                  lat_ban,
+                  statut,
+                  lon_osm,
+                  lat_osm,
+                  rapproche] = pointdata[s]
+                if (lon_ban){
+                    res.features.push(get_geojson_point(lon_ban,lat_ban,{'nom':nom,'fantoir':fantoir,'numero':numero,'source':'BAN','rapproche':rapproche}))
+                }
+                if (lon_osm){
+                    res.features.push(get_geojson_point(lon_osm,lat_osm,{'nom':nom,'fantoir':fantoir,'numero':numero,'source':'OSM','rapproche':rapproche}))
                 }
             }
-            console.log(res)
-            map.getSource('polygones_convexhull').setData(res)
+            map.getSource('adresses').setData(res)
             $('body').css('cursor','default');
             $('#wait_ajax').css('visibility','hidden');
         })
@@ -318,6 +337,50 @@
                 zoom: 15
             });
             map.addControl(new maplibregl.NavigationControl());
+                map.loadImage(
+                './img/rond_50.png',
+                (error, image) => {
+                    if (error) throw error;
+                    map.addImage('rond_50', image, { sdf: true });
+                })
+
+            // })
+            // map.loadImage(
+            //     'https://upload.wikimedia.org/wikipedia/commons/7/7c/201408_cat.png',
+            //     (error, image) => {
+            //         if (error) throw error;
+            //         map.addImage('cat', image, { sdf: true });
+            //         map.addSource('source_chat', {
+            //             'type': 'geojson',
+            //             'data': {
+            //                 'type': 'FeatureCollection',
+            //                 'features': [
+            //                     {
+            //                         'type': 'Feature',
+            //                         'geometry': {
+            //                             'type': 'Point',
+            //                             'coordinates': [lon_commune, lat_commune]
+            //                         }
+            //                     }
+            //                 ]
+            //             }
+            //         });
+            //         map.addLayer({
+            //             'id': 'chat',
+            //             'type': 'symbol',
+            //             'source': 'source_chat',
+            //             'layout': {
+            //                 'icon-image': 'cat',
+            //                 'icon-size': 0.15
+            //             },
+            //             'paint':{
+            //                 'icon-color': "#00ff00"
+            //             }
+            //         });
+            //     }
+            // );
+
+            // console.log(map.getLayer('chat'))
 
             document.title = nom_commune+' - Pifomètre'
             $('#descriptif').empty()
@@ -728,7 +791,7 @@
             def_clic(map,'layer_bleu','nom_osm')
             $('#wait_ajax').css('visibility','hidden');
 
-            console.log(map.getLayer('layer_bleu'))
+            // console.log(map.getLayer('layer_bleu'))
         });
     }
 

@@ -50,11 +50,12 @@
                 "text-variable-anchor": ["bottom", "right"],
                 "text-radial-offset": 0.5,
                 "text-justify": "auto",
-                "icon-image":"circle_11"
+                "icon-image":"rond_50",
+                "icon-size": 0.4
                 },
             "paint": {
                 "text-color": "green",
-                "icon-color": "#00ff00"
+                "icon-color": "green"
             }
         },
         {
@@ -67,49 +68,88 @@
                 "text-variable-anchor": ["bottom", "right"],
                 "text-radial-offset": 0.5,
                 "text-justify": "auto",
-                "icon-image":"circle_stroked_11"
+                "icon-image":"rond_50",
+                "icon-size": 0.4
                 },
             "paint": {
                 "text-color": "green",
-                "icon-color": "green"
+                "icon-color": "orange"
             }
         },
         {
-            "id": "BAN",
+            "id": "BAN_point",
             "source": "adresses",
             "type": "symbol",
+            "minzoom" : 12,
             "filter":["==",["get", "source"], "BAN"],
             "layout": {
-                "text-field": ["get", "numero"],
-                "text-variable-anchor": ["top", "left"],
-                "text-radial-offset": 0.5,
-                "text-justify": "auto",
-                "icon-image":"circle_11"
+                "icon-image":"rond_50",
+                "icon-size": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        12,
+                        0.1,
+                        19,
+                        0.2]
                 },
             "paint": {
-                "text-color": ["case",
-                                ["boolean",["get","rapproche"]],"blue",
-                                "red"],
                 "icon-color": ["case",
                                 ["boolean",["get","rapproche"]],"blue",
                                 "red"]
             }
         },
         {
-            "id": "OSM",
+            "id": "BAN_texte",
             "source": "adresses",
             "type": "symbol",
+            "minzoom" : 18,
+            "filter":["==",["get", "source"], "BAN"],
+            "layout": {
+                "text-field": ["get", "numero"],
+                "text-variable-anchor": ["top", "left"],
+                "text-radial-offset": 0.5,
+                "text-justify": "auto"
+            },
+            "paint": {
+                "text-color": ["case",
+                                ["boolean",["get","rapproche"]],"blue",
+                                "red"]
+            }
+        },
+        {
+            "id": "OSM_point",
+            "source": "adresses",
+            "type": "symbol",
+            "minzoom" : 12,
+            "filter":["==",["get", "source"], "OSM"],
+            "layout": {
+                "icon-image":"rond_50",
+                "icon-size": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        12,
+                        0.1,
+                        19,
+                        0.2]
+                },
+            "paint": {
+                "icon-color": "green"
+            }
+        },
+        {
+            "id": "OSM_texte",
+            "source": "adresses",
+            "type": "symbol",
+            "minzoom" : 18,
             "filter":["==",["get", "source"], "OSM"],
             "layout": {
                 "text-field": ["get", "numero"],
                 "text-variable-anchor": ["bottom", "right"],
                 "text-radial-offset": 0.5,
-                "text-justify": "auto",
-                "icon-image":"circle_11"
+                "text-justify": "auto"
                 },
             "paint": {
-                "text-color": "green",
-                "icon-color": "green"
+                "text-color": "green"
             }
         },
         {
