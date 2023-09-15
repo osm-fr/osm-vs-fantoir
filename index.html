@@ -168,7 +168,7 @@
 
 
             url_map_org_part1 = 'http://www.openstreetmap.org/'
-            url_bano_part1 = 'http://tile.openstreetmap.fr/~cquest/leaflet/bano.html'
+            url_bano = 'http://layers.openstreetmap.fr/?zoom=15&lat='+lat_commune+'&lon='+lon_commune+'&layers=0B00000000FFFFFFFFFFFFFFFFFFFFFFFFT'
             url_edit_part1 = 'http://www.openstreetmap.org/edit?editor='
             delta = 0.0008
             url_hash_coords = '15/'+lat_commune+'/'+lon_commune
@@ -197,7 +197,7 @@
             $('#liens_commune').append(' / ')
                                .append($('<a>')
                                    .attr('target','blank')
-                                   .attr('href',url_bano_part1+'#'+url_hash_coords)
+                                   .attr('href',url_bano)
                                    .text('BANO')
                                )
                                .append(' / ')
