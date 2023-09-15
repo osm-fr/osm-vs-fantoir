@@ -44,14 +44,21 @@
             "id": "points_nommes_rapproches",
             "source": "points_nommes",
             "filter":["==",["get", "rapproche"],true],
+            "minzoom" : 10,
             "type": "symbol",
             "layout": {
-                "text-field": ["get", "numero"],
+                "text-field": ["get", "nom_popup"],
                 "text-variable-anchor": ["bottom", "right"],
                 "text-radial-offset": 0.5,
                 "text-justify": "auto",
                 "icon-image":"rond_50",
-                "icon-size": 0.4
+                "icon-size": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        10,
+                        0.2,
+                        19,
+                        0.4]
                 },
             "paint": {
                 "text-color": "green",
@@ -62,18 +69,52 @@
             "id": "points_nommes_non_rapproches",
             "source": "points_nommes",
             "filter":["==",["get", "rapproche"],false],
+            "minzoom" : 10,
             "type": "symbol",
             "layout": {
-                "text-field": ["get", "numero"],
+                "text-field": ["get", "nom_popup"],
                 "text-variable-anchor": ["bottom", "right"],
                 "text-radial-offset": 0.5,
                 "text-justify": "auto",
+                "icon-allow-overlap":true,
                 "icon-image":"rond_50",
-                "icon-size": 0.4
+                "icon-size": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        10,
+                        0.2,
+                        19,
+                        0.4]
                 },
             "paint": {
-                "text-color": "green",
+                "text-color": "orange",
                 "icon-color": "orange"
+            }
+        },
+        {
+            "id": "points_nommes_OSM_hors_FANTOIR",
+            "source": "points_nommes",
+            "filter":["==",["get", "rapproche"],"NA"],
+            "minzoom" : 10,
+            "type": "symbol",
+            "layout": {
+                "text-field": ["get", "nom_popup"],
+                "text-variable-anchor": ["bottom", "right"],
+                "text-radial-offset": 0.5,
+                "text-justify": "auto",
+                "icon-allow-overlap":true,
+                "icon-image":"rond_50",
+                "icon-size": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        10,
+                        0.2,
+                        19,
+                        0.4]
+                },
+            "paint": {
+                "text-color": "blue",
+                "icon-color": "blue"
             }
         },
         {
@@ -83,12 +124,13 @@
             "minzoom" : 12,
             "filter":["==",["get", "source"], "BAN"],
             "layout": {
+                "icon-allow-overlap":true,
                 "icon-image":"rond_50",
                 "icon-size": ["interpolate",
                         ["linear"],
                         ["zoom"],
                         12,
-                        0.1,
+                        0.01,
                         19,
                         0.2]
                 },
@@ -123,12 +165,13 @@
             "minzoom" : 12,
             "filter":["==",["get", "source"], "OSM"],
             "layout": {
+                "icon-allow-overlap":true,
                 "icon-image":"rond_50",
                 "icon-size": ["interpolate",
                         ["linear"],
                         ["zoom"],
                         12,
-                        0.1,
+                        0.01,
                         19,
                         0.2]
                 },
