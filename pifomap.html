@@ -60,16 +60,18 @@
 
         let [a_menus_labels,STATUS_FANTOIR] = get_labels_statut_fantoir()
 
-        check_josm_remote_control()
         insee = check_url_for_insee()
         if (insee){
             $('#input_insee').empty()
             $('#input_insee')[0].value = insee
             requete_pifometre()
         }
-        $('#bouton_rendu_bano').on("click",function(){
-            rendu_bano(insee)
-        })
+
+        // check_josm_remote_control()
+
+        // $('#bouton_rendu_bano').on("click",function(){
+        //     rendu_bano(insee)
+        // })
         $('#bouton_communes_voisines').click(function(){
             $('#table_communes_voisines').css('visibility','visible');
         })
@@ -189,17 +191,36 @@
                         }})
     }
     function rendu_bano(insee){
+        min_lon = 180
+        max_lon = -180
+        min_lat = 90
+        max_lat = -90
         $('#wait_ajax').empty()
                        .css('visibility','visible') 
                        .append($('<span>').append('Rendu BANO en cours...'));
         $.ajax({
-            url: "numeros_pour_rendu_commune.py?insee="+insee,
+            url: "rendu_bano_commune.py?insee="+insee,
         })
         .done(function( data ){
-            let [polydata,
-                pointdata] = data
+            let [polycommunedata,
+                polydata,
+                pointdata,
+                pointnommedata] = data
 
-            res = EMPTY_GEOJSON
+            res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+            bbox = polycommunedata[0][0].coordinates
+            for (s=1;s<polycommunedata.length;s++){
+                let [poly] = polycommunedata[s]
+                if (poly.type == 'Polygon'){
+                    res.features.push(get_geojson_poly(poly,{}))
+                }
+                console.log(bbox)
+                map.fitBounds(bbox);
+
+            }
+            map.getSource('contour_communal').setData(res)
+
+            res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
             for (s=0;s<polydata.length;s++){
                 let [fantoir,
                     nom_ban,
@@ -210,7 +231,19 @@
             }
             map.getSource('polygones_convexhull').setData(res)
 
-            res = EMPTY_GEOJSON
+            res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+            for (s=0;s<pointnommedata.length;s++){
+                 [nom,
+                  source,
+                  lon,
+                  lat,
+                  rapproche] = pointnommedata[s]
+                  res.features.push(get_geojson_point(lon,lat,{'nom':nom,'source':source,'rapproche':rapproche}))
+            }
+            map.getSource('points_nommes').setData(res)
+
+            res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+            // console.log(res)
             for (s=0;s<pointdata.length;s++){
                  [nom,
                   fantoir,
@@ -222,15 +255,74 @@
                   lat_osm,
                   rapproche] = pointdata[s]
                 if (lon_ban){
+                    min_lon = Math.min(min_lon,lon_ban);
+                    max_lon = Math.max(max_lon,lon_ban);
+                    min_lat = Math.min(min_lat,lat_ban);
+                    max_lat = Math.max(max_lat,lat_ban);
                     res.features.push(get_geojson_point(lon_ban,lat_ban,{'nom':nom,'fantoir':fantoir,'numero':numero,'source':'BAN','rapproche':rapproche}))
                 }
                 if (lon_osm){
+                    min_lon = Math.min(min_lon,lon_osm);
+                    max_lon = Math.max(max_lon,lon_osm);
+                    min_lat = Math.min(min_lat,lat_osm);
+                    max_lat = Math.max(max_lat,lat_osm);
                     res.features.push(get_geojson_point(lon_osm,lat_osm,{'nom':nom,'fantoir':fantoir,'numero':numero,'source':'OSM','rapproche':rapproche}))
                 }
             }
             map.getSource('adresses').setData(res)
+            map.getSource('hover').setData(res)
+
             $('body').css('cursor','default');
             $('#wait_ajax').css('visibility','hidden');
+
+            popup = new maplibregl.Popup({
+                        closeButton: false,
+                        closeOnClick: false
+                    });
+
+            map.on('mouseenter', 'BAN_point', (e) => {
+                // Change the cursor style as a UI indicator.
+                map.getCanvas().style.cursor = 'pointer';
+
+                const coordinates = e.features[0].geometry.coordinates.slice();
+                nom = e.features[0].properties.nom;
+                map.setFilter('hover_adresses_point',["==",["get", "nom"], nom])
+
+                // Ensure that if the map is zoomed out such that multiple
+                // copies of the feature are visible, the popup appears
+                // over the copy being pointed to.
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+
+                // Populate the popup and set its coordinates
+                // based on the feature found.
+                popup.setLngLat(coordinates).setHTML(nom).addTo(map);
+            });
+
+            map.on('mouseleave', 'BAN_point', () => {
+                map.getCanvas().style.cursor = '';
+                popup.remove();
+                map.setFilter('hover_adresses_point',["==",["get", "nom"], " "])
+            });
+            map.on('mouseenter', 'OSM_point', (e) => {
+                map.getCanvas().style.cursor = 'pointer';
+                const coordinates = e.features[0].geometry.coordinates.slice();
+                nom = e.features[0].properties.nom;
+                console.log(e.features[0].properties)
+                map.setFilter('hover_adresses_point',["==",["get", "nom"], nom])
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+                popup.setLngLat(coordinates).setHTML(nom).addTo(map);
+            });
+
+            map.on('mouseleave', 'OSM_point', () => {
+                map.getCanvas().style.cursor = '';
+                popup.remove();
+                map.setFilter('hover_adresses_point',["==",["get", "nom"], " "])
+            });
+
         })
     }
     function affichage_des_numeros(fantoir,map){
@@ -463,7 +555,9 @@
                                                     .text(nom_commune_parente+' ('+insee_commune_parente+')')))
             }
 
-            $.ajax({
+            rendu_bano(code_insee)
+
+            /*$.ajax({
                 url: "requete_pifometre_voies.py?insee="+code_insee+"&format=json"
             })
             .done(function( data ) {
@@ -709,7 +803,7 @@
                 map.fitBounds([[min_lon,min_lat],[max_lon,max_lat]])
                 $('#wait_ajax').css('visibility','hidden');
                 // load_map(lon_commune,lat_commune,features_orange,features_vert,features_bleu)
-            })
+            })*/
 
             active_menu_filtres()
             update_menu_filtres()
@@ -940,7 +1034,7 @@
             </div>
         </div>
     </div>
-    <div id="bouton_rendu_bano" style="position:relative;top:100px;left:900px">Rendu BANO</div>
+    <!-- <div id="bouton_rendu_bano" style="position:relative;top:100px;left:900px">Rendu BANO</div> -->
     <div id="reponse" class="pifo">
         <div id="map"></div>
     </div>

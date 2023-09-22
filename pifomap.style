@@ -28,6 +28,18 @@
         "data": {"type": "FeatureCollection",
                           "features": []
                 }
+        },
+        "hover": {
+        "type": "geojson",
+        "data": {"type": "FeatureCollection",
+                          "features": []
+                }
+        },
+        "contour_communal": {
+        "type": "geojson",
+        "data": {"type": "FeatureCollection",
+                          "features": []
+                }
         }
     },
     "glyphs": "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
@@ -41,28 +53,48 @@
             "maxzoom": 22
         },
         {
+            "id": "contour_communal",
+            "source": "contour_communal",
+            "type": "line",
+            "minzoom" : 8,
+            "layout": {
+                "line-join":"round",
+                "line-cap":"round"
+            },
+            "paint": {
+                "line-color":"black",
+                "line-width":2,
+                "line-dasharray":[2,3]
+            }
+        },
+        {
             "id": "points_nommes_rapproches",
             "source": "points_nommes",
             "filter":["==",["get", "rapproche"],true],
             "minzoom" : 10,
             "type": "symbol",
             "layout": {
-                "text-field": ["get", "nom_popup"],
-                "text-variable-anchor": ["bottom", "right"],
+                "text-field": ["get", "nom"],
+                "text-variable-anchor": ["center", "left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"],
                 "text-radial-offset": 0.5,
                 "text-justify": "auto",
-                "icon-image":"rond_50",
-                "icon-size": ["interpolate",
+                "text-overlap":"cooperative",
+                "text-size": ["interpolate",
                         ["linear"],
                         ["zoom"],
                         10,
-                        0.2,
+                        10,
                         19,
-                        0.4]
+                        16]
                 },
             "paint": {
-                "text-color": "green",
-                "icon-color": "green"
+                "text-color": ["case",
+                                ["==",["get","source"],"CADASTRE"],"blue",
+                                ["==",["get","source"],"OSM"],"green","pink"],
+                "text-halo-color": ["case",
+                                ["==",["get","source"],"OSM"],"white","pink"],
+                "text-halo-width": ["case",
+                                ["==",["get","source"],"OSM"],4,0]
             }
         },
         {
@@ -72,23 +104,27 @@
             "minzoom" : 10,
             "type": "symbol",
             "layout": {
-                "text-field": ["get", "nom_popup"],
-                "text-variable-anchor": ["bottom", "right"],
+                "text-field": ["get", "nom"],
+                "text-variable-anchor": ["center", "left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"],
                 "text-radial-offset": 0.5,
                 "text-justify": "auto",
-                "icon-allow-overlap":true,
-                "icon-image":"rond_50",
-                "icon-size": ["interpolate",
+                "text-overlap":"cooperative",
+                "text-size": ["interpolate",
                         ["linear"],
                         ["zoom"],
                         10,
-                        0.2,
+                        10,
                         19,
-                        0.4]
+                        16]
                 },
             "paint": {
-                "text-color": "orange",
-                "icon-color": "orange"
+                "text-color": ["case",
+                                ["==",["get","source"],"CADASTRE"],"red",
+                                ["==",["get","source"],"OSM"],"purple","pink"],
+                "text-halo-color": ["case",
+                                ["==",["get","source"],"OSM"],"white","pink"],
+                "text-halo-width": ["case",
+                                ["==",["get","source"],"OSM"],4,0]
             }
         },
         {
@@ -98,23 +134,45 @@
             "minzoom" : 10,
             "type": "symbol",
             "layout": {
-                "text-field": ["get", "nom_popup"],
-                "text-variable-anchor": ["bottom", "right"],
+                "text-field": ["get", "nom"],
+                "text-variable-anchor": ["center", "left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"],
                 "text-radial-offset": 0.5,
                 "text-justify": "auto",
+                "text-overlap":"cooperative",
                 "icon-allow-overlap":true,
                 "icon-image":"rond_50",
                 "icon-size": ["interpolate",
                         ["linear"],
                         ["zoom"],
                         10,
-                        0.2,
+                        0.1,
                         19,
                         0.4]
                 },
             "paint": {
                 "text-color": "blue",
                 "icon-color": "blue"
+            }
+        },
+        {
+            "id": "hover_adresses_point",
+            "source": "hover",
+            "type": "symbol",
+            "minzoom" : 10,
+            "filter" : ["==",["get", "nom"], " "],
+            "layout": {
+                "icon-allow-overlap":true,
+                "icon-image":"rond_50",
+                "icon-size": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        12,
+                        0.02,
+                        19,
+                        0.4]
+                },
+            "paint": {
+                "icon-color": "red"
             }
         },
         {
@@ -144,12 +202,13 @@
             "id": "BAN_texte",
             "source": "adresses",
             "type": "symbol",
-            "minzoom" : 18,
+            "minzoom" : 17,
             "filter":["==",["get", "source"], "BAN"],
             "layout": {
                 "text-field": ["get", "numero"],
                 "text-variable-anchor": ["top", "left"],
                 "text-radial-offset": 0.5,
+                "text-overlap":"cooperative",
                 "text-justify": "auto"
             },
             "paint": {
@@ -183,22 +242,26 @@
             "id": "OSM_texte",
             "source": "adresses",
             "type": "symbol",
-            "minzoom" : 18,
+            "minzoom" : 17,
             "filter":["==",["get", "source"], "OSM"],
             "layout": {
                 "text-field": ["get", "numero"],
                 "text-variable-anchor": ["bottom", "right"],
                 "text-radial-offset": 0.5,
+                "text-overlap":"cooperative",
                 "text-justify": "auto"
                 },
             "paint": {
-                "text-color": "green"
+                "text-color": "green",
+                "text-halo-color": "white",
+                "text-halo-width": 2
             }
         },
         {
             "id": "polygones",
             "source": "polygones_convexhull",
             "type": "line",
+            "minzoom" : 16,
             "layout": {
                 "line-join":"round",
                 "line-cap":"round"
@@ -207,6 +270,23 @@
                 "line-color":"red",
                 "line-width":10,
                 "line-opacity":0.25
+            }
+        },
+        {
+            "id": "polygones_texte",
+            "source": "polygones_convexhull",
+            "type": "symbol",
+            "minzoom" : 16,
+            "layout": {
+                "text-field": ["get", "nom"],
+                "text-overlap":"cooperative",
+                "text-justify": "auto",
+                "symbol-placement": "line"
+                },
+            "paint": {
+                "text-color": "red",
+                "text-halo-color": "white",
+                "text-halo-width": 2
             }
         }
     ]

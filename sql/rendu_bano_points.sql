@@ -1,36 +1,31 @@
-SELECT COALESCE(o.nom_voie,o.nom_place,b.nom_voie,b.nom_place),
-       COALESCE(o.fantoir,b.fantoir,null),
-       COALESCE(o.numero,b.numero),
-       ST_X(b.geometrie),
-       ST_Y(b.geometrie),
-       COALESCE(s.id_statut,0),
-       ST_X(o.geometrie),
-       ST_Y(o.geometrie),
-       COALESCE(r.rapproche,false)
-FROM   (SELECT *,
-               TRANSLATE(UPPER(numero),' ','') AS uppernumero
-       FROM    bano_adresses
-       WHERE   code_insee = '__code_insee__' AND
-               source     = 'BAN') b
-FULL OUTER JOIN   (SELECT *,
-                          TRANSLATE(UPPER(numero),' ','') AS uppernumero
-                  FROM    bano_adresses
-                  WHERE   code_insee = '__code_insee__' AND
-                          source     = 'OSM') o
-USING (fantoir,uppernumero)
-LEFT OUTER JOIN (SELECT uppernumero,fantoir,source,id_statut
-                FROM    (SELECT  *,
-                                 TRANSLATE(UPPER(numero),' ','') AS uppernumero,
-                                 RANK() OVER (PARTITION BY numero,fantoir,source ORDER BY timestamp_statut DESC) rang
-                         FROM    statut_numero
-                         WHERE   code_insee = '__code_insee__' AND
-                                 fantoir = '__fantoir__') r
-                WHERE   rang = 1) s
-USING (uppernumero,fantoir)
-LEFT OUTER JOIN (SELECT DISTINCT fantoir,
-                        1::boolean AS rapproche 
-                FROM    nom_fantoir
+SELECT nom,
+       source,
+       lon,
+       lat,
+       COALESCE(o.rapproche,false)
+FROM   (SELECT *
+        FROM  bano_points_nommes
+        WHERE code_insee = '__code_insee__' AND
+              nature = 'lieu-dit')c
+LEFT OUTER JOIN (SELECT fantoir,
+                        true::boolean AS rapproche
+                FROM    bano_points_nommes
                 WHERE   code_insee = '__code_insee__' AND
-                        source = 'OSM') r
+                        nature = 'place')o
 USING (fantoir)
-ORDER BY 1;
+UNION ALL
+SELECT nom,
+       source,
+       lon,
+       lat,
+       COALESCE(c.rapproche,false)
+FROM   (SELECT *
+        FROM  bano_points_nommes
+        WHERE code_insee = '__code_insee__' AND
+              nature = 'place')o
+LEFT OUTER JOIN (SELECT fantoir,
+                        true::boolean AS rapproche
+                FROM    bano_points_nommes
+                WHERE   code_insee = '__code_insee__' AND
+                        nature = 'lieu-dit')c
+USING (fantoir);
