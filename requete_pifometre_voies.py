@@ -55,11 +55,16 @@ def main():
     params = cgi.FieldStorage()
     code_insee = params['insee'].value
     format = params.getvalue('format','json')
+    fantoir = params.getvalue('fantoir')
 
     # code_insee = '95633'
     # format = 'geojson'
 
-    data = sql_get_data('pifometre',{'code_insee':code_insee})
+    condition_fantoir_unique = ''
+    if fantoir:
+        condition_fantoir_unique = f"fantoir = '{fantoir}' AND "
+
+    data = sql_get_data('pifometre',{'code_insee':code_insee,'condition_fantoir_unique':condition_fantoir_unique})
 
     if format == 'csv':
         infos_commune = sql_get_data('infos_commune_insee',{'code_insee':code_insee})

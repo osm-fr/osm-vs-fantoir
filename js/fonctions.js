@@ -207,3 +207,168 @@
             })
         })))
     }
+    function parse_pifometre(categorie,caractere_annul,fantoir) {
+        is_voie = false
+        is_place = false
+        has_code_fantoir = true
+        is_osm_hors_fantoir = false
+        if (categorie == 0){
+            is_voie = true;
+        } else if (categorie == 1){
+            is_place = true;
+        } else if (categorie == 2){
+            is_osm_hors_fantoir = true;
+        }
+        fantoir_affiche = fantoir
+        fantoir_dans_relation = 'ok'
+        if (caractere_annul == 'B'){
+            has_code_fantoir = false
+            fantoir_affiche = 'Voie sans Fantoir'
+            fantoir_dans_relation = 'ko'
+        }
+        return [is_voie,is_place,is_osm_hors_fantoir,has_code_fantoir,fantoir_affiche,fantoir_dans_relation]
+    }
+    function interactions_souris(couche_carto){
+        if (couche_carto == 'BAN_point'||couche_carto == 'OSM_point'){
+            //--------------------------------------------------
+            //------- AU SURVOL D'UN POINT D'ADRESSE BAN -------
+            //--------------------------------------------------
+            map.on('mouseenter', couche_carto, (e) => {
+                // Changer le curseur
+                map.getCanvas().style.cursor = 'pointer';
+
+                const coordinates = e.features[0].geometry.coordinates.slice();
+                nom = e.features[0].properties.nom;
+                map.setFilter('hover_adresses_point',["==",["get", "nom"], nom])
+
+                // Si la carte est dézoomée et que de multiples copies de la cible sont visibles, la pop-up apparaît sur la copie pointée
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+
+                // Remplir la popup et définir ses coordonnées
+                popup.setLngLat(coordinates).setHTML(nom).addTo(map);
+            });
+
+            map.on('mouseleave', couche_carto, () => {
+                map.getCanvas().style.cursor = '';
+                popup.remove();
+                map.setFilter('hover_adresses_point',["==",["get", "nom"], " "])
+            });
+            //--------------------------------------------------
+            //------- AU SURVOL D'UN POINT D'ADRESSE OSM -------
+            //--------------------------------------------------
+            map.on('mouseenter', 'OSM_point', (e) => {
+                map.getCanvas().style.cursor = 'pointer';
+                const coordinates = e.features[0].geometry.coordinates.slice();
+                nom = e.features[0].properties.nom;
+                console.log(e.features[0].properties)
+                map.setFilter('hover_adresses_point',["==",["get", "nom"], nom])
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+                popup.setLngLat(coordinates).setHTML(nom).addTo(map);
+            });
+
+            map.on('mouseleave', 'OSM_point', () => {
+                map.getCanvas().style.cursor = '';
+                popup.remove();
+                map.setFilter('hover_adresses_point',["==",["get", "nom"], " "])
+            });
+
+            //-------------------------------------------------------
+            //---------- AU CLIC SUR UN POINT D'ADRESSE BAN ---------
+            //-------------------------------------------------------
+            map.on('click', couche_carto, (e) => {
+
+                console.log(e.features[0].properties)
+                nom = e.features[0].properties.nom;
+                fantoir = e.features[0].properties.fantoir;
+                numero = e.features[0].properties.numero;
+                source = e.features[0].properties.source;
+                rapproche = e.features[0].properties.rapproche;
+
+                $('#panneau_map h2').empty().text(nom)
+
+                $.ajax({
+                    url: "requete_pifometre_voies.py?insee="+insee+'&fantoir='+fantoir
+                })
+                .done(function( data ) {
+                    let [fantoir,
+                         date_creation,
+                         annule,
+                         nom_topo,
+                         nom_osm,
+                         nom_ban,
+                         source_nom_ban,
+                         nom_ancienne_commune,
+                         lon,
+                         lat,
+                         statut_voie,
+                         numeros_a_proposer,
+                         caractere_annul,
+                         categorie,
+                         avec_adresses_ban] = data[0]
+
+                    let [is_voie,
+                        is_place,
+                        is_osm_hors_fantoir,
+                        has_code_fantoir,
+                        fantoir_affiche,
+                        fantoir_dans_relation] = parse_pifometre(categorie,caractere_annul,fantoir)
+                    console.log(fantoir,
+                         date_creation,
+                         annule,
+                         nom_topo,
+                         nom_osm,
+                         nom_ban,
+                         source_nom_ban,
+                         nom_ancienne_commune,
+                         lon,
+                         lat,
+                         statut_voie,
+                         numeros_a_proposer,
+                         caractere_annul,
+                         categorie,
+                         avec_adresses_ban,
+                         is_voie,
+                        is_place,
+                        is_osm_hors_fantoir,
+                        has_code_fantoir,
+                        fantoir_affiche,
+                        fantoir_dans_relation)
+                })
+
+                //Infos vois ou lieu-dit
+                $('#infos_voie_lieudit').empty();
+                $('#infos_voie_lieudit').append($('<p>').text('Code Fantoir : '+fantoir));
+                if (rapproche) {
+                    $('#infos_voie_lieudit').append($('<p>')
+                                                .append($('<span class="pastille-verte" title="Déjà rapproché dans OSM">'))
+                                                .append($('<span>')
+                                                    .text('Voie ou lieu-dit rapproché dans OSM')
+                                                )
+                                            );
+                }
+                else {
+                    $('#infos_voie_lieudit').append($('<p>')
+                                                .append($('<span class="pastille-orange" title="Pas encore rapproché dans OSM">'))
+                                                .append($('<span>')
+                                                    .text('Voie ou lieu-dit pas encore rapproché dans OSM')
+                                                )
+                                            );
+                }
+
+                //Infos numéro
+                $('#infos_numero').empty();
+                $('#infos_numero').append($('<h3>').text('Point d\'adresse'));
+                $('#infos_numero').append($('<p>').text('Numéro : '+numero));
+                $('#infos_numero').append($('<p>').text('Source : '+source));
+
+                $('#infos_numero').append($('<p>').text('Voir sur : ').append($('<a>')
+                                                    .attr('href',url_map_org_part1+'?mlat='+e.lngLat.lat+'&mlon='+e.lngLat.lng+'#map='+'18/'+e.lngLat.lat+'/'+e.lngLat.lng)
+                                                    .attr('target','blank')
+                                                    .text('ORG')));
+            });
+        }
+    }

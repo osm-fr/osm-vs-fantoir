@@ -269,24 +269,13 @@
                          caractere_annul,
                          categorie,
                          avec_adresses_ban] = data[s]
-                    is_voie = false
-                    is_place = false
-                    has_code_fantoir = true
-                    is_osm_hors_fantoir = false
-                    if (categorie == 0){
-                        is_voie = true;
-                    } else if (categorie == 1){
-                        is_place = true;
-                    } else if (categorie == 2){
-                        is_osm_hors_fantoir = true;
-                    }
-                    fantoir_affiche = fantoir
-                    fantoir_dans_relation = 'ok'
-                    if (caractere_annul == 'B'){
-                        has_code_fantoir = false
-                        fantoir_affiche = 'Voie sans Fantoir'
-                        fantoir_dans_relation = 'ko'
-                    }
+
+                    let [is_voie,
+                        is_place,
+                        is_osm_hors_fantoir,
+                        has_code_fantoir,
+                        fantoir_affiche,
+                        fantoir_dans_relation] = parse_pifometre(categorie,caractere_annul,fantoir)
 
                     tr_id+=1
 
