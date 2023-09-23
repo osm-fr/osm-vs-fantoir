@@ -717,6 +717,49 @@ table.tablesorter thead th {
 	padding-left: 1.2em;
 }
 
+/*------------------------------------------------------*/
+/*----------------------- PIFOMAP ----------------------*/
+/*------------------------------------------------------*/
+
+#reponse.pifo #panneau_map {
+	float: left;
+	margin:20px 0 0 20px;
+	width:15%;
+	height:92%;
+	border-radius: 6px;
+	border:2px solid lightblue;
+	border-bottom: 2px solid lightblue;
+}
+
+#panneau_map h2 {
+	font-size: 1.2em;
+	text-align: center;
+	line-height: 1.5em;
+}
+
+#panneau_map h3 {
+	text-align: left;
+	font-size: 1.1em;
+	line-height: 1.2em;
+}
+
+#panneau_map #contenu {
+	margin-left: 5px;
+	font-size: 0.9em;
+}
+
+#panneau_map .pastille-verte {
+  margin-left: 0;
+}
+
+#reponse.pifo #map {
+	float: left;
+	margin:20px 10px 0 -3px;
+	width:80%;
+	height:92%;
+	border:2px solid lightblue;
+}
+
 /*---------------------------------------------------------------*/
 /*----------------------------- SURVOL --------------------------*/
 /*---------------------------------------------------------------*/
