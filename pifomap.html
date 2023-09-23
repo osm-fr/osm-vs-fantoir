@@ -280,23 +280,23 @@
                         closeOnClick: false
                     });
 
+            //--------------------------------------------------
+            //------- AU SURVOL D'UN POINT D'ADRESSE BAN -------
+            //--------------------------------------------------
             map.on('mouseenter', 'BAN_point', (e) => {
-                // Change the cursor style as a UI indicator.
+                // Changer le curseur
                 map.getCanvas().style.cursor = 'pointer';
 
                 const coordinates = e.features[0].geometry.coordinates.slice();
                 nom = e.features[0].properties.nom;
                 map.setFilter('hover_adresses_point',["==",["get", "nom"], nom])
 
-                // Ensure that if the map is zoomed out such that multiple
-                // copies of the feature are visible, the popup appears
-                // over the copy being pointed to.
+                // Si la carte est dézoomée et que de multiples copies de la cible sont visibles, la pop-up apparaît sur la copie pointée
                 while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                 }
 
-                // Populate the popup and set its coordinates
-                // based on the feature found.
+                // Remplir la popup et définir ses coordonnées
                 popup.setLngLat(coordinates).setHTML(nom).addTo(map);
             });
 
@@ -305,6 +305,10 @@
                 popup.remove();
                 map.setFilter('hover_adresses_point',["==",["get", "nom"], " "])
             });
+
+            //--------------------------------------------------
+            //------- AU SURVOL D'UN POINT D'ADRESSE OSM -------
+            //--------------------------------------------------
             map.on('mouseenter', 'OSM_point', (e) => {
                 map.getCanvas().style.cursor = 'pointer';
                 const coordinates = e.features[0].geometry.coordinates.slice();
@@ -322,6 +326,53 @@
                 popup.remove();
                 map.setFilter('hover_adresses_point',["==",["get", "nom"], " "])
             });
+
+            //-------------------------------------------------------
+            //---------- AU CLIC SUR UN POINT D'ADRESSE BAN ---------
+            //-------------------------------------------------------
+            map.on('click', 'BAN_point', (e) => {
+
+                console.log(e.features[0].properties)
+                nom = e.features[0].properties.nom;
+                fantoir = e.features[0].properties.fantoir;
+                numero = e.features[0].properties.numero;
+                source = e.features[0].properties.source;
+                rapproche = e.features[0].properties.rapproche;
+
+                $('#panneau_map h2').empty().text(nom)
+
+                //Infos vois ou lieu-dit
+                $('#infos_voie_lieudit').empty();
+                $('#infos_voie_lieudit').append($('<p>').text('Code Fantoir : '+fantoir));
+                if (rapproche) {
+                    $('#infos_voie_lieudit').append($('<p>')
+                                                .append($('<span class="pastille-verte" title="Déjà rapproché dans OSM">'))
+                                                .append($('<span>')
+                                                    .text('Voie ou lieu-dit rapproché dans OSM')
+                                                )
+                                            );
+                }
+                else {
+                    $('#infos_voie_lieudit').append($('<p>')
+                                                .append($('<span class="pastille-orange" title="Pas encore rapproché dans OSM">'))
+                                                .append($('<span>')
+                                                    .text('Voie ou lieu-dit pas encore rapproché dans OSM')
+                                                )
+                                            );
+                }
+
+                //Infos numéro
+                $('#infos_numero').empty();
+                $('#infos_numero').append($('<h3>').text('Point d\'adresse'));
+                $('#infos_numero').append($('<p>').text('Numéro : '+numero));
+                $('#infos_numero').append($('<p>').text('Source : '+source));
+
+                $('#infos_numero').append($('<p>').text('Voir sur : ').append($('<a>')
+                                                    .attr('href',url_map_org_part1+'?mlat='+e.lngLat.lat+'&mlon='+e.lngLat.lng+'#map='+'18/'+e.lngLat.lat+'/'+e.lngLat.lng)
+                                                    .attr('target','blank')
+                                                    .text('ORG')));
+            });
+
 
         })
     }
@@ -533,6 +584,8 @@
 
             $('#descriptif').append($('<div id="infos_commune_col2">').append($('<h1>').append((nom_commune))))
 
+
+
             //communes voisines
             $('#table_communes_voisines tr td').empty()
             $('#table_communes_voisines tr td.commune_centre').text(nom_commune)
@@ -554,6 +607,7 @@
                                                     .attr('href',window.location.href.split('?')[0]+'?insee='+insee_commune_parente)
                                                     .text(nom_commune_parente+' ('+insee_commune_parente+')')))
             }
+
 
             rendu_bano(code_insee)
 
@@ -969,21 +1023,32 @@
         <div id="wait_ajax" class="pifo"></div>
 
         <div id="boutons-filtres" class="pifo">
-            <p id="ligne-afficher">Afficher :</p>
-            <div class="ligne-boutons-filtres">
+            <p id="ligne-afficher">Rendu :</p>
+                <div class="ligne-boutons-filtres">
+                    <ul>
+                        <li>
+                            <span class="control-label" critere="rendu">Pifomètre</span>
+                            <label class="switch is-rounded is-small">
+                            <input type="checkbox" id="check_voie" checked>
+                            <span class="check is-dark"></span>
+                            <span class="control-label" critere="rendu">BANO</span>
+                        </li>
+                    </ul>                    
+                </div>
+            <!-- <div class="ligne-boutons-filtres">
                 <div>
                     <ul>
                         <li>
                             <label class="switch is-rounded is-small">
                             <input type="checkbox" id="check_voie" checked>
                             <span class="check is-dark"></span>
-                            <span class="control-label" critere="voie">Voies<span></span></span>
+                            <span class="control-label" critere="voie">Voies</span>
                         </li>
                         <li>
                             <label class="switch is-rounded is-small">
                             <input type="checkbox" id="check_lieu_dit" checked>
                             <span class="check is-dark"></span>
-                            <span class="control-label" critere="lieu_dit">Lieux-dits<span></span></span>
+                            <span class="control-label" critere="lieu_dit">Lieux-dits</span>
                         </li>
                     </ul>
                 </div>
@@ -993,7 +1058,7 @@
                             <label class="switch is-rounded is-small">
                             <input type="checkbox" id="check_nom_integre" checked>
                             <span class="check is-green"></span>
-                            <span class="control-label" critere="nom_integre">Déjà rapprochés dans OSM<span></span></span>
+                            <span class="control-label" critere="nom_integre">Déjà rapprochés dans OSM</span>
                         </li>
                         <li>
                             <label class="switch is-rounded is-small">
@@ -1031,11 +1096,18 @@
                         </li>
                     </ul>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
     <!-- <div id="bouton_rendu_bano" style="position:relative;top:100px;left:900px">Rendu BANO</div> -->
     <div id="reponse" class="pifo">
+        <div id="panneau_map">
+            <h2></h2> <!-- Nom commune -->
+            <div id="contenu">
+                <div id="infos_voie_lieudit"></div> <!-- Détails voie ou lieu-dit -->
+                <div id="infos_numero"></div> <!-- Détails numéro -->
+            </div>
+        </div>
         <div id="map"></div>
     </div>
     <footer>
