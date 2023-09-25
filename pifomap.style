@@ -288,6 +288,23 @@
                 "text-halo-color": "white",
                 "text-halo-width": 2
             }
+        },
+        {
+            "id": "polygones_texte_point",
+            "source": "polygones_convexhull",
+            "type": "symbol",
+            "minzoom" : 16,
+            "layout": {
+                "text-field": ["format",["get", "nom"],{},"\n",{},["get", "fantoir"],{"font-scale": 0.8}],
+                "text-overlap":"cooperative",
+                "text-justify": "auto",
+                "symbol-placement": "point"
+                },
+            "paint": {
+                "text-color": "red",
+                "text-halo-color": "white",
+                "text-halo-width": 2
+            }
         }
     ]
 }

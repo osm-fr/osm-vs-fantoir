@@ -228,6 +228,12 @@
         }
         return [is_voie,is_place,is_osm_hors_fantoir,has_code_fantoir,fantoir_affiche,fantoir_dans_relation]
     }
+    function fantoir_affiche(fantoir){
+        if (fantoir.includes('b')){
+            return 'Voie sans Fantoir'
+        }
+        return fantoir
+    }
     function interactions_souris(couche_carto){
         if (couche_carto == 'BAN_point'||couche_carto == 'OSM_point'){
             //--------------------------------------------------

@@ -14,6 +14,6 @@ SELECT fantoir,
        nom_voie,
        ST_AsGeoJSON(ST_Buffer(ST_Convexhull(ST_Collect(geometrie)),0.0001))
 FROM   bano_adresses
-join   fantoir
-using  (fantoir)
-group by 1,2
+JOIN   fantoir
+USING  (fantoir)
+GROUP BY 1,2

@@ -226,7 +226,7 @@
                     nom_ban,
                     poly] = polydata[s]
                 if (poly.type == 'Polygon'){
-                    res.features.push(get_geojson_poly(poly,{'fantoir':fantoir,'nom':nom_ban}))
+                    res.features.push(get_geojson_poly(poly,{'fantoir':fantoir_affiche(fantoir),'nom':nom_ban}))
                 } 
             }
             map.getSource('polygones_convexhull').setData(res)
