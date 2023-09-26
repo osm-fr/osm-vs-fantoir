@@ -245,6 +245,7 @@
 
                 const coordinates = e.features[0].geometry.coordinates.slice();
                 nom = e.features[0].properties.nom;
+                map.setFilter('filaire',["==",["get", "nom"], nom])
                 map.setFilter('hover_adresses_point',["==",["get", "nom"], nom])
 
                 // Si la carte est dézoomée et que de multiples copies de la cible sont visibles, la pop-up apparaît sur la copie pointée
@@ -259,6 +260,7 @@
             map.on('mouseleave', couche_carto, () => {
                 map.getCanvas().style.cursor = '';
                 popup.remove();
+                map.setFilter('filaire',["==",["get", "nom"], " "])
                 map.setFilter('hover_adresses_point',["==",["get", "nom"], " "])
             });
             //--------------------------------------------------

@@ -1,4 +1,4 @@
-SELECT COALESCE(o.nom_voie,o.nom_place,b.nom_voie,b.nom_place),
+SELECT COALESCE(r.nom,o.nom_voie,o.nom_place,b.nom_voie,b.nom_place),
        COALESCE(o.fantoir,b.fantoir,null),
        COALESCE(o.numero,b.numero),
        ST_X(b.geometrie),
@@ -27,6 +27,7 @@ LEFT OUTER JOIN (SELECT uppernumero,fantoir,source,id_statut
                 WHERE   rang = 1) s
 USING (uppernumero,fantoir)
 LEFT OUTER JOIN (SELECT DISTINCT fantoir,
+                        nom,
                         1::boolean AS rapproche 
                 FROM    nom_fantoir
                 WHERE   code_insee = '__code_insee__' AND

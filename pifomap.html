@@ -203,6 +203,7 @@
         })
         .done(function( data ){
             let [polycommunedata,
+                filairedata,
                 polydata,
                 pointdata,
                 pointnommedata] = data
@@ -214,11 +215,22 @@
                 if (poly.type == 'Polygon'){
                     res.features.push(get_geojson_poly(poly,{}))
                 }
-                console.log(bbox)
                 map.fitBounds(bbox);
-
             }
             map.getSource('contour_communal').setData(res)
+
+            res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+            for (s=0;s<filairedata.length;s++){
+                let [nom,
+                    geom] = filairedata[s]
+                if (geom.type == 'LineString'||geom.type == 'MultiLineString'){
+                    res.features.push(get_geojson_poly(geom,{'nom':nom}))
+                } else {
+                    console.log(nom,geom)
+                }
+
+            }
+            map.getSource('filaire').setData(res)
 
             res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
             for (s=0;s<polydata.length;s++){
@@ -254,19 +266,18 @@
                   lon_osm,
                   lat_osm,
                   rapproche] = pointdata[s]
-                if (lon_ban){
-                    min_lon = Math.min(min_lon,lon_ban);
-                    max_lon = Math.max(max_lon,lon_ban);
-                    min_lat = Math.min(min_lat,lat_ban);
-                    max_lat = Math.max(max_lat,lat_ban);
-                    res.features.push(get_geojson_point(lon_ban,lat_ban,{'nom':nom,'fantoir':fantoir,'numero':numero,'source':'BAN','rapproche':rapproche}))
-                }
                 if (lon_osm){
                     min_lon = Math.min(min_lon,lon_osm);
                     max_lon = Math.max(max_lon,lon_osm);
                     min_lat = Math.min(min_lat,lat_osm);
                     max_lat = Math.max(max_lat,lat_osm);
                     res.features.push(get_geojson_point(lon_osm,lat_osm,{'nom':nom,'fantoir':fantoir,'numero':numero,'source':'OSM','rapproche':rapproche}))
+                } else if (lon_ban){
+                    min_lon = Math.min(min_lon,lon_ban);
+                    max_lon = Math.max(max_lon,lon_ban);
+                    min_lat = Math.min(min_lat,lat_ban);
+                    max_lat = Math.max(max_lat,lat_ban);
+                    res.features.push(get_geojson_point(lon_ban,lat_ban,{'nom':nom,'fantoir':fantoir,'numero':numero,'source':'BAN','rapproche':rapproche}))
                 }
             }
             map.getSource('adresses').setData(res)
@@ -297,7 +308,6 @@
         .done(function( ndata ) {
             let [metadata,
                 numdata] = ndata
-            console.log(metadata)
             let [nom_topo,
                 is_place,
                 numeros_a_proposer,
@@ -318,7 +328,7 @@
                     max_lon = Math.max(max_lon,lon_ban);
                     min_lat = Math.min(min_lat,lat_ban);
                     max_lat = Math.max(max_lat,lat_ban);
-                    console.log(numero,lon_ban,lat_ban,'BAN',rapproche)
+                    // console.log(numero,lon_ban,lat_ban,'BAN',rapproche)
                 }
                 if (lon_osm){
                     data.features.push(get_geojson_point(lon_osm,lat_osm,{'numero':numero,'source':'OSM','rapproche':rapproche}))

@@ -40,6 +40,12 @@
         "data": {"type": "FeatureCollection",
                           "features": []
                 }
+        },
+        "filaire": {
+        "type": "geojson",
+        "data": {"type": "FeatureCollection",
+                          "features": []
+                }
         }
     },
     "glyphs": "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
@@ -155,6 +161,17 @@
             }
         },
         {
+            "id": "filaire",
+            "source": "filaire",
+            "type": "line",
+            "minzoom" : 10,
+            "filter" : ["==",["get", "nom"], " "],
+            "paint": {
+                "line-width": 4,
+                "line-color": "green"
+            }
+        },
+        {
             "id": "hover_adresses_point",
             "source": "hover",
             "type": "symbol",
@@ -194,7 +211,7 @@
                 },
             "paint": {
                 "icon-color": ["case",
-                                ["boolean",["get","rapproche"]],"blue",
+                                ["boolean",["get","rapproche"]],"orange",
                                 "red"]
             }
         },
@@ -213,7 +230,7 @@
             },
             "paint": {
                 "text-color": ["case",
-                                ["boolean",["get","rapproche"]],"blue",
+                                ["boolean",["get","rapproche"]],"orange",
                                 "red"]
             }
         },
