@@ -182,7 +182,6 @@
                         'geometry': geom})
     }
     function get_geojson_point(lon,lat,props){
-        // console.log(props)
         return ({'type': 'Feature',
                         'properties': props,
                         'geometry': {
@@ -215,7 +214,7 @@
                 if (poly.type == 'Polygon'){
                     res.features.push(get_geojson_poly(poly,{}))
                 }
-                map.fitBounds(bbox);
+                // map.fitBounds(bbox);
             }
             map.getSource('contour_communal').setData(res)
 
@@ -255,7 +254,6 @@
             map.getSource('points_nommes').setData(res)
 
             res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
-            // console.log(res)
             for (s=0;s<pointdata.length;s++){
                  [nom,
                   fantoir,
@@ -314,7 +312,6 @@
                 nom_commune,
                 nom,
                 rapproche] = metadata
-            // console.log(numdata)
             for (s=0;s<numdata.length;s++){
                  [numero,
                      lon_ban,
@@ -328,7 +325,6 @@
                     max_lon = Math.max(max_lon,lon_ban);
                     min_lat = Math.min(min_lat,lat_ban);
                     max_lat = Math.max(max_lat,lat_ban);
-                    // console.log(numero,lon_ban,lat_ban,'BAN',rapproche)
                 }
                 if (lon_osm){
                     data.features.push(get_geojson_point(lon_osm,lat_osm,{'numero':numero,'source':'OSM','rapproche':rapproche}))
@@ -382,8 +378,6 @@
             url: "requete_pifometre_commune.py?insee="+$('#input_insee')[0].value
         })
         .done(function( pifodata ) {
-            // if (map){
-            // }
             let [nom_commune,
                  lon_commune,
                  lat_commune,
@@ -391,13 +385,28 @@
                  insee_commune_parente,
                  nom_commune_parente,
                  date_dernier_rapprochement,
-                 commune_composee] = pifodata
+                 commune_composee,
+                 bbox_diagonale] = pifodata
+
+            let [mapz,mapx,mapy] = check_url_for_xyz()
+
+            premiere_affichage = false
+            if (mapz < 0){
+                mapz = 15
+                mapx = lon_commune
+                mapy = lat_commune
+                premiere_affichage = true
+            }
             map = new maplibregl.Map({
                 container: 'map',
                 style:'./pifomap.style',
-                center: [lon_commune,lat_commune],
-                zoom: 15
+                center: [mapx,mapy],
+                hash: 'map',
+                zoom: mapz
             });
+            if (premiere_affichage){
+                map.fitBounds(bbox_diagonale.coordinates)
+            }
             map.addControl(new maplibregl.NavigationControl());
                 map.loadImage(
                 './img/rond_50.png',
@@ -441,8 +450,6 @@
             //         });
             //     }
             // );
-
-            // console.log(map.getLayer('chat'))
 
             document.title = nom_commune+' - Pifomètre'
             $('#descriptif').empty()
@@ -781,87 +788,87 @@
             active_menu_filtres()
             update_menu_filtres()
         })
-        history.replaceState("", "", window.location.pathname+"?insee="+$('#input_insee')[0].value)
+        history.replaceState("", "", window.location.pathname+"?insee="+$('#input_insee')[0].value+window.location.hash)
         $('body').css('cursor','default');
     };
-    function load_map(lon_commune,lat_commune,features_orange,features_vert,features_bleu){
-        const map = new maplibregl.Map({
-            container: 'map',
-            style:'./pifomap.style',
-            center: [lon_commune,lat_commune],
-            zoom: 15
-        });
+    // function load_map(lon_commune,lat_commune,features_orange,features_vert,features_bleu){
+    //     const map = new maplibregl.Map({
+    //         container: 'map',
+    //         style:'./pifomap.style',
+    //         center: [lon_commune,lat_commune],
+    //         zoom: 15
+    //     });
 
-        map.on('load', () => {
-            // map.setCenter([lon_commune,lat_commune])
-            map.addSource('source_orange', {
-                'type': 'geojson',
-                'data': features_orange
-            });
-            map.addSource('source_vert', {
-                'type': 'geojson',
-                'data': features_vert
-            });
-            map.addSource('source_bleu', {
-                'type': 'geojson',
-                'data': features_bleu
-            });
+    //     map.on('load', () => {
+    //         // map.setCenter([lon_commune,lat_commune])
+    //         map.addSource('source_orange', {
+    //             'type': 'geojson',
+    //             'data': features_orange
+    //         });
+    //         map.addSource('source_vert', {
+    //             'type': 'geojson',
+    //             'data': features_vert
+    //         });
+    //         map.addSource('source_bleu', {
+    //             'type': 'geojson',
+    //             'data': features_bleu
+    //         });
 
-            // console.log(features_bleu)
+    //         // console.log(features_bleu)
 
-            map.addLayer({
-                'id': 'layer_orange',
-                'type': 'circle',
-                'source': 'source_orange',
-                // 'layout': {
-                //     'text-field': 'nom_topo',
-                //     'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
-                //     'text-offset': [0, 0.6],
-                //     'text-anchor': 'top'
-                // },
-                'paint': {
-                    'circle-radius': 5,
-                    'circle-color': '#cc3300'
-                }
-            });
-            map.addLayer({
-                'id': 'layer_vert',
-                'type': 'circle',
-                'source': 'source_vert',
-                // 'layout': {
-                //     'text-field': 'nom_osm',
-                //     'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
-                //     'text-offset': [0, 0.6],
-                //     'text-anchor': 'top'
-                // },
-                'paint': {
-                    'circle-radius': 5,
-                    'circle-color': '#007700'
-                }
-            });
-            map.addLayer({
-                'id': 'layer_bleu',
-                'type': 'circle',
-                'source': 'source_bleu',
-                // 'layout': {
-                //     'text-field': 'nom_osm',
-                //     'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
-                //     'text-offset': [0, 0.6],
-                //     'text-anchor': 'top'
-                // },
-                'paint': {
-                    'circle-radius': 5,
-                    'circle-color': '#007cbf'
-                }
-            });
-            def_clic(map,'layer_orange','nom_topo')
-            def_clic(map,'layer_vert','nom_osm')
-            def_clic(map,'layer_bleu','nom_osm')
-            $('#wait_ajax').css('visibility','hidden');
+    //         map.addLayer({
+    //             'id': 'layer_orange',
+    //             'type': 'circle',
+    //             'source': 'source_orange',
+    //             // 'layout': {
+    //             //     'text-field': 'nom_topo',
+    //             //     'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+    //             //     'text-offset': [0, 0.6],
+    //             //     'text-anchor': 'top'
+    //             // },
+    //             'paint': {
+    //                 'circle-radius': 5,
+    //                 'circle-color': '#cc3300'
+    //             }
+    //         });
+    //         map.addLayer({
+    //             'id': 'layer_vert',
+    //             'type': 'circle',
+    //             'source': 'source_vert',
+    //             // 'layout': {
+    //             //     'text-field': 'nom_osm',
+    //             //     'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+    //             //     'text-offset': [0, 0.6],
+    //             //     'text-anchor': 'top'
+    //             // },
+    //             'paint': {
+    //                 'circle-radius': 5,
+    //                 'circle-color': '#007700'
+    //             }
+    //         });
+    //         map.addLayer({
+    //             'id': 'layer_bleu',
+    //             'type': 'circle',
+    //             'source': 'source_bleu',
+    //             // 'layout': {
+    //             //     'text-field': 'nom_osm',
+    //             //     'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+    //             //     'text-offset': [0, 0.6],
+    //             //     'text-anchor': 'top'
+    //             // },
+    //             'paint': {
+    //                 'circle-radius': 5,
+    //                 'circle-color': '#007cbf'
+    //             }
+    //         });
+    //         def_clic(map,'layer_orange','nom_topo')
+    //         def_clic(map,'layer_vert','nom_osm')
+    //         def_clic(map,'layer_bleu','nom_osm')
+    //         $('#wait_ajax').css('visibility','hidden');
 
-            // console.log(map.getLayer('layer_bleu'))
-        });
-    }
+    //         // console.log(map.getLayer('layer_bleu'))
+    //     });
+    // }
 
     function def_clic(map,layer,nom){
         map.on('click', layer, (e) => {
