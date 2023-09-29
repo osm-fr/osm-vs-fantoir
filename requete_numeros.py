@@ -22,8 +22,8 @@ def get_OSM_name_and_positions_as_GeoJSON(code_insee,fantoir):
     data = sql_get_data('name_and_positions_OSM_as_GeoJSON',{'code_insee':code_insee,'fantoir':fantoir})
     return [data[0][0],[d[1] for d in data]]
 
-def get_OSM_relation_id_by_name_and_position_as_GeoJSON(name,GeoJSON_positions):
-    res = sql_get_data('rel_id_OSM_from_GeoJSON',{'name':hp.escape_quotes(name),'positions':' UNION ALL '.join([f"SELECT ST_GeomFromGeoJSON('{p}') AS geom_position" for p in GeoJSON_positions])})
+def get_OSM_relation_id_by_name_and_position_as_GeoJSON(name,code_insee, GeoJSON_positions):
+    res = sql_get_data('rel_id_OSM_from_GeoJSON',{'name':hp.escape_quotes(name),'code_insee':code_insee,'positions':' UNION ALL '.join([f"SELECT ST_GeomFromGeoJSON('{p}') AS geom_position" for p in GeoJSON_positions])})
     if res: return res[0]
     return None
 
@@ -170,7 +170,7 @@ def main():
     xmlResponse = None
     if modele == 'Relation':
         name, geom_position = get_OSM_name_and_positions_as_GeoJSON(code_insee,fantoir)
-        relation_id = get_OSM_relation_id_by_name_and_position_as_GeoJSON(name, geom_position)
+        relation_id = get_OSM_relation_id_by_name_and_position_as_GeoJSON(name, code_insee, geom_position)
         if relation_id:
             relation_id = relation_id[0] * -1
             headers = {}
