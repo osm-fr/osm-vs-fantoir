@@ -41,7 +41,7 @@
                           "features": []
                 }
         },
-        "filaire": {
+        "hover_filaire": {
         "type": "geojson",
         "data": {"type": "FeatureCollection",
                           "features": []
@@ -162,7 +162,7 @@
         },
         {
             "id": "filaire",
-            "source": "filaire",
+            "source": "hover_filaire",
             "type": "line",
             "minzoom" : 10,
             "filter" : ["==",["get", "nom"], " "],
@@ -276,7 +276,7 @@
         },
         {
             "id": "filaire_texte",
-            "source": "filaire",
+            "source": "hover_filaire",
             "type": "symbol",
             "minzoom" : 10,
             "filter" : ["==",["get", "nom"], " "],

@@ -241,7 +241,7 @@
         }
         return [is_voie,is_place,is_osm_hors_fantoir,has_code_fantoir,fantoir_affiche,fantoir_dans_relation]
     }
-    function fantoir_affiche(fantoir){
+    function get_fantoir_affiche(fantoir){
         if (fantoir.includes('b')){
             return 'Voie sans Fantoir'
         }
@@ -289,12 +289,11 @@
                 source = e.features[0].properties.source;
                 rapproche = e.features[0].properties.rapproche;
 
-                $('#panneau_map h2').empty().text(nom)
-                $('#infos_voie_lieudit').empty();
-                $('#infos_numero').empty();
+                reset_panneau_map()
+                $('#panneau_map h2').text(nom)
 
                 $.ajax({
-                    url: "requete_pifometre_voies.py?insee="+insee+'&fantoir='+fantoir
+                    url: "requete_pifometre_voies.py?insee="+fantoir.substring(0,5)+'&fantoir='+fantoir
                 })
                 .done(function( data ) {
                     let [fantoir,
@@ -355,3 +354,9 @@
     function reset_url_hash(){
         history.replaceState("", "", window.location.pathname+"?"+window.location.search)
     }
+    function reset_panneau_map(){
+        $('#panneau_map h2').empty()
+        $('#infos_voie_lieudit').empty();
+        $('#infos_numero').empty();
+    }
+

@@ -222,7 +222,7 @@
                 }
 
             }
-            map.getSource('filaire').setData(res)
+            map.getSource('hover_filaire').setData(res)
 
             res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
             for (s=0;s<polydata.length;s++){
@@ -230,7 +230,7 @@
                     nom_ban,
                     poly] = polydata[s]
                 if (poly.type == 'Polygon'){
-                    res.features.push(get_geojson_poly(poly,{'fantoir':fantoir_affiche(fantoir),'nom':nom_ban}))
+                    res.features.push(get_geojson_poly(poly,{'fantoir':get_fantoir_affiche(fantoir),'nom':nom_ban}))
                 } 
             }
             map.getSource('polygones_convexhull').setData(res)
@@ -882,7 +882,7 @@
 
     <div id="barre-jaune">
         <span>Commune :</span>
-        <form action="javascript:reset_url_hash();requete_pifometre()" autocomplete="on">
+        <form action="javascript:reset_url_hash();reset_panneau_map();requete_pifometre()" autocomplete="on">
             <input type="text" id="input_insee" placeholder="Code INSEE"></input>
             <input type="submit" value="Lister">
         </form>
