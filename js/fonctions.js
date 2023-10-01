@@ -259,6 +259,7 @@
                 const coordinates = e.features[0].geometry.coordinates.slice();
                 nom = e.features[0].properties.nom;
                 map.setFilter('filaire',["==",["get", "nom"], nom])
+                map.setFilter('filaire_texte',["==",["get", "nom"], nom])
                 map.setFilter('hover_adresses_point',["==",["get", "nom"], nom])
 
                 // Si la carte est dézoomée et que de multiples copies de la cible sont visibles, la pop-up apparaît sur la copie pointée
@@ -267,13 +268,14 @@
                 }
 
                 // Remplir la popup et définir ses coordonnées
-                popup.setLngLat(coordinates).setHTML(nom).addTo(map);
+                // popup.setLngLat(coordinates).setHTML(nom).addTo(map);
             });
 
             map.on('mouseleave', couche_carto, () => {
                 map.getCanvas().style.cursor = '';
-                popup.remove();
+                // popup.remove();
                 map.setFilter('filaire',["==",["get", "nom"], " "])
+                map.setFilter('filaire_texte',["==",["get", "nom"], " "])
                 map.setFilter('hover_adresses_point',["==",["get", "nom"], " "])
             });
 
@@ -349,4 +351,7 @@
                 })
             });
         }
+    }
+    function reset_url_hash(){
+        history.replaceState("", "", window.location.pathname+"?"+window.location.search)
     }

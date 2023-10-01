@@ -45,13 +45,6 @@
     var table = 'table_pifometre'
 
     function start(){
-        // map = new maplibregl.Map({
-        //     container: 'map',
-        //     style:'./pifomap.style',
-        //     center: [48,2],
-        //     zoom: 15
-        // });
-
         $('#table_communes_voisines').css('visibility','hidden');
         $('#table_communes_voisines table tr td').empty()
                                                  .removeAttr('insee_cible')
@@ -397,6 +390,10 @@
                 mapy = lat_commune
                 premiere_affichage = true
             }
+            if (map){
+                map.remove()
+                $('#reponse').append($('<div id=map>'))
+            }
             map = new maplibregl.Map({
                 container: 'map',
                 style:'./pifomap.style',
@@ -414,42 +411,6 @@
                     if (error) throw error;
                     map.addImage('rond_50', image, { sdf: true });
                 })
-
-            // })
-            // map.loadImage(
-            //     'https://upload.wikimedia.org/wikipedia/commons/7/7c/201408_cat.png',
-            //     (error, image) => {
-            //         if (error) throw error;
-            //         map.addImage('cat', image, { sdf: true });
-            //         map.addSource('source_chat', {
-            //             'type': 'geojson',
-            //             'data': {
-            //                 'type': 'FeatureCollection',
-            //                 'features': [
-            //                     {
-            //                         'type': 'Feature',
-            //                         'geometry': {
-            //                             'type': 'Point',
-            //                             'coordinates': [lon_commune, lat_commune]
-            //                         }
-            //                     }
-            //                 ]
-            //             }
-            //         });
-            //         map.addLayer({
-            //             'id': 'chat',
-            //             'type': 'symbol',
-            //             'source': 'source_chat',
-            //             'layout': {
-            //                 'icon-image': 'cat',
-            //                 'icon-size': 0.15
-            //             },
-            //             'paint':{
-            //                 'icon-color': "#00ff00"
-            //             }
-            //         });
-            //     }
-            // );
 
             document.title = nom_commune+' - Pifomètre'
             $('#descriptif').empty()
@@ -791,6 +752,7 @@
         history.replaceState("", "", window.location.pathname+"?insee="+$('#input_insee')[0].value+window.location.hash)
         $('body').css('cursor','default');
     };
+
     // function load_map(lon_commune,lat_commune,features_orange,features_vert,features_bleu){
     //     const map = new maplibregl.Map({
     //         container: 'map',
@@ -920,7 +882,7 @@
 
     <div id="barre-jaune">
         <span>Commune :</span>
-        <form action="javascript:requete_pifometre()" autocomplete="on">
+        <form action="javascript:reset_url_hash();requete_pifometre()" autocomplete="on">
             <input type="text" id="input_insee" placeholder="Code INSEE"></input>
             <input type="submit" value="Lister">
         </form>

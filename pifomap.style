@@ -275,6 +275,24 @@
             }
         },
         {
+            "id": "filaire_texte",
+            "source": "filaire",
+            "type": "symbol",
+            "minzoom" : 10,
+            "filter" : ["==",["get", "nom"], " "],
+            "layout" : {
+                "symbol-placement" : "line",
+                "text-field": ["get", "nom"],
+                "text-overlap":"cooperative",
+                "text-size": 20
+            },
+            "paint": {
+                "text-color": "black",
+                "text-halo-color": "white",
+                "text-halo-width": 3
+            }
+        },
+        {
             "id": "polygones",
             "source": "polygones_convexhull",
             "type": "line",
