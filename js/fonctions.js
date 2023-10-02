@@ -140,6 +140,35 @@
                                     )
         }
     }
+    function add_josm_addr_link_div(insee,nom_commune,fantoir,nom_fantoir,nombre,fantoir_dans_relation,is_place){
+        //Nb de points
+        $('#liens_voie').append($('<span>').addClass('zone-clic-adresses')
+                            .append($('<span>').text(nombre > 1 ? nombre+' Points':'1 Point'))
+                        )
+        if (is_place){
+            $('#liens_voie .zone-clic-adresses').append($('<span>').text(' (lieu-dit)'))
+        }
+        //Ajouter lien
+        stringToRemove = window.location.href.split('?')[0].split('/').pop()
+
+
+        $('#liens_voie .zone-clic-adresses').click(function(){
+                                                srcURL = 'http://127.0.0.1:8111/import?changeset_tags='+get_changeset_tags_addr(insee,nom_commune)+'&new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.split('?')[0].replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele='+((is_place) ? 'Place':'Points');
+                                                console.log(srcURL)
+                                                $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
+                                            })
+        //Ou relation si c'est une voie
+        if (!is_place){
+            $('#liens_voie').append($('<span>').text(' ou '))
+            $('#liens_voie').append($('<span>').addClass('zone-clic-adresses').text('Relation')
+                                                .click(function(){
+                                                    // stringToRemove = window.location.href.split('/').pop()
+                                                    srcURL = 'http://127.0.0.1:8111/import?changeset_tags='+get_changeset_tags_addr(insee,nom_commune)+'&new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.split('?')[0].replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele=Relation&fantoir_dans_relation='+fantoir_dans_relation;
+                                                    $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
+                                                })
+                                    )
+        }
+    }
     function get_changeset_tags_addr(insee,nom_commune){
         return "source=https://bano.openstreetmap.fr/pifometre/index.html?insee="+insee+"%7Chashtags=%23BANO %23Pifometre%7Ccomment=Intégration d'adresses - "+nom_commune+" ("+insee+")"
     }
@@ -347,6 +376,9 @@
                                                             .attr('href',url_map_org_part1+'?mlat='+e.lngLat.lat+'&mlon='+e.lngLat.lng+'#map='+'18/'+e.lngLat.lat+'/'+e.lngLat.lng)
                                                             .attr('target','blank')
                                                             .text('ORG')));
+                        if (numeros_a_proposer > 0){
+                            add_josm_addr_link_div($('#input_insee')[0].value,'nom_commune',fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
+                        }
                 })
             });
         }
@@ -358,5 +390,6 @@
         $('#panneau_map h2').empty()
         $('#infos_voie_lieudit').empty();
         $('#infos_numero').empty();
+        $('#liens_voie').empty();
     }
 
