@@ -120,16 +120,6 @@
             }
        });
     }
-    function add_addr_inspector_link(insee,fantoir,source){
-        $('#'+table+' tr:last')   .append($('<td>').addClass('zone-clic-adresses')
-                                        .append($('<a>').attr('href',"numeros.html?insee="+insee+'&fantoir='+fantoir+'&source='+source+'&tab=0').attr('target',"blank")
-                                            .text('Qualifier')
-                                        )
-                                        .click(function(){
-                                            $(this).addClass('clicked');
-                                        })
-                                        )
-    };
 
     function requete_pifometre(){
         commune_valide = false;
@@ -427,7 +417,7 @@
 
                     //--- Qualification des adresses ---
                     if (avec_adresses_ban && has_code_fantoir){
-                        add_addr_inspector_link($('#input_insee')[0].value,fantoir,'BAN')
+                        add_addr_inspector_link(table,$('#input_insee')[0].value,fantoir,'BAN')
                     } else {
                         $('#'+table+' tr:last').append($('<td>'))
                     }

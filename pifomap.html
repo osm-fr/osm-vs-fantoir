@@ -33,15 +33,6 @@
     EMPTY_GEOJSON = {'type': 'FeatureCollection',
                           'features': []}
 
-    // $('#reponse').append($('<div>').attr('id','map'))
-
-    // const map = new maplibregl.Map({
-    //     container: 'map',
-    //     style:'./pifomap.style',
-    //     center: [0,0],
-    //     zoom: 15
-    // });
-
     var table = 'table_pifometre'
 
     function start(){
@@ -106,18 +97,6 @@
             $('#wait_ajax').css('visibility','hidden');
         })
     }
-    // function rendu_bano(insee){
-    //     $('#wait_ajax').empty()
-    //                    .css('visibility','visible') 
-    //                    .append($('<span>').append('Rendu BANO en cours...'));
-    //     $.ajax({
-    //         url: "numeros_pour_rendu_commune.py?insee="+insee,
-    //     })
-    //     .done(function( data ){
-    //         $('body').css('cursor','default');
-    //         $('#wait_ajax').css('visibility','hidden');
-    //     })   
-    // }
     function update_filtres(){
         for (let i = 0; i < FILTRES.length; i++){
             FILTRES[i] = [FILTRES[i][0],$('#check_'+FILTRES[i][0]).is(':checked')]
@@ -158,17 +137,6 @@
             }
        });
     }
-    function add_addr_inspector_link(insee,fantoir,source){
-        $('#'+table+' tr:last')   .append($('<td>').addClass('zone-clic-adresses')
-                                        .append($('<a>').attr('href',"numeros.html?insee="+insee+'&fantoir='+fantoir+'&source='+source+'&tab=0').attr('target',"blank")
-                                            .text('Qualifier')
-                                        )
-                                        .click(function(){
-                                            $(this).addClass('clicked');
-                                        })
-                                        )
-    };
-    // function get_geojson_point(numero,lon,lat,source,rapproche){
     function get_geojson_poly(geom,props){
         return ({'type': 'Feature',
                         'properties': props,
@@ -263,7 +231,7 @@
                     min_lat = Math.min(min_lat,lat_osm);
                     max_lat = Math.max(max_lat,lat_osm);
                     res.features.push(get_geojson_point(lon_osm,lat_osm,{'nom':nom,'fantoir':fantoir,'numero':numero,'source':'OSM','rapproche':rapproche}))
-                } else if (lon_ban){
+                } else {
                     min_lon = Math.min(min_lon,lon_ban);
                     max_lon = Math.max(max_lon,lon_ban);
                     min_lat = Math.min(min_lat,lat_ban);
@@ -287,80 +255,6 @@
 
         })
     }
-    function affichage_des_numeros(fantoir,map){
-        min_lon = 180
-        max_lon = -180
-        min_lat = 90
-        max_lat = -90
-        data = map.getSource('adresses')._data
-        $.ajax({
-            url: "requete_inspect_numeros.py?insee="+code_insee+'&fantoir='+fantoir
-        })
-        .done(function( ndata ) {
-            let [metadata,
-                numdata] = ndata
-            let [nom_topo,
-                is_place,
-                numeros_a_proposer,
-                nom_commune,
-                nom,
-                rapproche] = metadata
-            for (s=0;s<numdata.length;s++){
-                 [numero,
-                     lon_ban,
-                     lat_ban,
-                     statut,
-                     lon_osm,
-                     lat_osm] = numdata[s]
-                if (lon_ban){
-                    data.features.push(get_geojson_point(lon_ban,lat_ban,{'numero':numero,'source':'BAN','rapproche':rapproche}))
-                    min_lon = Math.min(min_lon,lon_ban);
-                    max_lon = Math.max(max_lon,lon_ban);
-                    min_lat = Math.min(min_lat,lat_ban);
-                    max_lat = Math.max(max_lat,lat_ban);
-                }
-                if (lon_osm){
-                    data.features.push(get_geojson_point(lon_osm,lat_osm,{'numero':numero,'source':'OSM','rapproche':rapproche}))
-                    min_lon = Math.min(min_lon,lon_osm);
-                    max_lon = Math.max(max_lon,lon_osm);
-                    min_lat = Math.min(min_lat,lat_osm);
-                    max_lat = Math.max(max_lat,lat_osm);
-                }
-            }
-            map.getSource('adresses').setData(data)
-            map.fitBounds([[min_lon,min_lat],[max_lon,max_lat]]);
-            map.redraw()
-            map.on('click', 'BAN', (e) => {
-                console.log(e)
-                console.log(e.features)
-            });
-
-        })
-    }
-    function build_popup(popup,map){
-        divid = $('.maplibregl-popup-content .data_popup').not('.deja_ouvert').attr('id')
-        div_classes = $('.maplibregl-popup-content .data_popup').attr('class')
-        fantoir = $('.maplibregl-popup-content .data_popup').attr('fantoir')
-        nom_popup = $('.maplibregl-popup-content .data_popup').attr('nom_popup')
-        avec_adresses = $('.maplibregl-popup-content .data_popup').attr('avec_adresses')
-
-        $('#'+divid).empty().attr('id',divid)
-                     .append($('<h1>').text(nom_popup))
-        if (eval(avec_adresses)){
-            $('#'+divid).append($('<a>').attr('href','numeros.html?insee='+code_insee+'&fantoir='+fantoir)
-                                         .attr('target','blank')
-                                         .text('inspecter'))
-            $('#'+divid).append($('<div>').on("click",function(){
-                affichage_des_numeros(fantoir,map)
-            })
-                                         .text('afficher les numéros'))
-        } else {
-            $('#'+divid).append($('<span>').text('Sans adresses'))
-        }
-
-        $('#'+divid).addClass('deja_ouvert')
-    }
-
     function requete_pifometre(){
         commune_valide = false;
         $('body').css('cursor','progress');
@@ -383,6 +277,8 @@
 
             let [mapz,mapx,mapy] = check_url_for_xyz()
 
+            console.log(mapz,mapx,mapy)
+
             premiere_affichage = false
             if (mapz < 0){
                 mapz = 15
@@ -390,9 +286,11 @@
                 mapy = lat_commune
                 premiere_affichage = true
             }
+            console.log('premiere_affichage :', premiere_affichage)
             if (map){
                 map.remove()
                 $('#reponse').append($('<div id=map>'))
+                console.log('map remove')
             }
             map = new maplibregl.Map({
                 container: 'map',
@@ -402,6 +300,7 @@
                 zoom: mapz
             });
             if (premiere_affichage){
+                console.log('fit bounds',bbox_diagonale)
                 map.fitBounds(bbox_diagonale.coordinates)
             }
             map.addControl(new maplibregl.NavigationControl());
@@ -498,362 +397,12 @@
 
             rendu_bano(code_insee)
 
-            /*$.ajax({
-                url: "requete_pifometre_voies.py?insee="+code_insee+"&format=json"
-            })
-            .done(function( data ) {
-                min_lon = 180
-                max_lon = -180
-                min_lat = 90
-                max_lat = -90
-                res = EMPTY_GEOJSON
-
-                for (s=0;s<data.length;s++){
-                    let [fantoir,
-                         date_creation,
-                         annule,
-                         nom_topo,
-                         nom_osm,
-                         nom_ban,
-                         source_nom_ban,
-                         nom_ancienne_commune,
-                         lon,
-                         lat,
-                         statut_voie,
-                         numeros_a_proposer,
-                         caractere_annul,
-                         categorie,
-                         avec_adresses_ban] = data[s]
-                    is_voie = false
-                    is_place = false
-                    has_code_fantoir = true
-                    is_osm_hors_fantoir = false
-                    if (categorie == 0){
-                        is_voie = true;
-                    } else if (categorie == 1){
-                        is_place = true;
-                    } else if (categorie == 2){
-                        is_osm_hors_fantoir = true;
-                    }
-                    fantoir_affiche = fantoir
-                    fantoir_dans_relation = 'ok'
-                    if (caractere_annul == 'B'){
-                        has_code_fantoir = false
-                        fantoir_affiche = 'Voie sans Fantoir'
-                        fantoir_dans_relation = 'ko'
-                    }
-
-                    // Doublons de vrais FANTOIRs détectés à tort en pseudo-FANTOIRs BAN => masqués
-                    if (!has_code_fantoir && nom_ban == undefined){
-                        continue;
-                    }
-
-                    // Noms sans coordonnées
-                    if (lon == null){
-                        continue;
-                    }
-
-                    //Ajout des classes pour les filtres
-                    html_attributes = 'fantoir = '+fantoir
-                    class_marker = ''
-                    nom_popup = ''
-                    if (is_voie) {
-                        classnames = 'voie'
-                        html_attributes += ' type = voie'
-                    }
-                    if (is_place){
-                        classnames = 'lieu_dit'
-                        html_attributes += ' type = lieu-dit'
-                    } 
-                    if (is_osm_hors_fantoir) {
-                        class_marker = 'pastille-bleue'
-                        classnames = 'osm_hors_fantoir'
-                        html_attributes += ' type = hors_fantoir'
-                        rapproche = 'NA'
-                        nom_popup = nom_osm
-                    }
-                    if (!is_osm_hors_fantoir){
-                        if (nom_osm == undefined) {
-                            class_marker = 'pastille-orange'
-                            classnames += ' nom_a_integrer'
-                            nom_popup = nom_ban ? nom_ban:nom_topo;
-                            rapproche = false
-                        } else {
-                            class_marker = 'pastille-verte'
-                            classnames +=' nom_integre'
-                            nom_popup = nom_osm
-                            rapproche = true
-                        }
-                        if (avec_adresses_ban) {
-                            classnames = classnames+' avec_adresses'
-                            html_attributes += ' avec_adresses = true'
-                        } else {
-                            classnames = classnames+' sans_adresses'
-                            html_attributes += ' avec_adresses = false'
-                        }
-                    }
-                    props = {'is_voie':is_voie,'is_place':is_place,'is_osm_hors_fantoir':is_osm_hors_fantoir,'fantoir':fantoir,'fantoir_affiche':fantoir_affiche,'has_code_fantoir':has_code_fantoir,'nom_popup':nom_popup,'rapproche':rapproche}
-
-                    html_attributes+=' nom_popup = "'+nom_popup+'"'
-                    classnames += ' data_popup map_nom'
-
-                    el = document.createElement('div');
-                    el.className = class_marker;
-
-                    divid = 'contenu'+s.toString()
-                    html = '<div id='+divid+' class="'+classnames+'" '+html_attributes+'>'+nom_popup+'</div>'
-
-                    // new maplibregl.Marker({element: el})
-                    //     .setLngLat([lon,lat])
-                    //     .setPopup(new maplibregl.Popup().setHTML(html)
-                    //                                     .on('open', function(){build_popup($(this),map)}))
-                    //     .addTo(map);
-
-                    res.features.push(get_geojson_point(lon,lat,props))
-
-                    min_lon = Math.min(min_lon,lon);
-                    max_lon = Math.max(max_lon,lon);
-                    min_lat = Math.min(min_lat,lat);
-                    max_lat = Math.max(max_lat,lat);
-
-                    // REMPLISSAGE CELLULES
-
-                    //--- Code Fantoir ---
-                    // if (has_code_fantoir) {
-                    //     $('#'+table+' tbody').append($('<tr>').attr('id',tr_id).append($('<td>').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir_affiche)))                    
-                    // }
-                    // else {
-                    //     $('#'+table+' tbody').append($('<tr>').attr('id',tr_id).append($('<td>').attr('colspan','3').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir_affiche))) 
-                    // }
-                    // if (annule == -1){
-                    //     $('#'+table+' tr:last td:last').addClass('cell_mauvais_fantoir').attr('title','Code Fantoir annulé, à remplacer dans OSM')
-                    // } else if (fantoir_affiche != null && is_osm_hors_fantoir){
-                    //     $('#'+table+' tr:last td:last').addClass('cell_mauvais_fantoir').attr('title','Code Fantoir erroné, à corriger dans OSM')
-                    // }
-
-                    
-                    // //--- Date de création Fantoir ---
-                    // if (has_code_fantoir) {
-                    //     $('#'+table+' tr:last').append($('<td>').text(date_creation))
-                    // }
-
-                    // //--- Nom de l'ancienne commune ---
-                    // if (commune_composee == 1){
-                    //     $('#'+table+' tr:last').append($('<td>').text(nom_ancienne_commune))
-                    // }
-
-                    // //--- Nom Fantoir ---
-                    // if (is_place && has_code_fantoir){
-                    //     $('#'+table+' tr:last').append($('<td>')
-                    //                                 .append($('<img>').attr('src','img/lieudit.png').attr('width','20px').attr('title','Lieu-dit'))
-                    //                                 .append($('<span>').text(' '+nom_topo)))
-                    // }
-                    // else if (is_voie && has_code_fantoir){
-                    //     $('#'+table+' tr:last').append($('<td>')
-                    //                                 .append($('<img>').attr('src','img/voie.png').attr('title','Voie'))
-                    //                                 .append($('<span>').text(' '+nom_topo)))
-                    // }
-                    // else if (is_osm_hors_fantoir){
-                    //     $('#'+table+' tr:last').append($('<td>'))
-                    // }
-
-                    // //--- Nom OSM ---
-                    // if ($('#'+table+' tr:last').hasClass('nom_integre')){
-                    //     $('#'+table+' tr:last').append($('<td>')
-                    //                                     .append($('<span class="pastille-verte" title="Déjà rapproché dans OSM">'))
-                    //                                     .append($('<span>').text(nom_osm)))
-                    // }
-                    // else if ($('#'+table+' tr:last').hasClass('nom_a_integrer')){
-                    //     $('#'+table+' tr:last').append($('<td>')
-                    //                                     .append($('<span class="pastille-orange" title="Pas encore rapproché dans OSM">'))
-                    //                                     .append($('<span>').text(nom_osm)))
-                    // } else {
-                    //     $('#'+table+' tr:last').append($('<td>')
-                    //                                     .append($('<span class="pastille-bleue" title="Trouvé dans OSM mais inconnu de Fantoir">'))
-                    //                                     .append($('<span>').text(nom_osm)))
-                    // }
-                    // //--- Nom BAN ou Cadastre ---
-                    // if (source_nom_ban == 'CADASTRE') {
-                    //     $('#'+table+' tr:last').append($('<td>').append($('<span class="picto cadastre" title="Nom provenant du cadastre">'))
-                    //                                             .append($('<span>').text(nom_ban)))
-                    // }
-                    // else if (source_nom_ban == 'BAN') {
-                    //     $('#'+table+' tr:last').append($('<td>').append($('<span class="picto ban" title="Nom provenant de la BAN">'))
-                    //                                             .append($('<span>').text(nom_ban)))
-                    // }
-                    // else $('#'+table+' tr:last').append($('<td>').text(nom_ban))
-
-                    // //--- Visu ---
-                    // xmin  = lon-DELTA
-                    // xmax  = lon+DELTA
-                    // ymin  = lat-DELTA
-                    // ymax  = lat+DELTA
-
-                    // if (lat != null || lon != null) {
-                    //     $('#'+table+' tr:last').append($('<td>')
-                    //                     .append($('<a>')
-                    //                     .attr('href',url_map_org_part1+'#map='+'18/'+lat+'/'+lon)
-                    //                     .attr('target','blank')
-                    //                     .text('ORG')))
-                    // }
-                    // else {
-                    //     $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('x'))
-                    // }
-
-                    // //--- JOSM ---
-                    // if (lon != undefined) {
-                    //     add_josm_link(table,xmin,xmax,ymin,ymax,code_insee,nom_commune)
-                    // } else {
-                    //     $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('x'))
-                    // }
-                    // //--- iD ---
-                    // if (lon != undefined) {
-                    //     add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
-                    // } else {
-                    //     $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('x'))
-                    // }
-
-                    // //--- Statut Fantoir ---
-                    // if (caractere_annul != 'B' && is_osm_hors_fantoir == false){
-                    //     add_statut_fantoir(table,tr_id,fantoir,statut_voie)
-                    // } else {
-                    //     $('#'+table+' tr:last').addClass('statut0').append($('<td>'))
-                    // }
-                    // //--- Adresses à integrer ----
-                    // if (numeros_a_proposer > 0){
-                    //     add_josm_addr_link(table,$('#input_insee')[0].value,nom_commune,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
-                    // }
-                    // else if (numeros_a_proposer == null && avec_adresses_ban){
-                    //     $('#'+table+' tr:last').append($('<td>').attr('colspan','2').addClass('zone-adresses')
-                    //                                     .append($('<span>').addClass('adresses-integrees').text('✔'))
-                    //                                     .append($('<span>').text(' Adresses intégrées'))
-                    //                                 )
-                    // }
-                    // else {
-                    //     $('#'+table+' tr:last').append($('<td>').attr('colspan','2'))
-                    // }
-
-                    // //--- Qualification des adresses ---
-                    // if (avec_adresses_ban && has_code_fantoir){
-                    //     add_addr_inspector_link($('#input_insee')[0].value,fantoir,'BAN')
-                    // } else {
-                    //     $('#'+table+' tr:last').append($('<td>'))
-                    // }
-                }
-                map.getSource('points_nommes').setData(res)
-                map.fitBounds([[min_lon,min_lat],[max_lon,max_lat]])
-                $('#wait_ajax').css('visibility','hidden');
-                // load_map(lon_commune,lat_commune,features_orange,features_vert,features_bleu)
-            })*/
-
             active_menu_filtres()
             update_menu_filtres()
         })
         history.replaceState("", "", window.location.pathname+"?insee="+$('#input_insee')[0].value+window.location.hash)
         $('body').css('cursor','default');
     };
-
-    // function load_map(lon_commune,lat_commune,features_orange,features_vert,features_bleu){
-    //     const map = new maplibregl.Map({
-    //         container: 'map',
-    //         style:'./pifomap.style',
-    //         center: [lon_commune,lat_commune],
-    //         zoom: 15
-    //     });
-
-    //     map.on('load', () => {
-    //         // map.setCenter([lon_commune,lat_commune])
-    //         map.addSource('source_orange', {
-    //             'type': 'geojson',
-    //             'data': features_orange
-    //         });
-    //         map.addSource('source_vert', {
-    //             'type': 'geojson',
-    //             'data': features_vert
-    //         });
-    //         map.addSource('source_bleu', {
-    //             'type': 'geojson',
-    //             'data': features_bleu
-    //         });
-
-    //         // console.log(features_bleu)
-
-    //         map.addLayer({
-    //             'id': 'layer_orange',
-    //             'type': 'circle',
-    //             'source': 'source_orange',
-    //             // 'layout': {
-    //             //     'text-field': 'nom_topo',
-    //             //     'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
-    //             //     'text-offset': [0, 0.6],
-    //             //     'text-anchor': 'top'
-    //             // },
-    //             'paint': {
-    //                 'circle-radius': 5,
-    //                 'circle-color': '#cc3300'
-    //             }
-    //         });
-    //         map.addLayer({
-    //             'id': 'layer_vert',
-    //             'type': 'circle',
-    //             'source': 'source_vert',
-    //             // 'layout': {
-    //             //     'text-field': 'nom_osm',
-    //             //     'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
-    //             //     'text-offset': [0, 0.6],
-    //             //     'text-anchor': 'top'
-    //             // },
-    //             'paint': {
-    //                 'circle-radius': 5,
-    //                 'circle-color': '#007700'
-    //             }
-    //         });
-    //         map.addLayer({
-    //             'id': 'layer_bleu',
-    //             'type': 'circle',
-    //             'source': 'source_bleu',
-    //             // 'layout': {
-    //             //     'text-field': 'nom_osm',
-    //             //     'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
-    //             //     'text-offset': [0, 0.6],
-    //             //     'text-anchor': 'top'
-    //             // },
-    //             'paint': {
-    //                 'circle-radius': 5,
-    //                 'circle-color': '#007cbf'
-    //             }
-    //         });
-    //         def_clic(map,'layer_orange','nom_topo')
-    //         def_clic(map,'layer_vert','nom_osm')
-    //         def_clic(map,'layer_bleu','nom_osm')
-    //         $('#wait_ajax').css('visibility','hidden');
-
-    //         // console.log(map.getLayer('layer_bleu'))
-    //     });
-    // }
-
-    function def_clic(map,layer,nom){
-        map.on('click', layer, (e) => {
-                const coordinates = e.features[0].geometry.coordinates.slice();
-                const description = e.features[0].properties[nom];
-                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                }
-                new maplibregl.Popup()
-                    .setLngLat(coordinates)
-                    .setHTML(description)
-                    .addTo(map);
-            });
-
-            map.on('mouseenter', layer, () => {
-                map.getCanvas().style.cursor = 'pointer';
-            });
-
-            // Change it back to a pointer when it leaves.
-            map.on('mouseleave', layer, () => {
-                map.getCanvas().style.cursor = '';
-            });
-    }
     function update_csv_url(){
         urlCSV = 'requete_pifometre_voies.py?insee='+$('#input_insee')[0].value+'&format=csv';
     }
@@ -923,68 +472,6 @@
                         </li>
                     </ul>                    
                 </div>
-            <!-- <div class="ligne-boutons-filtres">
-                <div>
-                    <ul>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_voie" checked>
-                            <span class="check is-dark"></span>
-                            <span class="control-label" critere="voie">Voies</span>
-                        </li>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_lieu_dit" checked>
-                            <span class="check is-dark"></span>
-                            <span class="control-label" critere="lieu_dit">Lieux-dits</span>
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <ul>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_nom_integre" checked>
-                            <span class="check is-green"></span>
-                            <span class="control-label" critere="nom_integre">Déjà rapprochés dans OSM</span>
-                        </li>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_nom_a_integrer" checked>
-                            <span class="check is-orange"></span>
-                            <span class="control-label" critere="nom_a_integrer">Pas encore rapprochés dans OSM<span></span></span>
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <ul>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_avec_adresses" checked>
-                            <span class="check is-pink"></span>
-                            <span class="control-label" critere="avec_adresses">Ayant des adresses référencées dans la BAN<span></span></span>
-                        </li>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_sans_adresses" checked>
-                            <span class="check is-dark"></span>
-                            <span class="control-label" critere="sans_adresses">Sans adresses<span></span></span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="ligne-boutons-filtres">
-                <div>
-                    <ul>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_osm_hors_fantoir" checked>
-                            <span class="check is-blue"></span>
-                            <span class="control-label" critere="osm_hors_fantoir">Trouvé dans OSM et inconnu de Fantoir<span></span></span>
-                        </li>
-                    </ul>
-                </div>
-            </div> -->
         </div>
     </div>
     <!-- <div id="bouton_rendu_bano" style="position:relative;top:100px;left:900px">Rendu BANO</div> -->
@@ -995,6 +482,7 @@
                 <div id="infos_voie_lieudit"></div> <!-- Détails voie ou lieu-dit -->
                 <div id="infos_numero"></div> <!-- Détails numéro -->
                 <div id="liens_voie"></div>
+                <table id="table_liens"><thead></thead><tbody></tbody></table>
             </div>
         </div>
         <div id="map"></div>

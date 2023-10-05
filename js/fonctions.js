@@ -118,11 +118,11 @@
                                 )
     }
     function add_josm_addr_link(table,insee,nom_commune,fantoir,nom_fantoir,nombre,fantoir_dans_relation,is_place){
+        stringToRemove = window.location.href.split('?')[0].split('/').pop()
         $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-adresses'))
         $('#'+table+' tr:last td:last').append($('<span>').text(nombre > 1 ? nombre+' Points':'1 Point'))
                                             .click(function(){
-                                                stringToRemove = window.location.href.split('/').pop()
-                                                srcURL = 'http://127.0.0.1:8111/import?changeset_tags='+get_changeset_tags_addr(insee,nom_commune)+'&new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele='+((is_place) ? 'Place':'Points');
+                                                srcURL = 'http://127.0.0.1:8111/import?changeset_tags='+get_changeset_tags_addr(insee,nom_commune)+'&new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.split('?')[0].replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele='+((is_place) ? 'Place':'Points');
                                                 $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
                                                 $(this).addClass('clicked');
                                             })
@@ -132,43 +132,23 @@
             $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-adresses').append($('<span>'))
                                         .text('Relation')
                                         .click(function(){
-                                            stringToRemove = window.location.href.split('/').pop()
-                                            srcURL = 'http://127.0.0.1:8111/import?changeset_tags='+get_changeset_tags_addr(insee,nom_commune)+'&new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele=Relation&fantoir_dans_relation='+fantoir_dans_relation;
+                                            srcURL = 'http://127.0.0.1:8111/import?changeset_tags='+get_changeset_tags_addr(insee,nom_commune)+'&new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.split('?')[0].replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele=Relation&fantoir_dans_relation='+fantoir_dans_relation;
                                             $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
                                             $(this).addClass('clicked');
                                         })
                                     )
         }
     }
-    function add_josm_addr_link_div(insee,nom_commune,fantoir,nom_fantoir,nombre,fantoir_dans_relation,is_place){
-        //Nb de points
-        $('#liens_voie').append($('<span>').addClass('zone-clic-adresses')
-                            .append($('<span>').text(nombre > 1 ? nombre+' Points':'1 Point'))
-                        )
-        if (is_place){
-            $('#liens_voie .zone-clic-adresses').append($('<span>').text(' (lieu-dit)'))
-        }
-        //Ajouter lien
-        stringToRemove = window.location.href.split('?')[0].split('/').pop()
-
-
-        $('#liens_voie .zone-clic-adresses').click(function(){
-                                                srcURL = 'http://127.0.0.1:8111/import?changeset_tags='+get_changeset_tags_addr(insee,nom_commune)+'&new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.split('?')[0].replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele='+((is_place) ? 'Place':'Points');
-                                                console.log(srcURL)
-                                                $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
-                                            })
-        //Ou relation si c'est une voie
-        if (!is_place){
-            $('#liens_voie').append($('<span>').text(' ou '))
-            $('#liens_voie').append($('<span>').addClass('zone-clic-adresses').text('Relation')
-                                                .click(function(){
-                                                    // stringToRemove = window.location.href.split('/').pop()
-                                                    srcURL = 'http://127.0.0.1:8111/import?changeset_tags='+get_changeset_tags_addr(insee,nom_commune)+'&new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.split('?')[0].replace(stringToRemove,'')+'requete_numeros.py?insee='+insee+'&fantoir='+fantoir+'&modele=Relation&fantoir_dans_relation='+fantoir_dans_relation;
-                                                    $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
-                                                })
-                                    )
-        }
-    }
+    function add_addr_inspector_link(table,insee,fantoir,source){
+        $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-adresses')
+                                        .append($('<a>').attr('href',"numeros.html?insee="+insee+'&fantoir='+fantoir+'&source='+source+'&tab=0').attr('target',"blank")
+                                        .text('Qualifier')
+                                        )
+                                        .click(function(){
+                                            $(this).addClass('clicked');
+                                        })
+                                        )
+    };
     function get_changeset_tags_addr(insee,nom_commune){
         return "source=https://bano.openstreetmap.fr/pifometre/index.html?insee="+insee+"%7Chashtags=%23BANO %23Pifometre%7Ccomment=Intégration d'adresses - "+nom_commune+" ("+insee+")"
     }
@@ -277,6 +257,7 @@
         return fantoir
     }
     function interactions_souris(couche_carto){
+        console.log('interactions_souris')
         if (couche_carto == 'BAN_point'||couche_carto == 'OSM_point'){
             //--------------------------------------------------
             //-------- AU SURVOL D'UN POINT D'ADRESSE  ---------
@@ -314,15 +295,16 @@
             map.on('click', couche_carto, (e) => {
                 nom = e.features[0].properties.nom;
                 fantoir = e.features[0].properties.fantoir;
+                insee = fantoir.substring(0,5)
                 numero = e.features[0].properties.numero;
                 source = e.features[0].properties.source;
                 rapproche = e.features[0].properties.rapproche;
 
                 reset_panneau_map()
-                $('#panneau_map h2').text(nom)
+                $('#panneau_map h2').text(numero+' '+nom)
 
                 $.ajax({
-                    url: "requete_pifometre_voies.py?insee="+fantoir.substring(0,5)+'&fantoir='+fantoir
+                    url: "requete_pifometre_voies.py?insee="+insee+'&fantoir='+fantoir
                 })
                 .done(function( data ) {
                     let [fantoir,
@@ -368,22 +350,43 @@
                         }
 
                         //Infos numéro
-                        $('#infos_numero').append($('<h3>').text('Point d\'adresse'));
-                        $('#infos_numero').append($('<p>').text('Numéro : '+numero));
+                        // $('#infos_numero').append($('<h3>').text('Point d\'adresse'));
+                        // $('#infos_numero').append($('<p>').text('Numéro : '+numero));
                         $('#infos_numero').append($('<p>').text('Source : '+source));
 
                         $('#infos_numero').append($('<p>').text('Voir sur : ').append($('<a>')
                                                             .attr('href',url_map_org_part1+'?mlat='+e.lngLat.lat+'&mlon='+e.lngLat.lng+'#map='+'18/'+e.lngLat.lat+'/'+e.lngLat.lng)
                                                             .attr('target','blank')
                                                             .text('ORG')));
-                        if (numeros_a_proposer > 0){
-                            add_josm_addr_link_div($('#input_insee')[0].value,'nom_commune',fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
-                        }
+                        xmin  = lon-DELTA
+                        xmax  = lon+DELTA
+                        ymin  = lat-DELTA
+                        ymax  = lat+DELTA
+                        table = 'table_liens'
+                        $('#table_liens').append($('<tr>').append($('<td>').attr('colspan','2').text('Editer la zone')))
+                        $('#table_liens').append('<tr>')
+                        add_josm_link(table,xmin,xmax,ymin,ymax,insee,'nom_commune')
+                        add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
+                        $('#table_liens').append($('<tr>').append($('<td>').attr('colspan','2').text('Intégrer les adresses')))
+                        $('#table_liens').append('<tr>')
+                        add_josm_addr_link(table,insee,'nom_commune',fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
+                        $('#table_liens').append('<tr>')
+                        add_addr_inspector_link(table,insee,fantoir,'BAN')
+
+                        // add_josm_link_div(xmin,xmax,ymin,ymax,insee,'nom_commune')
+                        // if (numeros_a_proposer > 0){
+                        //     add_josm_addr_link_div($('#input_insee')[0].value,'nom_commune',fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
+                        // } else if (numeros_a_proposer == null && avec_adresses_ban){
+                        // $('#liens_voie').addClass('zone-adresses')
+                        //                 .append($('<span>').addClass('adresses-integrees').text('✔'))
+                        //                 .append($('<span>').text(' Adresses intégrées'))
+                        // }
                 })
             });
         }
     }
     function reset_url_hash(){
+        console.log('reset_url_hash')
         history.replaceState("", "", window.location.pathname+"?"+window.location.search)
     }
     function reset_panneau_map(){
@@ -391,5 +394,6 @@
         $('#infos_voie_lieudit').empty();
         $('#infos_numero').empty();
         $('#liens_voie').empty();
+        $('#table_liens > tbody').empty();
     }
 
