@@ -250,9 +250,6 @@
                         closeOnClick: false
                     });
 
-            interactions_souris('BAN_point')
-            interactions_souris('OSM_point')
-
         })
     }
     function requete_pifometre(){
@@ -277,8 +274,6 @@
 
             let [mapz,mapx,mapy] = check_url_for_xyz()
 
-            console.log(mapz,mapx,mapy)
-
             premiere_affichage = false
             if (mapz < 0){
                 mapz = 15
@@ -286,30 +281,29 @@
                 mapy = lat_commune
                 premiere_affichage = true
             }
-            console.log('premiere_affichage :', premiere_affichage)
-            if (map){
-                map.remove()
-                $('#reponse').append($('<div id=map>'))
-                console.log('map remove')
+
+            if (typeof map != 'undefined'){
+                empty_layers()
+            } else {
+                map = new maplibregl.Map({
+                    container: 'map_div',
+                    style:'./pifomap.style',
+                    center: [mapx,mapy],
+                    hash: 'map',
+                    zoom: mapz
+                });
+                interactions_souris('BAN_point')
+                interactions_souris('OSM_point')
             }
-            map = new maplibregl.Map({
-                container: 'map',
-                style:'./pifomap.style',
-                center: [mapx,mapy],
-                hash: 'map',
-                zoom: mapz
-            });
             if (premiere_affichage){
-                console.log('fit bounds',bbox_diagonale)
                 map.fitBounds(bbox_diagonale.coordinates)
             }
             map.addControl(new maplibregl.NavigationControl());
-                map.loadImage(
-                './img/rond_50.png',
-                (error, image) => {
-                    if (error) throw error;
+            if (!map.hasImage('rond_50')){
+                map.loadImage('./img/rond_50.png', (error, image) => {
                     map.addImage('rond_50', image, { sdf: true });
                 })
+            }
 
             document.title = nom_commune+' - Pifomètre'
             $('#descriptif').empty()
@@ -482,10 +476,10 @@
                 <div id="infos_voie_lieudit"></div> <!-- Détails voie ou lieu-dit -->
                 <div id="infos_numero"></div> <!-- Détails numéro -->
                 <div id="liens_voie"></div>
-                <table id="table_liens"><thead></thead><tbody></tbody></table>
+                <table id="table_liens"></table>
             </div>
         </div>
-        <div id="map"></div>
+        <div id="map_div"></div>
     </div>
     <footer>
     <!--#include file="includes/footer.html" -->

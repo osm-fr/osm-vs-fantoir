@@ -752,7 +752,7 @@ table.tablesorter thead th {
   margin-left: 0;
 }
 
-#reponse.pifo #map {
+#reponse.pifo #map_div {
 	float: left;
 	margin:20px 10px 0 -3px;
 	width:80%;

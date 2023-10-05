@@ -372,15 +372,6 @@
                         add_josm_addr_link(table,insee,'nom_commune',fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
                         $('#table_liens').append('<tr>')
                         add_addr_inspector_link(table,insee,fantoir,'BAN')
-
-                        // add_josm_link_div(xmin,xmax,ymin,ymax,insee,'nom_commune')
-                        // if (numeros_a_proposer > 0){
-                        //     add_josm_addr_link_div($('#input_insee')[0].value,'nom_commune',fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
-                        // } else if (numeros_a_proposer == null && avec_adresses_ban){
-                        // $('#liens_voie').addClass('zone-adresses')
-                        //                 .append($('<span>').addClass('adresses-integrees').text('✔'))
-                        //                 .append($('<span>').text(' Adresses intégrées'))
-                        // }
                 })
             });
         }
@@ -394,6 +385,13 @@
         $('#infos_voie_lieudit').empty();
         $('#infos_numero').empty();
         $('#liens_voie').empty();
-        $('#table_liens > tbody').empty();
+        $('#table_liens').empty();
     }
-
+    function empty_layers(){
+        map.getSource('points_nommes').setData(EMPTY_GEOJSON)
+        map.getSource('contour_communal').setData(EMPTY_GEOJSON)
+        map.getSource('hover_filaire').setData(EMPTY_GEOJSON)
+        map.getSource('polygones_convexhull').setData(EMPTY_GEOJSON)
+        map.getSource('adresses').setData(EMPTY_GEOJSON)
+        map.getSource('hover').setData(EMPTY_GEOJSON)
+    }
