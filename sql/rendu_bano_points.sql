@@ -1,31 +1,51 @@
+-- Lieux-dits non rapprochés
 SELECT nom,
+       null::text AS fantoir,
        source,
        lon,
        lat,
-       COALESCE(o.rapproche,false)
+       false
 FROM   (SELECT *
         FROM  bano_points_nommes
         WHERE code_insee = '__code_insee__' AND
-              nature = 'lieu-dit')c
-LEFT OUTER JOIN (SELECT fantoir,
-                        true::boolean AS rapproche
-                FROM    bano_points_nommes
+              source = 'CADASTRE')c
+LEFT OUTER JOIN (SELECT DISTINCT fantoir
+                FROM    nom_fantoir
                 WHERE   code_insee = '__code_insee__' AND
                         source = 'OSM')o
 USING (fantoir)
+WHERE o.fantoir IS NULL
 UNION ALL
+-- Voies & LD sans adresses
 SELECT nom,
+       o.fantoir,
        source,
        lon,
        lat,
-       COALESCE(c.rapproche,false)
+       true
 FROM   (SELECT *
         FROM  bano_points_nommes
         WHERE code_insee = '__code_insee__' AND
-              nature = 'place')o
-LEFT OUTER JOIN (SELECT fantoir,
-                        true::boolean AS rapproche
-                FROM    bano_points_nommes
-                WHERE   code_insee = '__code_insee__' AND
-                        nature = 'lieu-dit')c
-USING (fantoir);
+              nature in ('place','centroide')) o
+JOIN (SELECT fantoir
+        FROM    nom_fantoir
+        WHERE   code_insee = '__code_insee__' AND
+                source = 'OSM'
+        EXCEPT
+        SELECT  fantoir
+        FROM    nom_fantoir
+        WHERE   code_insee = '__code_insee__' AND
+                source = 'BAN')c
+USING (fantoir)
+UNION ALL
+-- Liste bleue
+SELECT nom,
+       null::text,
+       source,
+       lon,
+       lat,
+       false
+FROM   bano_points_nommes
+WHERE  code_insee = '__code_insee__'    AND
+       nature in ('place','centroide') AND
+       fantoir IS NULL;
