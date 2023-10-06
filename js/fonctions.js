@@ -257,7 +257,6 @@
         return fantoir
     }
     function interactions_souris(couche_carto){
-        console.log('interactions_souris')
         if (couche_carto == 'BAN_point'||couche_carto == 'OSM_point'){
             //--------------------------------------------------
             //-------- AU SURVOL D'UN POINT D'ADRESSE  ---------
@@ -299,6 +298,9 @@
                 numero = e.features[0].properties.numero;
                 source = e.features[0].properties.source;
                 rapproche = e.features[0].properties.rapproche;
+                nom_commune = e.features[0].properties.nom_com;
+                lon = e.lngLat.lng
+                lat = e.lngLat.lat
 
                 reset_panneau_map()
                 $('#panneau_map h2').text(numero+' '+nom)
@@ -355,7 +357,7 @@
                         $('#infos_numero').append($('<p>').text('Source : '+source));
 
                         $('#infos_numero').append($('<p>').text('Voir sur : ').append($('<a>')
-                                                            .attr('href',url_map_org_part1+'?mlat='+e.lngLat.lat+'&mlon='+e.lngLat.lng+'#map='+'18/'+e.lngLat.lat+'/'+e.lngLat.lng)
+                                                            .attr('href',url_map_org_part1+'?mlat='+lat+'&mlon='+lon+'#map='+'18/'+lat+'/'+lon)
                                                             .attr('target','blank')
                                                             .text('ORG')));
                         xmin  = lon-DELTA
@@ -365,15 +367,69 @@
                         table = 'table_liens'
                         $('#table_liens').append($('<tr>').append($('<td>').attr('colspan','2').text('Editer la zone')))
                         $('#table_liens').append('<tr>')
-                        add_josm_link(table,xmin,xmax,ymin,ymax,insee,'nom_commune')
+                        add_josm_link(table,xmin,xmax,ymin,ymax,insee,nom_commune)
                         add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
                         $('#table_liens').append($('<tr>').append($('<td>').attr('colspan','2').text('Intégrer les adresses')))
                         $('#table_liens').append('<tr>')
-                        add_josm_addr_link(table,insee,'nom_commune',fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
+                        add_josm_addr_link(table,insee,nom_commune,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
                         $('#table_liens').append('<tr>')
                         add_addr_inspector_link(table,insee,fantoir,'BAN')
                 })
             });
+        }
+        if (couche_carto == 'points_nommes_non_rapproches' || couche_carto == 'points_nommes_rapproches'){
+            map.on('click', couche_carto, (e) => {
+                reset_panneau_map()
+
+                nom = e.features[0].properties.nom;
+                rapproche = e.features[0].properties.rapproche;
+                source = e.features[0].properties.source;
+                nom_commune = e.features[0].properties.nom_com;
+                lon = e.lngLat.lng
+                lat = e.lngLat.lat
+
+                $('#panneau_map h2').text(nom)
+                if (rapproche) {
+                    $('#infos_voie_lieudit').append($('<p>')
+                                                .append($('<span class="pastille-verte" title="Déjà rapproché dans OSM">'))
+                                                .append($('<span>')
+                                                    .text('Voie ou lieu-dit rapproché dans OSM')
+                                                )
+                                            );
+                } else {
+                    if (source == 'OSM'){
+                        $('#infos_voie_lieudit').append($('<p>')
+                                                    .append($('<span class="pastille-bleue" title="Connu seulement d\'OSM">'))
+                                                    .append($('<span>')
+                                                        .text("Voie ou lieu-dit connu seulement d'OSM")
+                                                    )
+                                                );
+                    } else {
+                        $('#infos_voie_lieudit').append($('<p>')
+                                                    .append($('<span class="pastille-orange" title="Pas encore rapproché dans OSM">'))
+                                                    .append($('<span>')
+                                                        .text('Voie ou lieu-dit pas encore rapproché dans OSM')
+                                                    )
+                                                );
+                    }
+                }
+                $('#infos_numero').append($('<p>').text('Source : '+source));
+                $('#infos_numero').append($('<p>').text('Voir sur : ').append($('<a>')
+                                                    .attr('href',url_map_org_part1+'?mlat='+lat+'&mlon='+lon+'#map='+'18/'+lat+'/'+lon)
+                                                    .attr('target','blank')
+                                                    .text('ORG')));
+                xmin  = lon-DELTA
+                xmax  = lon+DELTA
+                ymin  = lat-DELTA
+                ymax  = lat+DELTA
+                table = 'table_liens'
+                $('#table_liens').append($('<tr>').append($('<td>').attr('colspan','2').text('Editer la zone')))
+                $('#table_liens').append('<tr>')
+                add_josm_link(table,xmin,xmax,ymin,ymax,insee,nom_commune)
+                add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
+
+                console.log(e.features[0])
+            })
         }
     }
     function reset_url_hash(){

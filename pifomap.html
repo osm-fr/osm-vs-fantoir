@@ -150,7 +150,7 @@
                             'coordinates': [lon,lat]
                         }})
     }
-    function rendu_bano(insee){
+    function rendu_bano(insee,nom_commune){
         min_lon = 180
         max_lon = -180
         min_lat = 90
@@ -210,7 +210,7 @@
                   lon,
                   lat,
                   rapproche] = pointnommedata[s]
-                  res.features.push(get_geojson_point(lon,lat,{'nom':nom,'source':source,'rapproche':rapproche}))
+                  res.features.push(get_geojson_point(lon,lat,{'nom':nom,'source':source,'rapproche':rapproche,'nom_com':nom_commune}))
             }
             map.getSource('points_nommes').setData(res)
 
@@ -230,13 +230,13 @@
                     max_lon = Math.max(max_lon,lon_osm);
                     min_lat = Math.min(min_lat,lat_osm);
                     max_lat = Math.max(max_lat,lat_osm);
-                    res.features.push(get_geojson_point(lon_osm,lat_osm,{'nom':nom,'fantoir':fantoir,'numero':numero,'source':'OSM','rapproche':rapproche}))
+                    res.features.push(get_geojson_point(lon_osm,lat_osm,{'nom':nom,'fantoir':fantoir,'numero':numero,'source':'OSM','rapproche':rapproche,'nom_com':nom_commune}))
                 } else {
                     min_lon = Math.min(min_lon,lon_ban);
                     max_lon = Math.max(max_lon,lon_ban);
                     min_lat = Math.min(min_lat,lat_ban);
                     max_lat = Math.max(max_lat,lat_ban);
-                    res.features.push(get_geojson_point(lon_ban,lat_ban,{'nom':nom,'fantoir':fantoir,'numero':numero,'source':'BAN','rapproche':rapproche}))
+                    res.features.push(get_geojson_point(lon_ban,lat_ban,{'nom':nom,'fantoir':fantoir,'numero':numero,'source':'BAN','rapproche':rapproche,'nom_com':nom_commune}))
                 }
             }
             map.getSource('adresses').setData(res)
@@ -245,18 +245,18 @@
             $('body').css('cursor','default');
             $('#wait_ajax').css('visibility','hidden');
 
-            popup = new maplibregl.Popup({
-                        closeButton: false,
-                        closeOnClick: false
-                    });
+            // popup = new maplibregl.Popup({
+            //             closeButton: false,
+            //             closeOnClick: false
+            //         });
 
         })
     }
     function requete_pifometre(){
         commune_valide = false;
         $('body').css('cursor','progress');
-        $('#'+table).trigger("destroy");
-        $('#'+table).empty()
+        // $('#'+table).trigger("destroy");
+        // $('#'+table).empty()
         $('#input_insee')[0].value = $('#input_insee')[0].value.toUpperCase()
         $.ajax({
             url: "requete_pifometre_commune.py?insee="+$('#input_insee')[0].value
@@ -294,6 +294,8 @@
                 });
                 interactions_souris('BAN_point')
                 interactions_souris('OSM_point')
+                interactions_souris('points_nommes_rapproches')
+                interactions_souris('points_nommes_non_rapproches')
             }
             if (premiere_affichage){
                 map.fitBounds(bbox_diagonale.coordinates)
@@ -389,10 +391,10 @@
             }
 
 
-            rendu_bano(code_insee)
+            rendu_bano(code_insee,nom_commune)
 
-            active_menu_filtres()
-            update_menu_filtres()
+            // active_menu_filtres()
+            // update_menu_filtres()
         })
         history.replaceState("", "", window.location.pathname+"?insee="+$('#input_insee')[0].value+window.location.hash)
         $('body').css('cursor','default');
