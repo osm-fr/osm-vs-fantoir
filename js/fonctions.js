@@ -333,6 +333,7 @@
                         fantoir_dans_relation] = parse_pifometre(categorie,caractere_annul,fantoir)
 
                         //Infos vois ou lieu-dit
+
                         $('#infos_voie_lieudit').append($('<p>').text('Code Fantoir : '+fantoir_affiche));
                         if (rapproche) {
                             $('#infos_voie_lieudit').append($('<p>')
@@ -364,16 +365,25 @@
                         xmax  = lon+DELTA
                         ymin  = lat-DELTA
                         ymax  = lat+DELTA
-                        table = 'table_liens'
-                        $('#table_liens').append($('<tr>').append($('<td>').attr('colspan','2').text('Editer la zone')))
-                        $('#table_liens').append('<tr>')
-                        add_josm_link(table,xmin,xmax,ymin,ymax,insee,nom_commune)
-                        add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
-                        $('#table_liens').append($('<tr>').append($('<td>').attr('colspan','2').text('Intégrer les adresses')))
-                        $('#table_liens').append('<tr>')
+
+                        //Liens
+                        $('#liens_voie').append($('<table id="pifomap_table_liens">'))
+                        table = 'pifomap_table_liens'
+                        //$('#table_liens').append($('<tr>').append($('<td>').attr('colspan','2').text('Editer la zone')))
+
+                        $('#pifomap_table_liens').append($('<tr>').append($('<td>').attr('colspan','2').append($('<h3>').text('Éditer sur : '))))
+                        $('#pifomap_table_liens').append($('<tr>'))
+                            add_josm_link(table,xmin,xmax,ymin,ymax,insee,nom_commune)
+                            add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
+                        
+                        $('#pifomap_table_liens').append($('<tr>').append($('<td>').attr('colspan','2').append($('<h3>').text('Intégrer les adresses dans JOSM :'))))
+                        $('#pifomap_table_liens').append($('<tr>'))
                         add_josm_addr_link(table,insee,nom_commune,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
-                        $('#table_liens').append('<tr>')
+
+                        $('#pifomap_table_liens').append($('<tr>').append($('<td>').attr('colspan','2').append($('<h3>').text('Qualifier les adresses sur Pifomètre :')))) 
+                        $('#pifomap_table_liens').append($('<tr>'))
                         add_addr_inspector_link(table,insee,fantoir,'BAN')
+                        
                 })
             });
         }
@@ -441,7 +451,7 @@
         $('#infos_voie_lieudit').empty();
         $('#infos_numero').empty();
         $('#liens_voie').empty();
-        $('#table_liens').empty();
+        $('#pifomap_table_liens').empty();
     }
     function empty_layers(){
         map.getSource('points_nommes').setData(EMPTY_GEOJSON)

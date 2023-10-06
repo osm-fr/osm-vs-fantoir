@@ -1,6 +1,7 @@
 body{
 	font-family: 'Arial', sans serif;
     margin: 0;
+    padding: 0;
 	}
 
 button {
@@ -190,29 +191,44 @@ h4 {
 /*----------------- VERSION PIFO ----------------*/
 /*-----------------------------------------------*/
 
-#wait_ajax.pifo,
-#alerte_commune {
+#wait_ajax.pifo, #wait_ajax.pifomap, #alerte_commune {
 	visibility:hidden;
 	position:fixed;
 	width:35%;
-	top:120px;
 	right:2%;
-	height: 100px;
 	text-align: center;
 	padding: 5px;
-  border-bottom: 4px #3FA4C5 solid;
-  border-radius: 8px;
+	background:lightblue;
+	border-bottom: 4px #3FA4C5 solid;
+	border-radius: 8px;
 }
 
-#wait_ajax.pifo {
-	line-height: 90px; /* doit être identique à height pour centrer verticalement */
-	background:lightblue;
-}
-#wait_ajax.pifo span{
+#wait_ajax.pifo span, #wait_ajax.pifomap span {
 	vertical-align:middle;
 	font-size:1.8em;
-	line-height:90px;
 	color:black;
+}
+
+/*----------------- PIFOMETRE ----------------*/
+
+#wait_ajax.pifo, #alerte_commune {
+	top:120px;
+	height: 100px;
+}
+
+#wait_ajax.pifo span {
+	line-height: 90px; /* doit être identique à height pour centrer verticalement */
+}
+
+/*----------------- PIFOMAP ----------------*/
+
+#wait_ajax.pifomap {
+	top:90px;
+	height:60px;
+}
+
+#wait_ajax.pifomap span {
+	line-height:60px; /* doit être identique à height pour centrer verticalement */
 }
 
 /*---------------------------------------------------*/
@@ -699,6 +715,10 @@ h4 {
 	margin-top:265px;
 	height: 65%;
 }
+#reponse.pifomap{
+	margin-top:170px;
+	height:calc(100vh - 200px);
+}
 #reponse.page_numeros{
 	float: left;
 	margin:0;
@@ -721,11 +741,11 @@ table.tablesorter thead th {
 /*----------------------- PIFOMAP ----------------------*/
 /*------------------------------------------------------*/
 
-#reponse.pifo #panneau_map {
+#reponse #panneau_map {
 	float: left;
-	margin:20px 0 0 20px;
+	margin:0;
 	width:15%;
-	height:92%;
+	height:calc(100% - 4px);
 	border-radius: 6px;
 	border:2px solid lightblue;
 	border-bottom: 2px solid lightblue;
@@ -752,13 +772,34 @@ table.tablesorter thead th {
   margin-left: 0;
 }
 
-#reponse.pifo #map_div {
+#reponse #map_div {
 	float: left;
-	margin:20px 10px 0 -3px;
-	width:80%;
-	height:92%;
+	margin:0 0 0 -3px;
+	width:calc(85% - 5px);
+	height:calc(100% - 4px);
 	border:2px solid lightblue;
 }
+
+#pifomap_table_liens {
+	font-size: 1em;
+}
+
+#pifomap_table_liens td {
+	padding: 3px 0;
+}
+
+#pifomap_table_liens h3 {
+	line-height: 0.9em;
+	margin: 10px 0 0 0;
+}
+
+#pifomap_table_liens .zone-clic-josm,
+#pifomap_table_liens .zone-clic-id,
+#pifomap_table_liens .zone-clic-adresses,
+#pifomap_table_liens .zone-adresses {
+	text-align: left;
+}
+
 
 /*---------------------------------------------------------------*/
 /*----------------------------- SURVOL --------------------------*/
@@ -768,6 +809,12 @@ table.tablesorter thead th {
 #reponse_numeros tr:hover td,
 #reponse_haut tr:hover td {
 	background-color: #FCFFB7;
+}
+
+#reponse #pifomap_table_liens tr:hover td,
+#reponse_numeros #pifomap_table_liens tr:hover td,
+#reponse_haut #pifomap_table_liens tr:hover td {
+	background: none;
 }
 
 /*---------------------------------------------------------------*/
