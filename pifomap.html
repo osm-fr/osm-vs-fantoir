@@ -157,7 +157,7 @@
         max_lat = -90
         $('#wait_ajax').empty()
                        .css('visibility','visible') 
-                       .append($('<span>').append('Rendu BANO en cours...'));
+                       .append($('<span>').append('Chargement...'));
         $.ajax({
             url: "rendu_bano_commune.py?insee="+insee,
         })
@@ -305,7 +305,7 @@
                 })
             }
 
-            document.title = nom_commune+' - Pifomètre'
+            document.title = nom_commune+' - Pifomap'
             $('#descriptif').empty()
             $('#alerte_commune').css('visibility','hidden');
 
@@ -359,7 +359,13 @@
                                .append($('<a>')
                                    .attr('target','blank')
                                    .attr('href',url_listing_fantoir)
-                                   .text('FANTOIR')
+                                   .text('Fantoir')
+                               )
+                               .append(' / ')
+                               .append($('<a>')
+                                   .attr('target','blank')
+                                   .attr('href','index.html?insee='+insee)
+                                   .text('Pifomètre')
                                )
 
             $('#descriptif').append($('<div id="infos_commune_col2">').append($('<h1>').append((nom_commune))))
@@ -451,9 +457,9 @@
         <button id="bouton_export_csv" title="Exporter le tableau en CSV" onclick="window.open(urlCSV, '_blank');"></button>
         <div id="infos_refresh"></div>
         <div id="alerte_commune"></div>
-        <div id="wait_ajax" class="pifo"></div>
+        <div id="wait_ajax" class="pifomap"></div>
 
-        <div id="boutons-filtres" class="pifo">
+        <!-- <div id="boutons-filtres" class="pifo">
             <p id="ligne-afficher">Rendu :</p>
                 <div class="ligne-boutons-filtres">
                     <ul>
@@ -466,18 +472,18 @@
                         </li>
                     </ul>                    
                 </div>
-        </div>
+        </div> -->
     </div>
     <!-- <div id="bouton_rendu_bano" style="position:relative;top:100px;left:900px">Rendu BANO</div> -->
-    <div id="reponse" class="pifo">
+    <div id="reponse" class="pifomap">
         <div id="panneau_map">
             <h2></h2> <!-- Nom commune -->
             <div id="contenu">
                 <div id="infos_voie_lieudit"></div> <!-- Détails voie ou lieu-dit -->
                 <div id="infos_numero"></div> <!-- Détails numéro -->
                 <div id="liens_voie"></div>
-                <table id="table_liens"></table>
-            </div>
+<!--                 <table id="pifomap_table_liens"></table>
+ -->            </div>
         </div>
         <div id="map_div"></div>
     </div>
