@@ -206,11 +206,12 @@
             res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
             for (s=0;s<pointnommedata.length;s++){
                  [nom,
+                  fantoir,
                   source,
                   lon,
                   lat,
                   rapproche] = pointnommedata[s]
-                  res.features.push(get_geojson_point(lon,lat,{'nom':nom,'source':source,'rapproche':rapproche,'nom_com':nom_commune}))
+                  res.features.push(get_geojson_point(lon,lat,{'nom':nom,'source':source,'rapproche':rapproche,'fantoir':fantoir,'nom_com':nom_commune}))
             }
             map.getSource('points_nommes').setData(res)
 

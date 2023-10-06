@@ -257,7 +257,7 @@
         return fantoir
     }
     function interactions_souris(couche_carto){
-        if (couche_carto == 'BAN_point'||couche_carto == 'OSM_point'){
+        if (couche_carto == 'BAN_point'||couche_carto == 'OSM_point'|| couche_carto == 'points_nommes_rapproches'){
             //--------------------------------------------------
             //-------- AU SURVOL D'UN POINT D'ADRESSE  ---------
             //--------------------------------------------------
@@ -271,23 +271,16 @@
                 map.setFilter('filaire_texte',["==",["get", "nom"], nom])
                 map.setFilter('hover_adresses_point',["==",["get", "nom"], nom])
 
-                // Si la carte est dézoomée et que de multiples copies de la cible sont visibles, la pop-up apparaît sur la copie pointée
-                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                }
-
-                // Remplir la popup et définir ses coordonnées
-                // popup.setLngLat(coordinates).setHTML(nom).addTo(map);
             });
 
             map.on('mouseleave', couche_carto, () => {
                 map.getCanvas().style.cursor = '';
-                // popup.remove();
                 map.setFilter('filaire',["==",["get", "nom"], " "])
                 map.setFilter('filaire_texte',["==",["get", "nom"], " "])
                 map.setFilter('hover_adresses_point',["==",["get", "nom"], " "])
             });
-
+        }
+        if (couche_carto == 'BAN_point'||couche_carto == 'OSM_point'){
             //-------------------------------------------------------
             //------------ AU CLIC SUR UN POINT D'ADRESSE -----------
             //-------------------------------------------------------
@@ -392,6 +385,7 @@
                 reset_panneau_map()
 
                 nom = e.features[0].properties.nom;
+                fantoir = e.features[0].properties.fantoir;
                 rapproche = e.features[0].properties.rapproche;
                 source = e.features[0].properties.source;
                 nom_commune = e.features[0].properties.nom_com;
@@ -400,6 +394,7 @@
 
                 $('#panneau_map h2').text(nom)
                 if (rapproche) {
+                    $('#infos_voie_lieudit').append($('<p>').text('Code Fantoir : '+get_fantoir_affiche(fantoir)));
                     $('#infos_voie_lieudit').append($('<p>')
                                                 .append($('<span class="pastille-verte" title="Déjà rapproché dans OSM">'))
                                                 .append($('<span>')
