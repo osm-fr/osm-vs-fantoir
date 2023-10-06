@@ -7,7 +7,7 @@
             ],
             "tileSize": 256,
             "attribution":
-                "Map tiles by ",
+                "Map tiles by OSM-FR",
             "note":
                 "https://a.piano.tiles.quaidorsay.fr/en/{z}/{x}/{y}.png"
         },
@@ -71,6 +71,17 @@
                 "line-color":"black",
                 "line-width":2,
                 "line-dasharray":[2,3]
+            }
+        },
+        {
+            "id": "filaire",
+            "source": "hover_filaire",
+            "type": "line",
+            "minzoom" : 10,
+            "filter" : ["==",["get", "nom"], " "],
+            "paint": {
+                "line-width": 4,
+                "line-color": "green"
             }
         },
         {
@@ -161,17 +172,6 @@
             }
         },
         {
-            "id": "filaire",
-            "source": "hover_filaire",
-            "type": "line",
-            "minzoom" : 10,
-            "filter" : ["==",["get", "nom"], " "],
-            "paint": {
-                "line-width": 4,
-                "line-color": "green"
-            }
-        },
-        {
             "id": "hover_adresses_point",
             "source": "hover",
             "type": "symbol",
@@ -231,7 +231,9 @@
             "paint": {
                 "text-color": ["case",
                                 ["boolean",["get","rapproche"]],"orange",
-                                "red"]
+                                "red"],
+                "text-halo-color": "white",
+                "text-halo-width": 2
             }
         },
         {
