@@ -257,7 +257,7 @@
         return fantoir
     }
     function interactions_souris(couche_carto){
-        if (couche_carto == 'BAN_point'||couche_carto == 'OSM_point'|| couche_carto == 'points_nommes_rapproches'){
+        if (couche_carto == 'BAN_point'||couche_carto == 'OSM_point'|| couche_carto == 'points_nommes_rapproches'||couche_carto == 'points_nommes_non_rapproches'){
             //--------------------------------------------------
             //-------- AU SURVOL D'UN POINT D'ADRESSE  ---------
             //--------------------------------------------------
@@ -265,7 +265,6 @@
                 // Changer le curseur
                 map.getCanvas().style.cursor = 'pointer';
 
-                const coordinates = e.features[0].geometry.coordinates.slice();
                 nom = e.features[0].properties.nom;
                 map.setFilter('filaire',["==",["get", "nom"], nom])
                 map.setFilter('filaire_texte',["==",["get", "nom"], nom])
@@ -344,10 +343,6 @@
                                                         )
                                                     );
                         }
-
-                        //Infos numéro
-                        // $('#infos_numero').append($('<h3>').text('Point d\'adresse'));
-                        // $('#infos_numero').append($('<p>').text('Numéro : '+numero));
                         $('#infos_numero').append($('<p>').text('Source : '+source));
 
                         $('#infos_numero').append($('<p>').text('Voir sur : ').append($('<a>')
@@ -360,21 +355,18 @@
                         ymax  = lat+DELTA
 
                         //Liens
-                        $('#liens_voie').append($('<table id="pifomap_table_liens">'))
                         table = 'pifomap_table_liens'
-                        //$('#table_liens').append($('<tr>').append($('<td>').attr('colspan','2').text('Editer la zone')))
-
-                        $('#pifomap_table_liens').append($('<tr>').append($('<td>').attr('colspan','2').append($('<h3>').text('Éditer sur : '))))
-                        $('#pifomap_table_liens').append($('<tr>'))
+                        $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<h3>').text('Éditer sur : '))))
+                        $('#'+table).append($('<tr>'))
                             add_josm_link(table,xmin,xmax,ymin,ymax,insee,nom_commune)
                             add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
                         
-                        $('#pifomap_table_liens').append($('<tr>').append($('<td>').attr('colspan','2').append($('<h3>').text('Intégrer les adresses dans JOSM :'))))
-                        $('#pifomap_table_liens').append($('<tr>'))
+                        $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<h3>').text('Intégrer les adresses dans JOSM :'))))
+                        $('#'+table).append($('<tr>'))
                         add_josm_addr_link(table,insee,nom_commune,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
 
-                        $('#pifomap_table_liens').append($('<tr>').append($('<td>').attr('colspan','2').append($('<h3>').text('Qualifier les adresses sur Pifomètre :')))) 
-                        $('#pifomap_table_liens').append($('<tr>'))
+                        $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<h3>').text('Qualifier les adresses sur Pifomètre :')))) 
+                        $('#'+table).append($('<tr>'))
                         add_addr_inspector_link(table,insee,fantoir,'BAN')
                         
                 })
@@ -427,25 +419,23 @@
                 xmax  = lon+DELTA
                 ymin  = lat-DELTA
                 ymax  = lat+DELTA
-                table = 'table_liens'
-                $('#table_liens').append($('<tr>').append($('<td>').attr('colspan','2').text('Editer la zone')))
-                $('#table_liens').append('<tr>')
+                table = 'pifomap_table_liens'
+                $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<h3>').text('Éditer sur : '))))
+                $('#'+table).append('<tr>')
                 add_josm_link(table,xmin,xmax,ymin,ymax,insee,nom_commune)
                 add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
 
-                console.log(e.features[0])
+                // console.log(e.features[0])
             })
         }
     }
     function reset_url_hash(){
-        console.log('reset_url_hash')
         history.replaceState("", "", window.location.pathname+"?"+window.location.search)
     }
     function reset_panneau_map(){
         $('#panneau_map h2').empty()
         $('#infos_voie_lieudit').empty();
         $('#infos_numero').empty();
-        $('#liens_voie').empty();
         $('#pifomap_table_liens').empty();
     }
     function empty_layers(){

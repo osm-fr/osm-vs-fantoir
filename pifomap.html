@@ -97,46 +97,46 @@
             $('#wait_ajax').css('visibility','hidden');
         })
     }
-    function update_filtres(){
-        for (let i = 0; i < FILTRES.length; i++){
-            FILTRES[i] = [FILTRES[i][0],$('#check_'+FILTRES[i][0]).is(':checked')]
-        }
-    }
-    function reset_filtres(){
-        for (let i = 0; i < FILTRES.length; i++){
-            FILTRES[i] = [FILTRES[i][0],true]
-        }
-        $('#boutons-filtres input').prop('checked',true)
-    }
-    function active_menu_filtres(){
-        $('#boutons-filtres input').click(function(){
-            show_mask_map_icon()
-            update_menu_filtres()
-        })
-    };
-    function update_menu_filtres(){
-        $('#boutons-filtres li span.control-label').each(function(){
-            total = $('.map_nom' + $(this).attr('critere')).length
-            visible = $('.map_nom'+$(this).attr('critere')).length
-            $(this).children('span').text(' ('+visible+' / '+total+')')
-        })
-    };
-    function show_mask_map_icon(){
-        update_filtres()
-        $('.map_nom').each(function() {
-            action = 'donotfilter'
-            for (let f of FILTRES){
-                if ($(this).hasClass(f[0]) && f[1] == false){
-                    action = 'filter'
-                }
-            }
-            if (action == 'filter'){
-                $(this).css('display','none')
-            } else {
-                $(this).css('display','block')
-            }
-       });
-    }
+    // function update_filtres(){
+    //     for (let i = 0; i < FILTRES.length; i++){
+    //         FILTRES[i] = [FILTRES[i][0],$('#check_'+FILTRES[i][0]).is(':checked')]
+    //     }
+    // }
+    // function reset_filtres(){
+    //     for (let i = 0; i < FILTRES.length; i++){
+    //         FILTRES[i] = [FILTRES[i][0],true]
+    //     }
+    //     $('#boutons-filtres input').prop('checked',true)
+    // }
+    // function active_menu_filtres(){
+    //     $('#boutons-filtres input').click(function(){
+    //         show_mask_map_icon()
+    //         update_menu_filtres()
+    //     })
+    // };
+    // function update_menu_filtres(){
+    //     $('#boutons-filtres li span.control-label').each(function(){
+    //         total = $('.map_nom' + $(this).attr('critere')).length
+    //         visible = $('.map_nom'+$(this).attr('critere')).length
+    //         $(this).children('span').text(' ('+visible+' / '+total+')')
+    //     })
+    // };
+    // function show_mask_map_icon(){
+    //     update_filtres()
+    //     $('.map_nom').each(function() {
+    //         action = 'donotfilter'
+    //         for (let f of FILTRES){
+    //             if ($(this).hasClass(f[0]) && f[1] == false){
+    //                 action = 'filter'
+    //             }
+    //         }
+    //         if (action == 'filter'){
+    //             $(this).css('display','none')
+    //         } else {
+    //             $(this).css('display','block')
+    //         }
+    //    });
+    // }
     function get_geojson_poly(geom,props){
         return ({'type': 'Feature',
                         'properties': props,
@@ -175,7 +175,6 @@
                 if (poly.type == 'Polygon'){
                     res.features.push(get_geojson_poly(poly,{}))
                 }
-                // map.fitBounds(bbox);
             }
             map.getSource('contour_communal').setData(res)
 
@@ -185,9 +184,9 @@
                     geom] = filairedata[s]
                 if (geom.type == 'LineString'||geom.type == 'MultiLineString'){
                     res.features.push(get_geojson_poly(geom,{'nom':nom}))
-                } else {
+                }/* else {
                     console.log(nom,geom)
-                }
+                }*/
 
             }
             map.getSource('hover_filaire').setData(res)
@@ -245,12 +244,6 @@
 
             $('body').css('cursor','default');
             $('#wait_ajax').css('visibility','hidden');
-
-            // popup = new maplibregl.Popup({
-            //             closeButton: false,
-            //             closeOnClick: false
-            //         });
-
         })
     }
     function requete_pifometre(){
@@ -396,12 +389,7 @@
                                                     .attr('href',window.location.href.split('?')[0]+'?insee='+insee_commune_parente)
                                                     .text(nom_commune_parente+' ('+insee_commune_parente+')')))
             }
-
-
             rendu_bano(code_insee,nom_commune)
-
-            // active_menu_filtres()
-            // update_menu_filtres()
         })
         history.replaceState("", "", window.location.pathname+"?insee="+$('#input_insee')[0].value+window.location.hash)
         $('body').css('cursor','default');
@@ -461,32 +449,16 @@
         <div id="infos_refresh"></div>
         <div id="alerte_commune"></div>
         <div id="wait_ajax" class="pifomap"></div>
-
-        <!-- <div id="boutons-filtres" class="pifo">
-            <p id="ligne-afficher">Rendu :</p>
-                <div class="ligne-boutons-filtres">
-                    <ul>
-                        <li>
-                            <span class="control-label" critere="rendu">Pifomètre</span>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_voie" checked>
-                            <span class="check is-dark"></span>
-                            <span class="control-label" critere="rendu">BANO</span>
-                        </li>
-                    </ul>                    
-                </div>
-        </div> -->
     </div>
-    <!-- <div id="bouton_rendu_bano" style="position:relative;top:100px;left:900px">Rendu BANO</div> -->
     <div id="reponse" class="pifomap">
         <div id="panneau_map">
             <h2></h2> <!-- Nom commune -->
             <div id="contenu">
                 <div id="infos_voie_lieudit"></div> <!-- Détails voie ou lieu-dit -->
                 <div id="infos_numero"></div> <!-- Détails numéro -->
-                <div id="liens_voie"></div>
-<!--                 <table id="pifomap_table_liens"></table>
- -->            </div>
+                <!-- <div id="liens_voie"></div> -->
+                <table id="pifomap_table_liens"></table>
+            </div>
         </div>
         <div id="map_div"></div>
     </div>
