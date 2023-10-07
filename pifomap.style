@@ -137,7 +137,7 @@
             "paint": {
                 "text-color": ["case",
                                 ["==",["get","source"],"CADASTRE"],"red",
-                                ["==",["get","source"],"OSM"],"purple","pink"],
+                                ["==",["get","source"],"OSM"],"#135495","pink"],
                 "text-halo-color": ["case",
                                 ["==",["get","source"],"OSM"],"white","pink"],
                 "text-halo-width": ["case",
@@ -211,7 +211,7 @@
                 },
             "paint": {
                 "icon-color": ["case",
-                                ["boolean",["get","rapproche"]],"orange",
+                                ["boolean",["get","rapproche"]],"#EFA500",
                                 "red"]
             }
         },
@@ -230,7 +230,7 @@
             },
             "paint": {
                 "text-color": ["case",
-                                ["boolean",["get","rapproche"]],"orange",
+                                ["boolean",["get","rapproche"]],"#EFA500",
                                 "red"],
                 "text-halo-color": "white",
                 "text-halo-width": 2
