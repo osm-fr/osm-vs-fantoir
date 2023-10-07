@@ -159,6 +159,7 @@
 
 
             url_map_org_part1 = 'http://www.openstreetmap.org/'
+            url_pifomap = 'pifomap.html?insee='+code_insee
             url_bano = 'http://layers.openstreetmap.fr/?zoom=15&lat='+lat_commune+'&lon='+lon_commune+'&layers=0B00000000FFFFFFFFFFFFFFFFFFFFFFFFT'
             url_edit_part1 = 'http://www.openstreetmap.org/edit?editor='
             delta = 0.0008
@@ -242,7 +243,7 @@
                 $('#'+table+' tr').append($('<th>').append('Libellé Fantoir'))
                 $('#'+table+' tr').append($('<th>').append('Libellé OSM'))
                 $('#'+table+' tr').append($('<th>').append('Libellé BAN ou CADASTRE'))
-                $('#'+table+' tr').append($('<th>').append('Carte'))
+                $('#'+table+' tr').append($('<th>').attr('colspan','2').append('Carte'))
                 $('#'+table+' tr').append($('<th>').attr('colspan','2').append('Edition'))
                 $('#'+table+' tr').append($('<th>').append('Statut Fantoir ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
                 $('#'+table+' tr').append($('<th>').attr('colspan','2').addClass('string-none').append('Intégrer les adresses'))
@@ -383,8 +384,14 @@
                                         .attr('href',url_map_org_part1+'#map='+'18/'+lat+'/'+lon)
                                         .attr('target','blank')
                                         .text('ORG')))
+                        $('#'+table+' tr:last').append($('<td>')
+                                        .append($('<a>')
+                                        .attr('href',url_pifomap+'#map='+'18/'+lat+'/'+lon)
+                                        .attr('target','blank')
+                                        .text('Pifomap')))
                     }
                     else {
+                        $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('x'))
                         $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('x'))
                     }
 
