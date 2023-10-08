@@ -231,6 +231,126 @@ h4 {
 	line-height:60px; /* doit être identique à height pour centrer verticalement */
 }
 
+/*---------LEGENDE ---------------*/
+/*#bouton_legende {
+	cursor: pointer;
+	top:90px;
+	height:60px;
+	position:fixed;
+	width:35%;
+	right:2%;
+	padding: 5px;
+	background: pink;
+	border: 1px violet solid;
+	border-bottom: 4px violet solid;
+	border-radius: 8px;
+}*/
+
+#bouton_legende {
+	cursor: pointer;
+	position: fixed;
+	top: 40px;
+	right: 20px;
+	background: pink;
+	background-size: 33px;
+	width: 85px;
+	height: 40px;
+	border-bottom: 2px violet solid;
+	border-radius: 6px;
+}
+
+#bouton_legende p {
+	text-align: center;
+	vertical-align:middle;
+	font-size:1em;
+	line-height: 0.8em;
+	font-weight: bold;
+	color:black;
+}
+
+#legende.pifomap {
+	position:fixed;
+	top:40px;
+	right:10px;
+	width:400px;
+	height:80%;
+	padding: 10px;
+	border-radius: 8px;
+	background-color:#FFE1E6; /*rose léger*/
+	overflow-y:scroll;
+	visibility:hidden;
+	font-size: 0.9em;
+}
+
+#legende.pifomap .fermer {
+	color: black;
+	float: right;
+	margin-top: 10px;
+	margin-right: 10px;
+	height: 30px;
+	line-height: 30px;
+	width: 30px;
+	text-align: center;
+	font-weight: bold;
+	background: violet;
+  	border-radius: 6px;
+	cursor:pointer;
+}
+
+#legende.pifomap h3{
+	font-size: 1.1em;
+	margin-top: 30px;
+	margin-left: 10px;
+}
+#legende.pifomap li{
+	font-weight:bolder;
+	background-color:ivory;
+}
+#legende.pifomap p{
+	margin-top: 0px;
+	margin-bottom: 10px;
+	margin-left: 3px;
+}
+
+#legende.pifomap p .osm_seulement {
+	background-color: #fff;
+	color: #135495; /*bleu*/
+}
+#legende.pifomap p span.rapproche {
+	background-color: #fff;
+	color: green; /*vert*/
+}
+#legende.pifomap p .non_rapproche {
+	background-color: #fff;
+	color: red; /*orange*/
+}
+#legende.pifomap p .point.integre {
+	height: 7px;
+	width: 7px;
+	display: inline-block;
+	background-color: green;
+	border-radius: 50%;
+	margin: 2px 10px 0 10px;
+	-ms-transform: rotate(45deg); /* Internet Explorer */
+	-moz-transform: rotate(45deg); /* Firefox */
+	-webkit-transform: rotate(45deg); /* Safari et Chrome */
+	-o-transform: rotate(45deg); /* Opera */
+	margin: 2px;
+}
+#legende.pifomap p .point.non_integre {
+	height: 7px;
+	width: 7px;
+	display: inline-block;
+	background-color: #EFA500;
+	border-radius: 50%;
+	margin: 2px 10px 0 10px;
+	-ms-transform: rotate(45deg); /* Internet Explorer */
+	-moz-transform: rotate(45deg); /* Firefox */
+	-webkit-transform: rotate(45deg); /* Safari et Chrome */
+	-o-transform: rotate(45deg); /* Opera */
+	margin: 2px;
+}
+
 /*---------------------------------------------------*/
 /*------------ ALERTE COMMUNE FUSIONNEE -------------*/
 /*---------------------------------------------------*/
