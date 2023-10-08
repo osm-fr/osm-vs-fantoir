@@ -1,5 +1,5 @@
 body{
-	font-family: 'Arial', sans serif;
+	font-family: 'Open Sans', 'Arial', sans serif;
     margin: 0;
     padding: 0;
 	}
@@ -93,7 +93,7 @@ h4 {
     float:left;
     margin: 0;
     padding: 6px 20px 7px;
-    font-family: 'Arial', sans serif;
+    /*font-family: 'Arial', sans serif;*/
     font-size: 0.9em;
     font-weight: bold;
     text-transform: uppercase;
@@ -110,7 +110,7 @@ h4 {
     float:left;
     margin: 0;
     padding: 7px 20px 7px;
-    font-family: 'Arial', sans serif;
+    /*font-family: 'Arial', sans serif;*/
     font-size: 0.9em;
     font-weight: bold;
     text-transform: uppercase;
@@ -131,7 +131,7 @@ h4 {
     box-sizing: initial;
     padding: 3px 10px;
     background-color: #faff99;
-    font-family: 'Arial', sans serif;
+    /*font-family: 'Arial', sans serif;*/
     font-size: 0.9em;
     font-weight: bold;
     text-transform: uppercase;
@@ -232,30 +232,17 @@ h4 {
 }
 
 /*---------LEGENDE ---------------*/
-/*#bouton_legende {
-	cursor: pointer;
-	top:90px;
-	height:60px;
-	position:fixed;
-	width:35%;
-	right:2%;
-	padding: 5px;
-	background: pink;
-	border: 1px violet solid;
-	border-bottom: 4px violet solid;
-	border-radius: 8px;
-}*/
 
 #bouton_legende {
 	cursor: pointer;
 	position: fixed;
 	top: 40px;
 	right: 20px;
-	background: pink;
+	background: #FEF3ED;
 	background-size: 33px;
 	width: 85px;
 	height: 40px;
-	border-bottom: 2px violet solid;
+	border-bottom: 2px #FA9D64 solid;
 	border-radius: 6px;
 }
 
@@ -276,7 +263,9 @@ h4 {
 	height:80%;
 	padding: 10px;
 	border-radius: 8px;
-	background-color:#FFE1E6; /*rose léger*/
+	border:1px solid #FA9D64;
+	border-bottom: 3px #FA9D64 solid;
+	background-color:#FEF3ED; /*orange léger*/
 	overflow-y:scroll;
 	visibility:hidden;
 	font-size: 0.9em;
@@ -292,7 +281,7 @@ h4 {
 	width: 30px;
 	text-align: center;
 	font-weight: bold;
-	background: violet;
+	background: #FA9D64;
   	border-radius: 6px;
 	cursor:pointer;
 }
@@ -314,14 +303,17 @@ h4 {
 
 #legende.pifomap p .osm_seulement {
 	background-color: #fff;
+	font-weight: bold;
 	color: #135495; /*bleu*/
 }
 #legende.pifomap p span.rapproche {
 	background-color: #fff;
+	font-weight: bold;
 	color: green; /*vert*/
 }
 #legende.pifomap p .non_rapproche {
 	background-color: #fff;
+	font-weight: bold;
 	color: red; /*orange*/
 }
 #legende.pifomap p .point.integre {
@@ -511,7 +503,7 @@ h4 {
 	display:none;
 	z-index: 5;
 	background-color: white;
-	font: 0.9em Arial,Sans-serif;
+	font-size: 0.9em;
 	text-align: right;
 }
 #refresh_infobulle span{
@@ -527,11 +519,11 @@ h4 {
 	position: fixed;
 	top: 40px;
 	right: 20px;
-	background: url("../img/aide.png") no-repeat pink center;
+	background: url("../img/aide.png") no-repeat #FEF3ED center;
 	background-size: 33px;
 	width: 40px;
 	height: 40px;
-	border-bottom: 2px violet solid;
+	border-bottom: 2px #FA9D64 solid;
 	border-radius: 6px;
 }
 
@@ -542,8 +534,10 @@ h4 {
 	width:400px;
 	height:100%;
 	padding: 10px;
+	border: 1px solid #FA9D64;
+	border-bottom: 3px solid #FA9D64;
 	border-radius: 8px;
-	background-color:#FFE1E6; /*rose léger*/
+	background-color:#FEF3ED; /*orange léger*/
 	overflow-y:scroll;
 	visibility:hidden;
 	font-size: 0.9em;
@@ -558,7 +552,7 @@ h4 {
 	width: 30px;
 	text-align: center;
 	font-weight: bold;
-	background: violet;
+	background: #FA9D64;
   	border-radius: 6px;
 	cursor:pointer;
 }
