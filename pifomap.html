@@ -7,7 +7,7 @@
 <script src="js/fonctions.js"></script>
 <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@3.2.1/dist/maplibre-gl.css' />
 <script src='https://unpkg.com/maplibre-gl@3.2.1/dist/maplibre-gl.js'></script>
-<link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+<link rel="preload" href="css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/bulma/bulma.min.css" type="text/css"/>
 <link rel="stylesheet" href="css/bulma/main.min.css" type="text/css"/>
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
@@ -59,7 +59,7 @@
             requete_pifometre()
         }
 
-        // check_josm_remote_control()
+        check_josm_remote_control()
 
         // $('#bouton_rendu_bano').on("click",function(){
         //     rendu_bano(insee)
@@ -462,8 +462,8 @@
         <div id="panneau_map">
             <h2></h2> <!-- Nom commune -->
             <div id="contenu">
-                <div id="infos_voie_lieudit"></div> <!-- Détails voie ou lieu-dit -->
-                <div id="infos_numero"></div> <!-- Détails numéro -->
+                <div id="infos_numero"></div>
+                <div id="infos_voie_lieudit"></div>
                 <table id="pifomap_table_liens"></table>
             </div>
         </div>
