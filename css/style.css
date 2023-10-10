@@ -1,3 +1,12 @@
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  src: local('Open Sans Regular'), local('OpenSans-Regular'), url(../css/fonts/opensans-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 body{
 	font-family: 'Open Sans', 'Arial', sans serif;
     margin: 0;
@@ -28,11 +37,19 @@ h4 {
 	font-size: 0.9em;
 }
 
+hr {
+	border: lightgrey solid 1px;
+}
+
 .monospace {
 	background: #EEF;
 	font-family: monospace;
 	font-size: 1.2em;
 	font-weight: normal;
+}
+
+.gras {
+	font-weight: bold;
 }
 
 /*-------------------------------------------------------------------------------------*/
@@ -93,7 +110,6 @@ h4 {
     float:left;
     margin: 0;
     padding: 6px 20px 7px;
-    /*font-family: 'Arial', sans serif;*/
     font-size: 0.9em;
     font-weight: bold;
     text-transform: uppercase;
@@ -110,7 +126,6 @@ h4 {
     float:left;
     margin: 0;
     padding: 7px 20px 7px;
-    /*font-family: 'Arial', sans serif;*/
     font-size: 0.9em;
     font-weight: bold;
     text-transform: uppercase;
@@ -131,7 +146,6 @@ h4 {
     box-sizing: initial;
     padding: 3px 10px;
     background-color: #faff99;
-    /*font-family: 'Arial', sans serif;*/
     font-size: 0.9em;
     font-weight: bold;
     text-transform: uppercase;
@@ -229,118 +243,6 @@ h4 {
 
 #wait_ajax.pifomap span {
 	line-height:60px; /* doit être identique à height pour centrer verticalement */
-}
-
-/*---------LEGENDE ---------------*/
-
-#bouton_legende {
-	cursor: pointer;
-	position: fixed;
-	top: 40px;
-	right: 20px;
-	background: #FEF3ED;
-	background-size: 33px;
-	width: 85px;
-	height: 40px;
-	border-bottom: 2px #FA9D64 solid;
-	border-radius: 6px;
-}
-
-#bouton_legende p {
-	text-align: center;
-	vertical-align:middle;
-	font-size:1em;
-	line-height: 0.8em;
-	font-weight: bold;
-	color:black;
-}
-
-#legende.pifomap {
-	position:fixed;
-	top:40px;
-	right:10px;
-	width:400px;
-	height:80%;
-	padding: 10px;
-	border-radius: 8px;
-	border:1px solid #FA9D64;
-	border-bottom: 3px #FA9D64 solid;
-	background-color:#FEF3ED; /*orange léger*/
-	overflow-y:scroll;
-	visibility:hidden;
-	font-size: 0.9em;
-}
-
-#legende.pifomap .fermer {
-	color: black;
-	float: right;
-	margin-top: 10px;
-	margin-right: 10px;
-	height: 30px;
-	line-height: 30px;
-	width: 30px;
-	text-align: center;
-	font-weight: bold;
-	background: #FA9D64;
-  	border-radius: 6px;
-	cursor:pointer;
-}
-
-#legende.pifomap h3{
-	font-size: 1.1em;
-	margin-top: 30px;
-	margin-left: 10px;
-}
-#legende.pifomap li{
-	font-weight:bolder;
-	background-color:ivory;
-}
-#legende.pifomap p{
-	margin-top: 0px;
-	margin-bottom: 10px;
-	margin-left: 3px;
-}
-
-#legende.pifomap p .osm_seulement {
-	background-color: #fff;
-	font-weight: bold;
-	color: #135495; /*bleu*/
-}
-#legende.pifomap p span.rapproche {
-	background-color: #fff;
-	font-weight: bold;
-	color: green; /*vert*/
-}
-#legende.pifomap p .non_rapproche {
-	background-color: #fff;
-	font-weight: bold;
-	color: red; /*orange*/
-}
-#legende.pifomap p .point.integre {
-	height: 7px;
-	width: 7px;
-	display: inline-block;
-	background-color: green;
-	border-radius: 50%;
-	margin: 2px 10px 0 10px;
-	-ms-transform: rotate(45deg); /* Internet Explorer */
-	-moz-transform: rotate(45deg); /* Firefox */
-	-webkit-transform: rotate(45deg); /* Safari et Chrome */
-	-o-transform: rotate(45deg); /* Opera */
-	margin: 2px;
-}
-#legende.pifomap p .point.non_integre {
-	height: 7px;
-	width: 7px;
-	display: inline-block;
-	background-color: #EFA500;
-	border-radius: 50%;
-	margin: 2px 10px 0 10px;
-	-ms-transform: rotate(45deg); /* Internet Explorer */
-	-moz-transform: rotate(45deg); /* Firefox */
-	-webkit-transform: rotate(45deg); /* Safari et Chrome */
-	-o-transform: rotate(45deg); /* Opera */
-	margin: 2px;
 }
 
 /*---------------------------------------------------*/
@@ -569,6 +471,184 @@ h4 {
 	margin-top: 0px;
 	margin-bottom: 10px;
 	margin-left: 3px;
+}
+
+
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+/*---------------                                                       ---------------*/
+/*---------------                         PIFOMAP                       ---------------*/
+/*---------------                                                       ---------------*/
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+
+/*-------------------------------------------*/
+/*------------------ LÉGENDE ----------------*/
+/*-------------------------------------------*/
+
+#bouton_legende {
+	cursor: pointer;
+	position: fixed;
+	top: 40px;
+	right: 20px;
+	background: #FEF3ED;
+	background-size: 33px;
+	width: 85px;
+	height: 40px;
+	border-bottom: 2px #FA9D64 solid;
+	border-radius: 6px;
+}
+
+#bouton_legende p {
+	text-align: center;
+	vertical-align:middle;
+	font-size:1em;
+	line-height: 0.8em;
+	font-weight: bold;
+	color:black;
+}
+
+#legende.pifomap {
+	position:fixed;
+	top:40px;
+	right:10px;
+	width:400px;
+	height:80%;
+	padding: 10px;
+	border-radius: 8px;
+	border:1px solid #FA9D64;
+	border-bottom: 3px #FA9D64 solid;
+	background-color:#FEF3ED; /*orange léger*/
+	overflow-y:scroll;
+	visibility:hidden;
+	font-size: 0.9em;
+}
+
+#legende.pifomap .fermer {
+	color: black;
+	float: right;
+	margin-top: 10px;
+	margin-right: 10px;
+	height: 30px;
+	line-height: 30px;
+	width: 30px;
+	text-align: center;
+	font-weight: bold;
+	background: #FA9D64;
+  	border-radius: 6px;
+	cursor:pointer;
+}
+
+#legende.pifomap h3{
+	font-size: 1.1em;
+	margin-top: 30px;
+	margin-left: 10px;
+}
+#legende.pifomap p{
+	margin-top: 0px;
+	margin-bottom: 10px;
+	margin-left: 3px;
+}
+
+#legende.pifomap p .osm_seulement {
+	background-color: #fff;
+	font-weight: bold;
+	color: #135495; /*bleu*/
+}
+#legende.pifomap p .rapproche {
+	background-color: #fff;
+	font-weight: bold;
+	color: green; /*vert*/
+}
+#legende.pifomap p .non_rapproche {
+	background-color: #fff;
+	font-weight: bold;
+	color: red; /*orange*/
+}
+#legende.pifomap p .point {
+	height: 7px;
+	width: 7px;
+	display: inline-block;
+	border-radius: 50%;
+	margin: 2px 10px 0 10px;
+	-ms-transform: rotate(45deg); /* Internet Explorer */
+	-moz-transform: rotate(45deg); /* Firefox */
+	-webkit-transform: rotate(45deg); /* Safari et Chrome */
+	-o-transform: rotate(45deg); /* Opera */
+	margin: 2px;
+}
+#legende.pifomap p .point.integre {
+	background-color: green;
+}
+#legende.pifomap p .point.non_integre {
+	background-color: #EFA500;
+}
+
+/*------------------------------------------------------*/
+/*------------------ PANNEAU LATÉRAL -------------------*/
+/*------------------------------------------------------*/
+
+#reponse #panneau_map {
+	float: left;
+	margin:0;
+	width:15%;
+	height:calc(100% - 4px);
+	border-radius: 6px;
+	border:2px solid lightblue;
+	border-bottom: 2px solid lightblue;
+}
+
+#panneau_map h2 {
+	font-size: 1.2em;
+	text-align: center;
+	line-height: 1.5em;
+}
+
+#panneau_map h3 {
+	text-align: left;
+	font-size: 1.1em;
+	line-height: 1.2em;
+}
+
+#panneau_map ul {
+	padding-left: 1em;
+}
+
+#panneau_map #contenu {
+	margin: 5px;
+	font-size: 0.9em;
+}
+
+#panneau_map .pastille-verte, #panneau_map .pastille-orange {
+  margin: 2px 5px 0 0;
+}
+
+#reponse #map_div {
+	float: left;
+	margin:0 0 0 -3px;
+	width:calc(85% - 5px);
+	height:calc(100% - 4px);
+	border:2px solid lightblue;
+}
+
+#pifomap_table_liens {
+	font-size: 1em;
+}
+
+#pifomap_table_liens td {
+	padding: 3px 0;
+}
+
+#pifomap_table_liens h3 {
+	line-height: 0.9em;
+	margin: 10px 0 0 0;
+}
+
+#pifomap_table_liens .zone-clic-josm,
+#pifomap_table_liens .zone-clic-id,
+#pifomap_table_liens .zone-clic-adresses,
+#pifomap_table_liens .zone-adresses {
+	text-align: left;
 }
 
 
@@ -851,70 +931,6 @@ table.tablesorter thead th {
 	padding-left: 1.2em;
 }
 
-/*------------------------------------------------------*/
-/*----------------------- PIFOMAP ----------------------*/
-/*------------------------------------------------------*/
-
-#reponse #panneau_map {
-	float: left;
-	margin:0;
-	width:15%;
-	height:calc(100% - 4px);
-	border-radius: 6px;
-	border:2px solid lightblue;
-	border-bottom: 2px solid lightblue;
-}
-
-#panneau_map h2 {
-	font-size: 1.2em;
-	text-align: center;
-	line-height: 1.5em;
-}
-
-#panneau_map h3 {
-	text-align: left;
-	font-size: 1.1em;
-	line-height: 1.2em;
-}
-
-#panneau_map #contenu {
-	margin-left: 5px;
-	font-size: 0.9em;
-}
-
-#panneau_map .pastille-verte {
-  margin-left: 0;
-}
-
-#reponse #map_div {
-	float: left;
-	margin:0 0 0 -3px;
-	width:calc(85% - 5px);
-	height:calc(100% - 4px);
-	border:2px solid lightblue;
-}
-
-#pifomap_table_liens {
-	font-size: 1em;
-}
-
-#pifomap_table_liens td {
-	padding: 3px 0;
-}
-
-#pifomap_table_liens h3 {
-	line-height: 0.9em;
-	margin: 10px 0 0 0;
-}
-
-#pifomap_table_liens .zone-clic-josm,
-#pifomap_table_liens .zone-clic-id,
-#pifomap_table_liens .zone-clic-adresses,
-#pifomap_table_liens .zone-adresses {
-	text-align: left;
-}
-
-
 /*---------------------------------------------------------------*/
 /*----------------------------- SURVOL --------------------------*/
 /*---------------------------------------------------------------*/
@@ -923,12 +939,6 @@ table.tablesorter thead th {
 #reponse_numeros tr:hover td,
 #reponse_haut tr:hover td {
 	background-color: #FCFFB7;
-}
-
-#reponse #pifomap_table_liens tr:hover td,
-#reponse_numeros #pifomap_table_liens tr:hover td,
-#reponse_haut #pifomap_table_liens tr:hover td {
-	background: none;
 }
 
 /*---------------------------------------------------------------*/
@@ -1085,6 +1095,38 @@ table.tablesorter thead th {
 	color:#fff;
 }
 
+/*--------------------------*/
+/*--------- Pifomap --------*/
+/*--------------------------*/
+
+/*Survol des lignes*/
+#reponse #pifomap_table_liens tr:hover td,
+#reponse_numeros #pifomap_table_liens tr:hover td,
+#reponse_haut #pifomap_table_liens tr:hover td {
+	background: none;
+}
+
+/*Survol des cellules*/
+#pifomap_table_liens td.zone-clic-josm.clicked {
+	background:none;
+	color: #863602;
+}
+#pifomap_table_liens tr:hover td.zone-clic-josm.clicked {
+	background:none;
+	color: #863602;
+}
+
+#pifomap_table_liens td.zone-clic-id.clicked {
+	background:none;
+}
+#pifomap_table_liens td.zone-clic-id.clicked a {
+	color: #777;
+}
+#pifomap_table_liens tr:hover td.zone-clic-id.clicked a {
+	background:none;
+	color: #777;
+}
+
 /*---------------------------------------------------------------*/
 /*-------------------- MESSAGE D'ENREGISTREMENT -----------------*/
 /*------------------- Après changement de statut ----------------*/
@@ -1214,4 +1256,24 @@ td.cell_statut {
 	height: 20px;
 	background: url("../img/pin-bleu.png") no-repeat;
 	background-size: 25px;
+}
+
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+/*---------------                                                       ---------------*/
+/*---------------             -          FOOTER                         ---------------*/
+/*---------------                                                       ---------------*/
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+
+footer {
+	position: fixed;
+	bottom:0;
+	width:100%;
+	height:20px;
+	padding:5;
+	z-index: 4;
+	background:darkgrey;
+	text-align: left;
+	font-size: 0.8em;
 }

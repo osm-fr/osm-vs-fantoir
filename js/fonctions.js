@@ -257,10 +257,11 @@
         return fantoir
     }
     function interactions_souris(couche_carto){
+
+        //-----------------------------------------------
+        //------------------ AU SURVOL ------------------
+        //-----------------------------------------------
         if (couche_carto == 'BAN_point'||couche_carto == 'OSM_point'|| couche_carto == 'points_nommes_rapproches'||couche_carto == 'points_nommes_non_rapproches'){
-            //--------------------------------------------------
-            //-------- AU SURVOL D'UN POINT D'ADRESSE  ---------
-            //--------------------------------------------------
             map.on('mouseenter', couche_carto, (e) => {
                 // Changer le curseur
                 map.getCanvas().style.cursor = 'pointer';
@@ -279,10 +280,16 @@
                 map.setFilter('hover_adresses_point',["==",["get", "nom"], " "])
             });
         }
-        if (couche_carto == 'BAN_point'||couche_carto == 'OSM_point'){
-            //-------------------------------------------------------
-            //------------ AU CLIC SUR UN POINT D'ADRESSE -----------
-            //-------------------------------------------------------
+
+        //---------------------------------------------
+        //------------------ AU CLIC ------------------
+        //---------------------------------------------
+
+        //----------------------------------------------------------------------------------
+        //------- POINTS D'ADRESSE et NOMS DE VOIES OU LIEUX-DITS RAPPROCHES (VERTS) -------
+        //----------------------------------------------------------------------------------
+
+        if (couche_carto == 'BAN_point' || couche_carto == 'OSM_point' || couche_carto == 'points_nommes_rapproches'){
             map.on('click', couche_carto, (e) => {
                 nom = e.features[0].properties.nom;
                 fantoir = e.features[0].properties.fantoir;
@@ -295,7 +302,12 @@
                 lat = e.lngLat.lat
 
                 reset_panneau_map()
-                $('#panneau_map h2').text(numero+' '+nom)
+
+                if (couche_carto == 'BAN_point' || couche_carto == 'OSM_point') {
+                    $('#panneau_map h2').text(numero+' '+nom)
+                } else {
+                    $('#panneau_map h2').text(nom)
+                }
 
                 $.ajax({
                     url: "requete_pifometre_voies.py?insee="+insee+'&fantoir='+fantoir
@@ -324,55 +336,139 @@
                         fantoir_affiche,
                         fantoir_dans_relation] = parse_pifometre(categorie,caractere_annul,fantoir)
 
-                        //Infos vois ou lieu-dit
+                        //Infos sur le numéro
+                        if (couche_carto == 'BAN_point' || couche_carto == 'OSM_point') {
+                            $('#infos_numero').append($('<h3>').text('Le point d\'adresse :'));
 
-                        $('#infos_voie_lieudit').append($('<p>').text('Code Fantoir : '+fantoir_affiche));
+                            $('#infos_numero').append($('<ul>'));
+
+                            $('#infos_numero ul').append($('<li>')
+                                                        .append($('<span class="gras">').text('Numéro : '))
+                                                        .append($('<span>').text(numero))
+                                                    );
+                            $('#infos_numero ul').append($('<li>')
+                                                            .append($('<span class="gras">').text('Source du point : '))
+                                                            .append($('<span>').text(source))
+                                                    );
+
+                            if (is_place) {
+                                $('#infos_numero ul').append($('<li>')
+                                                            .append($('<span class="gras">').text('Rattaché à : '))
+                                                            .append($('<span>').text('un lieu-dit'))
+                                                        );
+                            }
+                            else {
+                                $('#infos_numero ul').append($('<li>')
+                                                            .append($('<span class="gras">').text('Rattaché à : '))
+                                                            .append($('<span>').text('une voie'))
+                                                        );
+                            }                        
+                            $('#infos_numero').append($('<hr>'));
+                        }
+
+                        //Infos sur la voie ou le lieu-dit
+
+                        if (is_place) { $('#infos_voie_lieudit').append($('<h3>').text('Le lieu-dit :')); }
+                        else          { $('#infos_voie_lieudit').append($('<h3>').text('La voie :')); }
+
+                        $('#infos_voie_lieudit').append($('<ul>'));
+
                         if (rapproche) {
-                            $('#infos_voie_lieudit').append($('<p>')
+                            $('#infos_voie_lieudit ul').append($('<li>')
                                                         .append($('<span class="pastille-verte" title="Déjà rapproché dans OSM">'))
                                                         .append($('<span>')
-                                                            .text('Voie ou lieu-dit rapproché dans OSM')
+                                                            .text('rapproché(e) dans OSM')
                                                         )
                                                     );
+                        }    
+                        else {
+                            $('#infos_voie_lieudit ul').append($('<li>')
+                                                        .append($('<span class="pastille-orange" title="Pas rapproché dans OSM">'))
+                                                        .append($('<span>')
+                                                            .text('pas rapproché(e) dans OSM')
+                                                        )
+                                                    );
+                        }
+
+                        $('#infos_voie_lieudit ul').append($('<li>')
+                                                        .append($('<span class="gras">').text('Nom OSM : '))
+                                                        .append($('<span>').text(nom_osm))
+                                                    )
+                                                    .append($('<li>')
+                                                        .append($('<span class="gras">').text('Nom BAN : '))
+                                                        .append($('<span>').text(nom_ban))
+                                                    );
+                        if (has_code_fantoir) {
+                            $('#infos_voie_lieudit ul') .append($('<li>')
+                                                            .append($('<span class="gras">').text('Libellé Fantoir : '))
+                                                            .append($('<span>').text(nom_topo))
+                                                        )
+                                                        .append($('<li>')
+                                                            .append($('<span class="gras">').text('Code Fantoir : '))
+                                                            .append($('<span>').text(fantoir_affiche))
+                                                        );
                         }
                         else {
-                            $('#infos_voie_lieudit').append($('<p>')
-                                                        .append($('<span class="pastille-orange" title="Pas encore rapproché dans OSM">'))
-                                                        .append($('<span>')
-                                                            .text('Voie ou lieu-dit pas encore rapproché dans OSM')
-                                                        )
-                                                    );
+                            $('#infos_voie_lieudit ul') .append($('<li>')
+                                                            .append($('<span class="gras">').text('Libellé et code Fantoir : '))
+                                                            .append($('<span>').text('/'))
+                                                        );
                         }
-                        $('#infos_numero').append($('<p>').text('Source : '+source));
 
-                        $('#infos_numero').append($('<p>').text('Voir sur : ').append($('<a>')
+                        //LIENS DE VISU
+
+                        $('#infos_voie_lieudit').append($('<hr>'));
+                        $('#infos_voie_lieudit').append($('<h3>').text('Voir le lieu sur : '));
+
+                        $('#infos_voie_lieudit').append($('<ul>')
+                                                    .append($('<li>')
+                                                        .append($('<a>')
                                                             .attr('href',url_map_org_part1+'?mlat='+lat+'&mlon='+lon+'#map='+'18/'+lat+'/'+lon)
                                                             .attr('target','blank')
-                                                            .text('ORG')));
+                                                            .text('ORG')
+                                                        )
+                                                    )
+                                                );
+
+                        //LIENS D'EDITION
+
+                        $('#infos_voie_lieudit').append($('<hr>'));
+                        $('#infos_voie_lieudit').append($('<h3>').text('Édition'));
+
                         xmin  = lon-DELTA
                         xmax  = lon+DELTA
                         ymin  = lat-DELTA
                         ymax  = lat+DELTA
 
-                        //Liens
                         table = 'pifomap_table_liens'
-                        $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<h3>').text('Éditer sur : '))))
+                        $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Éditer la zone sur'))))
                         $('#'+table).append($('<tr>'))
                             add_josm_link(table,xmin,xmax,ymin,ymax,insee,nom_commune)
                             add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
                         
-                        $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<h3>').text('Intégrer les adresses dans JOSM :'))))
-                        $('#'+table).append($('<tr>'))
-                        add_josm_addr_link(table,insee,nom_commune,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
+                        if (couche_carto == 'BAN_point' || couche_carto == 'OSM_point') {
+                            if (is_place) {
+                                $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Intégrer les adresses dans JOSM'))))
+                            }
+                            else {
+                                $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Intégrer les adresses de la voie dans JOSM'))))
+                            }
+                            $('#'+table).append($('<tr>'))
+                            add_josm_addr_link(table,insee,nom_commune,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
 
-                        $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<h3>').text('Qualifier les adresses sur Pifomètre :')))) 
-                        $('#'+table).append($('<tr>'))
-                        add_addr_inspector_link(table,insee,fantoir,'BAN')
-                        
+                            $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Qualifier les adresses sur Pifomètre')))) 
+                            $('#'+table).append($('<tr>'))
+                            add_addr_inspector_link(table,insee,fantoir,'BAN')
+                        }
                 })
             });
         }
-        if (couche_carto == 'points_nommes_non_rapproches' || couche_carto == 'points_nommes_rapproches'){
+
+        //----------------------------------------------------------
+        //------- NOMS DE VOIES OU LIEUX-DITS NON RAPPROCHES -------
+        //----------------------------------------------------------
+
+        if (couche_carto == 'points_nommes_non_rapproches' /*|| couche_carto == 'points_nommes_rapproches'*/){
             map.on('click', couche_carto, (e) => {
                 reset_panneau_map()
 
@@ -385,47 +481,79 @@
                 lat = e.lngLat.lat
 
                 $('#panneau_map h2').text(nom)
-                if (rapproche) {
-                    $('#infos_voie_lieudit').append($('<p>').text('Code Fantoir : '+get_fantoir_affiche(fantoir)));
-                    $('#infos_voie_lieudit').append($('<p>')
-                                                .append($('<span class="pastille-verte" title="Déjà rapproché dans OSM">'))
-                                                .append($('<span>')
-                                                    .text('Voie ou lieu-dit rapproché dans OSM')
+
+                    //Infos sur la voie ou le lieu-dit
+
+                    if (source == "CADASTRE") { $('#infos_voie_lieudit').append($('<h3>').text('Lieu-dit')); }
+                    else                      { $('#infos_voie_lieudit').append($('<h3>').text('Voie (ou assimilé)')); }
+
+                    $('#infos_voie_lieudit').append($('<ul>'));
+
+                    if (rapproche) {
+                        $('#infos_voie_lieudit ul').append($('<li>')
+                                                    .append($('<span class="pastille-verte" title="Déjà rapproché dans OSM">'))
+                                                    .append($('<span>')
+                                                        .text('rapproché(e) dans OSM')
+                                                    )
+                                                );
+                    }    
+                    else {
+                        if (source == 'OSM') {
+                            $('#infos_voie_lieudit ul').append($('<li>')
+                                                        .append($('<span class="pastille-bleue" title="Connu(e) seulement d\'OSM">'))
+                                                        .append($('<span>')
+                                                            .text('connu(e) seulement d\'OSM')
+                                                        )
+                                                    );                                
+                        }
+                        else {
+                            $('#infos_voie_lieudit ul').append($('<li>')
+                                                        .append($('<span class="pastille-orange" title="Pas rapproché dans OSM">'))
+                                                        .append($('<span>')
+                                                            .text('pas rapproché(e) dans OSM')
+                                                        )
+                                                    );
+                        }
+                    }
+
+                    $('#infos_voie_lieudit ul').append($('<li>')
+                                                    .append($('<span class="gras">').text('Source : '))
+                                                    .append($('<span>').text(source))
+                                            );
+
+                    //LIENS DE VISU
+
+                    $('#infos_voie_lieudit').append($('<hr>'));
+                    $('#infos_voie_lieudit').append($('<h3>').text('Voir le point sur : '));
+
+                    $('#infos_voie_lieudit').append($('<ul>')
+                                                .append($('<li>')
+                                                    .append($('<a>')
+                                                        .attr('href',url_map_org_part1+'?mlat='+lat+'&mlon='+lon+'#map='+'18/'+lat+'/'+lon)
+                                                        .attr('target','blank')
+                                                        .text('ORG')
+                                                    )
                                                 )
                                             );
-                } else {
-                    if (source == 'OSM'){
-                        $('#infos_voie_lieudit').append($('<p>')
-                                                    .append($('<span class="pastille-bleue" title="Connu seulement d\'OSM">'))
-                                                    .append($('<span>')
-                                                        .text("Voie ou lieu-dit connu seulement d'OSM")
-                                                    )
-                                                );
-                    } else {
-                        $('#infos_voie_lieudit').append($('<p>')
-                                                    .append($('<span class="pastille-orange" title="Pas encore rapproché dans OSM">'))
-                                                    .append($('<span>')
-                                                        .text('Voie ou lieu-dit pas encore rapproché dans OSM')
-                                                    )
-                                                );
-                    }
-                }
-                $('#infos_numero').append($('<p>').text('Source : '+source));
-                $('#infos_numero').append($('<p>').text('Voir sur : ').append($('<a>')
-                                                    .attr('href',url_map_org_part1+'?mlat='+lat+'&mlon='+lon+'#map='+'18/'+lat+'/'+lon)
-                                                    .attr('target','blank')
-                                                    .text('ORG')));
-                xmin  = lon-DELTA
-                xmax  = lon+DELTA
-                ymin  = lat-DELTA
-                ymax  = lat+DELTA
-                table = 'pifomap_table_liens'
-                $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<h3>').text('Éditer sur : '))))
-                $('#'+table).append('<tr>')
-                add_josm_link(table,xmin,xmax,ymin,ymax,insee,nom_commune)
-                add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
 
-                // console.log(e.features[0])
+                    //LIENS D'EDITION
+
+                    $('#infos_voie_lieudit').append($('<hr>'));
+                    $('#infos_voie_lieudit').append($('<h3>').text('Édition'));
+
+                    xmin  = lon-DELTA
+                    xmax  = lon+DELTA
+                    ymin  = lat-DELTA
+                    ymax  = lat+DELTA
+
+                    table = 'pifomap_table_liens'
+                    $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Éditer la zone sur'))))
+                    $('#'+table).append('<tr>')
+                    add_josm_link(table,xmin,xmax,ymin,ymax,insee,nom_commune)
+                    add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
+
+                    // console.log(e.features[0])
+
             })
         }
     }
@@ -434,8 +562,8 @@
     }
     function reset_panneau_map(){
         $('#panneau_map h2').empty()
-        $('#infos_voie_lieudit').empty();
         $('#infos_numero').empty();
+        $('#infos_voie_lieudit').empty();
         $('#pifomap_table_liens').empty();
     }
     function empty_layers(){
