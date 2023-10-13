@@ -1,6 +1,6 @@
 -- Lieux-dits non rapprochés
 SELECT nom,
-       null::text AS fantoir,
+       fantoir,
        source,
        lon,
        lat,

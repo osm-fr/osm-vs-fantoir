@@ -11,6 +11,14 @@
             "note":
                 "https://a.piano.tiles.quaidorsay.fr/en/{z}/{x}/{y}.png"
         },
+        "communes": {
+             "type": "vector",
+             "tiles": [
+                  "https://bano.openstreetmap.fr/pifometre/tiles/{z}/{x}/{y}.pbf"
+                  ],
+            "minzoom":6,
+            "maxzoom":6
+        },
         "points_nommes": {
         "type": "geojson",
         "data": {"type": "FeatureCollection",
@@ -71,6 +79,57 @@
                 "line-color":"black",
                 "line-width":2,
                 "line-dasharray":[2,3]
+            }
+        },
+        {
+            "id": "noms_de_communes_1",
+            "source": "communes",
+            "source-layer": "centroides_communes",
+            "type": "symbol",
+            "filter" : ["==",["get", "class_pop"], 1],
+            "minzoom" : 6,
+            "layout": {
+                "text-overlap":"never",
+                "text-field": ["format",["get", "nom"],{},"\n",{},["get", "code_insee"],{"font-scale": 0.8}]
+            },
+            "paint": {
+                "text-color":"black",
+                "text-halo-color": "white",
+                "text-halo-width": 4
+            }
+        },
+        {
+            "id": "noms_de_communes_2",
+            "source": "communes",
+            "source-layer": "centroides_communes",
+            "type": "symbol",
+            "filter" : ["==",["get", "class_pop"], 2],
+            "minzoom" : 8,
+            "layout": {
+                "text-overlap":"never",
+                "text-field": ["format",["get", "nom"],{},"\n",{},["get", "code_insee"],{"font-scale": 0.8}]
+            },
+            "paint": {
+                "text-color":"black",
+                "text-halo-color": "white",
+                "text-halo-width": 4
+            }
+        },
+        {
+            "id": "noms_de_communes_3",
+            "source": "communes",
+            "source-layer": "centroides_communes",
+            "type": "symbol",
+            "filter" : ["==",["get", "class_pop"], 3],
+            "minzoom" : 9,
+            "layout": {
+                "text-overlap":"never",
+                "text-field": ["format",["get", "nom"],{},"\n",{},["get", "code_insee"],{"font-scale": 0.8}]
+            },
+            "paint": {
+                "text-color":"black",
+                "text-halo-color": "white",
+                "text-halo-width": 4
             }
         },
         {

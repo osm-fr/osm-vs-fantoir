@@ -270,6 +270,17 @@
         //-----------------------------------------------
         //------------------ AU SURVOL ------------------
         //-----------------------------------------------
+        if (couche_carto == 'noms_de_communes'){
+            for (i=1;i<4;i++){
+                map.on('mouseenter', couche_carto+'_'+i, (e) => {
+                    // Changer le curseur
+                    map.getCanvas().style.cursor = 'pointer';
+                });
+                map.on('mouseleave', couche_carto+'_'+i, () => {
+                    map.getCanvas().style.cursor = '';
+                });
+            }
+        }
         if (couche_carto == 'BAN_point'||couche_carto == 'OSM_point'|| couche_carto == 'points_nommes_rapproches'||couche_carto == 'points_nommes_non_rapproches'){
             map.on('mouseenter', couche_carto, (e) => {
                 // Changer le curseur
@@ -294,6 +305,18 @@
         //------------------ AU CLIC ------------------
         //---------------------------------------------
 
+        //--------------------------------
+        //------- NOMS DE COMMUNES -------
+        //--------------------------------
+
+        if (couche_carto == 'noms_de_communes'){
+            for (i=1;i<4;i++){
+                map.on('click', couche_carto+'_'+i, (e) => {
+                    code_insee = e.features[0].properties.code_insee;
+                    location.assign(window.location.pathname+"?insee="+code_insee)
+                });
+            }
+        }
         //----------------------------------------------------------------------------------
         //------- POINTS D'ADRESSE et NOMS DE VOIES OU LIEUX-DITS RAPPROCHES (VERTS) -------
         //----------------------------------------------------------------------------------
@@ -528,6 +551,10 @@
                     $('#infos_voie_lieudit ul').append($('<li>')
                                                     .append($('<span class="gras">').text('Source : '))
                                                     .append($('<span>').text(source))
+                                            );
+                    $('#infos_voie_lieudit ul').append($('<li>')
+                                                    .append($('<span class="gras">').text('Code Fantoir : '))
+                                                    .append($('<span>').text(fantoir))
                                             );
 
                     //LIENS DE VISU

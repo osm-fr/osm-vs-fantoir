@@ -57,6 +57,20 @@
             $('#input_insee').empty()
             $('#input_insee')[0].value = insee
             requete_pifometre()
+        } else {
+            map = new maplibregl.Map({
+                container: 'map_div',
+                style:'./pifomap.style',
+                center: [4,46],
+                hash: 'map',
+                zoom: 5
+            });
+            interactions_souris('noms_de_communes')
+            interactions_souris('simple-tiles')
+            interactions_souris('BAN_point')
+            interactions_souris('OSM_point')
+            interactions_souris('points_nommes_rapproches')
+            interactions_souris('points_nommes_non_rapproches')
         }
 
         check_josm_remote_control()
@@ -294,6 +308,7 @@
                     hash: 'map',
                     zoom: mapz
                 });
+                interactions_souris('noms_de_communes')
                 interactions_souris('simple-tiles')
                 interactions_souris('BAN_point')
                 interactions_souris('OSM_point')
@@ -369,7 +384,7 @@
                                .append(' / ')
                                .append($('<a>')
                                    .attr('target','blank')
-                                   .attr('href','index.html?insee='+insee)
+                                   .attr('href','index.html?insee='+code_insee)
                                    .text('Pifomètre')
                                )
 
