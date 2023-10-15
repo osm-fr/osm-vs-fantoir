@@ -69,6 +69,7 @@
             interactions_souris('simple-tiles')
             interactions_souris('BAN_point')
             interactions_souris('OSM_point')
+            interactions_souris('filaire_transparent')
             interactions_souris('points_nommes_rapproches')
             interactions_souris('points_nommes_non_rapproches')
         }
@@ -119,46 +120,6 @@
             $('#wait_ajax').css('visibility','hidden');
         })
     }
-    // function update_filtres(){
-    //     for (let i = 0; i < FILTRES.length; i++){
-    //         FILTRES[i] = [FILTRES[i][0],$('#check_'+FILTRES[i][0]).is(':checked')]
-    //     }
-    // }
-    // function reset_filtres(){
-    //     for (let i = 0; i < FILTRES.length; i++){
-    //         FILTRES[i] = [FILTRES[i][0],true]
-    //     }
-    //     $('#boutons-filtres input').prop('checked',true)
-    // }
-    // function active_menu_filtres(){
-    //     $('#boutons-filtres input').click(function(){
-    //         show_mask_map_icon()
-    //         update_menu_filtres()
-    //     })
-    // };
-    // function update_menu_filtres(){
-    //     $('#boutons-filtres li span.control-label').each(function(){
-    //         total = $('.map_nom' + $(this).attr('critere')).length
-    //         visible = $('.map_nom'+$(this).attr('critere')).length
-    //         $(this).children('span').text(' ('+visible+' / '+total+')')
-    //     })
-    // };
-    // function show_mask_map_icon(){
-    //     update_filtres()
-    //     $('.map_nom').each(function() {
-    //         action = 'donotfilter'
-    //         for (let f of FILTRES){
-    //             if ($(this).hasClass(f[0]) && f[1] == false){
-    //                 action = 'filter'
-    //             }
-    //         }
-    //         if (action == 'filter'){
-    //             $(this).css('display','none')
-    //         } else {
-    //             $(this).css('display','block')
-    //         }
-    //    });
-    // }
     function get_geojson_poly(geom,props){
         return ({'type': 'Feature',
                         'properties': props,
@@ -308,21 +269,22 @@
                     hash: 'map',
                     zoom: mapz
                 });
+                map.addControl(new maplibregl.NavigationControl());
+                if (!map.hasImage('rond_50')){
+                    map.loadImage('./img/rond_50.png', (error, image) => {
+                        map.addImage('rond_50', image, { sdf: true });
+                    })
+                }
                 interactions_souris('noms_de_communes')
                 interactions_souris('simple-tiles')
                 interactions_souris('BAN_point')
                 interactions_souris('OSM_point')
+                interactions_souris('filaire_transparent')
                 interactions_souris('points_nommes_rapproches')
                 interactions_souris('points_nommes_non_rapproches')
             }
             if (premiere_affichage){
                 map.fitBounds(bbox_diagonale.coordinates)
-            }
-            map.addControl(new maplibregl.NavigationControl());
-            if (!map.hasImage('rond_50')){
-                map.loadImage('./img/rond_50.png', (error, image) => {
-                    map.addImage('rond_50', image, { sdf: true });
-                })
             }
 
             document.title = nom_commune+' - Pifomap'

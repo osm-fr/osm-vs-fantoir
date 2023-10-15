@@ -144,6 +144,17 @@
             }
         },
         {
+            "id": "filaire_transparent",
+            "source": "hover_filaire",
+            "type": "line",
+            "minzoom" : 10,
+            "paint": {
+                "line-width": 24,
+                "line-color": "white",
+                "line-opacity" : 0
+            }
+        },
+        {
             "id": "points_nommes_rapproches",
             "source": "points_nommes",
             "filter":["==",["get", "rapproche"],true],

@@ -281,7 +281,11 @@
                 });
             }
         }
-        if (couche_carto == 'BAN_point'||couche_carto == 'OSM_point'|| couche_carto == 'points_nommes_rapproches'||couche_carto == 'points_nommes_non_rapproches'){
+        if (couche_carto == 'BAN_point'||
+            couche_carto == 'OSM_point'||
+            couche_carto == 'filaire_transparent'||
+            couche_carto == 'points_nommes_rapproches'||
+            couche_carto == 'points_nommes_non_rapproches'){
             map.on('mouseenter', couche_carto, (e) => {
                 // Changer le curseur
                 map.getCanvas().style.cursor = 'pointer';
@@ -290,7 +294,6 @@
                 map.setFilter('filaire',["==",["get", "nom"], nom])
                 map.setFilter('filaire_texte',["==",["get", "nom"], nom])
                 map.setFilter('hover_adresses_point',["==",["get", "nom"], nom])
-
             });
 
             map.on('mouseleave', couche_carto, () => {
