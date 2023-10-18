@@ -324,7 +324,9 @@
                         0.2]
                 },
             "paint": {
-                "icon-color": "green"
+                "icon-color": ["case",
+                                ["boolean",["get","osm_seul"]],"blue",
+                                "green"]
             }
         },
         {
@@ -341,7 +343,9 @@
                 "text-justify": "auto"
                 },
             "paint": {
-                "text-color": "green",
+                "text-color": ["case",
+                                ["boolean",["get","osm_seul"]],"blue",
+                                "green"],
                 "text-halo-color": "white",
                 "text-halo-width": 2
             }

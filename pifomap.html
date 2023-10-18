@@ -213,7 +213,7 @@
                     max_lon = Math.max(max_lon,lon_osm);
                     min_lat = Math.min(min_lat,lat_osm);
                     max_lat = Math.max(max_lat,lat_osm);
-                    res.features.push(get_geojson_point(lon_osm,lat_osm,{'nom':nom,'fantoir':fantoir,'numero':numero,'source':'OSM','rapproche':rapproche,'nom_com':nom_commune}))
+                    res.features.push(get_geojson_point(lon_osm,lat_osm,{'nom':nom,'fantoir':fantoir,'numero':numero,'source':'OSM','rapproche':rapproche,'osm_seul':(lon_ban?false:true),'nom_com':nom_commune}))
                 } else {
                     min_lon = Math.min(min_lon,lon_ban);
                     max_lon = Math.max(max_lon,lon_ban);
@@ -455,8 +455,9 @@
             <p><span class="non_rapproche">Rouges</span> : issus du cadastre (pour les lieux-dits) ou de la BAN (pour les voies) avec un nom inconnu d'OSM</p>
             <p><span class="osm_seulement">Bleus</span> : connus seulement d'OSM</p>
             <h3>Points d'adresses :</h3>
-            <p><span class="point integre"></span> issus d'OSM</p>
+            <p><span class="point integre"></span> issus d'OSM et connus de la BAN</p>
             <p><span class="point non_integre"></span> issus de la BAN, non retrouvés dans OSM</p>
+            <p><span class="point osm_seulement"></span> issus d'OSM, non retrouvés dans la BAN</p>
     </div>
 
     <footer>

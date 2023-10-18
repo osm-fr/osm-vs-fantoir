@@ -583,6 +583,9 @@ hr {
 #legende.pifomap p .point.non_integre {
 	background-color: #EFA500;
 }
+#legende.pifomap p .point.osm_seulement {
+	background-color: blue;
+}
 
 /*------------------------------------------------------*/
 /*------------------ PANNEAU LATÉRAL -------------------*/
