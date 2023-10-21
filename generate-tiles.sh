@@ -27,7 +27,7 @@ FROM ( SELECT code_insee,
                 256,
                 true
               ) AS geom
-  FROM polygones_insee_3857
+  FROM polygones_insee
   JOIN (SELECT DISTINCT \"ref:INSEE\" AS code_insee,
                         population_rel
        FROM             planet_osm_communes_statut
