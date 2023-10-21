@@ -15,7 +15,7 @@ insee = params['insee'].value
 # insee = '87187'
 
 poly_data = sql_get_data('rendu_bano_polygones',{'code_insee':insee})
-jpoly_data = [[d[0],d[1],json.loads(d[2])] for d in poly_data]
+jpoly_data = [[d[0],d[1],d[2],json.loads(d[3])] for d in poly_data]
 
 polycommune_data = sql_get_data('rendu_bano_contour_communal',{'code_insee':insee})
 jpolycommune_data = [[json.loads(d[0])] for d in polycommune_data]

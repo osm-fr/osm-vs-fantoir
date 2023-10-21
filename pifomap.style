@@ -378,7 +378,7 @@
                 "line-cap":"round"
             },
             "paint": {
-                "line-color":"red",
+                "line-color":["case",["!=", ["to-string",["get","statut"]],""], "grey","red"],
                 "line-width":10,
                 "line-opacity":0.25
             }
@@ -395,7 +395,7 @@
                 "symbol-placement": "line"
                 },
             "paint": {
-                "text-color": "red",
+                "text-color":["case",["!=", ["to-string",["get","statut"]],""],"black","red"],
                 "text-halo-color": "white",
                 "text-halo-width": 2
             }
@@ -406,15 +406,15 @@
             "type": "symbol",
             "minzoom" : 15,
             "layout": {
-                "text-field": ["format",["get", "nom"],{},"\n",{},["get", "fantoir"],{"font-scale": 0.8}],
+                "text-field": ["case",["!=", ["to-string",["get","statut"]],""],["format",["get", "nom"],{},"\n",{},["get", "fantoir"],{"font-scale": 0.8},"\n",{},["get", "statut"],{"font-scale": 0.8}],["format",["get", "nom"],{},"\n",{},["get", "fantoir"],{"font-scale": 0.8}]],
                 "text-overlap":"cooperative",
                 "text-justify": "auto",
                 "symbol-placement": "point"
                 },
             "paint": {
-                "text-color": "red",
+                "text-color":["case",["!=", ["to-string",["get","statut"]],""], "black","red"],
                 "text-halo-color": "white",
-                "text-halo-width": 2
+                "text-halo-width": 3
             }
         }
     ]
