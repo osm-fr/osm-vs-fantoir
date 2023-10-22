@@ -6,6 +6,12 @@
         }
         return res
     }
+    function get_dept_from_insee(code_insee){
+        if (code_insee.substr(0,2) == '97'){
+            return code_insee.substr(0,3)
+        }
+        return code_insee.substr(0,2)
+    }
     function check_url_for_dept(){
         var res
         if (window.location.hash){

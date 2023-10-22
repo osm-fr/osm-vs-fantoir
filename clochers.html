@@ -1,0 +1,40 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<title>clochers.org depuis JOSM</title>
+<script src="js/jquery-3.6.4.min.js"></script>
+<script src="js/fonctions.js"></script>
+<script>
+	function start(){
+		check_url_for_coords()
+	};
+	function check_url_for_coords(){
+		var lon, lat
+		if (window.location.search){
+			if (window.location.search.split('lat=')[1].split('&')[0]){
+				lat = Number(window.location.search.split('lat=')[1].split('&')[0])
+			}
+			if (window.location.search.split('lon=')[1].split('&')[0]){
+			    lon = Number(window.location.search.split('lon=')[1].split('&')[0])
+			}
+		}
+		if (-90 < lat && lat < 90 && -180 < lon && lon < 180){
+			console.log('ok')
+				$.ajax({
+				url: "insee_from_coords.py?lat="+lat+"&lon="+lon
+			})
+			.done(function( data ) {
+				code_insee = data[0][0]
+				dept = get_dept_from_insee(code_insee)
+                location.assign("https://clochers.org/Fichiers_HTML/Accueil/Accueil_clochers/"+dept+"/accueil_"+code_insee+".htm")
+			})
+
+		} else {
+            window.location.replace('index.html?insee=404')
+		}
+	}
+</script>
+</head>
+<body onload="start()">
+</body>
+</html>
