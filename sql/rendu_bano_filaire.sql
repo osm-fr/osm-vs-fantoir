@@ -51,28 +51,24 @@ WHERE   l.member_role = 'street' AND
 lignes_noms
 AS
 (SELECT CASE 
-            --WHEN GeometryType(way) = 'POINT' THEN ST_MakeLine(ST_Translate(way,-0.000001,-0.000001),ST_Translate(way,0.000001,0.000001))
             WHEN GeometryType(way) LIKE '%POLYGON' THEN ST_ExteriorRing(way)
             ELSE way
         END AS way_line,
+        GeometryType(way) AS geomtype,
         *
 FROM    lignes_brutes
 WHERE   name IS NOT NULL AND
-        (fantoir LIKE '__code_insee__%' OR fantoir = '')),
-lignes_noms_rang
-AS
-(SELECT *,
-        GeometryType(way) AS geomtype,
-        RANK() OVER(PARTITION BY name,insee_ac ORDER BY within DESC, fantoir DESC) rang
-FROM    lignes_noms)
+        (fantoir LIKE '__code_insee__%' OR fantoir = ''))
 SELECT  name,
+        within,
         ST_AsGeoJSON(ST_LineMerge(ST_Collect(way_line)))
-FROM    lignes_noms_rang
-WHERE   rang = 1 AND geomtype != 'POINT'
-GROUP BY 1
+FROM    lignes_noms
+WHERE   geomtype != 'POINT'
+GROUP BY 1,2
 UNION ALL
 SELECT  name,
+        within,
         ST_AsGeoJSON(ST_Collect(way_line))
-FROM    lignes_noms_rang
-WHERE   rang = 1 AND geomtype = 'POINT'
-GROUP BY 1;
+FROM    lignes_noms
+WHERE   geomtype = 'POINT'
+GROUP BY 1,2;

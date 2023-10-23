@@ -140,7 +140,7 @@
             "filter" : ["==",["get", "nom"], " "],
             "paint": {
                 "line-width": 4,
-                "line-color": "green"
+                "line-color": ["case",["==",["get", "within"],1],"green","orange"]
             }
         },
         {

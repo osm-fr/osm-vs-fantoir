@@ -164,9 +164,10 @@
             res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
             for (s=0;s<filairedata.length;s++){
                 let [nom,
+                    within,
                     geom] = filairedata[s]
                 if (geom.type == 'LineString'||geom.type == 'MultiLineString'){
-                    res.features.push(get_geojson_poly(geom,{'nom':nom}))
+                    res.features.push(get_geojson_poly(geom,{'nom':nom,'within':within}))
                 }/* else {
                     console.log(nom,geom)
                 }*/
