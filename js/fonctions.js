@@ -353,6 +353,38 @@
                 // Adresses rattachées à une voie OSM seule (liste bleue)
                 if (!fantoir){
                     $('#infos_numero').append($('<p>').text("Cette adresse (numéro + nom de voie ou lieu-dit) est issue d'OSM et elle est inconnue de la BAN. Son nom est aussi inconnu de Fantoir."));
+
+                    //LIENS DE VISU
+
+                    $('#infos_voie_lieudit').append($('<hr>'));
+                    $('#infos_voie_lieudit').append($('<h3>').text('Voir le lieu sur : '));
+
+                    $('#infos_voie_lieudit').append($('<ul>')
+                                                .append($('<li>')
+                                                    .append($('<a>')
+                                                        .attr('href',url_map_org_part1+'?mlat='+lat+'&mlon='+lon+'#map='+'18/'+lat+'/'+lon)
+                                                        .attr('target','blank')
+                                                        .text('ORG')
+                                                    )
+                                                )
+                                            );
+
+                    //LIENS D'EDITION
+
+                    $('#infos_voie_lieudit').append($('<hr>'));
+                    $('#infos_voie_lieudit').append($('<h3>').text('Édition'));
+
+                    xmin  = lon-DELTA
+                    xmax  = lon+DELTA
+                    ymin  = lat-DELTA
+                    ymax  = lat+DELTA
+
+                    table = 'pifomap_table_liens'
+                    $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Éditer la zone sur'))))
+                    $('#'+table).append($('<tr>'))
+                    add_josm_link(table,xmin,xmax,ymin,ymax,insee,nom_commune)
+                    add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
+
                     return 0
                 }
 
