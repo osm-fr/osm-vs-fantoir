@@ -333,8 +333,6 @@
         if (couche_carto == 'BAN_point' || couche_carto == 'OSM_point' || couche_carto == 'points_nommes_rapproches'){
             map.on('click', couche_carto, (e) => {
                 nom = e.features[0].properties.nom;
-                fantoir = e.features[0].properties.fantoir;
-                insee = fantoir.substring(0,5)
                 numero = e.features[0].properties.numero;
                 source = e.features[0].properties.source;
                 rapproche = e.features[0].properties.rapproche;
@@ -349,6 +347,17 @@
                 } else {
                     $('#panneau_map h2').text(nom)
                 }
+
+                fantoir = e.features[0].properties.fantoir;
+
+                // Adresses rattachées à une voie OSM seule (liste bleue)
+                if (!fantoir){
+                    $('#infos_numero').append($('<p>').text("Cette adresse (numéro + nom de voie ou lieu-dit) est issue d'OSM et elle est inconnue de la BAN. Son nom est aussi inconnu de Fantoir."));
+                    return 0
+                }
+
+                // cas général
+                insee = fantoir.substring(0,5)
 
                 $.ajax({
                     url: "requete_pifometre_voies.py?insee="+insee+'&fantoir='+fantoir
