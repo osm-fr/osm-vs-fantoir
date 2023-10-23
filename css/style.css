@@ -173,7 +173,7 @@ hr {
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
 /*---------------                                                       ---------------*/
-/*---------------                ENCADRÉ BLEU A DROITE                  ---------------*/
+/*---------------                    ENCADRÉ BLEU                       ---------------*/
 /*---------------                CHARGEMENT ET ALERTE                   ---------------*/
 /*---------------                                                       ---------------*/
 /*-------------------------------------------------------------------------------------*/
@@ -191,6 +191,7 @@ hr {
 	border-bottom: 4px #3FA4C5 solid;
 	border-radius: 8px;
 }
+
 #wait_ajax.bas {
 	margin: 20px 2% 0 2%;
 }
@@ -205,44 +206,26 @@ hr {
 /*----------------- VERSION PIFO ----------------*/
 /*-----------------------------------------------*/
 
-#wait_ajax.pifo, #wait_ajax.pifomap, #alerte_commune {
+#wait_ajax.pifo, #wait_ajax.pifomap {
 	visibility:hidden;
 	position:fixed;
+	margin: 0;
+	padding: 0;
+	top: 40px;
+	right: 270px;
 	width:35%;
-	right:2%;
+	height: 40px;
 	text-align: center;
-	padding: 5px;
 	background:lightblue;
-	border-bottom: 4px #3FA4C5 solid;
-	border-radius: 8px;
+	border-bottom: 2px #3FA4C5 solid;
+	border-radius: 6px;
 }
 
 #wait_ajax.pifo span, #wait_ajax.pifomap span {
 	vertical-align:middle;
-	font-size:1.8em;
+	font-size:1.3em;
+	line-height: 40px; /* doit être identique à height pour centrer verticalement */
 	color:black;
-}
-
-/*----------------- PIFOMETRE ----------------*/
-
-#wait_ajax.pifo, #alerte_commune {
-	top:120px;
-	height: 100px;
-}
-
-#wait_ajax.pifo span {
-	line-height: 90px; /* doit être identique à height pour centrer verticalement */
-}
-
-/*----------------- PIFOMAP ----------------*/
-
-#wait_ajax.pifomap {
-	top:90px;
-	height:60px;
-}
-
-#wait_ajax.pifomap span {
-	line-height:60px; /* doit être identique à height pour centrer verticalement */
 }
 
 /*---------------------------------------------------*/
@@ -250,14 +233,33 @@ hr {
 /*---------------------------------------------------*/
 
 #alerte_commune {
-	line-height: 40px;
+	visibility:hidden;
+	position:fixed;
+	width:35%;
+	height: 100px;
+	top:120px;
+	right:2%;
+	padding: 5px;
+	text-align: center;
 	background:#FFDE6A;
-  border-bottom: 4px #FFBB2D solid;
+	border-bottom: 4px #FFBB2D solid;
+	border-radius: 8px;
+	line-height: 40px;
 }
 #alerte_commune p {
 	text-align: center;
 	font-size: 1.2em;
 	font-weight: bold;
+}
+
+#alerte_commune.pifomap {
+	top:90px;
+	height:50px;
+	padding-top:0;
+}
+#alerte_commune.pifomap p {
+	font-size: 0.9em;
+	line-height: 1.2em;
 }
 
 .fermer-alerte {
@@ -271,7 +273,7 @@ hr {
 	text-align: center;
 	font-weight: bold;
 	background: orange;
-  border-radius: 6px;
+	border-radius: 6px;
 	cursor:pointer;
 }
 
@@ -563,8 +565,22 @@ hr {
 #legende.pifomap p .non_rapproche {
 	background-color: #fff;
 	font-weight: bold;
-	color: red; /*orange*/
+	color: red; /*rouge*/
 }
+
+#legende.pifomap p .voie_survolee {
+	background:none;
+	font-weight: bold;
+	font-size: 3em;
+	line-height: 0.1em;
+}
+#legende.pifomap p .voie_survolee.verte {
+	color: green; /*vert*/
+}
+#legende.pifomap p .voie_survolee.orange {
+	color: orange; /*vert*/
+}
+
 #legende.pifomap p .point {
 	height: 7px;
 	width: 7px;

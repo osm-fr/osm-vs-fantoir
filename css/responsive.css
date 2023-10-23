@@ -6,10 +6,6 @@
     #boutons-filtres.pifo {
         font-size: 0.7em;
     }
-    #alerte_commune, #wait_ajax.pifo {
-        font-size: 0.8em;
-        line-height:40px;
-    }
     #reponse.pifo {
         height: 60%;
     }
@@ -23,12 +19,27 @@
         padding: 6px 10px 7px;
         font-size: 0.8em;
     }
+    #descriptif h1 {
+        font-size: 1.6em;
+    }
 }
 
 @media only screen and (max-width: 1500px) {
-    #descriptif{padding: 0}
+    #descriptif{
+        padding: 0;
+        margin-right: 1% !important;
+    }
     #boutons-filtres.page_numeros {
         margin:10px 50px 0 0;
+    }
+    #alerte_commune, #wait_ajax.pifo {
+        font-size: 0.9em;
+    }
+    #descriptif h1 {
+        font-size: 1.35em;
+    }
+    #infos_commune_col1 {
+        font-size: 0.9em;
     }
 }
 
@@ -46,6 +57,9 @@
     .tablesorter-default {
         font-size: 0.8em;
     }
+    #descriptif {
+        width: 55% !important;
+    }
 }
 
 @media only screen and (max-width: 1330px) {
@@ -60,7 +74,7 @@
     }
     #alerte_commune, #wait_ajax.pifo {
         width: 30%;
-        font-size: 0.7em;
+        font-size: 0.85em;
         line-height:30px;
     }
 }
@@ -77,6 +91,12 @@
     #alerte_commune, #wait_ajax.pifo {
         width: 25%;
         line-height:25px;
+    }
+    #descriptif {
+        width: 60% !important;
+    }
+    #infos_commune_col1 {
+        font-size: 0.8em;
     }
 }
 
@@ -96,7 +116,15 @@
     }
     #alerte_commune, #wait_ajax.pifo {
         width: 20%;
-        font-size: 0.5em;
+        font-size: 0.75em;
+    }
+    #alerte_commune .fermer-alerte {
+        margin-top: 5px;
+        margin-right: 5px;
+        height: 20px;
+        line-height: 20px;
+        width: 20px;
+        border-radius: 3px;
     }
 }
 
