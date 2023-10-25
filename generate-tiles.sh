@@ -31,14 +31,17 @@ FROM ( SELECT code_insee,
   JOIN (SELECT DISTINCT \"ref:INSEE\" AS code_insee,
                         population_rel
        FROM             planet_osm_communes_statut
-       WHERE            admin_level = 8 AND
-                        \"ref:INSEE\" != '') p
+       WHERE            \"ref:INSEE\" != '') p
   USING (code_insee)
+  JOIN (SELECT com
+       FROM    cog_commune
+       WHERE   typecom IN ('COM','ARM')) cog
+  ON   (code_insee = com)
   WHERE geom_centroide_3857 && BBox($tx, $ty, $tz) AND
         ST_Intersects(geom_centroide_3857, BBox($tx, $ty, $tz)) AND
         code_insee != '' AND
         ((admin_level = 8 AND code_insee NOT IN ('13055','69123','75056')) OR
-         (admin_level = 9 AND (code_insee LIKE '751__' OR code_insee LIKE '6938_' OR code_insee LIKE '132_')))
+         (admin_level = 9 AND (code_insee LIKE '751__' OR code_insee LIKE '6938_' OR code_insee LIKE '132__')))
     ) AS q
   ) TO STDOUT;
   "
