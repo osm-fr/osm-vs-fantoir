@@ -300,6 +300,17 @@
                 map.setFilter('filaire',["==",["get", "nom"], nom])
                 map.setFilter('filaire_texte',["==",["get", "nom"], nom])
                 map.setFilter('hover_adresses_point',["==",["get", "nom"], nom])
+
+                if (e.features.length > 1){
+                    if (e.features[0].properties.nom != e.features[1].properties.nom){
+                        textfield = e.features[0].properties.nom
+                        for (i=1;i<e.features.length;i++){
+                            textfield = textfield+' / '+e.features[i].properties.nom
+                        }
+                        map.setLayoutProperty('filaire_texte','text-field',textfield)
+                        map.setLayoutProperty('filaire_texte','symbol-placement','point')
+                    }
+                }
             });
 
             map.on('mouseleave', couche_carto, () => {
@@ -307,6 +318,9 @@
                 map.setFilter('filaire',["==",["get", "nom"], " "])
                 map.setFilter('filaire_texte',["==",["get", "nom"], " "])
                 map.setFilter('hover_adresses_point',["==",["get", "nom"], " "])
+            // RAZ du texte multi-noms
+                map.setLayoutProperty('filaire_texte','text-field',["get", "nom"])
+                map.setLayoutProperty('filaire_texte','symbol-placement','line')
             });
         }
 
