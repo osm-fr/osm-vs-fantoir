@@ -303,9 +303,10 @@
 
                 if (e.features.length > 1){
                     if (e.features[0].properties.nom != e.features[1].properties.nom){
-                        textfield = e.features[0].properties.nom
+                        textfield = ["format",e.features[0].properties.nom,{"font-scale": 0.9}]
+
                         for (i=1;i<e.features.length;i++){
-                            textfield = textfield+' / '+e.features[i].properties.nom
+                            textfield.push('\n',{},e.features[i].properties.nom,{"font-scale": 0.9})
                         }
                         map.setLayoutProperty('filaire_texte','text-field',textfield)
                         map.setLayoutProperty('filaire_texte','symbol-placement','point')
