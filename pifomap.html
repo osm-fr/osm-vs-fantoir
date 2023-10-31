@@ -354,9 +354,21 @@
 
             $('#descriptif').append($('<div id="infos_commune_col2">').append($('<h1>').append((nom_commune))))
 
+            //-------------------------------------------
+            //-------   SWITCH CARTE INTEGRATION   ------
+            //-------------------------------------------
 
+            $('#bouton_progression').click(function(){
+                if($('#radio_prog_noms').is(':checked')) { $('#radio_prog_noms').prop("checked", false);}
+                else  $('#radio_prog_noms').prop("checked", true);
+                if($('#radio_prog_adresses').is(':checked')) { $('#radio_prog_adresses').prop("checked", false);}
+                else  $('#radio_prog_adresses').prop("checked", true);
+            })
 
-            //communes voisines
+            //------------------------------------
+            //-------   COMMUNES VOISINES   ------
+            //------------------------------------
+
             $('#table_communes_voisines tr td').empty()
             $('#table_communes_voisines tr td.commune_centre').text(nom_commune)
             for (v in communes_voisines){
@@ -431,6 +443,11 @@
             </table>
         </div>
         <div id="wait_ajax" class="pifomap"></div>
+
+        <div id="bouton_progression">
+            <p><input type="radio" id="radio_prog_noms" name="prog_noms" value="huey" checked /><label for="huey">Intégration des noms de voies</label></p>
+            <p><input type="radio" id="radio_prog_adresses" name="prog_adresses" value="huey" /><label for="huey">Intégration des adresses</label></p>
+        </div>
         <button id="bouton_communes_voisines" title="Communes voisines"></button>
         <button id="bouton_refresh"></button>
         <div id="alerte_commune" class="pifomap"></div>

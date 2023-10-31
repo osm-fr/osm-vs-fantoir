@@ -433,6 +433,13 @@
                         fantoir_affiche,
                         fantoir_dans_relation] = parse_pifometre(categorie,caractere_annul,fantoir)
 
+                        //Mettre à jour le nom de la rue
+                        if (couche_carto == 'BAN_point' || couche_carto == 'OSM_point') {
+                            $('#panneau_map h2').text(numero+' '+nom_osm)
+                        } else {
+                            $('#panneau_map h2').text(nom_osm)
+                        }
+
                         //Infos sur le numéro
                         if (couche_carto == 'BAN_point' || couche_carto == 'OSM_point') {
                             $('#infos_numero').append($('<h3>').text('Le point d\'adresse :'));
