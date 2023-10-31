@@ -143,10 +143,10 @@
                  bbox_diagonale,
                  nb_adresses_osm,
                  nb_adresses_ban,
-                 nb_nom_osm,
-                 nb_nom_ban,
-                 nb_nom_cadastre,
-                 nb_nom_topo] = pifodata
+                 nb_noms_osm,
+                 nb_noms_ban,
+                 nb_noms_cadastre,
+                 nb_noms_topo] = pifodata
 
             document.title = nom_commune+' - Pifomètre'
             $('#descriptif').empty()
@@ -214,7 +214,10 @@
 
             $('#descriptif').append($('<div id="infos_commune_col2">').append($('<h1>').append((nom_commune))))
 
-            //communes voisines
+            //------------------------------------
+            //-------   COMMUNES VOISINES   ------
+            //------------------------------------
+
             $('#table_communes_voisines tr td').empty()
             $('#table_communes_voisines tr td.commune_centre').text(nom_commune)
             for (v in communes_voisines){
@@ -223,6 +226,29 @@
                                                                                   .attr('href',window.location.href.split('?')[0]+'?insee='+communes_voisines[v][1])
                                                                                   .text(communes_voisines[v][2]))
             }
+
+            //------------------------------------
+            //-------       PIFOSTATS       ------
+            //------------------------------------
+
+            pourcent_adresses_osm = nb_adresses_osm*100/nb_adresses_ban
+            pourcent_noms_osm = nb_noms_osm*100/nb_noms_topo
+
+            $('#pifostats .barre_noms_osm').attr('aria-valuenow', Math.round(pourcent_noms_osm))
+            $('#pifostats .barre_noms_osm_texte').text(nb_noms_osm+' noms OSM'+' (soit '+Math.round(pourcent_noms_osm)+'% des '+nb_noms_topo+' noms Topo)')
+
+            $('#pifostats .barre_adresses_osm').attr('aria-valuenow', Math.round(pourcent_adresses_osm))
+            $('#pifostats .barre_adresses_osm_texte').text(nb_adresses_osm+' adresses OSM'+' (soit '+Math.round(pourcent_adresses_osm)+'% des '+nb_adresses_ban+' adresses BAN)')
+
+
+            $("#pifostats .barre_noms .barre_noms_osm") .stop(true, true)
+                                                        .delay(1000)
+                                                        .animate({width: pourcent_noms_osm+'%'}, 1000);
+
+            $("#pifostats .barre_adresses .barre_adresses_osm") .stop(true, true)
+                                                                .delay(1000)
+                                                                .animate({width: pourcent_adresses_osm+'%'}, 1000);
+
             if (insee_commune_parente){
                 $('#alerte_commune').empty();
                 $('#alerte_commune').css('visibility','visible');
@@ -249,7 +275,7 @@
                 }
                 $('#'+table+' tr').append($('<th>').append('Libellé Fantoir'))
                 $('#'+table+' tr').append($('<th>').append('Libellé OSM'))
-                $('#'+table+' tr').append($('<th>').append('Libellé BAN ou CADASTRE'))
+                $('#'+table+' tr').append($('<th>').append('Libellé BAN ou Cadastre'))
                 $('#'+table+' tr').append($('<th>').attr('colspan','2').append('Carte'))
                 $('#'+table+' tr').append($('<th>').attr('colspan','2').append('Edition'))
                 $('#'+table+' tr').append($('<th>').append('Statut Fantoir ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
@@ -289,8 +315,11 @@
                         continue;
                     }
 
-
-                    // REMPLISSAGE CELLULES
+                    //-------------------------------------------------------------------
+                    //-------------------------------------------------------------------
+                    //--------------------   REMPLISSAGE CELLULES   ---------------------
+                    //-------------------------------------------------------------------
+                    //-------------------------------------------------------------------
 
                     //--- Code Fantoir ---
                     if (has_code_fantoir) {
@@ -509,15 +538,43 @@
             </tbody>
             </table>
         </div>
+        <!--Boutons tout en haut à droite-->
         <div id="wait_ajax" class="pifo"></div>
-
         <a href="../pifometre_v2/index.html"><button id="bouton_v2" title="Ouvrir l'ancien Pifomètre (v2)"></button></a>
         <button id="bouton_communes_voisines" title="Communes voisines"></button>
         <button id="bouton_refresh"></button>
         <button id="bouton_export_csv" title="Exporter le tableau en CSV" onclick="window.open(urlCSV, '_blank');"></button>
         <button id="bouton_aide" title="Ouvrir la page d'aide" onclick="window.open('aide.html', '_blank');"></button>
         <div id="infos_refresh"></div>
+
+        <!------------------------------------------------------------->
+        <!------------------ Espace en haut à droite ------------------>
+        <!------------------------------------------------------------->
+
         <div id="alerte_commune"></div>
+
+        <!-----------------------   Pifostats   ----------------------->
+
+        <div id="pifostats">
+            <div><h3>Intégration des voies et adresses de la commune</h3></div>
+
+            <div class="barre_noms" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100"> 
+                <div class="barre_noms_osm"></div>
+                <span class="barre_noms_osm_texte"></span> 
+            </div>
+            <a href="pifomap.html" title="voir la carte de la progression en France"><img class="picto_france" src="img/france-blanc-points.png"/></a>
+
+            <div class="barre_adresses" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100"> 
+                <div class="barre_adresses_osm"></div> 
+                <span class="barre_adresses_osm_texte"></span> 
+            </div> 
+            <a href="pifomap.html" title="voir la carte de la progression en France"><img class="picto_france" src="img/france-blanc-points.png"/></a>
+
+        </div>
+
+        <!------------------------------------------------------------->
+        <!----------------------- ESPACE FILTRES ---------------------->
+        <!------------------------------------------------------------->
 
         <div id="boutons-filtres" class="pifo">
             <p id="ligne-afficher">Afficher :</p>

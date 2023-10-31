@@ -212,8 +212,8 @@ hr {
 	margin: 0;
 	padding: 0;
 	top: 40px;
-	right: 270px;
-	width:35%;
+	right: 470px;
+	width:25%;
 	height: 40px;
 	text-align: center;
 	background:lightblue;
@@ -228,59 +228,10 @@ hr {
 	color:black;
 }
 
-/*---------------------------------------------------*/
-/*------------ ALERTE COMMUNE FUSIONNEE -------------*/
-/*---------------------------------------------------*/
-
-#alerte_commune {
-	visibility:hidden;
-	position:fixed;
-	width:35%;
-	height: 100px;
-	top:120px;
-	right:2%;
-	padding: 5px;
-	text-align: center;
-	background:#FFDE6A;
-	border-bottom: 4px #FFBB2D solid;
-	border-radius: 8px;
-	line-height: 40px;
-}
-#alerte_commune p {
-	text-align: center;
-	font-size: 1.2em;
-	font-weight: bold;
-}
-
-#alerte_commune.pifomap {
-	top:90px;
-	height:50px;
-	padding-top:0;
-}
-#alerte_commune.pifomap p {
-	font-size: 0.9em;
-	line-height: 1.2em;
-}
-
-.fermer-alerte {
-	color: black;
-	float: right;
-	margin-top: 10px;
-	margin-right: 10px;
-	height: 30px;
-	line-height: 30px;
-	width: 30px;
-	text-align: center;
-	font-weight: bold;
-	background: orange;
-	border-radius: 6px;
-	cursor:pointer;
-}
-
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
 /*---------------                                                       ---------------*/
-/*---------------                  BOUTONS A DROITE                     ---------------*/
+/*---------------               BOUTONS EN HAUT A DROITE                ---------------*/
 /*---------------                                                       ---------------*/
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
@@ -308,8 +259,6 @@ hr {
 	background-size: 40px;
 }
 
-/*------------------ Voies récentes manquantes + page stats, à moderniser -------------------*/
-
 #bouton_export_csv a{
 	color: white;
 	font-weight: bold;
@@ -320,9 +269,9 @@ hr {
 	width: 50px;
 }
 
-/*-------------------------------------------------------------------*/
-/*--------------------- PIFO : COMMUNES VOISINES --------------------*/
-/*-------------------------------------------------------------------*/
+/*-------------------------------------------------------------*/
+/*---------------------- COMMUNES VOISINES --------------------*/
+/*-------------------------------------------------------------*/
 
 #bouton_communes_voisines{
 	cursor: pointer;
@@ -379,9 +328,9 @@ hr {
 	cursor:pointer;
 }
 
-/*-------------------------------------------------------------------*/
-/*-------------------------- PIFO : REFRESH -------------------------*/
-/*-------------------------------------------------------------------*/
+/*------------------------------------------------------------------*/
+/*----------------------------- REFRESH ----------------------------*/
+/*------------------------------------------------------------------*/
 
 #bouton_refresh{
 	cursor: pointer;
@@ -475,6 +424,126 @@ hr {
 	margin-left: 3px;
 }
 
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+/*---------------                                                       ---------------*/
+/*---------------       ALERTE ANCIENNE COMMUNE EN HAUT A DROITE        ---------------*/
+/*---------------                                                       ---------------*/
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+
+#alerte_commune {
+	visibility:hidden;
+	position:fixed;
+	width:35%;
+	height: 100px;
+	top:120px;
+	right:2%;
+	padding: 5px;
+	text-align: center;
+	background:#FFDE6A;
+	border-bottom: 4px #FFBB2D solid;
+	border-radius: 8px;
+	line-height: 40px;
+}
+#alerte_commune p {
+	text-align: center;
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+#alerte_commune.pifomap {
+	top:90px;
+	height:50px;
+	padding-top:0;
+}
+#alerte_commune.pifomap p {
+	font-size: 0.9em;
+	line-height: 1.2em;
+}
+
+.fermer-alerte {
+	color: black;
+	float: right;
+	margin-top: 10px;
+	margin-right: 10px;
+	height: 30px;
+	line-height: 30px;
+	width: 30px;
+	text-align: center;
+	font-weight: bold;
+	background: orange;
+	border-radius: 6px;
+	cursor:pointer;
+}
+
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+/*---------------                                                       ---------------*/
+/*---------------              PIFOSTATS EN HAUT A DROITE               ---------------*/
+/*---------------                                                       ---------------*/
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+
+#pifostats {
+	position:fixed;
+	width:35%;
+	height: 110px;
+	top:140px;
+	right:2%;
+	padding: 5px;
+	border:1px solid lightblue;
+	border-bottom: 3px skyblue solid;
+	border-radius: 8px;
+	line-height: 40px;
+}
+
+#pifostats h3 {
+	text-align: center;
+	font-size: 0.85em;
+	line-height: 0.9em;
+	margin: 0.6em 0 0.7em 0;
+}
+
+#pifostats span {
+	font-size: 0.8em;
+}
+
+.barre_noms, .barre_adresses {
+	float: left;
+	margin: 25px 12px 7px 8px;
+	width: 90%;
+	height: 8px;
+	background-color: #FFCC55; /* orange */
+	border-radius: 2px;
+}
+
+.barre_noms_osm, .barre_adresses_osm {
+	position: relative;
+	top: 0;
+	left: 0;
+	height: 8px;
+	width: 0%;
+	background-color: #00EAAA; /* vert */
+	border-radius: 4px;
+}
+
+.barre_noms_osm_texte, .barre_adresses_osm_texte {
+	position: relative;
+	top: -30px;
+	left: 1%;
+	color: #444;
+	font-size: 0.9em;
+	line-height: 1.2em;
+}
+
+.picto_france {
+	float: left;
+	display: inline-block;
+	width: 25px;
+	margin-top: 10px;
+}
+
 
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
@@ -483,6 +552,33 @@ hr {
 /*---------------                                                       ---------------*/
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
+
+#bouton_progression {
+	cursor: pointer;
+	position: fixed;
+	top: 40px;
+	right: 215px;
+	background: url("../img/layers.png") no-repeat wheat right 5px bottom 3px;
+	background-size: 33px;
+	width: 240px;
+	height: 38px;
+	padding: 2px 0 0 2px;
+	border-bottom: 2px sienna solid;
+	border-radius: 6px;
+}
+
+#bouton_progression * {
+	cursor: pointer;
+}
+
+#bouton_progression p {
+	line-height: 0.7em;
+	margin: 0;
+}
+
+#bouton_progression label {
+	font-size: 0.7em;
+}
 
 /*-------------------------------------------*/
 /*------------------ LÉGENDE ----------------*/
