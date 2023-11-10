@@ -59,6 +59,15 @@
         }
         return res
     }
+    function check_url_for_ratio_map(){
+        if (window.location.search){
+            if (window.location.search.includes('ratio=')){
+                ratio = window.location.search.split('ratio=')[1].split('&')[0]
+                return ratio
+            }
+        }
+        return 0
+    }
     function check_url_for_xyz(){
         if (window.location.hash){
             if (window.location.hash.includes('map=')){
@@ -85,11 +94,13 @@
             }
         }
         if (window.location.search && res == undefined){
-            if (window.location.search.split('insee=')[1].split('&')[0]){
-                if (pattern_insee.test(window.location.search.split('insee=')[1].split('&')[0])){
-                    res = window.location.search.split('insee=')[1].split('&')[0]
-                } else {
-                    alert(window.location.search.split('insee=')[1].split('&')[0]+' n\'est pas un code INSEE de commune\n\nAbandon')
+            if (window.location.search.includes('insee=')){
+                if (window.location.search.split('insee=')[1].split('&')[0]){
+                    if (pattern_insee.test(window.location.search.split('insee=')[1].split('&')[0])){
+                        res = window.location.search.split('insee=')[1].split('&')[0]
+                    } else {
+                        alert(window.location.search.split('insee=')[1].split('&')[0]+' n\'est pas un code INSEE de commune\n\nAbandon')
+                    }
                 }
             }
         }
@@ -434,10 +445,12 @@
                         fantoir_dans_relation] = parse_pifometre(categorie,caractere_annul,fantoir)
 
                         //Mettre à jour le nom de la rue
-                        if (couche_carto == 'BAN_point' || couche_carto == 'OSM_point') {
-                            $('#panneau_map h2').text(numero+' '+nom_osm)
-                        } else {
-                            $('#panneau_map h2').text(nom_osm)
+                        if (nom_osm != null){
+                            if (couche_carto == 'BAN_point' || couche_carto == 'OSM_point') {
+                                $('#panneau_map h2').text(numero+' '+nom_osm)
+                            } else {
+                                $('#panneau_map h2').text(nom_osm)
+                            }
                         }
 
                         //Infos sur le numéro
@@ -660,8 +673,6 @@
                     add_josm_link(table,xmin,xmax,ymin,ymax,insee,nom_commune)
                     add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
 
-                    // console.log(e.features[0])
-
             })
         }
     }
@@ -681,4 +692,79 @@
         map.getSource('polygones_convexhull').setData(EMPTY_GEOJSON)
         map.getSource('adresses').setData(EMPTY_GEOJSON)
         map.getSource('hover').setData(EMPTY_GEOJSON)
+    }
+    function affiche_ratio_map() {
+        hash_value = ''
+        if ($('#radio_prog_noms').is(':checked')) {
+            affiche_ratio_noms()
+            hash_value = 'N'
+        }
+        if ($('#radio_prog_adresses').is(':checked')) {
+            affiche_ratio_numeros()
+            hash_value = 'A'
+        }
+        if (hash_value != ''){
+            update_search('ratio',hash_value)
+        }
+    }
+    function update_search(key,value){
+        before_key = window.location.search.split(key+'=')[0]
+        if (before_key == ''){
+            before_key = '?'
+        }
+        after_key_str = ''
+        if (window.location.search.includes(key+'=')){
+            after_key = window.location.search.split(key+'=')[1].split('&')
+            if (after_key.length > 1){
+                after_key.shift()
+                after_key_str = '&'+after_key.join('&')
+            }
+        } else {
+            if (before_key != '?'){
+                before_key += '&'
+            }
+        }
+        history.replaceState("", "", window.location.pathname+before_key+key+'='+value+after_key_str+window.location.hash)
+    }
+
+    function affiche_ratio_numeros(){
+        map.setLayoutProperty('point_de_communes','visibility','visible')
+        map.setPaintProperty('point_de_communes','icon-color',["interpolate",["linear"],["*", ["/",["get", "nb_adresses_osm"],100],["get", "nb_adresses_ban"]],0,"red",25,"orange",50,"yellow",75,"green"])
+    }
+    function affiche_ratio_noms(){
+        map.setLayoutProperty('point_de_communes','visibility','visible')
+        map.setPaintProperty('point_de_communes','icon-color',["interpolate",["linear"],["*", ["/",["get", "nb_noms_osm"],100],["get", "nb_noms_topo"]],0,"red",25,"orange",50,"yellow",75,"green"])
+    }
+    function map_setup(){
+        map.addControl(new maplibregl.NavigationControl());
+        if (!map.hasImage('rond_50')){
+            map.loadImage('./img/rond_50.png', (error, image) => {
+                map.addImage('rond_50', image, { sdf: true });
+            })
+        }
+        interactions_souris('noms_de_communes')
+        interactions_souris('simple-tiles')
+        interactions_souris('BAN_point')
+        interactions_souris('OSM_point')
+        interactions_souris('filaire_transparent')
+        interactions_souris('points_nommes_rapproches')
+        interactions_souris('points_nommes_non_rapproches')
+
+        $('#bouton_progression').click(function(){
+            affiche_ratio_map()
+        })
+
+        update_radio_ratio()
+        affiche_ratio_map()
+        check_josm_remote_control()
+    }
+    function update_radio_ratio(){
+        ratio = check_url_for_ratio_map()
+        if (ratio == 'N'){
+            $('#radio_prog_noms').click()
+        } else if (ratio == 'A'){
+            $('#radio_prog_adresses').click()
+        } else {
+            update_search('ratio','no')
+        }
     }

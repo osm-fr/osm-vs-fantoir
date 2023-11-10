@@ -294,6 +294,7 @@ hr {
 	border: solid 1px #64A02E;
 	border-bottom: 2px #64A02E solid; /*vert plus foncé*/
 	border-radius: 6px;
+	z-index: 2;
 	visibility:hidden;
 }
 #table_communes_voisines table tr td.lien_commune,

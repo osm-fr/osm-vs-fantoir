@@ -44,6 +44,10 @@
             $('#legende').css('visibility','hidden');
         })
 
+        //-------------------------------------------
+        //-------   SWITCH CARTE INTEGRATION   ------
+        //-------------------------------------------
+
         $('#table_communes_voisines').css('visibility','hidden');
         $('#table_communes_voisines table tr td').empty()
                                                  .removeAttr('insee_cible')
@@ -65,20 +69,11 @@
                 hash: 'map',
                 zoom: 5
             });
-            interactions_souris('noms_de_communes')
-            interactions_souris('simple-tiles')
-            interactions_souris('BAN_point')
-            interactions_souris('OSM_point')
-            interactions_souris('filaire_transparent')
-            interactions_souris('points_nommes_rapproches')
-            interactions_souris('points_nommes_non_rapproches')
+            map.on('load', () => {
+                map_setup()
+            });
         }
 
-        check_josm_remote_control()
-
-        // $('#bouton_rendu_bano').on("click",function(){
-        //     rendu_bano(insee)
-        // })
         $('#bouton_communes_voisines').click(function(){
             $('#table_communes_voisines').css('visibility','visible');
         })
@@ -253,12 +248,12 @@
 
             let [mapz,mapx,mapy] = check_url_for_xyz()
 
-            premiere_affichage = false
+            premier_affichage = false
             if (mapz < 0){
                 mapz = 15
                 mapx = lon_commune
                 mapy = lat_commune
-                premiere_affichage = true
+                premier_affichage = true
             }
 
             if (typeof map != 'undefined'){
@@ -271,21 +266,11 @@
                     hash: 'map',
                     zoom: mapz
                 });
-                map.addControl(new maplibregl.NavigationControl());
-                if (!map.hasImage('rond_50')){
-                    map.loadImage('./img/rond_50.png', (error, image) => {
-                        map.addImage('rond_50', image, { sdf: true });
-                    })
-                }
-                interactions_souris('noms_de_communes')
-                interactions_souris('simple-tiles')
-                interactions_souris('BAN_point')
-                interactions_souris('OSM_point')
-                interactions_souris('filaire_transparent')
-                interactions_souris('points_nommes_rapproches')
-                interactions_souris('points_nommes_non_rapproches')
+                map.on('load', () => {
+                    map_setup()
+                });
             }
-            if (premiere_affichage){
+            if (premier_affichage){
                 map.fitBounds(bbox_diagonale.coordinates)
             }
 
@@ -354,17 +339,6 @@
 
             $('#descriptif').append($('<div id="infos_commune_col2">').append($('<h1>').append((nom_commune))))
 
-            //-------------------------------------------
-            //-------   SWITCH CARTE INTEGRATION   ------
-            //-------------------------------------------
-
-            $('#bouton_progression').click(function(){
-                if($('#radio_prog_noms').is(':checked')) { $('#radio_prog_noms').prop("checked", false);}
-                else  $('#radio_prog_noms').prop("checked", true);
-                if($('#radio_prog_adresses').is(':checked')) { $('#radio_prog_adresses').prop("checked", false);}
-                else  $('#radio_prog_adresses').prop("checked", true);
-            })
-
             //------------------------------------
             //-------   COMMUNES VOISINES   ------
             //------------------------------------
@@ -391,8 +365,8 @@
             }
             rendu_bano(code_insee,nom_commune)
         })
-        history.replaceState("", "", window.location.pathname+"?insee="+$('#input_insee')[0].value+window.location.hash)
-        $('body').css('cursor','default');
+        update_search('insee',$('#input_insee')[0].value)
+*        $('body').css('cursor','default');
     };
     function update_csv_url(){
         urlCSV = 'requete_pifometre_voies.py?insee='+$('#input_insee')[0].value+'&format=csv';
@@ -445,8 +419,10 @@
         <div id="wait_ajax" class="pifomap"></div>
 
         <div id="bouton_progression">
-            <p><input type="radio" id="radio_prog_noms" name="prog_noms" value="huey" checked /><label for="huey">Intégration des noms de voies</label></p>
-            <p><input type="radio" id="radio_prog_adresses" name="prog_adresses" value="huey" /><label for="huey">Intégration des adresses</label></p>
+            <p><input type="radio" id="radio_prog_noms" name="switch_noms_adresses" value="affiche_noms" >
+            <label for="radio_prog_noms">Intégration des noms de voies</label></p>
+            <p><input type="radio" id="radio_prog_adresses" name="switch_noms_adresses" value="affiche_adresses" >
+            <label for="radio_prog_adresses">Intégration des adresses</label></p>
         </div>
         <button id="bouton_communes_voisines" title="Communes voisines"></button>
         <button id="bouton_refresh"></button>

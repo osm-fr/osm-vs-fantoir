@@ -231,8 +231,8 @@
             //-------       PIFOSTATS       ------
             //------------------------------------
 
-            pourcent_adresses_osm = nb_adresses_osm*100/nb_adresses_ban
-            pourcent_noms_osm = nb_noms_osm*100/nb_noms_topo
+            pourcent_adresses_osm = nb_adresses_osm*100/Math.max(nb_adresses_ban,1)
+            pourcent_noms_osm = nb_noms_osm*100/Math.max(nb_noms_topo,1)
 
             $('#pifostats .barre_noms_osm').attr('aria-valuenow', Math.round(pourcent_noms_osm))
             $('#pifostats .barre_noms_osm_texte').text(nb_noms_osm+' noms OSM'+' (soit '+Math.round(pourcent_noms_osm)+'% des '+nb_noms_topo+' noms Topo)')
@@ -248,6 +248,8 @@
             $("#pifostats .barre_adresses .barre_adresses_osm") .stop(true, true)
                                                                 .delay(1000)
                                                                 .animate({width: pourcent_adresses_osm+'%'}, 1000);
+            $('#lien_map_noms').attr('href','pifomap.html?ratio=N#map=10/'+lat_commune+'/'+lon_commune)
+            $('#lien_map_adresses').attr('href','pifomap.html?ratio=A#map=10/'+lat_commune+'/'+lon_commune)
 
             if (insee_commune_parente){
                 $('#alerte_commune').empty();
@@ -562,13 +564,13 @@
                 <div class="barre_noms_osm"></div>
                 <span class="barre_noms_osm_texte"></span> 
             </div>
-            <a href="pifomap.html" title="voir la carte de la progression en France"><img class="picto_france" src="img/france-blanc-points.png"/></a>
+            <a id="lien_map_noms" href="pifomap.html" title="voir la carte de la progression en France"><img class="picto_france" src="img/france-blanc-points.png"/></a>
 
             <div class="barre_adresses" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100"> 
                 <div class="barre_adresses_osm"></div> 
                 <span class="barre_adresses_osm_texte"></span> 
-            </div> 
-            <a href="pifomap.html" title="voir la carte de la progression en France"><img class="picto_france" src="img/france-blanc-points.png"/></a>
+            </div>
+            <a id="lien_map_adresses" href="pifomap.html" title="voir la carte de la progression en France"><img class="picto_france" src="img/france-blanc-points.png"/></a>
 
         </div>
 

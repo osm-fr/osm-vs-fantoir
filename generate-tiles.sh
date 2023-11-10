@@ -20,6 +20,11 @@ FROM ( SELECT code_insee,
                    WHEN population_rel >  20000 THEN 2
                    ELSE 3
               END AS class_pop,
+              nb_adresses_osm,
+              nb_adresses_ban,
+              nb_noms_osm,
+              nb_noms_ban,
+              nb_noms_topo,
               ST_AsMvtGeom(
                 geom_centroide_3857,
                 BBox($tx, $ty, $tz),
@@ -32,6 +37,22 @@ FROM ( SELECT code_insee,
                         population_rel
        FROM             planet_osm_communes_statut
        WHERE            \"ref:INSEE\" != '') p
+  USING (code_insee)
+  JOIN (SELECT code_insee,
+               CASE
+                   WHEN nb_adresses_ban > 0 THEN nb_adresses_osm * 25 / nb_adresses_ban
+                   ELSE 50
+               END AS ratio_adresses,
+               CASE
+                   WHEN nb_nom_topo > 0 THEN nb_nom_osm * 75 / nb_nom_topo
+                   ELSE 50
+               END AS ratio_noms,
+              nb_adresses_osm,
+              GREATEST(1,nb_adresses_ban) AS nb_adresses_ban,
+              nb_nom_osm AS nb_noms_osm,
+              GREATEST(1,nb_nom_ban) AS nb_noms_ban,
+              GREATEST(1,nb_nom_topo) AS nb_noms_topo
+        FROM bano_stats_communales) AS s
   USING (code_insee)
   JOIN (SELECT com
        FROM    cog_commune
@@ -69,11 +90,16 @@ function pyramide(){
 }
 
 # Réunion
-pyramide 6 41 42 35 35
+# pyramide 6 41 42 35 35
+pyramide 5 20 21 17 17
 
 # Caraïbes
-pyramide 6 20 23 29 31
+# pyramide 6 20 23 29 31
+pyramide 5 10 12 14 15
 
 # Metro
-pyramide 6 30 34 21 24
+# pyramide 6 30 34 21 24
+pyramide 5 15 17 10 12
 
+# pyramide 0 0 0 0 0
+# pyramide 1 0 1 0 1
