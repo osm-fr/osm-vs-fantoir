@@ -678,7 +678,7 @@ hr {
 	color: orange; /*vert*/
 }
 
-#legende.pifomap p .point {
+#legende.pifomap .point {
 	height: 7px;
 	width: 7px;
 	display: inline-block;
@@ -700,6 +700,34 @@ hr {
 	background-color: blue;
 }
 
+/* Intégration gradient */
+#legende.pifomap table {
+	width: 80%;
+}
+
+#legende.pifomap td {
+	width: 7%;
+	padding: 0;
+	font-size: 0.8em;
+	text-align: center;
+}
+.point.integration.i0 {	background-color: red;}
+.point.integration.i8 {	background-color: orangered;}
+.point.integration.i16 {	background-color: darkorange;}
+.point.integration.i25 {	background-color: orange;}
+.point.integration.i33 {	background-color: gold;}
+.point.integration.i41 {	background-color: gold;}
+.point.integration.i50 {	background-color: yellow;}
+.point.integration.i58 {	background-color: greenyellow;}
+.point.integration.i66 {	background-color: lime;}
+.point.integration.i75 {	background-color: green;}
+.point.integration.i83 {	background-color: green;}
+.point.integration.i91 {	background-color: green;}
+.point.integration.i100 {	background-color: green;}
+
+#legende.pifomap .petit {
+	font-size: 0.8em;
+}
 /*------------------------------------------------------*/
 /*------------------ PANNEAU LATÉRAL -------------------*/
 /*------------------------------------------------------*/
