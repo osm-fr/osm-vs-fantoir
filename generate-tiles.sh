@@ -89,6 +89,10 @@ function pyramide(){
   done
 }
 
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd $SCRIPT_DIR
+
 # Réunion
 # pyramide 6 41 42 35 35
 pyramide 5 20 21 17 17
