@@ -49,9 +49,10 @@ CREATE TEMP TABLE geom
 AS
 (SELECT DISTINCT fantoir,
         nom_voie,
-        FIRST_VALUE(geometrie) OVER(PARTITION BY fantoir) geometrie
+        FIRST_VALUE(geometrie) OVER(PARTITION BY fantoir ORDER BY numero) geometrie
 FROM    (SELECT fantoir,
                 nom_voie,
+                numero,
                 geometrie
         FROM    bano_adresses
         WHERE   code_dept = '__dept__' AND
