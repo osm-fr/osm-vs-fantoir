@@ -3,13 +3,13 @@
         "raster-tiles": {
             "type": "raster",
             "tiles": [
-                "https://tile-a.openstreetmap.fr/hot/{z}/{x}/{y}.png"
+                "https://a.piano.tiles.quaidorsay.fr/fr/{z}/{x}/{y}.png"
             ],
             "tileSize": 256,
             "attribution":
                 "Map tiles by OSM-FR",
             "note":
-                "https://a.piano.tiles.quaidorsay.fr/en/{z}/{x}/{y}.png"
+                "https://tile-a.openstreetmap.fr/hot/{z}/{x}/{y}.png"
         },
         "communes": {
              "type": "vector",
