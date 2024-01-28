@@ -1,0 +1,283 @@
+{   "version": 8,
+    "sources": {
+        "raster-tiles": {
+            "type": "raster",
+            "tiles": [
+                "https://tile-a.openstreetmap.fr/hot/{z}/{x}/{y}.png"
+            ],
+            "tileSize": 256,
+            "attribution":
+                "Map tiles by OSM-FR",
+            "note":
+                "https://a.piano.tiles.quaidorsay.fr/fr/{z}/{x}/{y}.png"
+        },
+        "communes": {
+             "type": "vector",
+             "tiles": [
+                  "https://bano.openstreetmap.fr/pifometre/tiles/{z}/{x}/{y}.pbf"
+                  ],
+            "minzoom":5,
+            "maxzoom":5
+        },
+        "adresses": {
+             "type": "vector",
+             "tiles": [
+                  "https://bano.openstreetmap.fr/pifov3-dev/tiles_pifocarte11/{z}/{x}/{y}.pbf"
+                  ],
+            "minzoom":13,
+            "maxzoom":13
+        }
+    },
+    "glyphs": "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
+    "sprite": "https://demotiles.maplibre.org/styles/osm-bright-gl-style/sprite",
+    "layers": [
+        {
+            "id": "simple-tiles",
+            "type": "raster",
+            "source": "raster-tiles",
+            "minzoom": 0,
+            "maxzoom": 22
+        },
+        {
+            "id": "point_de_communes",
+            "source": "communes",
+            "source-layer": "centroides_communes",
+            "type": "symbol",
+            "minzoom" : 5,
+            "maxzoom" : 17,
+            "layout": {
+                "visibility" : "none",
+                "icon-allow-overlap":true,
+                "icon-image":"rond_50",
+                "icon-size": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        5,
+                        0.05,
+                        11,
+                        0.2,
+                        17,
+                        0.25]
+                },
+            "paint": {
+                "icon-color": ["interpolate",
+                        ["linear"],
+                        ["*", ["/",["get", "nb_noms_osm"],100],["get", "nb_noms_topo"]],
+                        0,
+                        "red",
+                        25,
+                        "orange",
+                        50,
+                        "yellow",
+                        75,
+                        "green"]
+            }
+        },
+        {
+            "id": "noms_de_communes_1",
+            "source": "communes",
+            "source-layer": "centroides_communes",
+            "type": "symbol",
+            "filter" : ["==",["get", "class_pop"], 1],
+            "minzoom" : 6,
+            "layout": {
+                "text-overlap":"never",
+                "text-variable-anchor": ["left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"],
+                "text-field": ["format",["get", "nom"],{},"\n",{},["get", "code_insee"],{"font-scale": 0.8}]
+            },
+            "paint": {
+                "text-color": "black",
+                "text-halo-color": "white",
+                "text-halo-width": 4
+            }
+        },
+        {
+            "id": "noms_de_communes_2",
+            "source": "communes",
+            "source-layer": "centroides_communes",
+            "type": "symbol",
+            "filter" : ["==",["get", "class_pop"], 2],
+            "minzoom" : 8,
+            "layout": {
+                "text-overlap":"never",
+                "text-variable-anchor": ["left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"],
+                "text-field": ["format",["get", "nom"],{},"\n",{},["get", "code_insee"],{"font-scale": 0.8}]
+            },
+            "paint": {
+                "text-color":"black",
+                "text-halo-color": "white",
+                "text-halo-width": 4
+            }
+        },
+        {
+            "id": "noms_de_communes_3",
+            "source": "communes",
+            "source-layer": "centroides_communes",
+            "type": "symbol",
+            "filter" : ["==",["get", "class_pop"], 3],
+            "minzoom" : 9,
+            "layout": {
+                "text-overlap":"never",
+                "text-variable-anchor": ["left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"],
+                "text-radial-offset": 0.4,
+                "text-field": ["format",["get", "nom"],{},"\n",{},["get", "code_insee"],{"font-scale": 0.8}]
+            },
+            "paint": {
+                "text-color":"black",
+                "text-halo-color": "white",
+                "text-halo-width": 4
+            }
+        },
+        {
+            "id": "noms_de_communes_4",
+            "source": "communes",
+            "source-layer": "centroides_communes",
+            "type": "symbol",
+            "filter" : ["==",["get", "class_pop"], 4],
+            "minzoom" : 11,
+            "layout": {
+                "text-overlap":"never",
+                "text-variable-anchor": ["left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"],
+                "text-radial-offset": 0.4,
+                "text-field": ["format",["get", "nom"],{},"\n",{},["get", "code_insee"],{"font-scale": 0.8}]
+            },
+            "paint": {
+                "text-color":"black",
+                "text-halo-color": "white",
+                "text-halo-width": 4
+            }
+        },
+        {
+            "id": "polygones_convexhull",
+            "source": "adresses",
+            "source-layer": "polygones_convexhull",
+            "type": "line",
+            "minzoom" : 16,
+            "layout": {
+                "line-join":"round",
+                "line-cap":"round"
+            },
+            "paint": {
+                "line-color":["case",["!=", ["to-string",["get","statut"]],""], "grey","red"],
+                "line-width":5,
+                "line-opacity":0.5
+            }
+        },
+        {
+            "id": "OSM_point",
+            "source": "adresses",
+            "source-layer": "numeros_points_OSM",
+            "type": "circle",
+            "minzoom" : 13,
+            "paint": {
+                "circle-radius": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        13,
+                        2,
+                        19,
+                        5],
+                "circle-color": ["case",
+                                ["boolean", ["get","commun"]],"green",
+                                 "blue"]
+            }
+        },
+        {
+            "id": "BAN_point",
+            "source": "adresses",
+            "source-layer": "numeros_points_BAN",
+            "type": "circle",
+            "minzoom" : 13,
+            "paint": {
+                "circle-radius": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        13,
+                        2,
+                        19,
+                        5],
+                "circle-color": ["case",
+                                ["boolean", ["get","rapproche"]],"orange",
+                                 "red"]
+            }
+        },
+        {
+            "id": "BAN_texte",
+            "source": "adresses",
+            "source-layer": "numeros_points_BAN",
+            "type": "symbol",
+            "minzoom" : 17,
+            "layout": {
+                "text-field": ["get", "numero"],
+                "text-variable-anchor": ["top", "left"],
+                "text-radial-offset": 0.5,
+                "text-overlap":"cooperative",
+                "text-justify": "auto"
+            },
+            "paint": {
+                "text-color": ["case",
+                                ["boolean",["get","rapproche"]],"brown",
+                                "red"],
+                "text-halo-color": "white",
+                "text-halo-width": 2
+            }
+        },
+        {
+            "id": "OSM_texte",
+            "source": "adresses",
+            "source-layer": "numeros_points_OSM",
+            "type": "symbol",
+            "minzoom" : 17,
+            "layout": {
+                "text-field": ["get", "numero"],
+                "text-variable-anchor": ["bottom", "right"],
+                "text-radial-offset": 0.5,
+                "text-overlap":"cooperative",
+                "text-justify": "auto"
+                },
+            "paint": {
+                "text-color": ["case",
+                                ["boolean",["get","commun"]],"green",
+                                "blue"],
+                "text-halo-color": "white",
+                "text-halo-width": 2
+            }
+        },
+        {
+            "id": "polygones_texte",
+            "source": "adresses",
+            "source-layer": "polygones_convexhull",
+            "type": "symbol",
+            "minzoom" : 16,
+            "layout": {
+                "text-field": ["get", "nom"],
+                "text-overlap":"cooperative",
+                "text-justify": "auto",
+                "symbol-placement": "line"
+                },
+            "paint": {
+                "text-color":["case",["!=", ["to-string",["get","statut"]],""],"black","red"],
+                "text-halo-color": "white",
+                "text-halo-width": 2
+            }
+        },
+        {
+            "id": "polygones_texte_point",
+            "source": "adresses",
+            "source-layer": "polygones_convexhull",
+            "type": "symbol",
+            "minzoom" : 15,
+            "layout": {
+                "text-field": ["case",["!=", ["to-string",["get","statut"]],""],["format",["get", "nom"],{},"\n",{},["get", "fantoir"],{"font-scale": 0.8},"\n",{},["get", "statut"],{"font-scale": 0.8}],["format",["get", "nom"],{},"\n",{},["get", "fantoir"],{"font-scale": 0.8}]],
+                "text-overlap":"cooperative",
+                "text-justify": "auto",
+                "symbol-placement": "point"
+                },
+            "paint": {
+                "text-color":["case",["!=", ["to-string",["get","statut"]],""], "black","red"],
+                "text-halo-color": "white",
+                "text-halo-width": 3
+            }
+        }
+    ]
+}
