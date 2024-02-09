@@ -69,69 +69,104 @@ FROM ( SELECT code_insee,
   "
 }
 
-function num_convex_old() {
+function lieudit_CADASTRE() {
   tz=$1
   tx=$2
   ty=$3
   echo "
   COPY (
-SELECT ST_AsMVT(q, 'polygones_convexhull', 4096, 'geom')
+SELECT ST_AsMVT(q, 'lieudit_CADASTRE', 4096, 'geom')
 FROM (
-    with 
-    liste_insee
-    as
-    (select distinct code_insee
-    from
-    polygones_insee_3857
-    where geom_centroide_3857 && ST_Buffer(BBox($tx, $ty, $tz),1000,2) AND
-            ST_Intersects(geom_centroide_3857, BBox($tx, $ty, $tz)) ),
-    fantoir
-    AS
-    (SELECT fantoir
-    FROM    nom_fantoir
-    join liste_insee
-     using (code_insee)
-    WHERE   source = 'BAN'
-    EXCEPT
-     SELECT fantoir
-    FROM    nom_fantoir
-    join liste_insee
-     using (code_insee)
-     WHERE       source = 'OSM'),
-    latest_statut
-    AS
-    (SELECT fantoir,
-            label_statut
-    FROM    (SELECT *,
-                    RANK() OVER(PARTITION BY fantoir ORDER BY timestamp_statut DESC,id_statut DESC) rang
-            FROM    statut_fantoir)f
-    JOIN    labels_statuts_fantoir
-    USING   (id_statut)
-    WHERE   rang = 1 AND
-            id_statut != 0),
-    bano_a
-    AS
-    (SELECT fantoir,
-           COALESCE(nom_place,nom_voie) AS nom,
-           label_statut,
-           ST_Transform(ST_Buffer(ST_Convexhull(ST_Collect(geometrie)),0.0001),3857) as geom_hull
-    FROM   (SELECT * FROM bano_adresses WHERE st_transform(geometrie,3857) && BBox($tx, $ty, $tz)) as bano_a
-    JOIN   fantoir
-    USING  (fantoir)
-    LEFT OUTER JOIN latest_statut
-    USING  (fantoir)
-    GROUP BY 1,2,3)
-    SELECT nom,
-          fantoir,
-          ST_AsMvtGeom(
-              geom_hull,
-              BBox($tx, $ty, $tz),
-              4096,
-              256,
-              true
-            ) AS geom
-     FROM bano_a
-     WHERE ST_Intersects(geom_hull, BBox($tx, $ty, $tz))
+      WITH 
+      cadastre
+      AS
+      (SELECT code_insee,fantoir,nom,geometrie_3857
+      FROM    bano_points_nommes
+      WHERE   ST_Intersects(geometrie_3857, BBox($tx, $ty, $tz)) AND
+              source = 'CADASTRE'),
+      liste_insee
+      AS
+      (SELECT DISTINCT code_insee
+      FROM cadastre),
+      fantoir_osm
+      AS
+      (SELECT DISTINCT fantoir
+      FROM  bano_points_nommes
+      JOIN liste_insee
+      USING (code_insee)
+      WHERE source = 'OSM'),
+      resultat
+      as
+      (SELECT nom,
+              fantoir,
+              CASE WHEN fantoir_osm.fantoir IS NULL THEN false ELSE true END rapproche,
+              geometrie_3857
+      FROM    cadastre
+      LEFT OUTER JOIN fantoir_osm
+      USING (fantoir))
+      SELECT nom,
+             fantoir,
+             rapproche,
+             ST_AsMvtGeom(
+                 geometrie_3857,
+                 BBox($tx, $ty, $tz),
+                 4096,
+                 256,
+                 true) AS geom
+     FROM resultat
+     WHERE ST_Intersects(geometrie_3857, BBox($tx, $ty, $tz))
+) AS q
+  ) TO STDOUT;
+  "
+}
+
+function place_OSM() {
+  tz=$1
+  tx=$2
+  ty=$3
+  echo "
+  COPY (
+SELECT ST_AsMVT(q, 'place_OSM', 4096, 'geom')
+FROM (
+      WITH 
+      osm
+      AS
+      (SELECT code_insee,fantoir,nom,geometrie_3857
+      FROM    bano_points_nommes
+      WHERE   ST_Intersects(geometrie_3857, BBox($tx, $ty, $tz)) AND
+              nature = 'place' AND
+              source = 'OSM'),
+      liste_insee
+      AS
+      (SELECT DISTINCT code_insee
+      FROM osm),
+      fantoir
+      AS
+      (SELECT DISTINCT fantoir
+      FROM  bano_points_nommes
+      JOIN liste_insee
+      USING (code_insee)
+      WHERE source != 'OSM'),
+      resultat
+      as
+      (SELECT nom,
+              fantoir,
+              CASE WHEN fantoir.fantoir IS NULL THEN false ELSE true END rapproche,
+              geometrie_3857
+      FROM    osm
+      LEFT OUTER JOIN fantoir
+      USING (fantoir))
+      SELECT nom,
+             fantoir,
+             rapproche,
+             ST_AsMvtGeom(
+                 geometrie_3857,
+                 BBox($tx, $ty, $tz),
+                 4096,
+                 256,
+                 true) AS geom
+     FROM resultat
+     WHERE ST_Intersects(geometrie_3857, BBox($tx, $ty, $tz))
 ) AS q
   ) TO STDOUT;
   "
@@ -148,18 +183,18 @@ FROM (
       with
       liste_insee
       as
-      (select distinct code_insee
+      (SELECT DISTINCT code_insee
       from bano_adresses
       WHERE ST_Intersects(geometrie_3857,ST_Buffer(BBox($tx, $ty, $tz),1000,2)) AND
             source = 'BAN'),
       fantoir
       as
-      (select fantoir
+      (SELECT fantoir
       from bano_adresses
       WHERE ST_Intersects(geometrie_3857,ST_Buffer(BBox($tx, $ty, $tz),1000,2)) AND
             source = 'BAN'
       except
-      select fantoir
+      SELECT fantoir
       from bano_points_nommes
       join liste_insee
       using (code_insee)
@@ -217,26 +252,31 @@ FROM (
       with 
       osm
       as
-      (select fantoir,numero,source as source_osm,geometrie_3857
+      (SELECT bano_id,code_insee,fantoir,numero,source as source_osm,geometrie_3857
       from bano_adresses
       WHERE ST_Intersects(geometrie_3857, BBox($tx, $ty, $tz))
       and source = 'OSM'),
+      liste_insee
+      AS
+      (SELECT DISTINCT code_insee
+      FROM osm),
       ban
       as
-      (select fantoir,numero
-      from bano_adresses
-      WHERE ST_Intersects(geometrie_3857, BBox($tx, $ty, $tz))
-      and source = 'BAN'),
+      (SELECT bano_id
+      FROM bano_adresses
+      JOIN liste_insee
+      USING (code_insee)
+      WHERE source = 'BAN'),
       resultat
       as
-      (select osm.fantoir,
+      (SELECT osm.fantoir,
               osm.numero,
-              CASE WHEN ban.fantoir is null THEN false ELSE true END as commun,
+              CASE WHEN ban.bano_id is null THEN false ELSE true END as commun,
               geometrie_3857
       from
       osm 
       left outer join ban
-      using (fantoir, numero))
+      using (bano_id))
       SELECT numero,
           fantoir,
           commun,
@@ -261,32 +301,48 @@ function num_point_ban() {
   COPY (
 SELECT ST_AsMVT(q, 'numeros_points_BAN', 4096, 'geom')
 FROM (
-      with 
+      WITH 
       ban
-      as
-      (select fantoir,numero,geometrie_3857
-      from bano_adresses
-      WHERE ST_Intersects(geometrie_3857, BBox($tx, $ty, $tz))
-      and source = 'BAN'),
+      AS
+      (SELECT code_insee,fantoir,numero,bano_id,geometrie_3857
+      FROM    bano_adresses
+      WHERE   ST_Intersects(geometrie_3857, BBox($tx, $ty, $tz)) AND
+              source = 'BAN'),
+      liste_insee
+      AS
+      (SELECT DISTINCT code_insee
+      FROM ban),
       fantoir_osm
+      AS
+      (SELECT DISTINCT fantoir
+      FROM  bano_points_nommes
+      JOIN (SELECT DISTINCT code_insee FROM ban) b
+      USING (code_insee)
+      WHERE source = 'OSM'),
+      osm
       as
-      (select distinct fantoir
-      from bano_points_nommes
-      WHERE ST_Intersects(geometrie_3857,ST_Buffer(BBox($tx, $ty, $tz),1000,2)) AND
-            source = 'OSM'),
+      (SELECT bano_id
+      FROM bano_adresses
+      JOIN liste_insee
+      USING (code_insee)
+      WHERE source = 'OSM'),
       resultat
       as
-      (select ban.fantoir,
+      (SELECT ban.fantoir,
               ban.numero,
               CASE WHEN fantoir_osm.fantoir IS NULL THEN false ELSE true END rapproche,
+              CASE WHEN osm.bano_id is null THEN false ELSE true END as commun,
               geometrie_3857
       from    ban
       left outer join
       fantoir_osm
-      using (fantoir))
+      using (fantoir)
+      left outer join osm
+      using (bano_id))
       SELECT numero,
           fantoir,
           rapproche,
+          commun,
           ST_AsMvtGeom(
               geometrie_3857,
               BBox($tx, $ty, $tz),
@@ -307,9 +363,9 @@ function pyramide(){
   x1=$3
   y0=$4
   y1=$5
-  root_dir=tiles_pifocarte
+  root_dir=../pifometre_v3/tiles_pifocarte
 
-  for (( z=$zoom; z<=$zoom; ++z )); do
+  for (( z=$zoom; z<=13; ++z )); do
     for (( x=$x0; x<=$x1; ++x )); do
       mkdir -p ./$root_dir/$z/$x
       for (( y=$y0; y<=$y1; ++y )); do
@@ -318,10 +374,16 @@ function pyramide(){
         psql -d bano -U cadastre -tq -c "$(num_convex $z $x $y)" | xxd -r -p ;
         psql -d bano -U cadastre -tq -c "$(num_point_ban $z $x $y)" | xxd -r -p ;
         psql -d bano -U cadastre -tq -c "$(num_point_osm $z $x $y)" | xxd -r -p ;
+        psql -d bano -U cadastre -tq -c "$(lieudit_CADASTRE $z $x $y)" | xxd -r -p ;
+        psql -d bano -U cadastre -tq -c "$(place_OSM $z $x $y)" | xxd -r -p ;
         } > $file
         du -h $file
       done
     done
+    let "x0 = x0 * 2"
+    let "y0 = y0 * 2"
+    let "x1 = x1 * 2"
+    let "y1 = y1 * 2"
   done
 }
 
@@ -332,6 +394,7 @@ cd $SCRIPT_DIR
 # Metro
 # pyramide 6 30 34 21 24
 # pyramide 10 509 511 359 361
-# pyramide 11 1018 1022 718 724
-# pyramide 12 2036 2044 1436 1448
-pyramide 13 4072 4080 2872 2880
+pyramide 11 725 726 995 996
+# pyramide 11 1018 1020 718 720
+# pyramide 12 2036 2040 1436 1440
+# pyramide 13 4072 4080 2872 2880

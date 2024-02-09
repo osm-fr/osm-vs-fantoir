@@ -22,9 +22,9 @@
         "adresses": {
              "type": "vector",
              "tiles": [
-                  "https://bano.openstreetmap.fr/pifov3-dev/tiles_pifocarte11/{z}/{x}/{y}.pbf"
+                  "https://bano.openstreetmap.fr/pifometre/tiles_pifocarte/{z}/{x}/{y}.pbf"
                   ],
-            "minzoom":13,
+            "minzoom":11,
             "maxzoom":13
         }
     },
@@ -164,15 +164,39 @@
             }
         },
         {
-            "id": "OSM_point",
+            "id": "BAN_point",
             "source": "adresses",
-            "source-layer": "numeros_points_OSM",
+            "source-layer": "numeros_points_BAN",
             "type": "circle",
-            "minzoom" : 13,
+            "minzoom" : 11,
             "paint": {
                 "circle-radius": ["interpolate",
                         ["linear"],
                         ["zoom"],
+                        11,
+                        2,
+                        13,
+                        2,
+                        19,
+                        5],
+                "circle-color": ["case", ["boolean",["get","rapproche"]],
+                                                ["case",["boolean", ["get","commun"]],"grey",
+                                                "orange"],
+                                         "red"]
+            }
+        },
+        {
+            "id": "OSM_point",
+            "source": "adresses",
+            "source-layer": "numeros_points_OSM",
+            "type": "circle",
+            "minzoom" : 11,
+            "paint": {
+                "circle-radius": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        11,
+                        2,
                         13,
                         2,
                         19,
@@ -180,25 +204,6 @@
                 "circle-color": ["case",
                                 ["boolean", ["get","commun"]],"green",
                                  "blue"]
-            }
-        },
-        {
-            "id": "BAN_point",
-            "source": "adresses",
-            "source-layer": "numeros_points_BAN",
-            "type": "circle",
-            "minzoom" : 13,
-            "paint": {
-                "circle-radius": ["interpolate",
-                        ["linear"],
-                        ["zoom"],
-                        13,
-                        2,
-                        19,
-                        5],
-                "circle-color": ["case",
-                                ["boolean", ["get","rapproche"]],"orange",
-                                 "red"]
             }
         },
         {
@@ -210,13 +215,15 @@
             "layout": {
                 "text-field": ["get", "numero"],
                 "text-variable-anchor": ["top", "left"],
-                "text-radial-offset": 0.5,
-                "text-overlap":"cooperative",
-                "text-justify": "auto"
+                "text-radial-offset": ["case",["boolean", ["get","commun"]],1,0.5],
+                "text-justify": "auto",
+                "text-size": ["case",["boolean", ["get","commun"]],12,16]
             },
             "paint": {
                 "text-color": ["case",
-                                ["boolean",["get","rapproche"]],"brown",
+                                ["boolean",["get","rapproche"]],["case",
+                                ["boolean", ["get","commun"]],"black",
+                                 "black"],
                                 "red"],
                 "text-halo-color": "white",
                 "text-halo-width": 2
@@ -232,12 +239,47 @@
                 "text-field": ["get", "numero"],
                 "text-variable-anchor": ["bottom", "right"],
                 "text-radial-offset": 0.5,
-                "text-overlap":"cooperative",
                 "text-justify": "auto"
                 },
             "paint": {
                 "text-color": ["case",
                                 ["boolean",["get","commun"]],"green",
+                                "blue"],
+                "text-halo-color": "white",
+                "text-halo-width": 2
+            }
+        },
+        {
+            "id": "lieudit_CADASTRE_texte",
+            "source": "adresses",
+            "source-layer": "lieudit_CADASTRE",
+            "type": "symbol",
+            "minzoom" : 12,
+            "layout": {
+                "text-field": ["get", "nom"],
+                "text-justify": "auto"
+                },
+            "paint": {
+                "text-color": ["case",
+                                ["boolean",["get","rapproche"]],"orange",
+                                "red"],
+                "text-halo-color": "white",
+                "text-halo-width": 2
+            }
+        },
+        {
+            "id": "place_OSM_texte",
+            "source": "adresses",
+            "source-layer": "place_OSM",
+            "type": "symbol",
+            "minzoom" : 12,
+            "layout": {
+                "text-field": ["get", "nom"],
+                "text-justify": "auto"
+                },
+            "paint": {
+                "text-color": ["case",
+                                ["boolean",["get","rapproche"]],"green",
                                 "blue"],
                 "text-halo-color": "white",
                 "text-halo-width": 2
