@@ -203,7 +203,7 @@
                                .append($('<a>')
                                    .attr('target','blank')
                                    .attr('href',url_listing_fantoir)
-                                   .text('Fantoir')
+                                   .text('Topo (ex-Fantoir)')
                                )
                                .append(' / ')
                                .append($('<a>')
@@ -271,16 +271,16 @@
                 $('#'+table).trigger("destroy");
                 $('#'+table).empty()
                 $('#'+table).append($('<thead>').append($('<tr>').append($('<th>').append('Code Fantoir'))))
-                $('#'+table+' tr').append($('<th>').append('Création Fantoir'))
+                $('#'+table+' tr').append($('<th>').append('Date de création'))
                 if (commune_composee == 1){
                     $('#'+table+' tr').append($('<th>').append('Ancienne commune'))
                 }
-                $('#'+table+' tr').append($('<th>').append('Libellé Fantoir'))
+                $('#'+table+' tr').append($('<th>').append('Libellé Topo (ex Fantoir)'))
                 $('#'+table+' tr').append($('<th>').append('Libellé OSM'))
                 $('#'+table+' tr').append($('<th>').append('Libellé BAN ou Cadastre'))
                 $('#'+table+' tr').append($('<th>').attr('colspan','2').append('Carte'))
                 $('#'+table+' tr').append($('<th>').attr('colspan','2').append('Edition'))
-                $('#'+table+' tr').append($('<th>').append('Statut Fantoir ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
+                $('#'+table+' tr').append($('<th title="ex statut Fantoir">').append('Statut du nom ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
                 $('#'+table+' tr').append($('<th>').attr('colspan','2').addClass('string-none').append('Intégrer les adresses'))
                 $('#'+table+' tr').append($('<th>').append('Qualifier les adresses'))
                 $('#'+table).append($('<tbody>'))
@@ -637,7 +637,7 @@
                             <label class="switch is-rounded is-small">
                             <input type="checkbox" id="check_osm_hors_fantoir" checked>
                             <span class="check is-blue"></span>
-                            <span class="control-label" critere="osm_hors_fantoir">Trouvé dans OSM et inconnu de Fantoir<span></span></span>
+                            <span class="control-label" critere="osm_hors_fantoir">Trouvé dans OSM et inconnu du fichier Topo<span></span></span>
                         </li>
                     </ul>
                 </div>
