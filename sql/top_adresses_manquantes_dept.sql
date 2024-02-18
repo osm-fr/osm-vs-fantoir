@@ -44,7 +44,7 @@ WHERE   rang = 1 AND
 geom
 AS
 (SELECT DISTINCT c.fantoir,
-        FIRST_VALUE(geometrie) OVER(PARTITION BY c.fantoir) geometrie
+        FIRST_VALUE(geometrie) OVER(PARTITION BY c.fantoir ORDER BY c.numero) geometrie
 FROM    bano_adresses c
 JOIN    max
 USING   (fantoir))
