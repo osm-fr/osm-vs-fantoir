@@ -7,7 +7,11 @@ SELECT  co.dep,
         lat,
         caractere_annul,
         COALESCE(id_statut,0)
-FROM    (SELECT * FROM bano_points_nommes WHERE code_dept = '__dept__' AND nature = 'numero') f
+FROM    (SELECT *
+        FROM    bano_points_nommes
+        WHERE   code_dept = '__dept__' AND
+                nature = 'numero'      AND
+                source = 'OSM') f
 JOIN    (SELECT libelle,
                 com AS code_insee,
                 dep
