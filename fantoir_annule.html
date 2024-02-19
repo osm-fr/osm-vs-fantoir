@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Fantoirs annulés</title>
+<title>Codes Fantoir annulés</title>
 <link rel="preload" href="css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
 <script src="js/jquery-3.6.4.min.js"></script>
 <script src="js/tablesorter/jquery.tablesorter.js"></script>
@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="css/responsive.css" type="text/css"/>
 
 <script>
-    var titre = "Codes FANTOIR annulés"
+    var titre = "Codes Fantoir annulés"
     function start(){
         document.title = titre
         numero_dept = check_url_for_dept()
@@ -29,7 +29,7 @@
 
             $('body').css('cursor','progress');
             $('#wait_ajax').css('visibility','visible')
-                            .append($('<p>').append('Chargement des Fantoirs annulés...'))
+                            .append($('<p>').append('Chargement des codes Fantoir annulés...'))
             $.ajax({
                 url: "fantoir_annule.py?dept="+numero_dept,
             })
@@ -44,7 +44,7 @@
                 }
                 $('#bandeau h1').empty().append(data.length+titre_bandeau)
                 $('#bandeau h2').empty().append(nom_dept+' ('+numero_dept+')')
-                $('#bandeau h4').empty().append("Codes trouvés dans OSM mais annulés d'après le fichier Fantoir officiel.<br />Noms de voies remplacés, voies en double dont un seul code est conservé... Pour les communes fusionnées, les nouveaux codes Fantoir sont à retrouver sur la page de la nouvelle commune.")
+                $('#bandeau h4').empty().append("Codes trouvés dans OSM mais annulés d'après le fichier Topo (ex Fantoir) officiel.<br />Noms de voies remplacés, voies en double dont un seul code est conservé... Pour les communes fusionnées, les nouveaux codes Fantoir sont à retrouver sur la page de la nouvelle commune.")
 
                 $('#wait_ajax').css('visibility','hidden');
 
@@ -95,7 +95,7 @@
                     add_josm_link('table_fantoir_annule',xleft,xright,ybottom,ytop,insee,commune)
                     //Fantoir
                     add_map_link('table_fantoir_annule','./index.html?insee='+insee,'Pifomètre ('+insee+')')
-                    add_map_link('table_fantoir_annule','./liste_brute_fantoir.html?insee='+insee,'Fantoir brut ('+insee+')')
+                    add_map_link('table_fantoir_annule','./liste_brute_fantoir.html?insee='+insee,'Topo brut ('+insee+')')
                 }
 
               //Sticky headers : le tableau scrolle dans son contenant
@@ -131,8 +131,8 @@
     <div id="bandeau">
         <div id="descriptif">
             <h2></h2>
-            <h1>Fantoirs annulés</h1>
-            <h3>Liste des codes trouvés dans OSM mais annulés d'après le fichier Fantoir officiel.<br />Cela peut être des noms de voies remplacés par d'autres, des voies en double dont un seul code est conservé...<br />Lors de fusions de communes, celles dont le code Insee disparaît voient leurs codes Fantoir annulés, et remplacés par de nouveaux codes dans la nouvelle commune. Dans ce cas, c'est dans la page de la nouvelle commune qu'il faut chercher le nouveau code Fantoir.</h3>
+            <h1>Codes Fantoir annulés</h1>
+            <h3>Liste des codes trouvés dans OSM mais annulés d'après le fichier Topo (ex Fantoir) officiel.<br />Cela peut être des noms de voies remplacés par d'autres, des voies en double dont un seul code est conservé...<br />Lors de fusions de communes, celles dont le code Insee disparaît voient leurs codes Fantoir annulés, et remplacés par de nouveaux codes dans la nouvelle commune. Dans ce cas, c'est dans la page de la nouvelle commune qu'il faut chercher le code Fantoir.</h3>
         </div>
         <div id="wait_ajax" class="bas"></div>
     </div>

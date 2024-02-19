@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Listes FANTOIR par commune</title>
+<title>Listes TOPO par commune</title>
 <script src="js/jquery-3.6.4.min.js"></script>
 <script src="js/tablesorter/jquery.tablesorter.js"></script>
 <script src="js/jquery.tablesorter.combined.min.js"></script>
@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="css/responsive.css" type="text/css"/>
 
 <script>
-	a_champs_fantoir = ['Rapproché ?','dept','code_insee','fantoir','nature_voie','libelle_voie','caractere_voie','caractere_annul','date_annul','date_creation','type_voie','dernier_mot']
+	a_champs_fantoir = ['Rapproché ?','Dept','Code Insee','Code Fantoir','Nature voie','Libellé voie','Caractère voie','Car. annul.','Date annul.','Date de création','Type de voie','Mot classant']
 	// function check_url_for_insee(){
 	// 	pattern_insee = new RegExp('^[0-9][0-9abAB][0-9]{3}$')
 	// 	var res
@@ -56,7 +56,7 @@
 				return 0;
 			}
 
-			document.title = nom_commune+' - Liste FANTOIR'
+			document.title = nom_commune+' - Liste TOPO'
 
       url_map_org_part1 = 'http://www.openstreetmap.org/'
       url_listing_fantoir = './liste_brute_fantoir.html?insee='+$('#input_insee')[0].value
@@ -93,7 +93,7 @@
                               )
                           
       $('#infos_commune_col2 h2').empty().append(nom_commune)
-      $('#infos_commune_col2 h1').empty().append('Fichier Fantoir brut')
+      $('#infos_commune_col2 h1').empty().append('Fichier Topo brut')
 
 			fantoir = data[1]
 
