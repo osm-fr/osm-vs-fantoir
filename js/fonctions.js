@@ -677,7 +677,7 @@
         }
     }
     function reset_url_hash(){
-        history.replaceState("", "", window.location.pathname+"?"+window.location.search)
+        history.replaceState("", "", window.location.pathname+"?"+window.location.search.replace(/\?/g,''))
     }
     function reset_panneau_map(){
         $('#panneau_map h2').empty()
