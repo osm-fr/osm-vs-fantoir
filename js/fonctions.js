@@ -373,6 +373,27 @@
                 } else {
                     $('#panneau_map h2').text(nom)
                 }
+                $('#panneau_map #espace_bouton_copier').append('<button id="copier_voie" title="Copier le nom de la voie"></button>')
+                $('#panneau_map #espace_bouton_copier #copier_voie').click(function(){
+
+                    //Copie le nom de la voie dans le presse-papier
+                    navigator.clipboard.writeText($('#panneau_map h2').html())
+                    //Affiche le picto copie en vert
+                    $(this).addClass('ok')
+                    //Affiche le message de confirmation
+                    $('#panneau_map #espace_bouton_copier').append($('<span id="confirmation_copie">').text('✔ Copié'));
+
+                    setTimeout(function(){
+                        $('#panneau_map #espace_bouton_copier #confirmation_copie').css('opacity', '1');
+                        setTimeout(function(){
+                            $('#panneau_map #espace_bouton_copier #confirmation_copie').css('opacity', '0');
+                        }, 800);
+                        setTimeout(function(){
+                            $('#panneau_map #espace_bouton_copier #confirmation_copie').remove();
+                        }, 1500);
+                    }, 50);
+
+                })
 
                 fantoir = e.features[0].properties.fantoir;
 
@@ -452,6 +473,8 @@
                                 $('#panneau_map h2').text(nom_osm)
                             }
                         }
+                        $('#panneau_map').append('<button id="copier_voie" title="Copier le nom de la voie"></button>')
+
 
                         //Infos sur le numéro
                         if (couche_carto == 'BAN_point' || couche_carto == 'OSM_point') {
@@ -598,6 +621,27 @@
                 lat = e.lngLat.lat
 
                 $('#panneau_map h2').text(nom)
+                $('#panneau_map #espace_bouton_copier').append('<button id="copier_voie" title="Copier le nom de la voie"></button>')
+                $('#panneau_map #espace_bouton_copier #copier_voie').click(function(){
+
+                    //Copie le nom de la voie dans le presse-papier
+                    navigator.clipboard.writeText($('#panneau_map h2').html())
+                    //Affiche le picto copie en vert
+                    $(this).addClass('ok')
+                    //Affiche le message de confirmation
+                    $('#panneau_map #espace_bouton_copier').append($('<span id="confirmation_copie">').text('✔ Copié'));
+
+                    setTimeout(function(){
+                        $('#panneau_map #espace_bouton_copier #confirmation_copie').css('opacity', '1');
+                        setTimeout(function(){
+                            $('#panneau_map #espace_bouton_copier #confirmation_copie').css('opacity', '0');
+                        }, 800);
+                        setTimeout(function(){
+                            $('#panneau_map #espace_bouton_copier #confirmation_copie').remove();
+                        }, 1500);
+                    }, 50);
+                    
+                })
 
                     //Infos sur la voie ou le lieu-dit
 
@@ -681,6 +725,7 @@
     }
     function reset_panneau_map(){
         $('#panneau_map h2').empty()
+        $('#panneau_map #espace_bouton_copier').empty()
         $('#infos_numero').empty();
         $('#infos_voie_lieudit').empty();
         $('#pifomap_table_liens').empty();
