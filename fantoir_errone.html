@@ -28,7 +28,8 @@
             document.title = titre+' ('+numero_dept+')'
 
             $('body').css('cursor','progress');
-            $('#wait_ajax').css('visibility','visible')
+            $('#wait_ajax').empty()
+                            .css('visibility','visible')
                             .append($('<p>').append('Chargement des codes Fantoir erronés...'))
             $.ajax({
                 url: "fantoir_errone.py?dept="+numero_dept,
