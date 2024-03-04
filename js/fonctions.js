@@ -358,6 +358,7 @@
 
         if (couche_carto == 'BAN_point' || couche_carto == 'OSM_point' || couche_carto == 'points_nommes_rapproches'){
             map.on('click', couche_carto, (e) => {
+
                 nom = e.features[0].properties.nom;
                 numero = e.features[0].properties.numero;
                 source = e.features[0].properties.source;
@@ -377,7 +378,7 @@
                 $('#panneau_map #espace_bouton_copier #copier_voie').click(function(){
 
                     //Copie le nom de la voie dans le presse-papier
-                    navigator.clipboard.writeText($('#panneau_map h2').html())
+                    navigator.clipboard.writeText(nom)
                     //Affiche le picto copie en vert
                     $(this).addClass('ok')
                     //Affiche le message de confirmation
@@ -625,7 +626,7 @@
                 $('#panneau_map #espace_bouton_copier #copier_voie').click(function(){
 
                     //Copie le nom de la voie dans le presse-papier
-                    navigator.clipboard.writeText($('#panneau_map h2').html())
+                    navigator.clipboard.writeText(nom)
                     //Affiche le picto copie en vert
                     $(this).addClass('ok')
                     //Affiche le message de confirmation
