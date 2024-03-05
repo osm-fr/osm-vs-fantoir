@@ -1,3 +1,5 @@
+    let hoveredStateId = null;
+
     function is_valid_dept(d){
         pattern_dept = new RegExp('^([01]|[3-8])([0-9])$|^2([aAbB]|[1-9])$|^9([0-5]|7[1-4]|76)$')
         res = false
@@ -308,9 +310,20 @@
                 map.getCanvas().style.cursor = 'pointer';
 
                 nom = e.features[0].properties.nom;
+                fantoir = e.features[0].properties.fantoir;
+                hoveredStateId = fantoir
+                if (couche_carto == 'BAN_point'||couche_carto == 'OSM_point'){
+                    map.setFeatureState({
+                          source: 'points_nommes',
+                          id: fantoir,
+                        }, {
+                          hover: true
+                        });
+                }
+
                 map.setFilter('filaire',["==",["get", "nom"], nom])
                 map.setFilter('filaire_texte',["==",["get", "nom"], nom])
-                map.setFilter('hover_adresses_point',["==",["get", "nom"], nom])
+                map.setFilter('hover_points',["==",["get", "fantoir"], fantoir])
 
                 if (e.features.length > 1){
                     if (e.features[0].properties.nom != e.features[1].properties.nom){
@@ -325,11 +338,21 @@
                 }
             });
 
-            map.on('mouseleave', couche_carto, () => {
+            map.on('mouseleave', couche_carto, (e) => {
+                if (hoveredStateId){
+                    map.setFeatureState({
+                          source: 'points_nommes',
+                          id: hoveredStateId,
+                        }, {
+                          hover: false
+                        });
+                }
+
                 map.getCanvas().style.cursor = '';
                 map.setFilter('filaire',["==",["get", "nom"], " "])
                 map.setFilter('filaire_texte',["==",["get", "nom"], " "])
-                map.setFilter('hover_adresses_point',["==",["get", "nom"], " "])
+                map.setFilter('hover_points',["==",["get", "fantoir"], "xxxxxxxxx"])
+
             // RAZ du texte multi-noms
                 map.setLayoutProperty('filaire_texte','text-field',["get", "nom"])
                 map.setLayoutProperty('filaire_texte','symbol-placement','line')
@@ -609,7 +632,7 @@
         //------- NOMS DE VOIES OU LIEUX-DITS NON RAPPROCHES -------
         //----------------------------------------------------------
 
-        if (couche_carto == 'points_nommes_non_rapproches' /*|| couche_carto == 'points_nommes_rapproches'*/){
+        if (couche_carto == 'points_nommes_non_rapproches'){
             map.on('click', couche_carto, (e) => {
                 reset_panneau_map()
 
@@ -717,7 +740,6 @@
                     $('#'+table).append('<tr>')
                     add_josm_link(table,xmin,xmax,ymin,ymax,code_insee,nom_commune)
                     add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
-
             })
         }
     }
@@ -736,8 +758,9 @@
         map.getSource('contour_communal').setData(EMPTY_GEOJSON)
         map.getSource('hover_filaire').setData(EMPTY_GEOJSON)
         map.getSource('polygones_convexhull').setData(EMPTY_GEOJSON)
-        map.getSource('adresses').setData(EMPTY_GEOJSON)
-        map.getSource('hover').setData(EMPTY_GEOJSON)
+        map.getSource('adresses_OSM').setData(EMPTY_GEOJSON)
+        map.getSource('adresses_BAN').setData(EMPTY_GEOJSON)
+        map.getSource('hover_points').setData(EMPTY_GEOJSON)
     }
     function affiche_ratio_map() {
         hash_value = ''

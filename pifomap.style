@@ -21,12 +21,21 @@
         },
         "points_nommes": {
         "type": "geojson",
+        "promoteId": "fantoir",
         "data": {"type": "FeatureCollection",
                           "features": []
                 }
         },
-        "adresses": {
+        "adresses_BAN": {
         "type": "geojson",
+        "promoteId": "fantoir",
+        "data": {"type": "FeatureCollection",
+                          "features": []
+                }
+        },
+        "adresses_OSM": {
+        "type": "geojson",
+        "promoteId": "fantoir",
         "data": {"type": "FeatureCollection",
                           "features": []
                 }
@@ -37,7 +46,7 @@
                           "features": []
                 }
         },
-        "hover": {
+        "hover_points": {
         "type": "geojson",
         "data": {"type": "FeatureCollection",
                           "features": []
@@ -204,23 +213,12 @@
                 "text-variable-anchor": ["center", "left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"],
                 "text-radial-offset": 0.5,
                 "text-justify": "auto",
-                "text-overlap":"cooperative",
-                "text-size": ["interpolate",
-                        ["linear"],
-                        ["zoom"],
-                        10,
-                        10,
-                        19,
-                        16]
+                "text-overlap":"cooperative"
                 },
             "paint": {
-                "text-color": ["case",
-                                ["==",["get","source"],"CADASTRE"],"blue",
-                                ["==",["get","source"],"OSM"],"green","pink"],
-                "text-halo-color": ["case",
-                                ["==",["get","source"],"OSM"],"white","pink"],
-                "text-halo-width": ["case",
-                                ["==",["get","source"],"OSM"],4,0]
+                "text-color": ["case",["boolean",["to-boolean",["feature-state","hover"]],"true"],"darkgreen","green"],
+                "text-halo-color": ["case",["boolean",["to-boolean",["feature-state","hover"]],"true"],"#F7FF5B","white"],
+                "text-halo-width": ["case",["boolean",["to-boolean",["feature-state","hover"]],"true"],8,4]
             }
         },
         {
@@ -234,15 +232,8 @@
                 "text-variable-anchor": ["center", "left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"],
                 "text-radial-offset": 0.5,
                 "text-justify": "auto",
-                "text-overlap":"cooperative",
-                "text-size": ["interpolate",
-                        ["linear"],
-                        ["zoom"],
-                        10,
-                        10,
-                        19,
-                        16]
-                },
+                "text-overlap":"cooperative"
+            },
             "paint": {
                 "text-color": ["case",
                                 ["==",["get","source"],"CADASTRE"],"red",
@@ -281,11 +272,11 @@
             }
         },
         {
-            "id": "hover_adresses_point",
-            "source": "hover",
+            "id": "hover_points",
+            "source": "hover_points",
             "type": "symbol",
             "minzoom" : 10,
-            "filter" : ["==",["get", "nom"], " "],
+            "filter" : ["==",["get", "fantoir"], " "],
             "layout": {
                 "icon-allow-overlap":true,
                 "icon-image":"rond_50",
@@ -303,10 +294,9 @@
         },
         {
             "id": "BAN_point",
-            "source": "adresses",
+            "source": "adresses_BAN",
             "type": "symbol",
             "minzoom" : 12,
-            "filter":["==",["get", "source"], "BAN"],
             "layout": {
                 "icon-allow-overlap":true,
                 "icon-image":"rond_50",
@@ -326,7 +316,7 @@
         },
         {
             "id": "BAN_texte",
-            "source": "adresses",
+            "source": "adresses_BAN",
             "type": "symbol",
             "minzoom" : 17,
             "filter":["==",["get", "source"], "BAN"],
@@ -347,7 +337,7 @@
         },
         {
             "id": "OSM_point",
-            "source": "adresses",
+            "source": "adresses_OSM",
             "type": "symbol",
             "minzoom" : 12,
             "filter":["==",["get", "source"], "OSM"],
@@ -370,7 +360,7 @@
         },
         {
             "id": "OSM_texte",
-            "source": "adresses",
+            "source": "adresses_OSM",
             "type": "symbol",
             "minzoom" : 17,
             "filter":["==",["get", "source"], "OSM"],

@@ -143,8 +143,8 @@
             let [polycommunedata,
                 filairedata,
                 polydata,
-                pointdata,
-                pointnommedata] = data
+                point_numero_data,
+                point_nomme_data] = data
 
             res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
             bbox = polycommunedata[0][0].coordinates
@@ -163,10 +163,7 @@
                     geom] = filairedata[s]
                 if (geom.type == 'LineString'||geom.type == 'MultiLineString'){
                     res.features.push(get_geojson_poly(geom,{'nom':nom,'within':within}))
-                }/* else {
-                    console.log(nom,geom)
-                }*/
-
+                }
             }
             map.getSource('hover_filaire').setData(res)
 
@@ -182,45 +179,46 @@
             }
             map.getSource('polygones_convexhull').setData(res)
 
-            res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
-            for (s=0;s<pointnommedata.length;s++){
+            res_points_nommes = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+            for (s=0;s<point_nomme_data.length;s++){
                  [nom,
                   fantoir,
-                  source,
                   lon,
                   lat,
-                  rapproche] = pointnommedata[s]
-                  res.features.push(get_geojson_point(lon,lat,{'nom':nom,'source':source,'rapproche':rapproche,'fantoir':fantoir,'nom_com':nom_commune}))
-            }
-            map.getSource('points_nommes').setData(res)
+                  cat] = point_nomme_data[s]
+                 source = cat[0] == 'C'?'CADASTRE':'OSM';
+                 rapproche = cat[1] == 'F'?true:false;
+                 avec_adresses = cat[2] == 'B'?true:false;
 
-            res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
-            for (s=0;s<pointdata.length;s++){
+                 res_points_nommes.features.push(get_geojson_point(lon,lat,{'nom':nom,'source':source,'rapproche':rapproche,'fantoir':fantoir,'nom_com':nom_commune}))
+            }
+            map.getSource('points_nommes').setData(res_points_nommes)
+
+            res_numero_BAN = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+            res_numero_OSM = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+            res_hover_point = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+            for (s=0;s<point_numero_data.length;s++){
                  [nom,
                   fantoir,
                   numero,
-                  lon_ban,
-                  lat_ban,
+                  lon,
+                  lat,
                   statut,
-                  lon_osm,
-                  lat_osm,
-                  rapproche] = pointdata[s]
-                if (lon_osm){
-                    min_lon = Math.min(min_lon,lon_osm);
-                    max_lon = Math.max(max_lon,lon_osm);
-                    min_lat = Math.min(min_lat,lat_osm);
-                    max_lat = Math.max(max_lat,lat_osm);
-                    res.features.push(get_geojson_point(lon_osm,lat_osm,{'nom':nom,'fantoir':fantoir,'numero':numero,'source':'OSM','rapproche':rapproche,'osm_seul':(lon_ban?false:true),'nom_com':nom_commune}))
+                  cat] = point_numero_data[s]
+                source = cat[0] == 'O'?'OSM':'BAN'
+                if (source == 'OSM'){
+                    osm_seul = cat[2] == 'b'?true:false;
+                    rapproche = cat[1] == 'F'?true:false;
+                    res_numero_OSM.features.push(get_geojson_point(lon,lat,{'nom':nom,'fantoir':fantoir,'numero':numero,'source':source,'rapproche':rapproche,'osm_seul':osm_seul,'nom_com':nom_commune}))
                 } else {
-                    min_lon = Math.min(min_lon,lon_ban);
-                    max_lon = Math.max(max_lon,lon_ban);
-                    min_lat = Math.min(min_lat,lat_ban);
-                    max_lat = Math.max(max_lat,lat_ban);
-                    res.features.push(get_geojson_point(lon_ban,lat_ban,{'nom':nom,'fantoir':fantoir,'numero':numero,'source':'BAN','rapproche':rapproche,'nom_com':nom_commune}))
+                    rapproche = cat[1] == 'O'?true:false;
+                    res_numero_BAN.features.push(get_geojson_point(lon,lat,{'nom':nom,'fantoir':fantoir,'numero':numero,'source':source,'rapproche':rapproche,'nom_com':nom_commune}))
                 }
+                res_hover_point.features.push(get_geojson_point(lon,lat,{'fantoir':fantoir}))
             }
-            map.getSource('adresses').setData(res)
-            map.getSource('hover').setData(res)
+            map.getSource('adresses_OSM').setData(res_numero_OSM)
+            map.getSource('adresses_BAN').setData(res_numero_BAN)
+            map.getSource('hover_points').setData(res_hover_point)
 
             $('body').css('cursor','default');
             $('#wait_ajax').css('visibility','hidden');
