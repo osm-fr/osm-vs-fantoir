@@ -460,27 +460,25 @@
         <div id="alerte_commune" class="pifomap"></div>
         <div id="infos_refresh"></div>
         <div id="bouton_legende"><p>Légende</p></div>
-    </div>
 
-    <!-----------------------   Pifostats   ----------------------->
+        <!-----------------------   Pifostats   ----------------------->
+        <div id="pifostats" class="pifomap">
+            <div><h3>Intégration des voies et adresses de la commune</h3></div>
 
-    <div id="pifostats" class="pifomap">
-        <div><h3>Intégration des voies et adresses de la commune</h3></div>
+            <div class="barre_noms" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100"> 
+                <div class="barre_noms_osm"></div>
+                <span class="barre_noms_osm_texte"></span> 
+            </div>
+            <a id="lien_map_noms" href="pifomap.html" title="voir la carte de la progression en France"><img class="picto_france" src="img/france-blanc-points.png"/></a>
 
-        <div class="barre_noms" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100"> 
-            <div class="barre_noms_osm"></div>
-            <span class="barre_noms_osm_texte"></span> 
+            <div class="barre_adresses" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100"> 
+                <div class="barre_adresses_osm"></div> 
+                <span class="barre_adresses_osm_texte"></span> 
+            </div>
+            <a id="lien_map_adresses" href="pifomap.html" title="voir la carte de la progression en France"><img class="picto_france" src="img/france-blanc-points.png"/></a>
         </div>
-        <a id="lien_map_noms" href="pifomap.html" title="voir la carte de la progression en France"><img class="picto_france" src="img/france-blanc-points.png"/></a>
-
-        <div class="barre_adresses" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100"> 
-            <div class="barre_adresses_osm"></div> 
-            <span class="barre_adresses_osm_texte"></span> 
-        </div>
-        <a id="lien_map_adresses" href="pifomap.html" title="voir la carte de la progression en France"><img class="picto_france" src="img/france-blanc-points.png"/></a>
 
     </div>
-
 
     <div id="reponse" class="pifomap">
         <div id="panneau_map">
