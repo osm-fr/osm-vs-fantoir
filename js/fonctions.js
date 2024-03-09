@@ -532,27 +532,27 @@
 
                         //Infos sur la voie ou le lieu-dit
 
-                        if (is_place) { $('#infos_voie_lieudit').append($('<h3>').text('Le lieu-dit :')); }
-                        else          { $('#infos_voie_lieudit').append($('<h3>').text('La voie :')); }
-
-                        $('#infos_voie_lieudit').append($('<ul>'));
+                        e_terminal = 'e'
+                        if (is_place) {
+                            $('#infos_voie_lieudit').append($('<h3>').text('Lieu-dit :'));
+                            e_terminal = ''
+                        } else {
+                            $('#infos_voie_lieudit').append($('<h3>').text('Voie :'));
+                        }
 
                         if (rapproche) {
-                            $('#infos_voie_lieudit ul').append($('<li>')
-                                                        .append($('<span class="pastille-verte" title="Déjà rapproché dans OSM">'))
-                                                        .append($('<span>')
-                                                            .text('rapproché(e) dans OSM')
-                                                        )
-                                                    );
-                        }    
-                        else {
-                            $('#infos_voie_lieudit ul').append($('<li>')
-                                                        .append($('<span class="pastille-orange" title="Pas rapproché dans OSM">'))
-                                                        .append($('<span>')
-                                                            .text('pas rapproché(e) dans OSM')
-                                                        )
-                                                    );
+                            title_text = 'rapproché'+e_terminal+' dans OSM'
+                            class_pastille = 'pastille-verte'
+                        } else {
+                            title_text = 'pas rapproché'+e_terminal+' dans OSM'
+                            class_pastille = 'pastille-orange'
                         }
+
+                        $('#infos_voie_lieudit').append($('<ul>'));
+                        $('#infos_voie_lieudit ul').append($('<li>')
+                                                .append($('<span>').addClass(class_pastille).attr('title',title_text))
+                                                .append($('<span>').text(title_text)));
+
 
                         $('#infos_voie_lieudit ul').append($('<li>')
                                                         .append($('<span class="gras">').text('Nom OSM : '))
@@ -641,6 +641,7 @@
                 rapproche = e.features[0].properties.rapproche;
                 source = e.features[0].properties.source;
                 nom_commune = e.features[0].properties.nom_com;
+                nature = e.features[0].properties.nature;
                 lon = e.lngLat.lng
                 lat = e.lngLat.lat
 
@@ -669,37 +670,25 @@
 
                     //Infos sur la voie ou le lieu-dit
 
-                    if (source == "CADASTRE") { $('#infos_voie_lieudit').append($('<h3>').text('Lieu-dit')); }
-                    else                      { $('#infos_voie_lieudit').append($('<h3>').text('Voie (ou assimilé)')); }
-
-                    $('#infos_voie_lieudit').append($('<ul>'));
-
-                    if (rapproche) {
-                        $('#infos_voie_lieudit ul').append($('<li>')
-                                                    .append($('<span class="pastille-verte" title="Déjà rapproché dans OSM">'))
-                                                    .append($('<span>')
-                                                        .text('rapproché(e) dans OSM')
-                                                    )
-                                                );
-                    }    
-                    else {
-                        if (source == 'OSM') {
-                            $('#infos_voie_lieudit ul').append($('<li>')
-                                                        .append($('<span class="pastille-bleue" title="Connu(e) seulement d\'OSM">'))
-                                                        .append($('<span>')
-                                                            .text('connu(e) seulement d\'OSM')
-                                                        )
-                                                    );                                
-                        }
-                        else {
-                            $('#infos_voie_lieudit ul').append($('<li>')
-                                                        .append($('<span class="pastille-orange" title="Pas rapproché dans OSM">'))
-                                                        .append($('<span>')
-                                                            .text('pas rapproché(e) dans OSM')
-                                                        )
-                                                    );
-                        }
+                    e_terminal = 'e'
+                    if (nature == "lieudit") {
+                        $('#infos_voie_lieudit').append($('<h3>').text('Lieu-dit :'));
+                        e_terminal = ''
+                    } else {
+                        $('#infos_voie_lieudit').append($('<h3>').text('Voie (ou assimilé) :'));
                     }
+
+                    if (source == 'OSM') {
+                        title_text = 'connu'+e_terminal+' seulement d\'OSM'
+                        class_pastille = 'pastille-bleue'
+                    } else {
+                        title_text = 'pas rapproché'+e_terminal+' dans OSM'
+                        class_pastille = 'pastille-orange'
+                    }
+                    $('#infos_voie_lieudit').append($('<ul>'));
+                    $('#infos_voie_lieudit ul').append($('<li>')
+                                                .append($('<span>').addClass(class_pastille).attr('title',title_text))
+                                                .append($('<span>').text(title_text)));
 
                     $('#infos_voie_lieudit ul').append($('<li>')
                                                     .append($('<span class="gras">').text('Source : '))
@@ -809,6 +798,21 @@
         if (!map.hasImage('rond_50')){
             map.loadImage('./img/rond_50.png', (error, image) => {
                 map.addImage('rond_50', image, { sdf: true });
+            })
+        }
+        if (!map.hasImage('lieudit_vert')){
+            map.loadImage('./img/lieudit_map_vert.png', (error, image) => {
+                map.addImage('lieudit_vert', image);
+            })
+        }
+        if (!map.hasImage('lieudit_rouge')){
+            map.loadImage('./img/lieudit_map_rouge.png', (error, image) => {
+                map.addImage('lieudit_rouge', image);
+            })
+        }
+        if (!map.hasImage('lieudit_bleu')){
+            map.loadImage('./img/lieudit_map_bleu.png', (error, image) => {
+                map.addImage('lieudit_bleu', image);
             })
         }
         interactions_souris('noms_de_communes')

@@ -14,7 +14,8 @@ SELECT nom,
        CASE
            WHEN ban.fantoir IS NULL THEN 'b'
            ELSE 'B'
-       END
+       END ||
+       'P' -- lieu-dit
 FROM   (SELECT *
         FROM  bano_points_nommes
         WHERE code_insee = '__code_insee__' AND
@@ -41,6 +42,10 @@ SELECT nom,
            WHEN ban.fantoir IS NULL THEN 'b'
            -- WHEN ban.fantoir IS NOT NULL AND nature = 'place' THEN 'B'
           ELSE 'B'
+       END ||
+       CASE nature
+           WHEN 'place' THEN 'P'
+           ELSE 'V'
        END
 FROM   (SELECT *
         FROM  bano_points_nommes
