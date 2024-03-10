@@ -392,8 +392,8 @@
             $("#pifostats .barre_adresses .barre_adresses_osm") .stop(true, true)
                                                                 .delay(1000)
                                                                 .animate({width: pourcent_adresses_osm+'%'}, 1000);
-
-
+            $('#lien_map_noms').attr('href','pifomap.html?ratio=N#map=10/'+lat_commune+'/'+lon_commune)
+            $('#lien_map_adresses').attr('href','pifomap.html?ratio=A#map=10/'+lat_commune+'/'+lon_commune)
         })
         update_search('insee',$('#input_insee')[0].value)
 *        $('body').css('cursor','default');
