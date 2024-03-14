@@ -1,0 +1,222 @@
+{   "version": 8,
+    "name": "Pifomètre",
+    "sources": {
+        "adresses": {
+             "type": "vector",
+             "tiles": [
+                  "https://bano.openstreetmap.fr/pifometre/tiles_pifocarte/{z}/{x}/{y}.pbf"
+                  ],
+            "minzoom":13,
+            "maxzoom":13
+        }
+    },
+    "glyphs": "",
+    "sprite": "",
+    "layers": [
+        {
+            "id": "noms_de_communes_1",
+            "source": "communes",
+            "source-layer": "centroides_communes",
+            "type": "symbol",
+            "filter" : ["==","class_pop", 1],
+            "minzoom" : 6,
+            "maxzoom" : 14,
+            "layout": {
+                "text-field": "eval(concat(tag(\"nom\"), \" \", tag(\"code_insee\")));text-anchor-horizontal: center"
+            },
+            "paint": {
+                "text-color": "black",
+                "text-halo-color": "white",
+                "text-halo-width": 4
+            }
+        },
+        {
+            "id": "noms_de_communes_2",
+            "source": "communes",
+            "source-layer": "centroides_communes",
+            "type": "symbol",
+            "filter" : ["==","class_pop", 2],
+            "minzoom" : 8,
+            "maxzoom" : 14,
+            "layout": {
+                "text-field": "eval(concat(tag(\"nom\"), \" \", tag(\"code_insee\")));text-anchor-horizontal: center"
+            },
+            "paint": {
+                "text-color":"black",
+                "text-halo-color": "white",
+                "text-halo-width": 4
+            }
+        },
+        {
+            "id": "noms_de_communes_3",
+            "source": "communes",
+            "source-layer": "centroides_communes",
+            "type": "symbol",
+            "filter" : ["==","class_pop", 3],
+            "minzoom" : 9,
+            "maxzoom" : 14,
+            "layout": {
+                "text-field": "eval(concat(tag(\"nom\"), \" \", tag(\"code_insee\")));text-anchor-horizontal: center"
+            },
+            "paint": {
+                "text-color":"black",
+                "text-halo-color": "white",
+                "text-halo-width": 4
+            }
+        },
+        {
+            "id": "noms_de_communes_4",
+            "source": "communes",
+            "source-layer": "centroides_communes",
+            "type": "symbol",
+            "filter" : ["==","class_pop", 4],
+            "minzoom" : 11,
+            "maxzoom" : 14,
+            "layout": {
+                "text-field": "eval(concat(tag(\"nom\"), \" \", tag(\"code_insee\")));text-anchor-horizontal: center"
+            },
+            "paint": {
+                "text-color":"black",
+                "text-halo-color": "white",
+                "text-halo-width": 4
+            }
+        },
+        {
+            "id": "polygones_convexhull",
+            "source": "adresses",
+            "source-layer": "polygones_convexhull",
+            "type": "line",
+            "minzoom" : 16,
+            "maxzoom" : 23,
+            "filter": ["==", "layer", "polygones_convexhull"],
+            "paint": {
+                "line-color":"eval(cond(has_tag_key(statut), grey, red))",
+                "line-width":5
+            }
+        },
+        {
+            "id": "BAN_point",
+            "source": "adresses",
+            "source-layer": "numeros_points_BAN",
+            "type": "circle",
+            "minzoom" : 11,
+            "maxzoom" : 17,
+            "filter": ["==", "layer", "numeros_points_BAN"],
+            "paint": {
+                "circle-radius": 2,
+                "circle-color": "eval(cond(tag(rapproche)=true, cond(tag(commun)=true, grey, orange), red))",
+                "circle-stroke-color": "eval(cond(tag(rapproche)=true, cond(tag(commun)=true, grey, orange), red))"
+            }
+        },
+        {
+            "id": "OSM_point",
+            "source": "adresses",
+            "source-layer": "numeros_points_OSM",
+            "type": "circle",
+            "minzoom" : 11,
+            "maxzoom" : 17,
+            "filter": ["==", "layer", "numeros_points_OSM"],
+            "paint": {
+                "circle-radius": 2,
+                "circle-color": "eval(cond(tag(commun)=true, green, blue))",
+                "circle-stroke-color": "eval(cond(tag(commun)=true, green, blue))"
+            }
+        },
+        {
+            "id": "BAN_texte",
+            "source": "adresses",
+            "source-layer": "numeros_points_BAN",
+            "type": "symbol",
+            "minzoom" : 17,
+            "maxzoom" : 23,
+            "filter": ["==", "layer", "numeros_points_BAN"],
+            "layout": {
+                "text-field": "numero;text-anchor-horizontal:center",
+                "text-size": 12
+            },
+            "paint": {
+                "text-color": "eval(cond(tag(rapproche)=true, cond(tag(commun)=true, grey, orange), red))",
+                "text-halo-color": "white",
+                "text-halo-width": 2
+            }
+        },
+        {
+            "id": "OSM_texte",
+            "source": "adresses",
+            "source-layer": "numeros_points_OSM",
+            "type": "symbol",
+            "minzoom" : 17,
+            "maxzoom" : 23,
+            "filter": ["==", "layer", "numeros_points_OSM"],
+            "layout": {
+                "text-field": "numero;text-anchor-horizontal:center",
+                "text-size": 12
+                },
+            "paint": {
+                "text-color": "eval(cond(tag(commun)=true, green, blue))",
+                "text-halo-color": "white",
+                "text-halo-width": 2
+            }
+        },
+        {
+            "id": "lieudit_CADASTRE_texte",
+            "source": "adresses",
+            "source-layer": "lieudit_CADASTRE",
+            "type": "symbol",
+            "minzoom" : 13,
+            "maxzoom" : 17,
+            "filter": ["==", "layer", "lieudit_CADASTRE"],
+            "layout": {
+                "text-field": "nom;text-anchor-horizontal:center",
+                "text-size": 12
+                },
+            "paint": {
+                "text-color": "eval(cond(tag(rapproche)=true, orange, red))",
+                "text-halo-color": "white",
+                "text-halo-width": 2
+            }
+        },
+        {
+            "id": "place_OSM_texte",
+            "source": "adresses",
+            "source-layer": "place_OSM",
+            "type": "symbol",
+            "minzoom" : 13,
+            "maxzoom" : 17,
+            "filter": ["==", "layer", "place_OSM"],
+            "layout": {
+                "text-field": "nom;text-anchor-horizontal:center",
+                "text-size": 12
+                },
+            "paint": {
+                "text-color": "eval(cond(tag(rapproche)=true, green, blue))",
+                "text-halo-color": "white",
+                "text-halo-width": 2
+            }
+        },
+        {
+            "id": "polygones_texte_point",
+            "source": "adresses",
+            "source-layer": "polygones_convexhull",
+            "type": "line",
+            "minzoom" : 16,
+            "maxzoom" : 23,
+            "filter": ["==", "layer", "polygones_convexhull"],
+            "paint": {
+                "line-color":"eval(cond(has_tag_key(statut), grey, red));text-color:eval(cond(has_tag_key(statut), grey, red));text:eval(concat(tag(nom), \" \", tag(fantoir), \" \", tag(statut)));text-halo-color:white;text-halo-radius:1;text-position:center;font-size:12"
+            }
+        },
+        {
+            "id": "polygones_texte",
+            "source": "adresses",
+            "source-layer": "polygones_convexhull",
+            "type": "line",
+            "minzoom" : 18,
+            "maxzoom" : 23,
+            "filter": ["==", "layer", "polygones_convexhull"],
+            "paint": {
+                "line-color":"eval(cond(has_tag_key(statut), grey, red));text-color:eval(cond(has_tag_key(statut), grey, red));text:nom;text-halo-color:white;text-halo-radius:1;text-position:line;font-size:12"
+            }
+        }
+    ]
+}

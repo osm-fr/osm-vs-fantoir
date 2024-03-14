@@ -21,6 +21,7 @@ FROM ( SELECT code_insee,
                    WHEN population_rel >  10000 THEN 3
                    ELSE 4
               END AS class_pop,
+              'admin' as layer,
               nb_adresses_osm,
               nb_adresses_ban,
               nb_noms_osm,
@@ -107,6 +108,7 @@ FROM (
       SELECT nom,
              fantoir,
              rapproche,
+             'lieudit_CADASTRE' as layer,
              ST_AsMvtGeom(
                  geometrie_3857,
                  BBox($tx, $ty, $tz),
@@ -159,6 +161,7 @@ FROM (
       SELECT nom,
              fantoir,
              rapproche,
+             'place_OSM' as layer,
              ST_AsMvtGeom(
                  geometrie_3857,
                  BBox($tx, $ty, $tz),
@@ -227,6 +230,8 @@ FROM (
               WHEN SUBSTR(fantoir,6,1) = 'b' THEN ''
               ELSE fantoir
           END AS fantoir,
+          label_statut as statut,
+          'polygones_convexhull' as layer,
           ST_AsMvtGeom(
               geom_hull,
               BBox($tx, $ty, $tz),
@@ -280,6 +285,7 @@ FROM (
       SELECT numero,
           fantoir,
           commun,
+          'numeros_points_OSM' as layer,
           ST_AsMvtGeom(
               geometrie_3857,
               BBox($tx, $ty, $tz),
@@ -343,6 +349,7 @@ FROM (
           fantoir,
           rapproche,
           commun,
+          'numeros_points_BAN' as layer,
           ST_AsMvtGeom(
               geometrie_3857,
               BBox($tx, $ty, $tz),
@@ -365,7 +372,7 @@ function pyramide(){
   y1=$5
   root_dir=../pifometre_v3/tiles_pifocarte
 
-  for (( z=$zoom; z<=13; ++z )); do
+  for (( z=$zoom; z<=$zoom; ++z )); do
     for (( x=$x0; x<=$x1; ++x )); do
       mkdir -p ./$root_dir/$z/$x
       for (( y=$y0; y<=$y1; ++y )); do
@@ -376,14 +383,11 @@ function pyramide(){
         psql -d bano -U cadastre -tq -c "$(num_point_osm $z $x $y)" | xxd -r -p ;
         psql -d bano -U cadastre -tq -c "$(lieudit_CADASTRE $z $x $y)" | xxd -r -p ;
         psql -d bano -U cadastre -tq -c "$(place_OSM $z $x $y)" | xxd -r -p ;
+        psql -d bano -U cadastre -tq -c "$(admin $z $x $y)" | xxd -r -p ;
         } > $file
         du -h $file
       done
     done
-    let "x0 = x0 * 2"
-    let "y0 = y0 * 2"
-    let "x1 = x1 * 2"
-    let "y1 = y1 * 2"
   done
 }
 
@@ -394,7 +398,8 @@ cd $SCRIPT_DIR
 # Metro
 # pyramide 6 30 34 21 24
 # pyramide 10 509 511 359 361
-pyramide 11 725 726 995 996
+# pyramide 11 725 726 995 996
 # pyramide 11 1018 1020 718 720
 # pyramide 12 2036 2040 1436 1440
 # pyramide 13 4072 4080 2872 2880
+pyramide 13 4160 4170 2940 2950
