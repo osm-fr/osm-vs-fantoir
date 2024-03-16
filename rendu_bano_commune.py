@@ -24,7 +24,7 @@ point_adresses_data = sql_get_data('rendu_bano_adresses',{'code_insee':insee})
 point_nommes_data = sql_get_data('rendu_bano_points',{'code_insee':insee})
 
 filaire_data = sql_get_data('rendu_bano_filaire',{'code_insee':insee})
-jfilaire_data = [[d[0],d[1],json.loads(d[2])] for d in filaire_data]
+jfilaire_data = [[d[0],d[1],d[2],json.loads(d[3])] for d in filaire_data]
 
 print("Content-Type: application/json\n")
 print(json.JSONEncoder().encode([jpolycommune_data,jfilaire_data,jpoly_data,point_adresses_data,point_nommes_data]))

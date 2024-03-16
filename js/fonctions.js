@@ -312,18 +312,20 @@
                 nom = e.features[0].properties.nom;
                 fantoir = e.features[0].properties.fantoir;
                 hoveredStateId = fantoir
-                if (couche_carto == 'BAN_point'||couche_carto == 'OSM_point'){
-                    map.setFeatureState({
-                          source: 'points_nommes',
-                          id: fantoir,
-                        }, {
-                          hover: true
-                        });
-                }
+                map.setFeatureState({
+                      source: 'points_nommes',
+                      id: fantoir,
+                    }, {
+                      hover: true
+                    });
 
                 map.setFilter('filaire',["==",["get", "nom"], nom])
                 map.setFilter('filaire_texte',["==",["get", "nom"], nom])
-                map.setFilter('hover_points',["==",["get", "fantoir"], fantoir])
+                if (fantoir != ''){
+                    map.setFilter('hover_points',["any",["==",["get", "fantoir"], fantoir],["==",["get", "nom"], nom]])
+                } else {
+                    map.setFilter('hover_points',["==",["get", "nom"], nom])
+                }
 
                 if (e.features.length > 1){
                     if (e.features[0].properties.nom != e.features[1].properties.nom){

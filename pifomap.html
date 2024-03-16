@@ -159,10 +159,11 @@
             res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
             for (s=0;s<filairedata.length;s++){
                 let [nom,
+                    fantoir,
                     within,
                     geom] = filairedata[s]
                 if (geom.type == 'LineString'||geom.type == 'MultiLineString'){
-                    res.features.push(get_geojson_poly(geom,{'nom':nom,'within':within}))
+                    res.features.push(get_geojson_poly(geom,{'nom':nom,'fantoir':fantoir,'within':within}))
                 }
             }
             map.getSource('hover_filaire').setData(res)
@@ -215,7 +216,7 @@
                     rapproche = cat[1] == 'O'?true:false;
                     res_numero_BAN.features.push(get_geojson_point(lon,lat,{'nom':nom,'fantoir':fantoir,'numero':numero,'source':source,'rapproche':rapproche,'nom_com':nom_commune}))
                 }
-                res_hover_point.features.push(get_geojson_point(lon,lat,{'fantoir':fantoir}))
+                res_hover_point.features.push(get_geojson_point(lon,lat,{'fantoir':fantoir,'nom':nom}))
             }
             map.getSource('adresses_OSM').setData(res_numero_OSM)
             map.getSource('adresses_BAN').setData(res_numero_BAN)
