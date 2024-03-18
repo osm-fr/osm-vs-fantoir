@@ -15,14 +15,14 @@
     "layers": [
         {
             "id": "noms_de_communes_1",
-            "source": "communes",
+            "source": "adresses",
             "source-layer": "centroides_communes",
             "type": "symbol",
             "filter" : ["==","class_pop", 1],
             "minzoom" : 6,
-            "maxzoom" : 14,
+            "maxzoom" : 19,
             "layout": {
-                "text-field": "eval(concat(tag(\"nom\"), \" \", tag(\"code_insee\")));text-anchor-horizontal: center"
+                "text-field": "eval(concat(tag(\"code_insee\"), \" \", tag(\"nom\")));text-anchor-horizontal: center"
             },
             "paint": {
                 "text-color": "black",
@@ -32,14 +32,14 @@
         },
         {
             "id": "noms_de_communes_2",
-            "source": "communes",
+            "source": "adresses",
             "source-layer": "centroides_communes",
             "type": "symbol",
             "filter" : ["==","class_pop", 2],
             "minzoom" : 8,
-            "maxzoom" : 14,
+            "maxzoom" : 19,
             "layout": {
-                "text-field": "eval(concat(tag(\"nom\"), \" \", tag(\"code_insee\")));text-anchor-horizontal: center"
+                "text-field": "eval(concat(tag(\"code_insee\"), \" \", tag(\"nom\")));text-anchor-horizontal: center"
             },
             "paint": {
                 "text-color":"black",
@@ -49,14 +49,14 @@
         },
         {
             "id": "noms_de_communes_3",
-            "source": "communes",
+            "source": "adresses",
             "source-layer": "centroides_communes",
             "type": "symbol",
             "filter" : ["==","class_pop", 3],
             "minzoom" : 9,
-            "maxzoom" : 14,
+            "maxzoom" : 19,
             "layout": {
-                "text-field": "eval(concat(tag(\"nom\"), \" \", tag(\"code_insee\")));text-anchor-horizontal: center"
+                "text-field": "eval(concat(tag(\"code_insee\"), \" \", tag(\"nom\")));text-anchor-horizontal: center"
             },
             "paint": {
                 "text-color":"black",
@@ -66,14 +66,14 @@
         },
         {
             "id": "noms_de_communes_4",
-            "source": "communes",
+            "source": "adresses",
             "source-layer": "centroides_communes",
             "type": "symbol",
             "filter" : ["==","class_pop", 4],
-            "minzoom" : 11,
-            "maxzoom" : 14,
+            "minzoom" : 12,
+            "maxzoom" : 19,
             "layout": {
-                "text-field": "eval(concat(tag(\"nom\"), \" \", tag(\"code_insee\")));text-anchor-horizontal: center"
+                "text-field": "eval(concat(tag(\"code_insee\"), \" \", tag(\"nom\")));text-anchor-horizontal: center"
             },
             "paint": {
                 "text-color":"black",
@@ -95,26 +95,54 @@
             }
         },
         {
-            "id": "BAN_point",
+            "id": "BAN_point_zm",
             "source": "adresses",
             "source-layer": "numeros_points_BAN",
             "type": "circle",
-            "minzoom" : 11,
-            "maxzoom" : 17,
+            "minzoom" : 12,
+            "maxzoom" : 15,
             "filter": ["==", "layer", "numeros_points_BAN"],
             "paint": {
-                "circle-radius": 2,
-                "circle-color": "eval(cond(tag(rapproche)=true, cond(tag(commun)=true, grey, orange), red))",
+                "circle-radius": 1,
+                "circle-color": "eval(cond(tag(rapproche)=true, cond(tag(commun)=true, grey, orange), red));z-index: eval(cond(tag(rapproche)=true, cond(tag(commun)=true, -2, -1), 1))",
                 "circle-stroke-color": "eval(cond(tag(rapproche)=true, cond(tag(commun)=true, grey, orange), red))"
             }
         },
         {
-            "id": "OSM_point",
+            "id": "BAN_point_zh",
+            "source": "adresses",
+            "source-layer": "numeros_points_BAN",
+            "type": "circle",
+            "minzoom" : 15,
+            "maxzoom" : 22,
+            "filter": ["==", "layer", "numeros_points_BAN"],
+            "paint": {
+                "circle-radius": 2,
+                "circle-color": "eval(cond(tag(rapproche)=true, cond(tag(commun)=true, grey, orange), red));z-index: eval(cond(tag(rapproche)=true, cond(tag(commun)=true, -2, -1), 1))",
+                "circle-stroke-color": "eval(cond(tag(rapproche)=true, cond(tag(commun)=true, grey, orange), red))"
+            }
+        },
+        {
+            "id": "OSM_point_zm",
             "source": "adresses",
             "source-layer": "numeros_points_OSM",
             "type": "circle",
-            "minzoom" : 11,
-            "maxzoom" : 17,
+            "minzoom" : 12,
+            "maxzoom" : 15,
+            "filter": ["==", "layer", "numeros_points_OSM"],
+            "paint": {
+                "circle-radius": 1,
+                "circle-color": "eval(cond(tag(commun)=true, green, blue))",
+                "circle-stroke-color": "eval(cond(tag(commun)=true, green, blue))"
+            }
+        },
+        {
+            "id": "OSM_point_zh",
+            "source": "adresses",
+            "source-layer": "numeros_points_OSM",
+            "type": "circle",
+            "minzoom" : 15,
+            "maxzoom" : 22,
             "filter": ["==", "layer", "numeros_points_OSM"],
             "paint": {
                 "circle-radius": 2,
@@ -131,13 +159,11 @@
             "maxzoom" : 23,
             "filter": ["==", "layer", "numeros_points_BAN"],
             "layout": {
-                "text-field": "numero;text-anchor-horizontal:center",
+                "text-field": "numero",
                 "text-size": 12
             },
             "paint": {
-                "text-color": "eval(cond(tag(rapproche)=true, cond(tag(commun)=true, grey, orange), red))",
-                "text-halo-color": "white",
-                "text-halo-width": 2
+                "text-color": "eval(cond(tag(rapproche)=true, cond(tag(commun)=true, grey, orange), red))"
             }
         },
         {
@@ -149,13 +175,11 @@
             "maxzoom" : 23,
             "filter": ["==", "layer", "numeros_points_OSM"],
             "layout": {
-                "text-field": "numero;text-anchor-horizontal:center",
+                "text-field": "numero",
                 "text-size": 12
                 },
             "paint": {
-                "text-color": "eval(cond(tag(commun)=true, green, blue))",
-                "text-halo-color": "white",
-                "text-halo-width": 2
+                "text-color": "eval(cond(tag(commun)=true, green, blue))"
             }
         },
         {
@@ -163,7 +187,7 @@
             "source": "adresses",
             "source-layer": "lieudit_CADASTRE",
             "type": "symbol",
-            "minzoom" : 13,
+            "minzoom" : 15,
             "maxzoom" : 17,
             "filter": ["==", "layer", "lieudit_CADASTRE"],
             "layout": {
@@ -181,7 +205,7 @@
             "source": "adresses",
             "source-layer": "place_OSM",
             "type": "symbol",
-            "minzoom" : 13,
+            "minzoom" : 15,
             "maxzoom" : 17,
             "filter": ["==", "layer", "place_OSM"],
             "layout": {
@@ -215,7 +239,7 @@
             "maxzoom" : 23,
             "filter": ["==", "layer", "polygones_convexhull"],
             "paint": {
-                "line-color":"eval(cond(has_tag_key(statut), grey, red));text-color:eval(cond(has_tag_key(statut), grey, red));text:nom;text-halo-color:white;text-halo-radius:1;text-position:line;font-size:12"
+                "line-color":"eval(cond(has_tag_key(statut), grey, red));text-color:eval(cond(has_tag_key(statut), grey, red));text:nom;text-halo-color:white;text-halo-radius:3;text-position:line;font-size:12"
             }
         }
     ]
