@@ -78,7 +78,7 @@ def append_street_role(xml,GeoJSON_positions,name,fantoir):
         xml.osm.insert(0,c)
     return xml
 
-def append_single_OSM_addr(xml,code_insee,fantoir):
+def append_single_OSM_addr(xml,code_insee,fantoir,relation_id):
     headers = {}
     xmlRels = None
     xmlWAys = None
@@ -92,9 +92,9 @@ def append_single_OSM_addr(xml,code_insee,fantoir):
     s_numeros_OSM = ','.join(["'"+n[0]+"'" for n in numeros_OSM])
     s_name_OSM = hp.escape_quotes(numeros_OSM[0][1])
     
-    node_ids = sql_get_data('numeros_deja_dans_OSM',{'code_insee':code_insee,'numeros_OSM':s_numeros_OSM,'type_geom':'point','signe':'>','name':s_name_OSM})
-    way_ids = sql_get_data('numeros_deja_dans_OSM',{'code_insee':code_insee,'numeros_OSM':s_numeros_OSM,'type_geom':'polygon','signe':'>','name':s_name_OSM})
-    rel_ids = sql_get_data('numeros_deja_dans_OSM',{'code_insee':code_insee,'numeros_OSM':s_numeros_OSM,'type_geom':'polygon','signe':'<','name':s_name_OSM})
+    node_ids = sql_get_data('numeros_deja_dans_OSM',{'code_insee':code_insee,'numeros_OSM':s_numeros_OSM,'type_geom':'point','signe':'>','name':s_name_OSM,'relation_id':str(relation_id)})
+    way_ids = sql_get_data('numeros_deja_dans_OSM',{'code_insee':code_insee,'numeros_OSM':s_numeros_OSM,'type_geom':'polygon','signe':'>','name':s_name_OSM,'relation_id':str(relation_id)})
+    rel_ids = sql_get_data('numeros_deja_dans_OSM',{'code_insee':code_insee,'numeros_OSM':s_numeros_OSM,'type_geom':'polygon','signe':'<','name':s_name_OSM,'relation_id':str(relation_id)})
 
     for r in rel_ids:
         xml.relation.insert(1,xml.new_tag("member", ref=r[0], role='house', type='relation'))
@@ -140,7 +140,6 @@ def append_single_OSM_addr(xml,code_insee,fantoir):
     if xmlNodes:
         for c in xmlNodes.find_all('node'):
             xml.osm.insert(0,remove_tag_by_kv(c,'tag','k','addr:street'))
-
     return xml
 
 def remove_tag_by_kv(xml,tag,k,v):
@@ -160,8 +159,8 @@ def main():
     if modele == 'Relation':
         fantoir_dans_relation = params['fantoir_dans_relation'].value == 'ok'
 
-    # code_insee = '95633'
-    # fantoir = '956330015'
+    # code_insee = '01072'
+    # fantoir = '010720210'
     # modele = 'Points'
     # modele = 'Relation'
     # modele = 'Place'
@@ -177,6 +176,12 @@ def main():
             resp = requests.get(f"https://www.openstreetmap.org/api/0.6/relation/{relation_id}/full", headers=headers)
             if resp.status_code == 200:
                 xmlResponse = BeautifulSoup(resp.content,'xml')
+
+                for osmtype in ('relation','way','node'):
+                    for r in xmlResponse.osm.find_all(osmtype):
+                        xmlResponse.osm.append(remove_tag_by_kv(r,'tag','k','addr:street'))
+        else:
+            relation_id = -1
 
         if not xmlResponse:
             xmlResponse = get_empty_associatedStreet_XML(fantoir,name,fantoir_dans_relation)
@@ -201,7 +206,7 @@ def main():
 
     if modele == 'Relation':
         xmlResponse.relation['action'] = 'modify'
-        xmlResponse = append_single_OSM_addr(xmlResponse,code_insee,fantoir)
+        xmlResponse = append_single_OSM_addr(xmlResponse,code_insee,fantoir,relation_id * -1)
 
         tag_fantoir = xmlResponse.select_one(f'tag[k="ref:FR:FANTOIR"]')
         if tag_fantoir and fantoir in tag_fantoir['v']:

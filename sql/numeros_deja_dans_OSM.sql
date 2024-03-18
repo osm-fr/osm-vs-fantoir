@@ -6,4 +6,8 @@ ON     pl.way && p.way                           AND
 WHERE  pl."ref:INSEE" = '__code_insee__'         AND
        p."addr:housenumber" IN (__numeros_OSM__) AND
        p."addr:street" = '__name__'              AND
-       p.osm_id __signe__ 0;
+       p.osm_id __signe__ 0
+EXCEPT
+SELECT osm_id
+FROM   planet_osm_rels
+WHERE  rel_id = __relation_id__;
