@@ -29,7 +29,7 @@ FROM ( SELECT code_insee,
               nb_noms_topo,
               ST_AsMvtGeom(
                 geom_centroide_3857,
-                BBox($tx, $ty, $tz),
+                ST_TileEnvelope($tz, $tx, $ty),
                 4096,
                 256,
                 true
@@ -60,8 +60,8 @@ FROM ( SELECT code_insee,
        FROM    cog_commune
        WHERE   typecom IN ('COM','ARM')) cog
   ON   (code_insee = com)
-  WHERE geom_centroide_3857 && BBox($tx, $ty, $tz) AND
-        ST_Intersects(geom_centroide_3857, BBox($tx, $ty, $tz)) AND
+  WHERE geom_centroide_3857 && ST_TileEnvelope($tz, $tx, $ty) AND
+        ST_Intersects(geom_centroide_3857, ST_TileEnvelope($tz, $tx, $ty)) AND
         code_insee != '' AND
         ((admin_level = 8 AND code_insee NOT IN ('13055','69123','75056')) OR
          (admin_level = 9 AND (code_insee LIKE '751__' OR code_insee LIKE '6938_' OR code_insee LIKE '132__')))
@@ -78,12 +78,12 @@ function lieudit_CADASTRE() {
   COPY (
 SELECT ST_AsMVT(q, 'lieudit_CADASTRE', 4096, 'geom')
 FROM (
-      WITH 
+      WITH
       cadastre
       AS
       (SELECT code_insee,fantoir,nom,geometrie_3857
       FROM    bano_points_nommes
-      WHERE   ST_Intersects(geometrie_3857, BBox($tx, $ty, $tz)) AND
+      WHERE   ST_Intersects(geometrie_3857, ST_TileEnvelope($tz, $tx, $ty)) AND
               source = 'CADASTRE'),
       liste_insee
       AS
@@ -111,12 +111,12 @@ FROM (
              'lieudit_CADASTRE' as layer,
              ST_AsMvtGeom(
                  geometrie_3857,
-                 BBox($tx, $ty, $tz),
+                 ST_TileEnvelope($tz, $tx, $ty),
                  4096,
                  256,
                  true) AS geom
      FROM resultat
-     WHERE ST_Intersects(geometrie_3857, BBox($tx, $ty, $tz))
+     WHERE ST_Intersects(geometrie_3857, ST_TileEnvelope($tz, $tx, $ty))
 ) AS q
   ) TO STDOUT;
   "
@@ -130,12 +130,12 @@ function place_OSM() {
   COPY (
 SELECT ST_AsMVT(q, 'place_OSM', 4096, 'geom')
 FROM (
-      WITH 
+      WITH
       osm
       AS
       (SELECT code_insee,fantoir,nom,geometrie_3857
       FROM    bano_points_nommes
-      WHERE   ST_Intersects(geometrie_3857, BBox($tx, $ty, $tz)) AND
+      WHERE   ST_Intersects(geometrie_3857, ST_TileEnvelope($tz, $tx, $ty)) AND
               nature = 'place' AND
               source = 'OSM'),
       liste_insee
@@ -164,12 +164,12 @@ FROM (
              'place_OSM' as layer,
              ST_AsMvtGeom(
                  geometrie_3857,
-                 BBox($tx, $ty, $tz),
+                 ST_TileEnvelope($tz, $tx, $ty),
                  4096,
                  256,
                  true) AS geom
      FROM resultat
-     WHERE ST_Intersects(geometrie_3857, BBox($tx, $ty, $tz))
+     WHERE ST_Intersects(geometrie_3857, ST_TileEnvelope($tz, $tx, $ty))
 ) AS q
   ) TO STDOUT;
   "
@@ -183,65 +183,37 @@ function num_convex() {
   COPY (
 SELECT ST_AsMVT(q, 'polygones_convexhull', 4096, 'geom')
 FROM (
-      with
-      liste_insee
-      as
-      (SELECT DISTINCT code_insee
-      from bano_adresses
-      WHERE ST_Intersects(geometrie_3857,ST_Buffer(BBox($tx, $ty, $tz),1000,2)) AND
-            source = 'BAN'),
-      fantoir
-      as
-      (SELECT fantoir
-      from bano_adresses
-      WHERE ST_Intersects(geometrie_3857,ST_Buffer(BBox($tx, $ty, $tz),1000,2)) AND
-            source = 'BAN'
-      except
-      SELECT fantoir
-      from bano_points_nommes
-      join liste_insee
-      using (code_insee)
-      WHERE source = 'OSM'),
-    latest_statut
-    AS
-    (SELECT fantoir,
-            label_statut
-    FROM    (SELECT *,
-                    RANK() OVER(PARTITION BY fantoir ORDER BY timestamp_statut DESC,id_statut DESC) rang
-            FROM    statut_fantoir)f
-    JOIN    labels_statuts_fantoir
-    USING   (id_statut)
-    WHERE   rang = 1 AND
-            id_statut != 0),
-    bano_a
-    AS
-    (SELECT fantoir,
-           COALESCE(nom_place,nom_voie) AS nom,
-           label_statut,
-           ST_Transform(ST_Buffer(ST_Convexhull(ST_Collect(geometrie)),0.0001),3857) as geom_hull
-    FROM   (SELECT * FROM bano_adresses WHERE st_transform(geometrie,3857) && BBox($tx, $ty, $tz)) as bano_a
-    JOIN   fantoir
-    USING  (fantoir)
-    LEFT OUTER JOIN latest_statut
-    USING  (fantoir)
-    GROUP BY 1,2,3)
-    SELECT nom,
-          CASE
-              WHEN SUBSTR(fantoir,6,1) = 'b' THEN ''
-              ELSE fantoir
-          END AS fantoir,
-          label_statut as statut,
-          'polygones_convexhull' as layer,
-          ST_AsMvtGeom(
-              geom_hull,
-              BBox($tx, $ty, $tz),
-              4096,
-              256,
-              true
-            ) AS geom
-     FROM bano_a
-     WHERE ST_Intersects(geom_hull, BBox($tx, $ty, $tz))
-) AS q
+	select 	ST_AsMVTGeom(
+				st_buffer(st_convexhull(st_collect(aall.geometrie_3857)), 10,3),
+				ST_TileEnvelope($tz, $tx, $ty),
+				4096,
+				4096,
+				true
+				) AS geom,
+			CASE
+              WHEN SUBSTR(aall.fantoir,6,1) = 'b' THEN ''
+              ELSE aall.fantoir
+          	END AS fantoir,
+			COALESCE(aall.nom_place,aall.nom_voie) AS nom,
+			aall.source,
+			st.label_statut,
+			'polygones_convexhull' as layer
+	FROM bano_adresses ain
+	LEFT JOIN bano_points_nommes pn ON (ain.fantoir=pn.fantoir AND pn.source='OSM')
+	JOIN bano_adresses aall ON (ain.fantoir=aall.fantoir AND aall.source='BAN')
+	LEFT JOIN (	SELECT 	fantoir,
+		        		label_statut
+				FROM    (
+						SELECT *,
+		                		RANK() OVER(PARTITION BY fantoir ORDER BY timestamp_statut DESC,id_statut DESC) rang
+		        		FROM    statut_fantoir)f
+				JOIN    labels_statuts_fantoir
+				USING   (id_statut)
+				WHERE   rang = 1 AND
+		        		id_statut != 0) st
+	on (ain.fantoir=st.fantoir)
+	where ain.geometrie_3857 && ST_TileEnvelope($tz, $tx, $ty) and ain.source='BAN' and pn.fantoir is null
+	group by aall.fantoir,aall.nom_place,aall.nom_voie,aall.source,st.label_statut) q
   ) TO STDOUT;
   "
 }
@@ -254,12 +226,12 @@ function num_point_osm() {
   COPY (
 SELECT ST_AsMVT(q, 'numeros_points_OSM', 4096, 'geom')
 FROM (
-      with 
+      with
       osm
       as
       (SELECT bano_id,code_insee,fantoir,numero,source as source_osm,geometrie_3857
       from bano_adresses
-      WHERE ST_Intersects(geometrie_3857, BBox($tx, $ty, $tz))
+      WHERE ST_Intersects(geometrie_3857, ST_TileEnvelope($tz, $tx, $ty))
       and source = 'OSM'),
       liste_insee
       AS
@@ -279,7 +251,7 @@ FROM (
               CASE WHEN ban.bano_id is null THEN false ELSE true END as commun,
               geometrie_3857
       from
-      osm 
+      osm
       left outer join ban
       using (bano_id))
       SELECT numero,
@@ -288,13 +260,13 @@ FROM (
           'numeros_points_OSM' as layer,
           ST_AsMvtGeom(
               geometrie_3857,
-              BBox($tx, $ty, $tz),
+              ST_TileEnvelope($tz, $tx, $ty),
               4096,
               256,
               true
             ) AS geom
      FROM resultat
-     WHERE ST_Intersects(geometrie_3857, BBox($tx, $ty, $tz))
+     WHERE ST_Intersects(geometrie_3857, ST_TileEnvelope($tz, $tx, $ty))
 ) AS q
   ) TO STDOUT;
   "
@@ -307,12 +279,12 @@ function num_point_ban() {
   COPY (
 SELECT ST_AsMVT(q, 'numeros_points_BAN', 4096, 'geom')
 FROM (
-      WITH 
+      WITH
       ban
       AS
       (SELECT code_insee,fantoir,numero,bano_id,geometrie_3857
       FROM    bano_adresses
-      WHERE   ST_Intersects(geometrie_3857, BBox($tx, $ty, $tz)) AND
+      WHERE   ST_Intersects(geometrie_3857, ST_TileEnvelope($tz, $tx, $ty)) AND
               source = 'BAN'),
       liste_insee
       AS
@@ -352,13 +324,13 @@ FROM (
           'numeros_points_BAN' as layer,
           ST_AsMvtGeom(
               geometrie_3857,
-              BBox($tx, $ty, $tz),
+              ST_TileEnvelope($tz, $tx, $ty),
               4096,
               256,
               true
             ) AS geom
      FROM resultat
-     WHERE ST_Intersects(geometrie_3857, BBox($tx, $ty, $tz))
+     WHERE ST_Intersects(geometrie_3857, ST_TileEnvelope($tz, $tx, $ty))
 ) AS q
   ) TO STDOUT;
   "
