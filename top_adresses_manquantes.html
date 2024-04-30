@@ -29,7 +29,7 @@
     }
     function update_csv_url(dept){
         $('#bouton_export_csv').empty()
-        $('#bouton_export_csv').append($('<a>').attr('href',"requete_par_dept.py?requete=top_adresses_manquantes&cache=False&dept="+numero_dept+'&format=csv&offset='+offset+'&limit='+nb_lignes_par_page)
+        $('#bouton_export_csv').append($('<a>').attr('href',"top_adresses_manquantes_dept.py?dept="+dept+'&format=csv&offset='+offset+'&limit='+nb_lignes_par_page,)
                                                .attr('target','blank')
                                                .append($('<img>').attr('src','img/export-csv.png')))
     }
@@ -74,6 +74,7 @@
                 $('#'+table).empty().append($('<thead>').append($('<tr>').append($('<th>').append('Commune (Insee)'))))
                 $('#'+table+' tr').append($('<th>').append('Code Fantoir'))
                 $('#'+table+' tr').append($('<th>').append('Voie'))
+                $('#'+table+' tr').append($('<th>').append('% adresses certifiées BAN'))
                 $('#'+table+' tr').append($('<th>').attr('colspan','1').append('Carte'))
                 $('#'+table+' tr').append($('<th>').attr('colspan','2').append('Édition'))
                 $('#'+table+' tr').append($('<th>').append('Statut du nom ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
@@ -92,7 +93,8 @@
                         lat,
                         nbaddr,
                         id_statut,
-                        is_place] = data[l]
+                        is_place,
+                        certification] = data[l]
 
                     fantoir_affiche = fantoir
                     fantoir_dans_relation = 'ok'
@@ -115,6 +117,8 @@
                     $('#'+table+' tr:last').append($('<td>').addClass('cell_fantoir').text(fantoir_affiche))
                     //Voie
                     $('#'+table+' tr:last').append($('<td>').text(voie))
+                    //Certification
+                    $('#'+table+' tr:last').append($('<td>').text(certification))
                     //Date de création
                     // $('#'+table+' tr:last').append($('<td>').text(data[l][7]))
                     //visu

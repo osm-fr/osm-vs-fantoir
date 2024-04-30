@@ -19,7 +19,8 @@ AS
 (SELECT c.code_insee,
         c.fantoir,
         c.nom_voie,
-        count(*) a_proposer
+        count(*) a_proposer,
+        avg(certification_commune*100)::int certification
 FROM    bano_adresses c
 JOIN    fantoir
 USING   (fantoir)
@@ -58,6 +59,7 @@ SELECT cog.code_insee,
        max.a_proposer,
        COALESCE(id_statut,0),
        COALESCE(is_place,false),
+       max.certification,
        nb_ligne_total
 FROM   max
 JOIN   (SELECT libelle,
