@@ -4,11 +4,12 @@
 import cgi
 import cgitb
 import json
-
+import helpers as hp
 from sql import sql_get_data
 
 def format_csv(fetch):
-    return ('Département;Code INSEE;Commune;FANTOIR;Voie;Date de création;lon;lat\n'+'\n'.join([f'{c[0]};{c[1]};"{c[2]}";{c[4]};{c[3]};{c[7]};{c[5]};{c[6]}' for c in fetch]))
+    labels = hp.get_dict_labels()
+    return ('Code INSEE;Commune;Code Fantoir;Voie;% adresses certifiées BAN;lon;lat;Statut du nom;Nombre d\'adresses\n'+'\n'.join([f'{c[0]};{c[1]};{c[3] if c[3] and c[3][5] != "b" else ""};"{c[2]}";{c[9]};{c[4]};{c[5]};{labels[c[7]]};{c[6]}' for c in fetch]))
 
 params = cgi.FieldStorage()
 dept = params['dept'].value
