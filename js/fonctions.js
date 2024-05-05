@@ -395,15 +395,15 @@
                 reset_panneau_map()
 
                 if (couche_carto == 'BAN_point' || couche_carto == 'OSM_point') {
-                    $('#panneau_map h2').text(numero+' '+nom)
+                    $('#panneau_map h2').attr('texte_a_copier',nom).text(numero+' '+nom)
                 } else {
-                    $('#panneau_map h2').text(nom)
+                    $('#panneau_map h2').attr('texte_a_copier',nom).text(nom)
                 }
                 $('#panneau_map #espace_bouton_copier').append('<button id="copier_voie" title="Copier le nom de la voie"></button>')
                 $('#panneau_map #espace_bouton_copier #copier_voie').click(function(){
 
                     //Copie le nom de la voie dans le presse-papier
-                    navigator.clipboard.writeText(nom)
+                    navigator.clipboard.writeText($('h2').attr('texte_a_copier'))
                     //Affiche le picto copie en vert
                     $(this).addClass('ok')
                     //Affiche le message de confirmation
@@ -494,13 +494,11 @@
                         //Mettre à jour le nom de la rue
                         if (nom_osm != null){
                             if (couche_carto == 'BAN_point' || couche_carto == 'OSM_point') {
-                                $('#panneau_map h2').text(numero+' '+nom_osm)
+                                $('#panneau_map h2').attr('texte_a_copier',nom_osm).text(numero+' '+nom_osm)
                             } else {
-                                $('#panneau_map h2').text(nom_osm)
+                                $('#panneau_map h2').attr('texte_a_copier',nom_osm).text(nom_osm)
                             }
                         }
-                        $('#panneau_map').append('<button id="copier_voie" title="Copier le nom de la voie"></button>')
-
 
                         //Infos sur le numéro
                         if (couche_carto == 'BAN_point' || couche_carto == 'OSM_point') {
@@ -647,12 +645,12 @@
                 lon = e.lngLat.lng
                 lat = e.lngLat.lat
 
-                $('#panneau_map h2').text(nom)
+                $('#panneau_map h2').attr('texte_a_copier',nom).text(nom)
                 $('#panneau_map #espace_bouton_copier').append('<button id="copier_voie" title="Copier le nom de la voie"></button>')
                 $('#panneau_map #espace_bouton_copier #copier_voie').click(function(){
 
                     //Copie le nom de la voie dans le presse-papier
-                    navigator.clipboard.writeText(nom)
+                    navigator.clipboard.writeText($('h2').attr('texte_a_copier'))
                     //Affiche le picto copie en vert
                     $(this).addClass('ok')
                     //Affiche le message de confirmation
