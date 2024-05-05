@@ -791,6 +791,10 @@
         map.setLayoutProperty('point_de_communes','visibility','visible')
         map.setPaintProperty('point_de_communes','icon-color',["interpolate",["linear"],["/", ["*",["get", "nb_adresses_osm"],100],["get", "nb_adresses_ban"]],0,"red",25,"orange",50,"yellow",75,"green"])
     }
+    function affiche_ratio_noms_adresses(){
+        map.setLayoutProperty('point_de_communes','visibility','visible')
+        map.setPaintProperty('point_de_communes','icon-color',["interpolate",["linear"],["/", ["*",["get", "nb_nom_adr_osm"],100],["get", "nb_noms_ban"]],0,"red",25,"orange",50,"yellow",75,"green"])
+    }
     function affiche_ratio_noms(){
         map.setLayoutProperty('point_de_communes','visibility','visible')
         map.setPaintProperty('point_de_communes','icon-color',["interpolate",["linear"],["/", ["*",["get", "nb_noms_osm"],100],["get", "nb_noms_topo"]],0,"red",25,"orange",50,"yellow",75,"green"])
