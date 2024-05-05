@@ -25,6 +25,7 @@ FROM ( SELECT code_insee,
               nb_noms_osm,
               nb_noms_ban,
               nb_noms_topo,
+              nb_nom_adr_osm,
               ST_AsMvtGeom(
                 geom_centroide_3857,
                 BBox($tx, $ty, $tz),
@@ -39,17 +40,10 @@ FROM ( SELECT code_insee,
        WHERE            \"ref:INSEE\" != '') p
   USING (code_insee)
   JOIN (SELECT code_insee,
-               CASE
-                   WHEN nb_adresses_ban > 0 THEN nb_adresses_osm * 25 / nb_adresses_ban
-                   ELSE 50
-               END AS ratio_adresses,
-               CASE
-                   WHEN nb_nom_topo > 0 THEN nb_nom_osm * 75 / nb_nom_topo
-                   ELSE 50
-               END AS ratio_noms,
               nb_adresses_osm,
               GREATEST(1,nb_adresses_ban) AS nb_adresses_ban,
               nb_nom_osm AS nb_noms_osm,
+              nb_nom_adr_osm,
               GREATEST(1,nb_nom_ban) AS nb_noms_ban,
               GREATEST(1,nb_nom_topo) AS nb_noms_topo
         FROM bano_stats_communales) AS s
