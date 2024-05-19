@@ -31,6 +31,7 @@ if infos_commune:
         bounds,
         adresses_osm,
         adresses_ban,
+        nb_nom_adr_osm,
         nom_osm,
         nom_ban,
         nom_cadastre,
@@ -62,6 +63,7 @@ data = [
     adresses_ban,
     nom_osm,
     nom_ban,
+    nb_nom_adr_osm,
     nom_cadastre,
     nom_topo,
 ]
