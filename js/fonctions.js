@@ -757,6 +757,10 @@
             affiche_ratio_noms()
             hash_value = 'N'
         }
+        if ($('#radio_prog_noms_avec_adresses').is(':checked')) {
+            affiche_ratio_noms_adresses()
+            hash_value = 'NA'
+        }
         if ($('#radio_prog_adresses').is(':checked')) {
             affiche_ratio_numeros()
             hash_value = 'A'
@@ -827,7 +831,7 @@
         interactions_souris('points_nommes_rapproches')
         interactions_souris('points_nommes_non_rapproches')
 
-        $('#bouton_progression').click(function(){
+        $('#popup_calques_progression').click(function(){
             affiche_ratio_map()
         })
 
@@ -837,10 +841,13 @@
     }
     function update_radio_ratio(){
         ratio = check_url_for_ratio_map()
+        console.log(ratio)
         if (ratio == 'N'){
             $('#radio_prog_noms').click()
         } else if (ratio == 'A'){
             $('#radio_prog_adresses').click()
+        } else if (ratio == 'NA'){
+            $('#radio_prog_noms_avec_adresses').click()
         } else {
             update_search('ratio','no')
         }

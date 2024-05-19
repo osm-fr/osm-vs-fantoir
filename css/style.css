@@ -489,7 +489,7 @@ hr {
 
 #pifostats {
 	position:fixed;
-	width:35%;
+	width:43%;
 	height: 110px;
 	top:140px;
 	right:2%;
@@ -525,26 +525,31 @@ hr {
 	font-size: 0.75em;
 }
 
-.barre_noms, .barre_adresses {
+.barre_noms, .barre_noms_avec_adresses, .barre_adresses {
 	float: left;
-	margin: 25px 12px 7px 8px;
-	width: 90%;
-	height: 8px;
-	background-color: #FFCC55; /* orange */
-	border-radius: 2px;
+	margin: 6px 8px;
+	width: 100%;
 }
-.pifomap .barre_noms, .pifomap .barre_adresses {
+
+.barre_noms_texte, .barre_noms_avec_adresses_texte, .barre_adresses_texte {
 	float: left;
-	margin: 25px 12px 4px 8px;
-	width: 90%;
+	width: 45%;
+	color: #444;
+	font-size: 0.75em;
+	line-height: 1em;
+}
+
+.barre_noms_tous, .barre_noms_avec_adresses_tous, .barre_adresses_tous { /*Barre orange du total, en fond*/
+	float: left;
+	width: 50%;
 	height: 8px;
 	background-color: #FFCC55; /* orange */
 	border-radius: 2px;
 }
 
-.barre_noms_osm, .barre_adresses_osm {
+.barre_noms_osm, .barre_noms_avec_adresses_osm, .barre_adresses_osm { /*Barre verte du nombre calculé, par-dessus*/
 	position: relative;
-	top: 0;
+	top: 0px;
 	left: 0;
 	height: 8px;
 	width: 0%;
@@ -552,20 +557,12 @@ hr {
 	border-radius: 4px;
 }
 
-.barre_noms_osm_texte, .barre_adresses_osm_texte {
-	position: relative;
-	top: -30px;
-	left: 1%;
-	color: #444;
-	font-size: 0.9em;
-	line-height: 1.2em;
-}
-
 .picto_france {
 	float: left;
 	display: inline-block;
 	width: 25px;
-	margin-top: 10px;
+	margin-top: -10px;
+	margin-left: 5px;
 }
 
 
@@ -577,7 +574,7 @@ hr {
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
 
-#bouton_progression {
+#bouton_calques_progression {
 	cursor: pointer;
 	position: fixed;
 	top: 40px;
@@ -586,22 +583,43 @@ hr {
 	background-size: 33px;
 	width: 240px;
 	height: 38px;
-	padding: 2px 0 0 2px;
 	border-bottom: 2px sienna solid;
 	border-radius: 6px;
 }
 
-#bouton_progression * {
+#bouton_calques_progression * {
 	cursor: pointer;
 }
 
-#bouton_progression p {
-	line-height: 0.7em;
-	margin: 0;
+#bouton_calques_progression p {
+	text-align: center;
+	vertical-align:middle;
+	padding-right: 30px;
+	font-size:0.9em;
+	line-height: 0.9em;
+	font-weight: bold;
+	color:black;
 }
 
-#bouton_progression label {
-	font-size: 0.7em;
+#popup_calques_progression {
+	position: fixed;
+	visibility: hidden;
+	top: 85px;
+	right: 215px;
+	background: wheat;
+	background-size: 33px;
+	width: 230px;
+	height: 100px;
+	padding: 5px;
+	border-bottom: 2px sienna solid;
+	border-radius: 6px;
+}
+
+#popup_calques_progression p {
+	margin: 0;
+}
+#popup_calques_progression label {
+	font-size: 0.75em;
 }
 
 /*-------------------------------------------*/
