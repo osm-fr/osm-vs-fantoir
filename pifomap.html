@@ -298,6 +298,8 @@
                 return 0;
             }
             commune_valide = true;
+            $('#pifostats').css('visibility','visible')
+
             code_insee = $('#input_insee')[0].value
             update_csv_url()
             $('#wait_ajax').empty()
@@ -379,29 +381,6 @@
             }
             rendu_bano(code_insee,nom_commune)
 
-
-       $('#panneau_map #espace_bouton_copier #copier_voie').click(function(){
-
-            alert('ok');
-
-            //Copie le nom de la voie dans le presse-papier
-            navigator.clipboard.writeText(nom)
-            //Affiche le picto copie en vert
-            $(this).addClass('ok')
-            //Affiche le message de confirmation
-            $('#panneau_map #espace_bouton_copier').append($('<span id="confirmation_copie">').text('✔ Copié'));
-
-            setTimeout(function(){
-                $('#panneau_map #espace_bouton_copier #confirmation_copie').css('opacity', '1');
-                setTimeout(function(){
-                    $('#panneau_map #espace_bouton_copier #confirmation_copie').css('opacity', '0');
-                }, 800);
-                setTimeout(function(){
-                    $('#panneau_map #espace_bouton_copier #confirmation_copie').remove();
-                }, 1500);
-            }, 50);
-
-        })
 
             //------------------------------------
             //-------       PIFOSTATS       ------
@@ -505,7 +484,7 @@
                 <div class="barre_noms_tous" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100">
                     <div class="barre_noms_osm"></div>
                 </div>
-            <a id="lien_map_noms" href="pifomap.html" title="voir la carte de la progression en France"><img class="picto_france" src="img/france-blanc-points.png"/></a>
+            <a id="lien_map_noms" href="pifomap.html" title="voir la carte de la progression dans la région"><img class="picto_france" src="img/france-blanc-points.png"/></a>
             </div>
 
             <div class="barre_noms_avec_adresses"> 
@@ -513,7 +492,7 @@
                 <div class="barre_noms_avec_adresses_tous" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100">
                     <div class="barre_noms_avec_adresses_osm"></div>
                 </div>
-            <a id="lien_map_noms_avec_adresses" href="pifomap.html" title="voir la carte de la progression en France"><img class="picto_france" src="img/france-blanc-points.png"/></a>
+            <a id="lien_map_noms_avec_adresses" href="pifomap.html" title="voir la carte de la progression dans la région"><img class="picto_france" src="img/france-blanc-points.png"/></a>
             </div>
 
             <div class="barre_adresses"> 
@@ -521,7 +500,7 @@
                 <div class="barre_adresses_tous" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100">
                     <div class="barre_adresses_osm"></div>
                 </div>
-            <a id="lien_map_adresses" href="pifomap.html" title="voir la carte de la progression en France"><img class="picto_france" src="img/france-blanc-points.png"/></a>
+            <a id="lien_map_adresses" href="pifomap.html" title="voir la carte de la progression dans la région"><img class="picto_france" src="img/france-blanc-points.png"/></a>
             </div>
 
         </div>
