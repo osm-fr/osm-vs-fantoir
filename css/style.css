@@ -236,15 +236,16 @@ hr {
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
 
-#bouton_v2 {
+#bouton_aleatoire {
 	cursor: pointer;
 	position: fixed;
 	top: 40px;
 	right: 215px;
-	background: url("../img/bouton_v2.png") #cacaca no-repeat center;
+	background: url("../img/des.png") #E0D5F4 no-repeat center;
+	background-size: 37px;
 	width: 40px;
 	height: 40px;
-	border-bottom: 2px #8f8f8f solid; /*gris*/
+	border-bottom: 2px #8E68D7 solid; /*gris*/
 	border-radius: 6px;
 }
 
@@ -489,16 +490,15 @@ hr {
 
 #pifostats {
 	position:fixed;
-	width:43%;
+	width:39%;
 	height: 110px;
 	top:140px;
-	right:2%;
+	right:1%;
 	padding: 5px;
 	border:1px solid lightblue;
 	border-bottom: 3px skyblue solid;
 	border-radius: 8px;
 	line-height: 40px;
-	visibility: hidden;
 }
 
 #pifostats.pifomap {
