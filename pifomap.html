@@ -414,7 +414,9 @@
             $('#lien_map_noms').attr('href','pifomap.html?ratio=N#map=10/'+lat_commune+'/'+lon_commune)
             $('#lien_map_noms_avec_adresses').attr('href','pifomap.html?ratio=NA#map=10/'+lat_commune+'/'+lon_commune)
             $('#lien_map_adresses').attr('href','pifomap.html?ratio=A#map=10/'+lat_commune+'/'+lon_commune)
+
         })
+
         update_search('insee',$('#input_insee')[0].value)
 *        $('body').css('cursor','default');
     };
@@ -475,7 +477,10 @@
         <div id="infos_refresh"></div>
         <div id="bouton_legende"><p>Légende</p></div>
 
+        <!------------------------------------------------------------->
         <!-----------------------   Pifostats   ----------------------->
+        <!------------------------------------------------------------->
+
         <div id="pifostats" class="pifomap">
             <div><h3>Intégration des voies et adresses de la commune</h3></div>
 
