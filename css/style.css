@@ -499,6 +499,7 @@ hr {
 	border-bottom: 3px skyblue solid;
 	border-radius: 8px;
 	line-height: 40px;
+	visibility: hidden;
 }
 
 #pifostats.pifomap {
