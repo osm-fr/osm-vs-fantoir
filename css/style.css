@@ -490,7 +490,7 @@ hr {
 
 #pifostats {
 	position:fixed;
-	width:39%;
+	width:40%;
 	height: 110px;
 	top:140px;
 	right:1%;
@@ -535,7 +535,7 @@ hr {
 
 .barre_noms_texte, .barre_noms_avec_adresses_texte, .barre_adresses_texte {
 	float: left;
-	width: 45%;
+	width: 46%;
 	color: #444;
 	font-size: 0.75em;
 	line-height: 1em;
@@ -543,7 +543,7 @@ hr {
 
 .barre_noms_tous, .barre_noms_avec_adresses_tous, .barre_adresses_tous { /*Barre orange du total, en fond*/
 	float: left;
-	width: 50%;
+	width: 49%;
 	height: 8px;
 	background-color: #FFCC55; /* orange */
 	border-radius: 2px;
@@ -968,7 +968,7 @@ hr {
 }
 
 #boutons-filtres.pifo {
-	margin-left: 2%;
+	margin-left: 1%;
 	width: 55%;
 }
 #boutons-filtres.page_numeros {
@@ -1013,7 +1013,7 @@ hr {
 
 #descriptif {
 	float: left;
-	margin:0 2%;
+	margin:0 2% 0 1%;
 	width: 50%;
 }
 

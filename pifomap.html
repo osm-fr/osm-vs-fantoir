@@ -385,32 +385,32 @@
             //------------------------------------
             //-------       PIFOSTATS       ------
             //------------------------------------
-
             pourcent_adresses_osm = nb_adresses_osm*100/Math.max(nb_adresses_ban,1)
             pourcent_noms_avec_adresses_osm = nb_nom_adr_osm*100/Math.max(nb_noms_ban,1)
             pourcent_noms_osm = nb_noms_osm*100/Math.max(nb_noms_topo,1)
 
             $('#pifostats .barre_noms_texte').text(nb_noms_osm+' noms OSM'+' (soit '+Math.round(pourcent_noms_osm)+'% des '+nb_noms_topo+' noms Topo)')
-            $('#pifostats .barre_noms_osm').attr('aria-valuenow', Math.round(pourcent_noms_osm))
+            $('#pifostats .barre_noms_osm').attr('aria-valuenow', Math.min(100, Math.round(pourcent_noms_osm)))
 
             $('#pifostats .barre_noms_avec_adresses_texte').text(nb_nom_adr_osm+' noms OSM avec adresses'+' (soit '+Math.round(pourcent_noms_avec_adresses_osm)+'% des '+nb_noms_ban+' noms BAN)')
-            $('#pifostats .barre_noms_avec_adresses_osm').attr('aria-valuenow', Math.round(pourcent_noms_avec_adresses_osm))
+            $('#pifostats .barre_noms_avec_adresses_osm').attr('aria-valuenow', Math.min(100, Math.round(pourcent_noms_avec_adresses_osm)))
 
             $('#pifostats .barre_adresses_texte').text(nb_adresses_osm+' adresses OSM'+' (soit '+Math.round(pourcent_adresses_osm)+'% des '+nb_adresses_ban+' adresses BAN)')
-            $('#pifostats .barre_adresses_osm').attr('aria-valuenow', Math.round(pourcent_adresses_osm))
+            
+            $('#pifostats .barre_adresses_osm').attr('aria-valuenow', Math.min(100, Math.round(pourcent_adresses_osm)))
 
 
             $("#pifostats .barre_noms .barre_noms_osm") .stop(true, true)
                                                         .delay(1000)
-                                                        .animate({width: pourcent_noms_osm+'%'}, 1000);
+                                                        .animate({width: Math.min(100, Math.round(pourcent_noms_osm))+'%'}, 1000);
 
             $("#pifostats .barre_noms_avec_adresses .barre_noms_avec_adresses_osm") .stop(true, true)
                                                         .delay(1000)
-                                                        .animate({width: pourcent_noms_avec_adresses_osm+'%'}, 1000);
+                                                        .animate({width: Math.min(100, Math.round(pourcent_noms_avec_adresses_osm))+'%'}, 1000);
 
             $("#pifostats .barre_adresses .barre_adresses_osm") .stop(true, true)
                                                                 .delay(1000)
-                                                                .animate({width: pourcent_adresses_osm+'%'}, 1000);
+                                                                .animate({width: Math.min(100, Math.round(pourcent_adresses_osm))+'%'}, 1000);
             $('#lien_map_noms').attr('href','pifomap.html?ratio=N#map=10/'+lat_commune+'/'+lon_commune)
             $('#lien_map_noms_avec_adresses').attr('href','pifomap.html?ratio=NA#map=10/'+lat_commune+'/'+lon_commune)
             $('#lien_map_adresses').attr('href','pifomap.html?ratio=A#map=10/'+lat_commune+'/'+lon_commune)
