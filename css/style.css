@@ -212,7 +212,7 @@ hr {
 	margin: 0;
 	padding: 0;
 	top: 40px;
-	right: 470px;
+	right: 515px;
 	width:25%;
 	height: 40px;
 	text-align: center;
@@ -580,7 +580,7 @@ hr {
 	cursor: pointer;
 	position: fixed;
 	top: 40px;
-	right: 215px;
+	right: 265px;
 	background: url("../img/layers.png") no-repeat wheat right 5px bottom 3px;
 	background-size: 33px;
 	width: 240px;
@@ -607,7 +607,7 @@ hr {
 	position: fixed;
 	visibility: hidden;
 	top: 85px;
-	right: 215px;
+	right: 265px;
 	background: wheat;
 	background-size: 33px;
 	width: 230px;

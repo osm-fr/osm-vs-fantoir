@@ -40,6 +40,7 @@
             $('#input_insee')[0].value = insee
             requete_pifometre()
         }
+        $('#bouton_aleatoire').attr('title', 'Une commune au pif\noù dégommer du rouge');
         $('#bouton_aleatoire').click(function(){
             commune_aleatoire()
         })
@@ -63,6 +64,17 @@
                                 $('#refresh_infobulle').hide()
                             })
     };
+
+    function commune_aleatoire(){
+        $.ajax({
+            url: "requete_commune_random.py"
+        })
+        .done(function( data ) {
+            $('#input_insee')[0].value = data[0][0]
+            requete_pifometre()
+        })
+    }
+    
     function refresh(){
         if (commune_valide == false){
             return 0;
