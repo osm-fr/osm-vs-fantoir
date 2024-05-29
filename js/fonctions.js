@@ -248,6 +248,15 @@
             })
         })))
     }
+    function commune_aleatoire(){
+        $.ajax({
+            url: "requete_commune_random.py"
+        })
+        .done(function( data ) {
+            $('#input_insee')[0].value = data[0][0]
+            requete_pifometre()
+        })
+    }
     function parse_pifometre(categorie,caractere_annul,fantoir) {
         is_voie = false
         is_place = false
