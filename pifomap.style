@@ -389,7 +389,7 @@
             "id": "polygones",
             "source": "polygones_convexhull",
             "type": "line",
-            "minzoom" : 14,
+            "minzoom" : 13,
             "layout": {
                 "line-join":"round",
                 "line-cap":"round"
