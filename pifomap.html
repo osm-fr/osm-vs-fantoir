@@ -54,6 +54,12 @@
                 $('#popup_calques_progression').css('visibility','hidden');
         })
 
+        //Commune au pif
+        $('#bouton_aleatoire').attr('title', 'Une commune au pif\noù dégommer du rouge');
+        $('#bouton_aleatoire').click(function(){
+            commune_aleatoire()
+        })
+
         //Communes voisines
         $('#table_communes_voisines').css('visibility','hidden');
         $('#table_communes_voisines table tr td').empty()
@@ -101,6 +107,19 @@
                                 $('#refresh_infobulle').hide()
                             })
     };
+
+    function commune_aleatoire(){
+        $.ajax({
+            url: "requete_commune_random.py"
+        })
+        .done(function( data ) {
+            $('#input_insee')[0].value = data[0][0]
+            reset_url_hash();
+            reset_panneau_map();
+            requete_pifometre()
+        })
+    }
+
     function refresh(){
         if (commune_valide == false){
             return 0;
@@ -418,7 +437,7 @@
         })
 
         update_search('insee',$('#input_insee')[0].value)
-*        $('body').css('cursor','default');
+        $('body').css('cursor','default');
     };
     function update_csv_url(){
         urlCSV = 'requete_pifometre_voies.py?insee='+$('#input_insee')[0].value+'&format=csv';
@@ -468,9 +487,12 @@
             </tbody>
             </table>
         </div>
+
+        <!--Boutons tout en haut à droite-->
         <div id="wait_ajax" class="pifomap"></div>
 
         <div id="bouton_calques_progression"><p>Calques de progression</p></div>
+        <button id="bouton_aleatoire" title="Une commune au pif"></button>
         <button id="bouton_communes_voisines" title="Communes voisines"></button>
         <button id="bouton_refresh"></button>
         <div id="alerte_commune" class="pifomap"></div>
