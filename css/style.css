@@ -213,12 +213,16 @@ hr {
 	padding: 0;
 	top: 40px;
 	right: 515px;
-	width:25%;
-	height: 40px;
+	width:330px;
+	height: 38px;
 	text-align: center;
 	background:lightblue;
 	border-bottom: 2px #3FA4C5 solid;
 	border-radius: 6px;
+}
+
+#wait_ajax.pifomap {
+	right: 675px;
 }
 
 #wait_ajax.pifo span, #wait_ajax.pifomap span {
@@ -495,8 +499,8 @@ hr {
 	top:140px;
 	right:1%;
 	padding: 5px;
-	border:1px solid lightblue;
-	border-bottom: 3px skyblue solid;
+	border:1px solid wheat;
+	border-bottom: 3px sienna solid;
 	border-radius: 8px;
 	line-height: 40px;
 	visibility: hidden;
@@ -509,7 +513,7 @@ hr {
 }
 
 #pifostats h3 {
-	text-align: center;
+	text-align: left;
 	font-size: 0.85em;
 	line-height: 0.9em;
 	margin: 0.6em 0 0.7em 0;
@@ -517,7 +521,7 @@ hr {
 
 #pifostats.pifomap h3 {
 	font-size: 0.8em;
-	margin: 0 0 5px 0;
+	margin: 0 0 5px 7px;
 }
 
 #pifostats span {
@@ -567,7 +571,6 @@ hr {
 	margin-left: 5px;
 }
 
-
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
 /*---------------                                                       ---------------*/
@@ -576,52 +579,132 @@ hr {
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
 
-#bouton_calques_progression {
-	cursor: pointer;
+
+/*----------------------------------------------------------------------*/
+/*--------------             ONGLETS - BOUTON             --------------*/
+/*----------------------------------------------------------------------*/
+
+#onglets {
 	position: fixed;
 	top: 40px;
 	right: 265px;
-	background: url("../img/layers.png") no-repeat wheat right 5px bottom 3px;
-	background-size: 33px;
-	width: 240px;
+	width: 400px;
 	height: 38px;
-	border-bottom: 2px sienna solid;
-	border-radius: 6px;
 }
 
-#bouton_calques_progression * {
+#bouton_pifostats, #bouton_pifofiltres, #bouton_pifoprogression {
 	cursor: pointer;
+	float: left;
+	background: wheat;
+	width: 33%;
+	height: 100%;
+	border-bottom: 2px sienna solid;
 }
 
-#bouton_calques_progression p {
+#bouton_pifostats {
+	border-right: 1px solid darkgrey;
+	border-bottom-left-radius: 6px;
+	border-top-left-radius: 6px;
+	background: url("../img/stats2.png") no-repeat wheat right 12px bottom 5px;
+	background-size: 28px;
+}
+
+#bouton_pifofiltres {
+	border-right: 1px solid darkgrey;
+	background: url("../img/lieudit-fil.png") no-repeat wheat right 12px bottom 5px;
+	background-size: 28px;
+}
+
+#bouton_pifoprogression {
+	background: lightsalmon;
+	border-bottom-right-radius: 6px;
+	border-top-right-radius: 6px;
+	background: url("../img/france-fil.png") no-repeat wheat right 6px bottom 5px;
+	background-size: 26px;
+}
+
+#bouton_pifostats p, #bouton_pifofiltres p, #bouton_pifoprogression p {
 	text-align: center;
 	vertical-align:middle;
 	padding-right: 30px;
-	font-size:0.9em;
-	line-height: 0.9em;
+	font-size:0.85em;
+	line-height: 0.85em;
 	font-weight: bold;
 	color:black;
 }
 
-#popup_calques_progression {
-	position: fixed;
-	visibility: hidden;
-	top: 85px;
-	right: 265px;
-	background: wheat;
-	background-size: 33px;
-	width: 230px;
-	height: 100px;
+
+/*----------------------------------------------------------------------*/
+/*--------------              ONGLETS - BLOC              --------------*/
+/*----------------------------------------------------------------------*/
+
+#pifofiltres, #pifoprogression {
+	position:fixed;
+	width:40%;
+	height:90px;
+	top:90px;
+	right:1%;
 	padding: 5px;
-	border-bottom: 2px sienna solid;
-	border-radius: 6px;
+	background-color: white;
+	border:1px solid wheat;
+	border-bottom: 3px sienna solid;
+	border-radius: 8px;
+	line-height:35px;
+	visibility: hidden;
 }
 
-#popup_calques_progression p {
-	margin: 0;
+#pifofiltres h3, #pifoprogression h3 {
+	text-align: left;
+	font-size: 0.8em;
+	margin: 0 0 5px 7px;
+	line-height: 0.9em;
 }
-#popup_calques_progression label {
+
+#pifofiltres div {
+	width: auto;
+	display: inline-block;
+}
+
+#pifofiltres ul {
+  list-style-type: none;
+  margin:0;
+}
+
+#pifofiltres ul li {
+  margin: 0.2em 0;
+}
+
+#pifofiltres span {
+	font-size: 0.8em;
+}
+#pifofiltres.pifomap span {
 	font-size: 0.75em;
+}
+
+#pifoprogression #france_points {
+	width: 60px;
+}
+
+#pifoprogression div {
+	float: left;
+}
+
+#pifoprogression div h3 {
+	text-align: left;
+	margin: 6px 0;
+}
+
+#pifoprogression div img {
+	margin: 15px 10px 0 10px;
+}
+
+#pifoprogression p {
+	margin: 0;
+	font-size: 0.75em;
+	line-height: 0.75em;
+}
+#pifoprogression label {
+	line-height: 1.6em;
 }
 
 /*-------------------------------------------*/
