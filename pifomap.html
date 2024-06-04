@@ -45,13 +45,44 @@
             $('#legende').css('visibility','hidden');
         })
 
-        //Calques progression
-        $('#bouton_calques_progression').click(function(){
-            if ( $('#popup_calques_progression').css('visibility') == 'hidden' ) {
-                $('#popup_calques_progression').css('visibility','visible');
+        //Sélection des onglets (stats / filtres / barres de progression)
+
+        //Pifostats activé au démarrage
+        $('#bouton_pifostats').addClass('onglet_actif'); 
+        $('#bouton_pifostats').css('background-color', 'burlywood'); 
+
+        //Changement d'onglet
+        $('#bouton_pifostats').click(function(){
+            if (!$(this).hasClass('onglet_actif')) {
+                $(this).addClass('onglet_actif').css('background-color', 'burlywood');
+                $('#bouton_pifofiltres').removeClass('onglet_actif').css('background-color', 'wheat');
+                $('#pifofiltres').css('visibility','hidden');
+                $('#bouton_pifoprogression').removeClass('onglet_actif').css('background-color', 'wheat');
+                $('#pifoprogression').css('visibility','hidden');
+                $('#pifostats').css('visibility','visible');
             }
-            else
-                $('#popup_calques_progression').css('visibility','hidden');
+        })
+
+        $('#bouton_pifofiltres').click(function(){
+            if (!$(this).hasClass('onglet_actif')) {
+                $(this).addClass('onglet_actif').css('background-color', 'burlywood');
+                $('#bouton_pifostats').removeClass('onglet_actif').css('background-color', 'wheat');
+                $('#pifostats').css('visibility','hidden');
+                $('#bouton_pifoprogression').removeClass('onglet_actif').css('background-color', 'wheat');
+                $('#pifoprogression').css('visibility','hidden');
+                $('#pifofiltres').css('visibility','visible');
+            }
+        })
+
+        $('#bouton_pifoprogression').click(function(){
+            if (!$(this).hasClass('onglet_actif')) { 
+                $(this).addClass('onglet_actif').css('background-color', 'burlywood');
+                $('#bouton_pifostats').removeClass('onglet_actif').css('background-color', 'wheat');
+                $('#pifostats').css('visibility','hidden');
+                $('#bouton_pifofiltres').removeClass('onglet_actif').css('background-color', 'wheat');
+                $('#pifofiltres').css('visibility','hidden');              
+                $('#pifoprogression').css('visibility','visible');
+            }
         })
 
         //Commune au pif
@@ -430,9 +461,9 @@
             $("#pifostats .barre_adresses .barre_adresses_osm") .stop(true, true)
                                                                 .delay(1000)
                                                                 .animate({width: Math.min(100, Math.round(pourcent_adresses_osm))+'%'}, 1000);
-            $('#lien_map_noms').attr('href','pifomap.html?ratio=N#map=10/'+lat_commune+'/'+lon_commune)
+            /*$('#lien_map_noms').attr('href','pifomap.html?ratio=N#map=10/'+lat_commune+'/'+lon_commune)
             $('#lien_map_noms_avec_adresses').attr('href','pifomap.html?ratio=NA#map=10/'+lat_commune+'/'+lon_commune)
-            $('#lien_map_adresses').attr('href','pifomap.html?ratio=A#map=10/'+lat_commune+'/'+lon_commune)
+            $('#lien_map_adresses').attr('href','pifomap.html?ratio=A#map=10/'+lat_commune+'/'+lon_commune)*/
 
         })
 
@@ -491,7 +522,11 @@
         <!--Boutons tout en haut à droite-->
         <div id="wait_ajax" class="pifomap"></div>
 
-        <div id="bouton_calques_progression"><p>Calques de progression</p></div>
+        <div id="onglets">
+            <div id="bouton_pifostats"><p>Pifostats</p></div>
+            <div id="bouton_pifofiltres"><p>Filtres</p></div>
+            <div id="bouton_pifoprogression"><p>Progression</p></div>
+        </div>
         <button id="bouton_aleatoire" title="Une commune au pif"></button>
         <button id="bouton_communes_voisines" title="Communes voisines"></button>
         <button id="bouton_refresh"></button>
@@ -511,7 +546,6 @@
                 <div class="barre_noms_tous" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100">
                     <div class="barre_noms_osm"></div>
                 </div>
-            <a id="lien_map_noms" href="pifomap.html" title="voir la carte de la progression dans la région"><img class="picto_france" src="img/france-blanc-points.png"/></a>
             </div>
 
             <div class="barre_noms_avec_adresses"> 
@@ -519,18 +553,66 @@
                 <div class="barre_noms_avec_adresses_tous" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100">
                     <div class="barre_noms_avec_adresses_osm"></div>
                 </div>
-            <a id="lien_map_noms_avec_adresses" href="pifomap.html" title="voir la carte de la progression dans la région"><img class="picto_france" src="img/france-blanc-points.png"/></a>
-            </div>
+           </div>
 
             <div class="barre_adresses"> 
                 <div class="barre_adresses_texte"></div> 
                 <div class="barre_adresses_tous" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100">
                     <div class="barre_adresses_osm"></div>
                 </div>
-            <a id="lien_map_adresses" href="pifomap.html" title="voir la carte de la progression dans la région"><img class="picto_france" src="img/france-blanc-points.png"/></a>
-            </div>
-
+           </div>
         </div>
+
+        <div id="pifofiltres" class="pifomap">
+            <h3>Afficher ou masquer...</h3>
+            <div class="ligne-boutons-filtres">
+                <div>
+                    <ul>
+                        <li>
+                            <label class="switch is-rounded is-small">
+                            <input type="checkbox" id="check_voie" checked>
+                            <span class="check is-dark"></span>
+                            <span class="control-label" critere="voie">Voies<span></span></span>
+                        </li>
+                        <li>
+                            <label class="switch is-rounded is-small">
+                            <input type="checkbox" id="check_lieu_dit" checked>
+                            <span class="check is-dark"></span>
+                            <span class="control-label" critere="lieu_dit">Lieux-dits<span></span></span>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <ul>
+                        <li>
+                            <label class="switch is-rounded is-small">
+                            <input type="checkbox" id="check_nom_integre" checked>
+                            <span class="check is-green"></span>
+                            <span class="control-label" critere="nom_integre">Déjà rapprochés dans OSM<span></span></span>
+                        </li>
+                        <li>
+                            <label class="switch is-rounded is-small">
+                            <input type="checkbox" id="check_nom_a_integrer" checked>
+                            <span class="check is-orange"></span>
+                            <span class="control-label" critere="nom_a_integrer">Pas encore rapprochés dans OSM<span></span></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    <div id="pifoprogression" class="pifomap">
+        <div><img id="france_points" src="img/france-blanc-points.png"></div>
+        <div>
+            <h3>Afficher la progression</h3>
+            <p><input type="radio" id="radio_prog_noms"                 name="switch_noms_adresses"     value="affiche_noms" >
+            <label for="radio_prog_noms">Intégration des noms de voies</label></p>
+            <p><input type="radio" id="radio_prog_noms_avec_adresses"   name="switch_noms_adresses"     value="affiche_noms_avec_adresses" >
+            <label for="radio_prog_noms_avec_adresses">Intégration des noms de voies avec adresses</label></p>
+            <p><input type="radio" id="radio_prog_adresses"             name="switch_noms_adresses"     value="affiche_adresses" >
+            <label for="radio_prog_adresses">Intégration des adresses</label></p>
+        </div>
+    </div>
 
     </div>
 
@@ -545,16 +627,6 @@
             </div>
         </div>
         <div id="map_div"></div>
-    </div>
-
-    <div id="popup_calques_progression" class="pifomap">
-
-        <p><input type="radio" id="radio_prog_noms"                 name="switch_noms_adresses"     value="affiche_noms" >
-        <label for="radio_prog_noms">Intégration des noms de voies</label></p>
-        <p><input type="radio" id="radio_prog_noms_avec_adresses"   name="switch_noms_adresses"     value="affiche_noms_avec_adresses" >
-        <label for="radio_prog_noms_avec_adresses">Intégration des noms de voies avec adresses</label></p>
-        <p><input type="radio" id="radio_prog_adresses"             name="switch_noms_adresses"     value="affiche_adresses" >
-        <label for="radio_prog_adresses">Intégration des adresses</label></p>
     </div>
 
     <div id="legende" class="pifomap">
