@@ -579,6 +579,21 @@ hr {
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
 
+#infos_commune_col2 h1 {
+	display: inline-block;
+}
+
+#recentrer_commune {
+	cursor: pointer;
+	vertical-align: middle;
+	margin-left: 20px;
+	width: 30px;
+	height: 30px;
+	background: url("../img/cible-couleur.png") whitesmoke no-repeat top 5px left 5px;
+	background-size: 20px;
+	border-bottom: 2px lightgrey solid;
+	border-radius: 6px;
+}
 
 /*----------------------------------------------------------------------*/
 /*--------------             ONGLETS - BOUTON             --------------*/
@@ -592,10 +607,24 @@ hr {
 	height: 38px;
 }
 
+.onglet_actif {
+	background-color: burlywood !important; 
+}
+
+.onglet_non_cliquable {
+	cursor: default !important;
+	background-color: whitesmoke !important;
+	border-bottom: 2px darkgrey solid !important;
+}
+
+.onglet_non_cliquable p {
+	color: grey !important;
+}
+
 #bouton_pifostats, #bouton_pifofiltres, #bouton_pifoprogression {
 	cursor: pointer;
 	float: left;
-	background: wheat;
+	background-color: wheat;
 	width: 33%;
 	height: 100%;
 	border-bottom: 2px sienna solid;

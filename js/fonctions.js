@@ -832,7 +832,7 @@
         interactions_souris('points_nommes_rapproches')
         interactions_souris('points_nommes_non_rapproches')
 
-        $('#popup_calques_progression').click(function(){
+        $('#pifoprogression').click(function(){
             affiche_ratio_map()
         })
 
