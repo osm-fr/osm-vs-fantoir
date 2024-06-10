@@ -49,37 +49,42 @@
 
         //Pifostats activé au démarrage
         $('#bouton_pifostats').addClass('onglet_actif'); 
-        $('#bouton_pifostats').css('background-color', 'burlywood'); 
 
         //Changement d'onglet
-        $('#bouton_pifostats').click(function(){
-            if (!$(this).hasClass('onglet_actif')) {
-                $(this).addClass('onglet_actif').css('background-color', 'burlywood');
-                $('#bouton_pifofiltres').removeClass('onglet_actif').css('background-color', 'wheat');
-                $('#pifofiltres').css('visibility','hidden');
-                $('#bouton_pifoprogression').removeClass('onglet_actif').css('background-color', 'wheat');
-                $('#pifoprogression').css('visibility','hidden');
-                $('#pifostats').css('visibility','visible');
-            }
-        })
+        insee=check_url_for_insee()
 
-        $('#bouton_pifofiltres').click(function(){
-            if (!$(this).hasClass('onglet_actif')) {
-                $(this).addClass('onglet_actif').css('background-color', 'burlywood');
-                $('#bouton_pifostats').removeClass('onglet_actif').css('background-color', 'wheat');
-                $('#pifostats').css('visibility','hidden');
-                $('#bouton_pifoprogression').removeClass('onglet_actif').css('background-color', 'wheat');
-                $('#pifoprogression').css('visibility','hidden');
-                $('#pifofiltres').css('visibility','visible');
-            }
-        })
+        if (insee) {
+            $('#bouton_pifostats').click(function(){
+                if (!$(this).hasClass('onglet_actif')) {
+                    $(this).addClass('onglet_actif')
+                    $('#bouton_pifofiltres').removeClass('onglet_actif');
+                    $('#pifofiltres').css('visibility','hidden');
+                    $('#bouton_pifoprogression').removeClass('onglet_actif');
+                    $('#pifoprogression').css('visibility','hidden');
+                    $('#pifostats').css('visibility','visible');
+                }
+            })
+        }
+
+        if (insee) {
+            $('#bouton_pifofiltres').click(function(){
+                if (!$(this).hasClass('onglet_actif')) {
+                    $(this).addClass('onglet_actif')
+                    $('#bouton_pifostats').removeClass('onglet_actif');
+                    $('#pifostats').css('visibility','hidden');
+                    $('#bouton_pifoprogression').removeClass('onglet_actif');
+                    $('#pifoprogression').css('visibility','hidden');
+                    $('#pifofiltres').css('visibility','visible');
+                }
+            })
+        }
 
         $('#bouton_pifoprogression').click(function(){
             if (!$(this).hasClass('onglet_actif')) { 
-                $(this).addClass('onglet_actif').css('background-color', 'burlywood');
-                $('#bouton_pifostats').removeClass('onglet_actif').css('background-color', 'wheat');
+                $(this).addClass('onglet_actif')
+                $('#bouton_pifostats').removeClass('onglet_actif');
                 $('#pifostats').css('visibility','hidden');
-                $('#bouton_pifofiltres').removeClass('onglet_actif').css('background-color', 'wheat');
+                $('#bouton_pifofiltres').removeClass('onglet_actif');
                 $('#pifofiltres').css('visibility','hidden');              
                 $('#pifoprogression').css('visibility','visible');
             }
@@ -116,6 +121,10 @@
             map.on('load', () => {
                 map_setup()
             });
+            $('#bouton_pifostats').addClass('onglet_non_cliquable');
+            $('#bouton_pifofiltres').addClass('onglet_non_cliquable');
+            $('#bouton_pifoprogression').addClass('onglet_actif');
+            $('#pifoprogression').css('visibility','visible');
         }
 
         $('#bouton_communes_voisines').click(function(){
@@ -394,7 +403,7 @@
                                .append($('<a>')
                                    .attr('target','blank')
                                    .attr('href',url_listing_fantoir)
-                                   .text('Topo (ex-Fantoir)')
+                                   .text('Topo (Fantoir)')
                                )
                                .append(' / ')
                                .append($('<a>')
@@ -403,7 +412,17 @@
                                    .text('Pifomètre')
                                )
 
-            $('#descriptif').append($('<div id="infos_commune_col2">').append($('<h1>').append((nom_commune))))
+            $('#descriptif').append($('<div id="infos_commune_col2">').append($('<h1>')
+                                                                        .append((nom_commune))
+                                                                        .append($('<button id="recentrer_commune" title="Recentrer la carte"></button>'))
+                                                                      )
+                                    )
+
+            $('#recentrer_commune').click(function(){
+                map.flyTo({
+                    center:[lon_commune, lat_commune]
+                });
+            });
 
             //------------------------------------
             //-------   COMMUNES VOISINES   ------
