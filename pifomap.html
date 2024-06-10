@@ -21,13 +21,10 @@
     }
 </style>
 <script>
-    FILTRES = [["voie",true],
-               ["lieu_dit",true],
-               ["osm_hors_fantoir",true],
-               ["nom_integre",true],
-               ["nom_a_integrer",true],
-               ["avec_adresses",true],
-               ["sans_adresses",true]]
+    FILTRES_TYPE = [["voie",true],
+               ["lieudit",true]]
+    FILTRES_STATUT = [["rapproches",true],
+               ["non_rapproches",true]]
 
     DELTA = 0.0008
 
@@ -52,32 +49,6 @@
 
         //Changement d'onglet
         insee=check_url_for_insee()
-
-        if (insee) {
-            $('#bouton_pifostats').click(function(){
-                if (!$(this).hasClass('onglet_actif')) {
-                    $(this).addClass('onglet_actif')
-                    $('#bouton_pifofiltres').removeClass('onglet_actif');
-                    $('#pifofiltres').css('visibility','hidden');
-                    $('#bouton_pifoprogression').removeClass('onglet_actif');
-                    $('#pifoprogression').css('visibility','hidden');
-                    $('#pifostats').css('visibility','visible');
-                }
-            })
-        }
-
-        if (insee) {
-            $('#bouton_pifofiltres').click(function(){
-                if (!$(this).hasClass('onglet_actif')) {
-                    $(this).addClass('onglet_actif')
-                    $('#bouton_pifostats').removeClass('onglet_actif');
-                    $('#pifostats').css('visibility','hidden');
-                    $('#bouton_pifoprogression').removeClass('onglet_actif');
-                    $('#pifoprogression').css('visibility','hidden');
-                    $('#pifofiltres').css('visibility','visible');
-                }
-            })
-        }
 
         $('#bouton_pifoprogression').click(function(){
             if (!$(this).hasClass('onglet_actif')) { 
@@ -125,6 +96,8 @@
             $('#bouton_pifofiltres').addClass('onglet_non_cliquable');
             $('#bouton_pifoprogression').addClass('onglet_actif');
             $('#pifoprogression').css('visibility','visible');
+            $('#pifofiltres').css('visibility','hidden');
+            $('#pifostats').css('visibility','hidden');
         }
 
         $('#bouton_communes_voisines').click(function(){
@@ -295,8 +268,6 @@
     function requete_pifometre(){
         commune_valide = false;
         $('body').css('cursor','progress');
-        // $('#'+table).trigger("destroy");
-        // $('#'+table).empty()
         $('#input_insee')[0].value = $('#input_insee')[0].value.toUpperCase()
         $.ajax({
             url: "requete_pifometre_commune.py?insee="+$('#input_insee')[0].value
@@ -357,7 +328,35 @@
                 return 0;
             }
             commune_valide = true;
-            $('#pifostats').css('visibility','visible')
+
+            $('#bouton_pifostats').removeClass('onglet_non_cliquable').addClass('onglet_actif');
+            $('#bouton_pifofiltres').removeClass('onglet_non_cliquable').removeClass('onglet_actif');
+            $('#bouton_pifoprogression').removeClass('onglet_actif');
+            $('#pifostats').css('visibility','visible');
+            $('#pifofiltres').css('visibility','hidden');
+            $('#pifoprogression').css('visibility','hidden');
+
+            $('#bouton_pifostats').click(function(){
+                if (!$(this).hasClass('onglet_actif')) {
+                    $(this).addClass('onglet_actif')
+                    $('#bouton_pifofiltres').removeClass('onglet_actif');
+                    $('#pifofiltres').css('visibility','hidden');
+                    $('#bouton_pifoprogression').removeClass('onglet_actif');
+                    $('#pifoprogression').css('visibility','hidden');
+                    $('#pifostats').css('visibility','visible');
+                }
+            })
+
+            $('#bouton_pifofiltres').click(function(){
+                if (!$(this).hasClass('onglet_actif')) {
+                    $(this).addClass('onglet_actif')
+                    $('#bouton_pifostats').removeClass('onglet_actif');
+                    $('#pifostats').css('visibility','hidden');
+                    $('#bouton_pifoprogression').removeClass('onglet_actif');
+                    $('#pifoprogression').css('visibility','hidden');
+                    $('#pifofiltres').css('visibility','visible');
+                }
+            })
 
             code_insee = $('#input_insee')[0].value
             update_csv_url()
@@ -417,12 +416,10 @@
                                                                         .append($('<button id="recentrer_commune" title="Recentrer la carte"></button>'))
                                                                       )
                                     )
-
             $('#recentrer_commune').click(function(){
-                map.flyTo({
-                    center:[lon_commune, lat_commune]
-                });
+                map.fitBounds(bbox_diagonale.coordinates)
             });
+
 
             //------------------------------------
             //-------   COMMUNES VOISINES   ------
@@ -507,6 +504,27 @@
                             .append($('<span>').append(osm_state+' (UTC)'))
                             .show()
     }
+    function update_filtres(){
+        for (let i = 0; i < FILTRES_TYPE.length; i++){
+            FILTRES_TYPE[i] = [FILTRES_TYPE[i][0],$('#pifofiltres.pifomap input#check_'+FILTRES_TYPE[i][0]).is(':checked')]
+        }
+        for (let i = 0; i < FILTRES_STATUT.length; i++){
+            FILTRES_STATUT[i] = [FILTRES_STATUT[i][0],$('#pifofiltres.pifomap input#check_'+FILTRES_STATUT[i][0]).is(':checked')]
+        }
+    }
+    function filtre_pifomap(){
+        for (let i = 0; i < FILTRES_STATUT.length; i++){
+            for (let j = 0; j < FILTRES_TYPE.length; j++){
+                if (FILTRES_STATUT[i][1] == true && FILTRES_TYPE[j][1] == true){
+                    map.setPaintProperty('points_nommes_'+FILTRES_STATUT[i][0]+'_'+FILTRES_TYPE[j][0], 'icon-opacity', 1);
+                    map.setPaintProperty('points_nommes_'+FILTRES_STATUT[i][0]+'_'+FILTRES_TYPE[j][0], 'text-opacity', 1);
+                } else {
+                    map.setPaintProperty('points_nommes_'+FILTRES_STATUT[i][0]+'_'+FILTRES_TYPE[j][0], 'icon-opacity', 0);
+                    map.setPaintProperty('points_nommes_'+FILTRES_STATUT[i][0]+'_'+FILTRES_TYPE[j][0], 'text-opacity', 0);
+                }
+            }
+        }
+    }
 </script>
 </head>
 
@@ -589,15 +607,15 @@
                     <ul>
                         <li>
                             <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_voie" checked>
+                            <input type="checkbox" id="check_voie"  critere="voie" checked>
                             <span class="check is-dark"></span>
-                            <span class="control-label" critere="voie">Voies<span></span></span>
+                            <span class="control-label">Voies<span></span></span>
                         </li>
                         <li>
                             <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_lieu_dit" checked>
+                            <input type="checkbox" id="check_lieudit"  critere="lieudit" checked>
                             <span class="check is-dark"></span>
-                            <span class="control-label" critere="lieu_dit">Lieux-dits<span></span></span>
+                            <span class="control-label">Lieux-dits<span></span></span>
                         </li>
                     </ul>
                 </div>
@@ -605,15 +623,15 @@
                     <ul>
                         <li>
                             <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_nom_integre" checked>
+                            <input type="checkbox" id="check_rapproches" critere="rapproches" checked>
                             <span class="check is-green"></span>
-                            <span class="control-label" critere="nom_integre">Déjà rapprochés dans OSM<span></span></span>
+                            <span class="control-label">Déjà rapprochés dans OSM<span></span></span>
                         </li>
                         <li>
                             <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_nom_a_integrer" checked>
+                            <input type="checkbox" id="check_non_rapproches"  critere="non_rapproches" checked>
                             <span class="check is-orange"></span>
-                            <span class="control-label" critere="nom_a_integrer">Pas encore rapprochés dans OSM<span></span></span>
+                            <span class="control-label">Pas encore rapprochés dans OSM<span></span></span>
                         </li>
                     </ul>
                 </div>

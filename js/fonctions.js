@@ -304,8 +304,7 @@
         if (couche_carto == 'BAN_point'||
             couche_carto == 'OSM_point'||
             couche_carto == 'filaire_transparent'||
-            couche_carto == 'points_nommes_rapproches'||
-            couche_carto == 'points_nommes_non_rapproches'){
+            couche_carto.indexOf('points_nommes_') == 0){
             map.on('mouseenter', couche_carto, (e) => {
                 // Changer le curseur
                 map.getCanvas().style.cursor = 'pointer';
@@ -382,7 +381,7 @@
         //------- POINTS D'ADRESSE et NOMS DE VOIES OU LIEUX-DITS RAPPROCHES (VERTS) -------
         //----------------------------------------------------------------------------------
 
-        if (couche_carto == 'BAN_point' || couche_carto == 'OSM_point' || couche_carto == 'points_nommes_rapproches'){
+        if (couche_carto == 'BAN_point' || couche_carto == 'OSM_point' || couche_carto.indexOf('points_nommes_rapproches') == 0){
             map.on('click', couche_carto, (e) => {
 
                 nom = e.features[0].properties.nom;
@@ -633,7 +632,7 @@
         //------- NOMS DE VOIES OU LIEUX-DITS NON RAPPROCHES -------
         //----------------------------------------------------------
 
-        if (couche_carto == 'points_nommes_non_rapproches'){
+        if (couche_carto.indexOf('points_nommes_non_rapproches') == 0){
             map.on('click', couche_carto, (e) => {
                 reset_panneau_map()
 
@@ -829,11 +828,17 @@
         interactions_souris('BAN_point')
         interactions_souris('OSM_point')
         interactions_souris('filaire_transparent')
-        interactions_souris('points_nommes_rapproches')
-        interactions_souris('points_nommes_non_rapproches')
+        interactions_souris('points_nommes_rapproches_lieudit')
+        interactions_souris('points_nommes_non_rapproches_lieudit')
+        interactions_souris('points_nommes_rapproches_voie')
+        interactions_souris('points_nommes_non_rapproches_voie')
 
         $('#pifoprogression').click(function(){
             affiche_ratio_map()
+        })
+        $('#pifofiltres.pifomap input').click(function(){
+            update_filtres()
+            filtre_pifomap()
         })
 
         update_radio_ratio()
@@ -842,7 +847,6 @@
     }
     function update_radio_ratio(){
         ratio = check_url_for_ratio_map()
-        console.log(ratio)
         if (ratio == 'N'){
             $('#radio_prog_noms').click()
         } else if (ratio == 'A'){

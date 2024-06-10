@@ -203,9 +203,9 @@
             }
         },
         {
-            "id": "points_nommes_rapproches",
+            "id": "points_nommes_rapproches_lieudit",
             "source": "points_nommes",
-            "filter":["==",["get", "rapproche"],true],
+            "filter":["all",["==",["get", "rapproche"],true],["==",["get","nature"],"lieudit"]],
             "minzoom" : 10,
             "type": "symbol",
             "layout": {
@@ -230,9 +230,36 @@
             }
         },
         {
-            "id": "points_nommes_non_rapproches",
+            "id": "points_nommes_rapproches_voie",
             "source": "points_nommes",
-            "filter":["==",["get", "rapproche"],false],
+            "filter":["all",["==",["get", "rapproche"],true],["==",["get","nature"],"voie"]],
+            "minzoom" : 10,
+            "type": "symbol",
+            "layout": {
+                "text-field": ["get", "nom"],
+                "text-variable-anchor": ["left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"],
+                "text-radial-offset": 0.7,
+                "text-justify": "auto",
+                "text-overlap":"cooperative",
+                "text-size": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        12.99,0,
+                        13,16],
+                "icon-size":["case",["==",["get","nature"],"lieudit"],1,0],
+                "icon-allow-overlap":true,
+                "icon-image":"lieudit_vert"
+                },
+            "paint": {
+                "text-color": ["case",["boolean",["to-boolean",["feature-state","hover"]],"true"],"darkgreen","green"],
+                "text-halo-color": ["case",["boolean",["to-boolean",["feature-state","hover"]],"true"],"#F7FF5B","white"],
+                "text-halo-width": ["case",["boolean",["to-boolean",["feature-state","hover"]],"true"],8,4]
+            }
+        },
+        {
+            "id": "points_nommes_non_rapproches_lieudit",
+            "source": "points_nommes",
+            "filter":["all",["==",["get", "rapproche"],false],["==",["get","nature"],"lieudit"]],
             "minzoom" : 10,
             "type": "symbol",
             "layout": {
@@ -247,7 +274,7 @@
                         12.99,0,
                         13,16],
                 "icon-allow-overlap":true,
-                "icon-size":["case",["==",["get","nature"],"lieudit"],1,0],
+                "icon-size":1,
                 "icon-image":["case",
                                 ["==",["get","source"],"CADASTRE"],"lieudit_rouge","lieudit_bleu"]
             },
@@ -255,6 +282,30 @@
                 "text-color": ["case",
                                 ["==",["get","source"],"CADASTRE"],"red",
                                 ["==",["get","source"],"OSM"],"#135495","pink"],
+                "text-halo-color": "white",
+                "text-halo-width": 4
+            }
+        },
+        {
+            "id": "points_nommes_non_rapproches_voie",
+            "source": "points_nommes",
+            "filter":["all",["==",["get", "rapproche"],false],["==",["get","nature"],"voie"]],
+            "minzoom" : 10,
+            "type": "symbol",
+            "layout": {
+                "text-field": ["get", "nom"],
+                "text-variable-anchor": ["left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"],
+                "text-radial-offset": 0.7,
+                "text-justify": "auto",
+                "text-overlap":"cooperative",
+                "text-size": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        12.99,0,
+                        13,16]
+            },
+            "paint": {
+                "text-color": "#135495",
                 "text-halo-color": "white",
                 "text-halo-width": 4
             }
