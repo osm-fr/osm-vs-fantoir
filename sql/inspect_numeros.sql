@@ -3,7 +3,8 @@ SELECT COALESCE(o.numero,b.numero),
        ST_Y(b.geometrie),
        COALESCE(s.id_statut,0),
        ST_X(o.geometrie),
-       ST_Y(o.geometrie)
+       ST_Y(o.geometrie),
+       b.id_ban
 FROM   (SELECT *,
                TRANSLATE(UPPER(numero),' ','') AS uppernumero
        FROM    bano_adresses
