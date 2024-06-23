@@ -134,18 +134,18 @@
 
                     //Afficher l'infobulle de confirmation
                     if (statut != '0') {
-                        $('tr#'+id_ligne+' td:last').append($('<span class="enregistrement numeros rose">').text('✔ Enregistré'));
+                        $('tr#'+id_ligne+' td:eq(1)').append($('<span class="enregistrement numeros rose">').text('✔ Enregistré'));
                     }
                     else {
-                        $('tr#'+id_ligne+' td:last').append($('<span class="enregistrement numeros bleu">').text('✔ Enregistré'));
+                        $('tr#'+id_ligne+' td:eq(1)').append($('<span class="enregistrement numeros bleu">').text('✔ Enregistré'));
                     }
                     setTimeout(function(){
-                        $('tr#'+id_ligne+' td:last span').css('opacity', '1');
+                        $('tr#'+id_ligne+' td:eq(1) span').css('opacity', '1');
                         setTimeout(function(){
-                            $('tr#'+id_ligne+' td:last span').css('opacity', '0');                      
+                            $('tr#'+id_ligne+' td:eq(1) span').css('opacity', '0');                      
                         }, 1500);
                         setTimeout(function(){
-                            $('tr#'+id_ligne+' td:last span').remove();                
+                            $('tr#'+id_ligne+' td:eq(1) span').remove();                
                         }, 2000);
                     }, 50);
 
@@ -253,6 +253,7 @@
                                                                         .append($('<tr>')
                                                                             .append($('<th>').append('Numéro'))
                                                                             .append($('<th>').append("Statut de l'adresse BAN"))
+                                                                            .append($('<th id="colonne_signaler">').append('Signaler'))
                                                                             .append($('<th>').append('Zoomer'))
                                                                         )
                                                                     )
@@ -264,7 +265,8 @@
                                         lat_ban,
                                         statut,
                                         lon_osm,
-                                        lat_osm] = data[l]
+                                        lat_osm,
+                                        ban_id] = data[l]
                                     parite = Number.parseInt(numero) % 2 == 0 ? 'pair':'impair';
 
                                     $('#'+table+' tbody:last').append($('<tr>').attr('id',l))
@@ -288,6 +290,27 @@
                                         add_statut_numero(l,numero,statut,insee,fantoir)
                                     } else {
                                         $('#'+table+' tr:last').addClass('statut_vide').append($('<td>'))
+                                    }
+
+                                    //---COLONNE REMONTÉE DES SIGNALEMENTS---
+                                    if (lon_ban != undefined){
+                                        $('#'+table+' tr:last').append($('<td class="remontee_suppr_numero">')
+                                                                    .append($('<a target="_blank" title="Signaler un problème dans la BAN : Numéro à modifier">')
+                                                                    .attr('href', 'https://mes-signalements.mes-adresses.fr/#/'+ban_id+'?sourceId=666995bb05052e9edf0d59d5&type=LOCATION_TO_UPDATE&changesRequested=%7B%22comment%22%3A%20%22%22%7D')
+                                                                        .append($('<span class="remontee_edit_numero">')
+                                                                            //.text('Suppr')
+                                                                        )
+                                                                    )
+                                                                    .append($('<a target="_blank" title="Signaler un problème dans la BAN : Numéro à supprimer">')
+                                                                    .attr('href', 'https://mes-signalements.mes-adresses.fr/#/'+ban_id+'?sourceId=666995bb05052e9edf0d59d5&type=LOCATION_TO_DELETE&changesRequested=%7B%22comment%22%3A%20%22%22%7D')
+                                                                        .append($('<span class="remontee_suppr_numero">')
+                                                                            //.text('Suppr')
+                                                                        )
+                                                                    )
+                                                                )
+                                    }
+                                    else {
+                                        $('#'+table+' tr:last').append($('<td>'))
                                     }
 
                                     //---COLONNE ZOOMER---

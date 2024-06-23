@@ -1222,7 +1222,6 @@ hr {
 
 /*------------------------------------------------------*/
 /*--------------------- PAGE NUMEROS -------------------*/
-/*------------------ TABLEAU ET CARTE ------------------*/
 /*------------------------------------------------------*/
 
 #reponse_et_map {
@@ -1232,6 +1231,41 @@ hr {
 	width: 100%;
 	height:65%;
 	overflow-y: auto;
+}
+
+#colonne_signaler {
+	background: url("../img/bal.png") no-repeat;
+	background-size: 28px;
+}
+
+td.remontee_suppr_numero {
+	text-align: center;
+	padding-top: 4px;
+	height: 30px;
+}
+
+span.remontee_edit_numero {
+	padding: 0px 15px 0px 25px;
+	margin: 1px 0 1px 0;
+	background: url("../img/remontee-edit.png") no-repeat;
+	background-size: 28px;
+	border-radius: 5px;
+	font-weight: bold;
+	font-size: 1.3em;
+}
+
+span.remontee_suppr_numero {
+	padding: 0px 10px 0px 25px;
+	margin: 1px 0 1px 0;
+	background: url("../img/remontee-suppr.png") no-repeat;
+	background-size: 28px;
+	border-radius: 5px;
+	font-weight: bold;
+	font-size: 1.3em;
+}
+
+.remontee_suppr_numero a {
+	text-decoration: none;
 }
 
 /*------------------------------------------------------*/
@@ -1261,7 +1295,7 @@ hr {
 #reponse.page_numeros{
 	float: left;
 	margin:0;
-	width:40%;
+	width:45%;
 	height: 90%;
 }
 
