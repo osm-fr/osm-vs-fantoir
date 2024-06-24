@@ -1234,34 +1234,30 @@ hr {
 }
 
 #colonne_signaler {
-	background: url("../img/bal.png") no-repeat;
-	background-size: 28px;
+	background: url("../img/ban.png") no-repeat left 8px top 4px;
+	padding-left: 33px;
 }
 
 td.remontee_suppr_numero {
 	text-align: center;
-	padding-top: 4px;
+	padding:3px 0 2px 0;
 	height: 30px;
 }
 
-span.remontee_edit_numero {
+span.remontee_edit_numero, span.remontee_suppr_numero {
 	padding: 0px 15px 0px 25px;
-	margin: 1px 0 1px 0;
-	background: url("../img/remontee-edit.png") no-repeat;
-	background-size: 28px;
+	margin: 0;
 	border-radius: 5px;
 	font-weight: bold;
-	font-size: 1.3em;
+	font-size: 1.4em;
+}
+
+span.remontee_edit_numero {
+	background: url("../img/remontee-edit-30.png") no-repeat;
 }
 
 span.remontee_suppr_numero {
-	padding: 0px 10px 0px 25px;
-	margin: 1px 0 1px 0;
-	background: url("../img/remontee-suppr.png") no-repeat;
-	background-size: 28px;
-	border-radius: 5px;
-	font-weight: bold;
-	font-size: 1.3em;
+	background: url("../img/remontee-suppr-30.png") no-repeat;
 }
 
 .remontee_suppr_numero a {
