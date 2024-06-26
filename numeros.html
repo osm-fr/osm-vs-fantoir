@@ -121,8 +121,8 @@
                                     )
         }
     }
-    function add_statut_numero(id_ligne,numero,statut,insee,fantoir){
-        $('#'+table+' tr:last').removeClass().addClass('statut'+statut).attr('numero',numero)
+    function add_statut_numero(id_ligne,numero,statut,insee,fantoir,ban_id){
+        $('#'+table+' tr:last').removeClass().addClass('statut'+statut).attr('numero',numero).attr('statut',statut)
         $('#'+table+' tr:last').append($('<td>').append($(a_menus_labels[statut]).change(function() {
             statut = $(this)[0].value;
             $.ajax({
@@ -130,7 +130,8 @@
             })
             .done(function( data ) {
                 if(data == statut){
-                    $('tr#'+id_ligne).removeClass().addClass('statut'+statut);
+                    $('tr#'+id_ligne).removeClass().addClass('statut'+statut).attr('statut',statut);
+                    update_url_mes_adresses_commentaire(id_ligne,ban_id)
 
                     //Afficher l'infobulle de confirmation
                     if (statut != '0') {
@@ -162,6 +163,11 @@
         })
         .done(function( data ) {
             a_menus_labels = []
+            labels_statut = {}
+
+            for (c=0;c<data.length;c++){
+                labels_statut[data[c][0]] = data[c][1]
+            }
             for (c=0;c<data.length;c++){
                 menu_labels = '<select>'
                 id_label = 0
@@ -287,27 +293,26 @@
 
                                     //---COLONNE STATUT---
                                     if (lon_ban != undefined){
-                                        add_statut_numero(l,numero,statut,insee,fantoir)
+                                        add_statut_numero(l,numero,statut,insee,fantoir,ban_id)
                                     } else {
                                         $('#'+table+' tr:last').addClass('statut_vide').append($('<td>'))
                                     }
 
                                     //---COLONNE REMONTÉE DES SIGNALEMENTS---
                                     if (lon_ban != undefined){
-                                        $('#'+table+' tr:last').append($('<td class="remontee_suppr_numero">')
-                                                                    .append($('<a target="_blank" title="Signaler un problème dans la BAN : Numéro à modifier">')
-                                                                    .attr('href', 'https://mes-signalements.mes-adresses.fr/#/'+ban_id+'?sourceId=666995bb05052e9edf0d59d5&type=LOCATION_TO_UPDATE&changesRequested=%7B%22comment%22%3A%20%22%22%7D')
+                                        json_args = JSON.stringify({"comment":labels_statut[statut]})
+                                        $('#'+table+' tr:last').append($('<td class="remontee_edit_numero">')
+                                                                    .append($('<a class="remontee_edit_numero" target="_blank" title="Signaler un problème dans la BAN : Numéro à modifier">')
+                                                                    .attr('href', 'https://mes-signalements.mes-adresses.fr/#/'+ban_id+'?sourceId=666995bb05052e9edf0d59d5&type=LOCATION_TO_UPDATE')
                                                                         .append($('<span class="remontee_edit_numero">')
-                                                                            //.text('Suppr')
                                                                         )
                                                                     )
-                                                                    .append($('<a target="_blank" title="Signaler un problème dans la BAN : Numéro à supprimer">')
-                                                                    .attr('href', 'https://mes-signalements.mes-adresses.fr/#/'+ban_id+'?sourceId=666995bb05052e9edf0d59d5&type=LOCATION_TO_DELETE&changesRequested=%7B%22comment%22%3A%20%22%22%7D')
+                                                                    .append($('<a class="remontee_suppr_numero" target="_blank" title="Signaler un problème dans la BAN : Numéro à supprimer">')
                                                                         .append($('<span class="remontee_suppr_numero">')
-                                                                            //.text('Suppr')
                                                                         )
                                                                     )
                                                                 )
+                                        update_url_mes_adresses_commentaire(l,ban_id)
                                     }
                                     else {
                                         $('#'+table+' tr:last').append($('<td>'))
@@ -374,6 +379,17 @@
                                 update_menu_filtres()
                                 refresh();
                             })
+    }
+
+    function update_url_mes_adresses_commentaire(num_ligne,ban_id){
+        current_statut = $('#table_inspect_adresse tr#'+num_ligne).attr('statut')
+        changesRequested = ''
+        // transfert du statut comme commentaire si différent de 'Ok'
+        if (current_statut != "0"){
+            json_args = JSON.stringify({"comment":labels_statut[current_statut]})
+            changesRequested = '&changesRequested='+json_args
+        }
+        $('#table_inspect_adresse tr#'+num_ligne+' a.remontee_suppr_numero').attr('href','https://mes-signalements.mes-adresses.fr/#/'+ban_id+'?sourceId=666995bb05052e9edf0d59d5&type=LOCATION_TO_DELETE'+changesRequested)
     }
 
     function refresh(){
