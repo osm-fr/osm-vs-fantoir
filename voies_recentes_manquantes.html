@@ -29,10 +29,7 @@
     }
 
     function update_csv_url(dept){
-        $('#bouton_export_csv').empty()
-        $('#bouton_export_csv').append($('<a>').attr('href',"voies_recentes_manquantes_dept.py?dept="+dept+'&format=csv&offset='+offset+'&limit='+nb_lignes_par_page,)
-                                               .attr('target','blank')
-                                               .append($('<img>').attr('src','img/export-csv.png')))
+       urlCSV = 'voies_recentes_manquantes_dept.py?dept='+dept+'&format=csv&offset='+offset+'&limit='+nb_lignes_par_page;
     }
 
     function requete_voies_dept(){
@@ -195,7 +192,7 @@
             <h2></h2>
             <h1>Voies connues de la BAN ou du fichier Topo mais pas d'OSM,<br/>classées par date</h1>
         </div>
-        <div id="bouton_export_csv" title="Exporter la liste courante en CSV"></div>
+        <button id="bouton_export_csv" title="Exporter la liste courante en CSV" onclick="window.open(urlCSV, '_blank');"></button>
         <div id="wait_ajax" class="bas"></div>
         <div class="pagination"></div>
     </div>

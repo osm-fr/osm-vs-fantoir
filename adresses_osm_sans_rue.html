@@ -36,10 +36,7 @@
     }
 
     function update_csv_url(dept){
-        $('#bouton_export_csv').empty()
-        $('#bouton_export_csv').append($('<a>').attr('href',"adresses_osm_sans_rue.py?dept="+dept+'&format=csv')
-                                               .attr('target','blank')
-                                               .append($('<img>').attr('src','img/export-csv.png')))
+       urlCSV = 'adresses_osm_sans_rue.py?dept='+dept+'&format=csv';
     }
 
     function requete_voies_dept(){
@@ -175,7 +172,7 @@
             <h1>Adresses trouvées dans OSM sans voie ou lieu-dit</h1>
             <h3>Le nom de ces adresses (<span class="monospace">addr:street</span>, <span class="monospace">addr:place</span> ou <span class="monospace">name</span> dans une relation <span class="monospace">associatedStreet</span>) est introuvable ailleurs dans OSM. C'est le signe qu'il manque ce nom sur une rue, un lieu-dit, une place, un parking, etc.</h3>
         </div>
-        <div id="bouton_export_csv" title="Exporter la liste courante en CSV"></div>
+        <button id="bouton_export_csv" title="Exporter la liste courante en CSV" onclick="window.open(urlCSV, '_blank');"></button>
         <div id="wait_ajax" class="bas"></div>
     </div>
 

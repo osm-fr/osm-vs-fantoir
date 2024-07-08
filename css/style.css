@@ -183,7 +183,7 @@ hr {
 	visibility:hidden;
 	float: left;
 	margin: 0 2%;
-	width:40%;
+	width:35%;
 	height: 100px;
 	text-align: center;
 	padding: 5px;
@@ -1234,7 +1234,8 @@ hr {
 }
 
 #colonne_signaler {
-	background: url("../img/ban.png") no-repeat left 8px top 4px;
+	background: url("../img/ban_logo.png") no-repeat left 10px top 4px;
+	background-size: 17px;
 	padding-left: 33px;
 }
 
@@ -1387,8 +1388,8 @@ table.tablesorter thead th {
 /*---------------------------------------------------------------*/
 
 .picto {
-  height: 16px;
-  width: 16px;
+  width: 18px;
+  height: 18px;
   display: inline-block;
   margin: 2px 5px 0 5px;
 }
@@ -1396,7 +1397,8 @@ table.tablesorter thead th {
   background: url("../img/cadastre.png") no-repeat;
 }
 .picto.ban {
-  background: url("../img/ban.png") no-repeat;
+  background: url("../img/ban_logo.png") no-repeat;
+  background-size: 15px;
 }
 
 /*---------------------------------------------------------------*/
