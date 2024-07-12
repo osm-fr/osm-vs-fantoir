@@ -303,7 +303,7 @@
                                         json_args = JSON.stringify({"comment":labels_statut[statut]})
                                         $('#'+table+' tr:last').append($('<td class="remontee_edit_numero">')
                                                                     .append($('<a class="remontee_edit_numero" target="_blank" title="Signaler un problème dans la BAN : Numéro à modifier">')
-                                                                    .attr('href', 'https://mes-signalements.mes-adresses.fr/#/'+ban_id+'?sourceId=666995bb05052e9edf0d59d5&type=LOCATION_TO_UPDATE')
+                                                                    .attr('href', 'https://mes-signalements.mes-adresses.fr/#/'+ban_id+'?sourceId=e32cd3e1-b19d-4a49-9aee-31a7929a8ead&type=LOCATION_TO_UPDATE')
                                                                         .append($('<span class="remontee_edit_numero">')
                                                                         )
                                                                     )
@@ -389,7 +389,7 @@
             json_args = JSON.stringify({"comment":labels_statut[current_statut]})
             changesRequested = '&changesRequested='+json_args
         }
-        $('#table_inspect_adresse tr#'+num_ligne+' a.remontee_suppr_numero').attr('href','https://mes-signalements.mes-adresses.fr/#/'+ban_id+'?sourceId=666995bb05052e9edf0d59d5&type=LOCATION_TO_DELETE'+changesRequested)
+        $('#table_inspect_adresse tr#'+num_ligne+' a.remontee_suppr_numero').attr('href','https://mes-signalements.mes-adresses.fr/#/'+ban_id+'?sourceId=e32cd3e1-b19d-4a49-9aee-31a7929a8ead&type=LOCATION_TO_DELETE'+changesRequested)
     }
 
     function refresh(){
