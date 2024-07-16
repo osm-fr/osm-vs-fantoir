@@ -2,10 +2,12 @@ WITH
 qualif_adresse
 AS
 (SELECT TRANSLATE(UPPER(numero),' ','') AS numero,fantoir,code_insee
-FROM   (SELECT       *,rank() OVER (PARTITION BY numero,fantoir ORDER BY timestamp_statut DESC) rang
-       FROM   statut_numero
-       WHERE  fantoir = '__fantoir__')r
-WHERE  rang = 1),
+FROM   (SELECT *,
+               rank() OVER (PARTITION BY numero,fantoir ORDER BY timestamp_statut DESC) rang
+       FROM    statut_numero
+       WHERE   fantoir = '__fantoir__')r
+WHERE  rang      = 1   AND
+       id_statut != 0),
 diff
 AS
 ((SELECT TRANSLATE(UPPER(numero),' ','') AS uppernum,fantoir,code_insee FROM bano_adresses WHERE code_insee = '__code_insee__' AND fantoir = '__fantoir__' AND source = 'BAN' 
