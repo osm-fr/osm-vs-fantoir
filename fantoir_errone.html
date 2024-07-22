@@ -60,7 +60,7 @@
                 $('#table_fantoir_errone tr').append($('<th>').append('Voie OSM'))
                 $('#table_fantoir_errone tr').append($('<th>').attr('colspan','1').append('Carte'))
                 $('#table_fantoir_errone tr').append($('<th>').attr('colspan','1').append('Édition'))
-                $('#table_fantoir_errone tr').append($('<th>').attr('colspan','2').append('Voir la commune sur...'))
+                $('#table_fantoir_errone tr').append($('<th>').attr('colspan','3').append('Voir la commune sur...'))
 
                 $('#table_fantoir_errone').append($('<tbody>'))
                 for (l=0;l<data.length;l++){
@@ -90,8 +90,9 @@
                     //JOSM
                     add_josm_link('table_fantoir_errone',xleft,xright,ybottom,ytop,insee,commune)
                     //Fantoir
-                    add_map_link('table_fantoir_errone','./index.html?insee='+insee,'Pifomètre ('+insee+')')
-                    add_map_link('table_fantoir_errone','./liste_brute_fantoir.html?insee='+insee,'Topo brut ('+insee+')')
+                    add_map_link('table_fantoir_errone','./index.html?insee='+insee,'Pifomètre')
+                    add_map_link('table_fantoir_errone','./pifomap.html?insee='+insee+'#map='+url_hash_coords,'Pifomap')
+                    add_map_link('table_fantoir_errone','./liste_brute_fantoir.html?insee='+insee,'Topo')
                 }
 
                 //Sticky headers : le tableau scrolle dans son contenant
