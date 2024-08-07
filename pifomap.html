@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Pifomètre</title>
+<title>Pifomap</title>
 <script src="js/jquery-3.6.4.min.js"></script>
 <script src="js/jquery.tablesorter.combined.min.js"></script>
 <script src="js/fonctions.js"></script>
@@ -428,10 +428,16 @@
             $('#table_communes_voisines tr td').empty()
             $('#table_communes_voisines tr td.commune_centre').text(nom_commune)
             for (v in communes_voisines){
-                $('#table_communes_voisines tr td#'+(communes_voisines[v])[0]).append($('<a>')
-                                                                              .addClass('lien_commune')
-                                                                                  .attr('href',window.location.href.split('?')[0]+'?insee='+communes_voisines[v][1])
-                                                                                  .text(communes_voisines[v][2]))
+                $('#table_communes_voisines tr td#'+(communes_voisines[v])[0]) .append($('<a>')
+                                                                               .addClass('lien_commune')
+                                                                               .text(communes_voisines[v][2]))
+                                                                               .attr('cible_commune_voisine', communes_voisines[v][1])
+                                                                               .click(function(event) {
+                                                                               	    $('#input_insee')[0].value = $(this).attr('cible_commune_voisine');
+                                                                                       reset_url_hash();
+                                                                                       reset_panneau_map();
+                                                                                       requete_pifometre()
+                                                                               });
             }
             if (insee_commune_parente){
                 $('#alerte_commune').empty();
