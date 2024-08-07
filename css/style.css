@@ -1055,7 +1055,7 @@ hr {
 }
 
 .page_numeros #infos_commune_col2 {
-	max-width: 400px;
+	max-width: 450px;
 	margin:0;
 	margin-left: 15px;
 }
@@ -1130,7 +1130,7 @@ hr {
 }
 
 #descriptif.page_numeros {
-	width: 44%;
+	width: 60%;
 	margin-right: 0;
 	white-space: normal;
 }
@@ -1577,6 +1577,10 @@ td.cell_statut {
 	text-align: center;
 	white-space: nowrap;
 	border: solid 1px;
+}
+
+.legende_numero {
+	padding:2px 3px;
 }
 
 .legende_numero.en_commun, .legende_numero.en_commun, 
