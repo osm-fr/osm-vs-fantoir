@@ -432,12 +432,11 @@
                                                                                .addClass('lien_commune')
                                                                                .text(communes_voisines[v][2]))
                                                                                .attr('cible_commune_voisine', communes_voisines[v][1])
-
                                                                                .click(function(event) {
                                                                                	    $('#input_insee')[0].value = $(this).attr('cible_commune_voisine');
-																		            reset_url_hash();
-																		            reset_panneau_map();
-																		            requete_pifometre()
+                                                                                       reset_url_hash();
+                                                                                       reset_panneau_map();
+                                                                                       requete_pifometre()
                                                                                });
             }
             if (insee_commune_parente){
