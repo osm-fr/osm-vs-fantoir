@@ -235,6 +235,12 @@
                                       .attr('href','index.html?insee='+insee)
                                       .text('Pifomètre')
                                   )
+                                  .append(' / ')
+                                  .append($('<a>')
+                                      .attr('target','blank')
+                                      .attr('href','./pifomap.html?insee='+insee+'#map=18/'+min_lat+'/'+min_lon)
+                                      .text('Pifomap')
+                                  )
                                 )
 
                                 .append($('<div id="liens_voie">').append('<strong>Intégrer les adresses :</strong> '))
