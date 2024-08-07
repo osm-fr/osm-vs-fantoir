@@ -8,7 +8,7 @@ import json
 from sql import sql_get_data
 
 def format_csv(fetch):
-    return ('Code INSEE;Commune;FANTOIR;Voie;Date de création;lon;lat\n'+'\n'.join([f'{c[0]};"{c[1]}";{c[3]};{c[2]};{c[6]};{c[4]};{c[5]}' for c in fetch]))
+    return ('Code INSEE;Commune;FANTOIR;Voie;Date de création;lon;lat\n'+'\n'.join([f'{c[0]};{c[1]};{c[3]};{c[2]};{c[6]};{c[4]};{c[5]}' for c in fetch]))
 
 params = cgi.FieldStorage()
 dept = params['dept'].value
