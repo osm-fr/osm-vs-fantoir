@@ -10,7 +10,7 @@ from sql import sql_get_data
 
 
 def format_csv(fetch):
-    return ('Format\tCode INSEE\tCommune\tVoies avec adresses rapprochées (a)\tToutes voies rapprochées (b)...\t...dont voies rapprochées sur lieux-dits FANTOIR\tVoies FANTOIR (c)\tVoies et lieux-dits FANTOIR (d)\tVoies avec adresses voies FANTOIR (a/c) en %\tVoies rapprochées voies FANTOIR (b/c) en %\tVoies rapprochées voies et lieux-dits FANTOIR (b/d) en %\tAdresses OSM\tAdresses BAN\tAdresses BAN sans voie rapprochées\tAdresse BAN avec voie rapprochée en %\tIndice 2020\n'+'\n'.join([f'{c[0]}\t{c[1]}\t"{c[2]}"\t{c[3]}\t{c[4]}\t{c[5]}\t{c[6]}\t{c[7]}\t{c[8]}\t{c[9]}\t{c[10]}\t{c[11]}\t{c[12]}\t{c[13]}\t{c[14]}\t{c[15]}' for c in fetch]))
+    return ('Code INSEE;Commune;Voies avec adresses rapprochées (a);Toutes voies rapprochées (b)...;...dont voies rapprochées sur lieux-dits FANTOIR;Voies FANTOIR (c);Voies et lieux-dits FANTOIR (d);Voies avec adresses voies FANTOIR (a/c) en %;Voies rapprochées voies FANTOIR (b/c) en %;Voies rapprochées voies et lieux-dits FANTOIR (b/d) en %;Adresses OSM;Adresses BAN;Adresses BAN sans voie rapprochées;Adresse BAN avec voie rapprochée en %;Indice 2020\n'+'\n'.join([f'{c[0]};{c[1]};{c[2]};{c[3]};{c[4]};{c[5]};{c[6]};{c[7]};{c[8]};{c[9]};{c[10]};{c[11]};{c[12]};{c[13]};{c[14]};{c[15]}' for c in fetch]))
 
 cgitb.enable()
 params = cgi.FieldStorage()
