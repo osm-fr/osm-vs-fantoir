@@ -513,6 +513,9 @@
                     widgetOptions: {
                       stickyHeaders_attachTo : '#reponse'
                     }
+                // }).bind("filterEnd",function(e, t) {
+                    // console.log("fin de tri ");
+                //     show_mask_lines();
                 });
 
                 active_menu_filtres()
@@ -629,13 +632,13 @@
                 <div>
                     <ul>
                         <li>
-                            <label class="switch is-rounded is-small"></label>
+                            <label class="switch is-rounded is-small">
                             <input type="checkbox" id="check_voie" checked/>
                             <span class="check is-dark"></span>
                             <span class="control-label" critere="voie">Voies<span></span></span>
                         </li>
                         <li>
-                            <label class="switch is-rounded is-small"></label>
+                            <label class="switch is-rounded is-small">
                             <input type="checkbox" id="check_lieu_dit" checked/>
                             <span class="check is-dark"></span>
                             <span class="control-label" critere="lieu_dit">Lieux-dits<span></span></span>
@@ -645,13 +648,13 @@
                 <div>
                     <ul>
                         <li>
-                            <label class="switch is-rounded is-small"></label>
+                            <label class="switch is-rounded is-small">
                             <input type="checkbox" id="check_nom_integre" checked/>
                             <span class="check is-green"></span>
                             <span class="control-label" critere="nom_integre">Déjà rapprochés dans OSM<span></span></span>
                         </li>
                         <li>
-                            <label class="switch is-rounded is-small"></label>
+                            <label class="switch is-rounded is-small">
                             <input type="checkbox" id="check_nom_a_integrer" checked/>
                             <span class="check is-orange"></span>
                             <span class="control-label" critere="nom_a_integrer">Pas encore rapprochés dans OSM<span></span></span>
@@ -661,13 +664,13 @@
                 <div>
                     <ul>
                         <li>
-                            <label class="switch is-rounded is-small"></label>
+                            <label class="switch is-rounded is-small">
                             <input type="checkbox" id="check_avec_adresses" checked/>
                             <span class="check is-pink"></span>
                             <span class="control-label" critere="avec_adresses">Ayant des adresses référencées dans la BAN<span></span></span>
                         </li>
                         <li>
-                            <label class="switch is-rounded is-small"></label>
+                            <label class="switch is-rounded is-small">
                             <input type="checkbox" id="check_sans_adresses" checked/>
                             <span class="check is-dark"></span>
                             <span class="control-label" critere="sans_adresses">Sans adresses<span></span></span>
@@ -679,7 +682,7 @@
                 <div>
                     <ul>
                         <li>
-                            <label class="switch is-rounded is-small"></label>
+                            <label class="switch is-rounded is-small">
                             <input type="checkbox" id="check_osm_hors_fantoir" checked/>
                             <span class="check is-blue"></span>
                             <span class="control-label" critere="osm_hors_fantoir">Trouvé dans OSM et inconnu du fichier Topo<span></span></span>
