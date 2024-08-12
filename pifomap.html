@@ -2,13 +2,14 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pifomap</title>
 <script src="js/jquery-3.6.4.min.js"></script>
 <script src="js/jquery.tablesorter.combined.min.js"></script>
 <script src="js/fonctions.js"></script>
-<link rel='stylesheet' href='https://unpkg.com/maplibre-gl@3.2.1/dist/maplibre-gl.css' />
 <script src='https://unpkg.com/maplibre-gl@3.2.1/dist/maplibre-gl.js'></script>
 <link rel="preload" href="css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel='stylesheet' href='https://unpkg.com/maplibre-gl@3.2.1/dist/maplibre-gl.css' />
 <link rel="stylesheet" href="css/bulma/bulma.min.css" type="text/css"/>
 <link rel="stylesheet" href="css/bulma/main.min.css" type="text/css"/>
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
@@ -367,7 +368,6 @@
 
 
             url_map_org_part1 = 'http://www.openstreetmap.org/'
-            url_bano_part1 = 'http://tile.openstreetmap.fr/~cquest/leaflet/bano.html'
             url_edit_part1 = 'http://www.openstreetmap.org/edit?editor='
             delta = 0.0008
             url_hash_coords = '15/'+lat_commune+'/'+lon_commune
@@ -396,14 +396,8 @@
             $('#liens_commune').append(' / ')
                                .append($('<a>')
                                    .attr('target','blank')
-                                   .attr('href',url_bano_part1+'#'+url_hash_coords)
-                                   .text('BANO')
-                               )
-                               .append(' / ')
-                               .append($('<a>')
-                                   .attr('target','blank')
                                    .attr('href',url_listing_fantoir)
-                                   .text('Topo (Fantoir)')
+                                   .text('Topo')
                                )
                                .append(' / ')
                                .append($('<a>')
@@ -574,6 +568,7 @@
         <button id="bouton_aleatoire" title="Une commune au pif"></button>
         <button id="bouton_communes_voisines" title="Communes voisines"></button>
         <button id="bouton_refresh"></button>
+        <button id="bouton_localise_moi"></button>
         <div id="alerte_commune" class="pifomap"></div>
         <div id="infos_refresh"></div>
         <div id="bouton_legende"><p>Légende</p></div>
