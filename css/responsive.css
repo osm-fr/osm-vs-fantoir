@@ -167,6 +167,7 @@
 /*-----------------------------------------------------------------------*/
 
 @media only screen and (max-width: 600px) {
+    /*--------- PIFOMAP ---------*/
     #topnav {height: 30px;}
     #barre-jaune {top: 30px;}
     #bandeau {top:60px;}
@@ -190,7 +191,19 @@
     #bandeau {height: 110px;}
     #bandeau #descriptif {width: 100%;}
     #bandeau #descriptif #infos_commune_col1, #bandeau #descriptif #infos_commune_col2 {margin:4px 0;}
-    #descriptif.pifo #infos_commune_col2 h1 {margin: 0; font-size: 0.9em}
+    #descriptif.pifo #infos_commune_col2 h1 {margin: 0; font-size: 0.9em;}
+    #filtre_lieuxdits_mobile {
+        display:block;
+        cursor: pointer;
+        position: fixed;
+        top: 120px;
+        right: 20px;
+        width: 60px;
+        height: 35px;
+        background: url("../img/lieuxdits.png") no-repeat wheat right 5px top 3px;
+        border-bottom: 1px peru solid;
+        border-radius: 6px;       
+    }
     #reponse.pifomap{margin-top: 160px;}
     #reponse #map_div {
         margin:0;
@@ -208,4 +221,8 @@
         border:none;
         border-top: 2px solid lightblue;
     }
+
+    /*--------- TOPO BRUT ---------*/
+    #listing_fantoir .nature_voie, #listing_fantoir .dpt, #listing_fantoir .insee, #listing_fantoir .car_voie, #listing_fantoir .car_annul,
+    #listing_fantoir .type_voie, #listing_fantoir .mot_classant {display: none;}
 }

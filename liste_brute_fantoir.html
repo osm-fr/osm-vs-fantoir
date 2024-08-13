@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Listes TOPO par commune</title>
 <script src="js/jquery-3.6.4.min.js"></script>
 <script src="js/tablesorter/jquery.tablesorter.js"></script>
@@ -13,7 +14,8 @@
 <link rel="stylesheet" href="css/responsive.css" type="text/css"/>
 
 <script>
-	a_champs_fantoir = ['Rapproché ?','Dept','Code Insee','Code Fantoir','Nature voie','Libellé voie','Caractère voie','Car. annul.','Date annul.','Date de création','Type de voie','Mot classant']
+	a_champs_topo = ['Rapproché','Dept','Code Insee','Code Fantoir','Nature voie','Libellé voie','Caractère voie','Car. annul.','Date annul.','Date de création','Type de voie','Mot classant']
+	a_champs_topo_classes = ['rapproche','dpt','insee','code_fantoir','nature_voie','libelle_voie','car_voie','car_annul','date_annul','date_crea','type_voie','mot_classant']
 	// function check_url_for_insee(){
 	// 	pattern_insee = new RegExp('^[0-9][0-9abAB][0-9]{3}$')
 	// 	var res
@@ -79,12 +81,6 @@
                                       .attr('href','https://adresse.data.gouv.fr/base-adresse-nationale/'+insee)
                                       .text('BAN')
                                   )
-                                  /*.append(' / ')
-                                  .append($('<a>')
-                                      .attr('target','blank')
-                                      .attr('href',url_bano_part1+'#'+url_hash_coords)
-                                      .text('BANO')
-                                  )*/
                                   .append(' / ')
                                   .append($('<a>')
                                       .attr('target','blank')
@@ -98,14 +94,14 @@
 
 			fantoir = data[1]
 
-			for (c=0;c<a_champs_fantoir.length;c++){
-				$('#listing_fantoir > thead > tr:last').append($('<th>').append(a_champs_fantoir[c]))
+			for (c=0;c<a_champs_topo.length;c++){
+				$('#listing_fantoir > thead > tr:last').append($('<th>').append(a_champs_topo[c]).attr('class',a_champs_topo_classes[c]))
 			}
 			$('#listing_fantoir').append($('<tbody>'))
 			for (c=0;c<fantoir.length;c++){
 				$('#listing_fantoir').append($('<tr>'))
 				for (d=0;d<fantoir[c].length;d++){
-					$('tr:last').append($('<td>').attr('title',a_champs_fantoir[d]).append($('<span>').append(fantoir[c][d])))
+					$('tr:last').append($('<td>').attr('class',a_champs_topo_classes[d]).attr('title',a_champs_topo[d]).append($('<span>').append(fantoir[c][d])))
 				}
 
 				if ($('tr:last td span')[0].childNodes[0].data == 'OUI'){
