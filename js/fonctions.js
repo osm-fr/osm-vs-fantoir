@@ -843,7 +843,9 @@
 
         update_radio_ratio()
         affiche_ratio_map()
-        check_josm_remote_control()
+        if (!device_is_mobile()){
+            check_josm_remote_control()
+        }
     }
     function update_radio_ratio(){
         ratio = check_url_for_ratio_map()
@@ -856,5 +858,12 @@
         } else {
             update_search('ratio','no')
         }
+    }
+    function device_is_mobile(){
+        ua = navigator.userAgent.toLowerCase()
+        if (ua.includes('android')||ua.match(/iphone/)||ua.match(/ipod/)||ua.match(/ipad/)){
+            return true
+        }
+        return false
     }
 
