@@ -431,7 +431,9 @@ hr {
 	margin-left: 3px;
 }
 
-#bouton_localise_moi {
+/*-----Spécificités mobile-----*/
+
+#bouton_localise_moi, #filtre_lieuxdits_mobile {
 	display: none;
 }
 
@@ -967,12 +969,28 @@ hr {
   margin: 2px 5px 0 0;
 }
 
+/*--- CARTE ---*/
 #reponse #map_div {
 	float: left;
 	margin:0 0 0 -3px;
 	width:calc(85% - 5px);
 	height:calc(100% - 4px);
 	border:2px solid lightblue;
+}
+
+#bouton_fond_carte {
+	display: none;
+	z-index: 2;
+	cursor: pointer;
+	position: absolute;
+	top: 110px;
+	right: 10px;
+	background: url("../img/layers.png") no-repeat center white;
+	background-size: 20px;
+	height: 29px;
+	width: 29px;
+	border-radius: 4px;
+	 box-shadow: 0 0 0 2px rgba(0,0,0,.1);
 }
 
 #pifomap_table_liens {

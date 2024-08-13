@@ -46,9 +46,6 @@
 
         //Sélection des onglets (stats / filtres / barres de progression)
 
-        //Pifostats activé au démarrage
-        $('#bouton_pifostats').addClass('onglet_actif'); 
-
         //Changement d'onglet
         insee=check_url_for_insee()
 
@@ -75,6 +72,10 @@
                                                  .removeAttr('insee_cible')
                                                  .unbind('click');
 
+        //Bouton changement fond
+        $('#bouton_fond_carte').click(function(){
+            alert('Fond changé !');
+        })
 
         let [a_menus_labels,STATUS_FANTOIR] = get_labels_statut_fantoir()
 
@@ -100,6 +101,9 @@
             $('#pifoprogression').css('visibility','visible');
             $('#pifofiltres').css('visibility','hidden');
             $('#pifostats').css('visibility','hidden');
+            //Activer la progression des noms de voies intégrés par défaut
+            $('#radio_prog_noms').prop("checked", true);
+            affiche_ratio_map();
         }
 
         $('#bouton_communes_voisines').click(function(){
@@ -551,6 +555,10 @@
             }
         }
     }
+    function filtre_pifomap_mobile(){
+        FILTRES_TYPE[1][1] = FILTRES_TYPE[1][1] == true ? false : true;
+        filtre_pifomap();
+    }
 </script>
 </head>
 
@@ -665,18 +673,22 @@
             </div>
         </div>
 
-    <div id="pifoprogression" class="pifomap">
-        <div><img id="france_points" src="img/france-blanc-points.png"></div>
-        <div>
-            <h3>Afficher la progression</h3>
-            <p><input type="radio" id="radio_prog_noms"                 name="switch_noms_adresses"     value="affiche_noms" >
-            <label for="radio_prog_noms">Intégration des noms de voies</label></p>
-            <p><input type="radio" id="radio_prog_noms_avec_adresses"   name="switch_noms_adresses"     value="affiche_noms_avec_adresses" >
-            <label for="radio_prog_noms_avec_adresses">Intégration des noms de voies avec adresses</label></p>
-            <p><input type="radio" id="radio_prog_adresses"             name="switch_noms_adresses"     value="affiche_adresses" >
-            <label for="radio_prog_adresses">Intégration des adresses</label></p>
+        <div id="pifoprogression" class="pifomap">
+            <div><img id="france_points" src="img/france-blanc-points.png"></div>
+            <div>
+                <h3>Afficher la progression</h3>
+                <p><input type="radio" id="radio_prog_noms"                 name="switch_noms_adresses"     value="affiche_noms" >
+                <label for="radio_prog_noms">Intégration des noms de voies</label></p>
+                <p><input type="radio" id="radio_prog_noms_avec_adresses"   name="switch_noms_adresses"     value="affiche_noms_avec_adresses" >
+                <label for="radio_prog_noms_avec_adresses">Intégration des noms de voies avec adresses</label></p>
+                <p><input type="radio" id="radio_prog_adresses"             name="switch_noms_adresses"     value="affiche_adresses" >
+                <label for="radio_prog_adresses">Intégration des adresses</label></p>
+            </div>
         </div>
-    </div>
+
+        <div id="filtre_lieuxdits_mobile" title="Afficher les lieux-dits">
+            <input type="checkbox" id="check_lieudit"  critere="lieudit" checked/>
+        </div>
 
     </div>
 
@@ -690,7 +702,9 @@
                 <table id="pifomap_table_liens"></table>
             </div>
         </div>
-        <div id="map_div"></div>
+        <div id="map_div">
+            <button id="bouton_fond_carte" title="Changer le fond de carte"></button>
+        </div>
     </div>
 
     <div id="legende" class="pifomap">

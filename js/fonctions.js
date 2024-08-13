@@ -840,6 +840,9 @@
             update_filtres()
             filtre_pifomap()
         })
+        $('#filtre_lieuxdits_mobile input').click(function(){
+            filtre_pifomap_mobile()
+        })
 
         update_radio_ratio()
         affiche_ratio_map()
