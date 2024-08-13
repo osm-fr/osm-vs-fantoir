@@ -186,7 +186,6 @@
 
             url_map_org_part1 = 'http://www.openstreetmap.org/'
             url_pifomap = 'pifomap.html?insee='+code_insee
-            url_bano = 'http://layers.openstreetmap.fr/?zoom=15&lat='+lat_commune+'&lon='+lon_commune+'&layers=0B00000000FFFFFFFFFFFFFFFFFFFFFFFFT'
             url_edit_part1 = 'http://www.openstreetmap.org/edit?editor='
             delta = 0.0008
             url_hash_coords = '15/'+lat_commune+'/'+lon_commune
@@ -213,12 +212,6 @@
                                         )
             }
             $('#liens_commune').append(' / ')
-                               .append($('<a>')
-                                   .attr('target','blank')
-                                   .attr('href',url_bano)
-                                   .text('BANO')
-                               )
-                               .append(' / ')
                                .append($('<a>')
                                    .attr('target','blank')
                                    .attr('href',url_listing_fantoir)
