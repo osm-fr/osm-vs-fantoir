@@ -121,6 +121,9 @@
                             .mouseout(function(){
                                 $('#refresh_infobulle').hide()
                             })
+        $('#bouton_localise_moi').click(function(){
+                                getLocation();
+                            })
     };
 
     function commune_aleatoire(){
@@ -156,6 +159,29 @@
             $('#wait_ajax').css('visibility','hidden');
         })
     }
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(localise_moi);
+        } else {
+            console.log("Pas de geolocalisation disponible");
+        }
+    }
+    function localise_moi(position){
+            $.ajax({
+                url: "insee_from_coords.py?lat="+position.coords.latitude+"&lon="+position.coords.longitude
+            })
+            .done(function( data ) {
+                if ($('#input_insee')[0].value != data[0][0]){
+                    $('#input_insee')[0].value = data[0][0]
+                    reset_url_hash();
+                    reset_panneau_map();
+                    requete_pifometre();
+                }
+                map.flyTo({center: [position.coords.longitude, position.coords.latitude],
+                    zoom: 18});
+            })
+    }
+
     function get_geojson_poly(geom,props){
         return ({'type': 'Feature',
                         'properties': props,
