@@ -543,7 +543,7 @@ hr {
 
 .barre_noms_texte, .barre_noms_avec_adresses_texte, .barre_adresses_texte {
 	float: left;
-	width: 46%;
+	width: 55%;
 	color: #444;
 	font-size: 0.75em;
 	line-height: 1em;
@@ -551,7 +551,7 @@ hr {
 
 .barre_noms_tous, .barre_noms_avec_adresses_tous, .barre_adresses_tous { /*Barre orange du total, en fond*/
 	float: left;
-	width: 49%;
+	width: 40%;
 	height: 8px;
 	background-color: #FFCC55; /* orange */
 	border-radius: 2px;
