@@ -122,7 +122,7 @@
                                 event.stopPropagation();
                             })
                             .mouseout(function(){
-                                $('#refresh_infobulle').hide()
+                                $('#refresh_infobulle').css('visibility','hidden');
                             })
         $('#bouton_localise_moi').click(function(){
                                 getLocation();
@@ -149,6 +149,7 @@
         $('#wait_ajax').empty()
                        .css('visibility','visible') 
                        .append($('<span>').append('Mise à jour BANO en cours...'));
+        $('#wait_ajax_mobile').css('visibility','visible');
         $.ajax({
             url: "refresh.py?insee="+$('#input_insee')[0].value,
         })
@@ -160,6 +161,7 @@
             }
             $('body').css('cursor','default');
             $('#wait_ajax').css('visibility','hidden');
+            $('#wait_ajax_mobile').css('visibility','hidden');
         })
     }
     function getLocation() {
@@ -205,6 +207,7 @@
         $('#wait_ajax').empty()
                        .css('visibility','visible') 
                        .append($('<span>').append('Chargement...'));
+        $('#wait_ajax_mobile').css('visibility','visible');
         $.ajax({
             url: "rendu_bano_commune.py?insee="+insee,
         })
@@ -293,6 +296,7 @@
 
             $('body').css('cursor','default');
             $('#wait_ajax').css('visibility','hidden');
+            $('#wait_ajax_mobile').css('visibility','hidden');
         })
     }
     function requete_pifometre(){
@@ -394,7 +398,6 @@
                            .css('visibility','visible')
                            .append($('<span>').append('Chargement des données...'));
 
-
             url_map_org_part1 = 'http://www.openstreetmap.org/'
             url_edit_part1 = 'http://www.openstreetmap.org/edit?editor='
             delta = 0.0008
@@ -443,7 +446,6 @@
                 map.fitBounds(bbox_diagonale.coordinates)
             });
 
-
             //------------------------------------
             //-------   COMMUNES VOISINES   ------
             //------------------------------------
@@ -475,7 +477,6 @@
                                                     .text(nom_commune_parente+' ('+insee_commune_parente+')')))
             }
             rendu_bano(code_insee,nom_commune)
-
 
             //------------------------------------
             //-------       PIFOSTATS       ------
@@ -531,7 +532,7 @@
         $('#refresh_infobulle').empty()
                             .append('Mettre à jour avec les données OSM du ')
                             .append($('<span>').append(osm_state+' (UTC)'))
-                            .show()
+                            .css('visibility','visible');
     }
     function update_filtres(){
         for (let i = 0; i < FILTRES_TYPE.length; i++){
@@ -591,6 +592,7 @@
 
         <!--Boutons tout en haut à droite-->
         <div id="wait_ajax" class="pifomap"></div>
+        <div id="wait_ajax_mobile" class="pifomap"></div>
 
         <div id="onglets">
             <div id="bouton_pifostats"><p>Pifostats</p></div>
