@@ -1,34 +1,19 @@
-/*-----------------------------------------------------------------------*/
-/*------------------------------- REPONSIF ------------------------------*/
-/*-----------------------------------------------------------------------*/
-
 @media only screen and (max-width: 1700px) {
-    #boutons-filtres.pifo {
-        font-size: 0.7em;
-    }
-    #reponse.pifo {
-        height: 60%;
-    }
-    .tablesorter-default {
-        font-size: 0.9em;
-    }
+    #descriptif, #infos_commune_col2 {margin:0 10px;}
+    #boutons-filtres.pifo {font-size: 0.7em;}
+    #boutons-filtres ul {padding: 0;}
+    #reponse.pifo {height: 60%;}
+    .tablesorter-default {font-size: 0.9em;}
+    .barre_noms_tous, .barre_noms_avec_adresses_tous, .barre_adresses_tous {width:35%;}
 }
 
 @media only screen and (max-width: 1600px) {
-    #topnav .bouton_nav, #topnav .menu_actif {
-        padding: 6px 10px 7px;
-        font-size: 0.8em;
-    }
-    #descriptif h1 {
-        font-size: 1.6em;
-    }
+    #descriptif h1 {font-size: 1.5em;}
+    #infos_commune_col2 {max-width: 370px;}
 }
 
 @media only screen and (max-width: 1500px) {
-    #descriptif{
-        padding: 10px 0 0 0;
-        margin-right: 1%;
-    }
+    #descriptif{margin-right: 1%;}
     #boutons-filtres.page_numeros {
         margin:10px 50px 0 0;
     }
@@ -38,16 +23,14 @@
     #descriptif h1 {font-size: 1.35em;}
     #infos_commune_col1 {font-size: 0.9em;}
     #infos_commune_col2 {max-width: 340px;}
+    .barre_noms, .barre_noms_avec_adresses, .barre_adresses {margin:4px 5px;}
 }
 
 @media only screen and (max-width: 1400px) {
     h1 {font-size: 1.3em;}
     h2 {font-size: 1.2em;}
     h3 {font-size: 0.9em;}
-
-    #boutons-filtres.pifo {
-        width: 60%;
-    }
+    #boutons-filtres.pifo {font-size: 0.65em;}
     #alerte_commune, #wait_ajax.pifo {
         right: 1%;
     }
@@ -56,18 +39,12 @@
     }
     #descriptif {width: 55%;}
     #infos_commune_col2 {max-width: 270px;}
-    .barre_noms, .barre_noms_avec_adresses, .barre_adresses {margin: 3px 5px;}
 }
 
 @media only screen and (max-width: 1330px) {
-    #topnav .bouton_nav, #topnav .menu_actif {
-        padding: 8px 6px;
-        font-size: 0.75em;
-    }
     h1 {font-size: 1.5em;}
     #boutons-filtres.pifo {
         margin-left: 1%;
-        width: 67%;
     }
     #alerte_commune, #wait_ajax.pifo {
         width: 30%;
@@ -82,9 +59,6 @@
     #type_voie {margin-bottom: 0.8em;}
     #titre_commune{margin:0 20px;}
     #bandeau_commune{margin-left:5px;}
-    #boutons-filtres.pifo {
-        width: 72%;
-    }
     #alerte_commune, #wait_ajax.pifo {
         width: 25%;
         line-height:25px;
@@ -102,15 +76,9 @@
     h2 {font-size: 1.1em;}
     h3 {font-size: 0.8em; margin-bottom: 0}
     #bandeau {height: 130px;}
-    #topnav {height: 60px;}
-    #barre-jaune {top: 60px;}
-    #bandeau {top:90px}
 }
 
 @media only screen and (max-width: 1100px) {
-    #boutons-filtres.pifo {
-        width: 75%;
-    }
     #alerte_commune, #wait_ajax.pifo {
         width: 20%;
         font-size: 0.75em;
@@ -167,22 +135,39 @@
 /*-----------------------------------------------------------------------*/
 
 @media only screen and (max-width: 600px) {
+    .navigation {
+        left:-112%;
+        width: 100%;
+    }
+    .navigation h1 a{font-size: 0.8em;}
     /*--------- PIFOMAP ---------*/
-    #topnav {height: 30px;}
-    #barre-jaune {top: 30px;}
     #bandeau {top:60px;}
-    #pifostats, #pifoprogression, #onglets, #bouton_legende, #bouton_refresh, #bouton_aleatoire, #bouton_communes_voisines,
-    #panneau_map #espace_bouton_copier, #panneau_map #contenu {display: none;}
+    #wait_ajax, #infos_refresh, #refresh_infobulle, #pifostats, #pifoprogression, #onglets, #bouton_legende, #bouton_aleatoire, #bouton_communes_voisines,
+    #panneau_map #espace_bouton_copier, #panneau_map #contenu, #bouton_export_csv, #bouton_aide {display: none;}
+    #bouton_refresh {width: 30px; height: 30px; right: 45px; top:15px; background-size: 25px;}
+    #wait_ajax.pifomap {width: 30px; height: 30px; right: 45px; top:15px; background-size: 25px;}
+    #wait_ajax_mobile {
+        display: block;
+        visibility: hidden;
+        position:fixed;
+        width: 30px; height: 30px;
+        right: 45px; top:15px;
+        background:url("../img/skate.gif") no-repeat lightblue center;
+        background-size: 25px;
+        border-bottom: 2px #3FA4C5 solid;
+        border-radius: 6px;
+        z-index: 2;
+    }
     #bouton_localise_moi {
         display:block;
         cursor: pointer;
         position: fixed;
         top: 15px;
-        right: 20px;
+        right: 10px;
         background: url("../img/cible.png") no-repeat gold center;
-        background-size: 30px;
-        width: 40px;
-        height: 40px;
+        background-size: 25px;
+        width: 30px;
+        height: 30px;
         border-bottom: 2px salmon solid;
         border-radius: 6px;
     }
