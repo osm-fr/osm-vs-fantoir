@@ -296,6 +296,19 @@ hr {
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
 
+#bouton_localise_moi {
+    display:block;
+    cursor: pointer;
+    position: fixed;
+    top: 40px;
+    right: 265px;
+    background: url("../img/cible.png") no-repeat gold center;
+    background-size: 30px;
+    width: 40px;
+    height: 40px;
+    border-bottom: 2px salmon solid;
+    border-radius: 6px;
+}
 #bouton_aleatoire {
 	cursor: pointer;
 	position: fixed;
@@ -489,7 +502,7 @@ hr {
 
 /*-----Spécificités mobile-----*/
 
-#bouton_localise_moi, #filtre_lieuxdits_mobile {
+#filtre_lieuxdits_mobile {
 	display: none;
 }
 
