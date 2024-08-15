@@ -278,7 +278,7 @@ hr {
 }
 
 #wait_ajax.pifomap {
-	right: 675px;
+	right: 725px;
 }
 
 #wait_ajax.pifo span, #wait_ajax.pifomap span {
@@ -677,7 +677,7 @@ hr {
 #onglets {
 	position: fixed;
 	top: 40px;
-	right: 265px;
+	right: 315px;
 	width: 400px;
 	height: 38px;
 }
