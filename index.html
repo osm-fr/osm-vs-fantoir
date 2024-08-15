@@ -68,8 +68,12 @@
                                 $('#refresh_infobulle').hide()
                             })
         $('#bouton_localise_moi').click(function(){
-                                getLocation();
-                            })
+            $('body').css('cursor','progress');
+            $('#wait_ajax').empty()
+                           .css('visibility','visible') 
+                           .append($('<span>').append('Localisation en cours...'));
+                                    getLocation();
+        })
     };
 
     function commune_aleatoire(){
@@ -104,13 +108,15 @@
         })
     }
     function localise_moi(position){
-            $.ajax({
-                url: "insee_from_coords.py?lat="+position.coords.latitude+"&lon="+position.coords.longitude
-            })
-            .done(function( data ) {
-                $('#input_insee')[0].value = data[0][0]
-                requete_pifometre()
-            })
+        $.ajax({
+            url: "insee_from_coords.py?lat="+position.coords.latitude+"&lon="+position.coords.longitude
+        })
+        .done(function( data ) {
+            $('#input_insee')[0].value = data[0][0]
+            requete_pifometre()
+            $('body').css('cursor','default');
+            $('#wait_ajax').css('visibility','hidden');
+        })
     }
 
     function update_filtres(){

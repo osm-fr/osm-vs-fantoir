@@ -125,6 +125,10 @@
                                 $('#refresh_infobulle').css('visibility','hidden');
                             })
         $('#bouton_localise_moi').click(function(){
+                                $('body').css('cursor','progress');
+                                $('#wait_ajax').empty()
+                                               .css('visibility','visible') 
+                                               .append($('<span>').append('Localisation en cours...'));
                                 getLocation();
                             })
     };
@@ -176,6 +180,8 @@
                     reset_panneau_map();
                     requete_pifometre();
                 }
+                $('body').css('cursor','default');
+                $('#wait_ajax').css('visibility','hidden');
             })
     }
     function bascule_fond_raster(){
