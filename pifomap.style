@@ -1,15 +1,24 @@
 {   "version": 8,
     "sources": {
-        "raster-tiles": {
+        "OSM-HOT-tiles": {
             "type": "raster",
             "tiles": [
                 "https://tile-a.openstreetmap.fr/hot/{z}/{x}/{y}.png"
             ],
             "tileSize": 256,
             "attribution":
-                "Map tiles by OSM-FR",
+                "Données © Communauté <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a>",
             "note":
                 "https://a.piano.tiles.quaidorsay.fr/fr/{z}/{x}/{y}.png"
+        },
+        "OSM-standard-tiles": {
+            "type": "raster",
+            "tiles": [
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+            ],
+            "tileSize": 256,
+            "attribution":
+                "Données © Communauté <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a>"
         },
         "communes": {
              "type": "vector",
@@ -71,9 +80,22 @@
         {
             "id": "simple-tiles",
             "type": "raster",
-            "source": "raster-tiles",
+            "source": "OSM-HOT-tiles",
             "minzoom": 0,
-            "maxzoom": 22
+            "maxzoom": 22,
+            "layout": {
+                "visibility" : "visible"
+            }
+        },
+        {
+            "id": "OSM-standard-tiles",
+            "type": "raster",
+            "source": "OSM-standard-tiles",
+            "minzoom": 0,
+            "maxzoom": 22,
+            "layout": {
+                "visibility" : "none"
+            }
         },
         {
             "id": "point_de_communes",

@@ -869,4 +869,21 @@
         }
         return false
     }
-
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(localise_moi);
+        } else {
+            console.log("Pas de geolocalisation disponible");
+        }
+    }
+    function update_storage_raster(){
+        layers = Object.values(map.style._layers)
+        for (l = 0; l < layers.length; l++){
+            layername = layers[l].id
+            if (map.getLayer(layername).type == 'raster'){
+                if (map.getLayoutProperty(layername,'visibility') == 'visible'){
+                    localStorage.setItem('raster',layername)
+                }
+            }
+        }
+    }

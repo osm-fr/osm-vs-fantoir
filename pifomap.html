@@ -74,7 +74,7 @@
 
         //Bouton changement fond
         $('#bouton_fond_carte').click(function(){
-            alert('Fond changé !');
+            bascule_fond_raster();
         })
 
         let [a_menus_labels,STATUS_FANTOIR] = get_labels_statut_fantoir()
@@ -164,13 +164,6 @@
             $('#wait_ajax_mobile').css('visibility','hidden');
         })
     }
-    function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(localise_moi);
-        } else {
-            console.log("Pas de geolocalisation disponible");
-        }
-    }
     function localise_moi(position){
             $.ajax({
                 url: "insee_from_coords.py?lat="+position.coords.latitude+"&lon="+position.coords.longitude
@@ -184,6 +177,13 @@
                     requete_pifometre();
                 }
             })
+    }
+    function bascule_fond_raster(){
+        visibility_HOT = map.getLayoutProperty('simple-tiles','visibility')
+        visibility_Standard = map.getLayoutProperty('OSM-standard-tiles','visibility')
+        map.setLayoutProperty('simple-tiles','visibility',visibility_Standard)
+        map.setLayoutProperty('OSM-standard-tiles','visibility',visibility_HOT)
+        update_storage_raster()
     }
 
     function get_geojson_poly(geom,props){
