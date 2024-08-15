@@ -802,6 +802,13 @@
         map.setPaintProperty('point_de_communes','icon-color',["interpolate",["linear"],["/", ["*",["get", "nb_noms_osm"],100],["get", "nb_noms_topo"]],0,"red",25,"orange",50,"yellow",75,"green"])
     }
     function map_setup(){
+        // initialisation du fond raster mémorisé
+        if (localStorage.raster == undefined){
+            localStorage.setItem('raster','simple-tiles')
+        }
+        // Fond raster de la dernière session
+        set_visible_raster(localStorage.raster)
+
         map.addControl(new maplibregl.NavigationControl());
         if (!map.hasImage('rond_50')){
             map.loadImage('./img/rond_50.png', (error, image) => {
@@ -874,16 +881,5 @@
             navigator.geolocation.getCurrentPosition(localise_moi);
         } else {
             console.log("Pas de geolocalisation disponible");
-        }
-    }
-    function update_storage_raster(){
-        layers = Object.values(map.style._layers)
-        for (l = 0; l < layers.length; l++){
-            layername = layers[l].id
-            if (map.getLayer(layername).type == 'raster'){
-                if (map.getLayoutProperty(layername,'visibility') == 'visible'){
-                    localStorage.setItem('raster',layername)
-                }
-            }
         }
     }

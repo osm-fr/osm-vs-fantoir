@@ -191,7 +191,30 @@
         map.setLayoutProperty('OSM-standard-tiles','visibility',visibility_HOT)
         update_storage_raster()
     }
-
+    function update_storage_raster(){
+        layers = Object.values(map.style._layers)
+        for (l = 0; l < layers.length; l++){
+            layername = layers[l].id
+            if (map.getLayer(layername).type == 'raster'){
+                if (map.getLayoutProperty(layername,'visibility') == 'visible'){
+                    localStorage.setItem('raster',layername)
+                }
+            }
+        }
+    }
+    function set_visible_raster(rasterlayer){
+        layers = Object.values(map.style._layers)
+        for (l = 0; l < layers.length; l++){
+            layername = layers[l].id
+            if (map.getLayer(layername).type == 'raster'){
+                if (layername == rasterlayer){
+                    map.setLayoutProperty(layername,'visibility','visible')
+                } else {
+                    map.setLayoutProperty(layername,'visibility','none')
+                }
+            }
+        }
+    }
     function get_geojson_poly(geom,props){
         return ({'type': 'Feature',
                         'properties': props,
