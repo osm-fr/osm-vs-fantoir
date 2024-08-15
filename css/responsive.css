@@ -31,7 +31,7 @@
     h2 {font-size: 1.2em;}
     h3 {font-size: 0.9em;}
     #boutons-filtres.pifo {font-size: 0.65em;}
-    #alerte_commune, #wait_ajax.pifo {
+    #alerte_commune {
         right: 1%;
     }
     .tablesorter-default {
@@ -159,17 +159,11 @@
         z-index: 2;
     }
     #bouton_localise_moi {
-        display:block;
-        cursor: pointer;
-        position: fixed;
         top: 15px;
         right: 10px;
-        background: url("../img/cible.png") no-repeat gold center;
         background-size: 25px;
         width: 30px;
         height: 30px;
-        border-bottom: 2px salmon solid;
-        border-radius: 6px;
     }
     #recentrer_commune {margin-left:10px; width: 30px; height: 30px;}
     #barre-jaune input[type="text"] {width: 50px;}
