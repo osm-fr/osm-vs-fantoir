@@ -65,7 +65,7 @@
                                 event.stopPropagation();
                             })
                             .mouseout(function(){
-                                $('#refresh_infobulle').hide()
+                                $('#refresh_infobulle').css('visibility','hidden');
                             })
         $('#bouton_localise_moi').click(function(){
             $('body').css('cursor','progress');
@@ -556,7 +556,7 @@
         $('#refresh_infobulle').empty()
                             .append('Mettre à jour avec les données OSM du ')
                             .append($('<span>').append(osm_state+' (UTC)'))
-                            .show()
+                            .css('visibility','visible');
     }
 </script>
 </head>
