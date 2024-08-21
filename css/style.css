@@ -117,14 +117,15 @@ hr {
 	width: 36px;
 	height: 30px;
 	margin: 0;
-	span {
-		display:inline-block;
-		font-size: 0.95em;
-		line-height: 1em;
-		font-weight: bolder;
-		margin: 7px 0 0 35px;
-		width:65px;
-	}
+}
+
+.bouton_burger span {
+	display:inline-block;
+	font-size: 0.95em;
+	line-height: 1em;
+	font-weight: bolder;
+	margin: 7px 0 0 35px;
+	width:65px;
 }
 
 .controle_nav {
@@ -132,30 +133,32 @@ hr {
 	left:-9999px;
 	width: 100%;
 	clip: rect(0, 0, 0, 0);
+}
 
-  &:checked ~ .navigation {
+.controle_nav:checked ~ .navigation {
     left: 0;
     transition: left 0.3s;
-    ul li {
-      opacity: 1;
-      -webkit-transform: translateX( 0 );
-      -moz-transform: translateX( 0 );
-      -ms-transform: translateX( 0 );
-      -o-transform: translateX( 0 );
-      transform: translateX( 0 );
-    }
-  }
+ }
 
-  &:checked ~ .bouton_burger {
-  	background: url("../img/croix.png") no-repeat center;
-  	background-size: 26px;
-  	width: 40px;
-  	height: 40px;
-  	transition: all .3s 0s ease;
-  	span {
-  		visibility: hidden;
-  	}
-  }
+.controle_nav:checked ~ .navigation ul li {
+	opacity: 1;
+	-webkit-transform: translateX( 0 );
+	-moz-transform: translateX( 0 );
+	-ms-transform: translateX( 0 );
+	-o-transform: translateX( 0 );
+	transform: translateX( 0 );
+}
+
+.controle_nav:checked ~ .bouton_burger {
+	background: url("../img/croix.png") no-repeat center;
+	background-size: 26px;
+	width: 40px;
+	height: 40px;
+	transition: all .3s 0s ease;
+}
+
+.controle_nav:checked ~ .bouton_burger span {
+	visibility: hidden;
 }
 
 .navigation {
@@ -170,20 +173,25 @@ hr {
 	width: 30%;
 	padding: 50px 0 0 0;
 	z-index: 50;
-	h1, h1 a{
-		width: 100%;
-		color: #111;
-		z-index: 99;
-	}
-	h1 a{
-		display:block;
-		font-size: 0.7em;
-		padding: 5px 10px 5px 20px;
-		margin-bottom: 5px;
-		text-decoration: none;
-		transition: all .1s ease;
-		&:hover {background: #B1DE89;}
-	}
+}
+
+.navigation h1 a {
+	display:block;
+	font-size: 0.7em;
+	padding: 5px 10px 5px 20px;
+	margin-bottom: 5px;
+	text-decoration: none;
+	transition: all .1s ease;
+}
+
+.navigation h1 a:hover {
+	background: #B1DE89;
+}
+
+.navigation h1, h1 a {
+	width: 100%;
+	color: #111;
+	z-index: 99;
 }
 
 /*-----------------------------------------------------------------------*/
@@ -420,6 +428,7 @@ hr {
 	border-radius: 6px;
 }
 #refresh_infobulle{
+	visibility: hidden;
 	position: fixed;
 	width: 250px;
 	height: 56px;
@@ -428,7 +437,6 @@ hr {
 	border: 1px grey solid;
 	border-radius: 5px;
 	padding: 5px;
-	display:none;
 	z-index: 5;
 	background-color: white;
 	font-size: 0.9em;

@@ -140,7 +140,6 @@
         width: 100%;
     }
     .navigation h1 a{font-size: 0.8em;}
-    /*--------- PIFOMAP ---------*/
     #bandeau {top:60px;}
     #wait_ajax, #infos_refresh, #refresh_infobulle, #pifostats, #pifoprogression, #onglets, #bouton_legende, #bouton_aleatoire, #bouton_communes_voisines,
     #panneau_map #espace_bouton_copier, #panneau_map #contenu, #bouton_export_csv, #bouton_aide {display: none;}
