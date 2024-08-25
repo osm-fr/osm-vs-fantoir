@@ -199,6 +199,7 @@
             $('#pifostats').css('visibility','visible');
 
             code_insee = $('#input_insee')[0].value
+            update_storage_visits(nom_commune,code_insee,'pifometre')
             update_csv_url()
             $('#wait_ajax').empty()
                            .css('visibility','visible')

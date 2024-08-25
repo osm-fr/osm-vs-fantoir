@@ -391,6 +391,9 @@
                 return 0;
             }
             commune_valide = true;
+            code_insee = $('#input_insee')[0].value
+
+            update_storage_visits(nom_commune,code_insee,'pifomap')
 
             $('#bouton_pifostats').removeClass('onglet_non_cliquable').addClass('onglet_actif');
             $('#bouton_pifofiltres').removeClass('onglet_non_cliquable').removeClass('onglet_actif');
@@ -421,7 +424,6 @@
                 }
             })
 
-            code_insee = $('#input_insee')[0].value
             update_csv_url()
             $('#wait_ajax').empty()
                            .css('visibility','visible')

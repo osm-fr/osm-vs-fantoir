@@ -883,3 +883,24 @@
             console.log("Pas de geolocalisation disponible");
         }
     }
+    function update_storage_visits(name,code,type){
+        const v = {nom:name,code:code,type:type}
+        if (localStorage.visits == undefined){
+            localStorage.setItem('visits',JSON.stringify([v]))
+        }
+        visits = JSON.parse(localStorage.visits)
+        indice = -1
+        for (i=0;i<visits.length;i++){
+            if (visits[i].code == code && visits[i].type == type){
+                indice = i
+            }
+        }
+        if (indice > -1){
+            visits.splice(indice,1)
+        }
+        visits.unshift(v)
+        if (visits.length > 5){
+            visits = visits.slice(0,5)
+        }
+        localStorage.setItem('visits',JSON.stringify(visits))
+    }
