@@ -175,9 +175,18 @@ hr {
 	z-index: 50;
 }
 
+.navigation h1, h1 a {
+	width: 100%;
+	color: #111;
+	z-index: 99;
+}
+
+.navigation h1 {
+	font-size: 1.2em;
+}
+
 .navigation h1 a {
 	display:block;
-	font-size: 0.7em;
 	padding: 5px 10px 5px 20px;
 	margin-bottom: 5px;
 	text-decoration: none;
@@ -188,11 +197,27 @@ hr {
 	background: #B1DE89;
 }
 
-.navigation h1, h1 a {
-	width: 100%;
-	color: #111;
-	z-index: 99;
+/*En-tête pages récemment consultées*/
+#menu_recent { 
+	padding: 5px 0;
+	background-color: #DDF0CA;
 }
+#menu_recent h1 {
+	padding-left: 20px;
+}
+#menu_recent h2 { 
+	margin: 5px 0;
+	font-size: 1em;
+}
+#menu_recent h2 a {
+	display: block;
+	text-decoration: none;
+	padding: 10px 10px 10px 40px;
+}
+#menu_recent h2 a:hover { 
+	background: #B1DE89;
+}
+
 
 /*-----------------------------------------------------------------------*/
 /*------------------------------ MENU JAUNE -----------------------------*/
