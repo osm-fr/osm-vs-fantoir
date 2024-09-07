@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Statistiques de couverture en voies nommées par département</title>
+<title>Statistiques par commune</title>
 <script src="js/jquery-3.6.4.min.js"></script>
 <script src="js/tablesorter/jquery.tablesorter.js"></script>
 <script src="js/jquery.tablesorter.combined.min.js"></script>
+<script src="js/fonctions.js"></script>
 <link rel="preload" href="css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
 <link rel="stylesheet" href="css/style.css" type="text/css"/>
@@ -24,19 +25,7 @@
 		}
 		return res
 	}
-	function check_url_for_dept(){
-		var res
-		if (window.location.hash){
-			if (window.location.hash.split('dept=')[1]){
-				if (is_valid_dept(window.location.hash.split('dept=')[1].split('&')[0])){
-					res = window.location.hash.split('dept=')[1].split('&')[0]
-				} else {
-					alert(window.location.hash.split('dept=')[1].split('&')[0]+' n\'est pas un numero de département valide\n\nAbandon')
-				}
-			}
-		}
-		return res
-	}
+
 	function start(){
 		$('#bouton_aide').click(function(){
 			$('#aide_stats').css('visibility','visible');
@@ -45,6 +34,7 @@
 			$('#aide_stats').css('visibility','hidden');
 		})
 		dept = check_url_for_dept()
+        update_menu_visits()
 		if (dept){
 			$('#input_dept').empty()
 			$('#input_dept')[0].value = dept
@@ -59,6 +49,8 @@
 			alert($('#input_dept')[0].value+" n'est pas un numéro de département valide\n\nAbandon")
 			return;
 		}
+
+		dept = $('#input_dept')[0].value
 
 		$('body').css('cursor','progress');
         $('#wait_ajax').empty()
@@ -81,7 +73,7 @@
 				$('#wait_ajax').css('visibility','hidden');
 				return 0;
 			}
-			document.title = nom_dept+' - Avancement du rapprochement des voies par commune'
+			document.title = nom_dept+' - Statistiques par commune'
 
 			$('#nom_dept').append((nom_dept+" ("+$('#input_dept')[0].value+")"))
 			stats = data[1]
@@ -119,7 +111,10 @@
             });
 
 		})
-		window.location.hash="#dept="+$('#input_dept')[0].value
+		// window.location.hash="#dept="+$('#input_dept')[0].value
+        history.replaceState("", "", window.location.pathname+"?dept="+dept);
+        update_storage_visits(dept,dept,'Stats par commune',window.location.href.split('?')[0].split('/').pop(),'dept')
+        update_menu_visits()
 	}
 </script>
 </head>
@@ -140,7 +135,7 @@
 	<div id="bandeau">
 	    <div id="descriptif">
 			<h2 id="nom_dept"></h2>
-			<h1>Avancement du rapprochement des voies par commune</h1>
+			<h1>Statistiques par commune</h1>
 		</div>
 		<button id="bouton_export_csv" title="Exporter le tableau en CSV" onclick="window.open(urlCSV, '_blank');"></button>
 		<button id="bouton_aide" title="Aide"></button>

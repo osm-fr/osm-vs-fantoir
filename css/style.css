@@ -205,16 +205,16 @@ hr {
 #menu_recent h1 {
 	padding-left: 20px;
 }
-#menu_recent h2 { 
+#menu_recent #liens h2 {
 	margin: 5px 0;
 	font-size: 1em;
 }
-#menu_recent h2 a {
+#menu_recent  #liens h2 a {
 	display: block;
 	text-decoration: none;
 	padding: 10px 10px 10px 40px;
 }
-#menu_recent h2 a:hover { 
+#menu_recent  #liens h2 a:hover {
 	background: #B1DE89;
 }
 

@@ -16,20 +16,7 @@
 <script>
 	a_champs_topo = ['Rapproché','Dept','Code Insee','Code Fantoir','Nature voie','Libellé voie','Caractère voie','Car. annul.','Date annul.','Date de création','Type de voie','Mot classant']
 	a_champs_topo_classes = ['rapproche','dpt','insee','code_fantoir','nature_voie','libelle_voie','car_voie','car_annul','date_annul','date_crea','type_voie','mot_classant']
-	// function check_url_for_insee(){
-	// 	pattern_insee = new RegExp('^[0-9][0-9abAB][0-9]{3}$')
-	// 	var res
-	// 	if (window.location.hash){
-	// 		if (window.location.hash.split('insee=')[1]){
-	// 			if (pattern_insee.test(window.location.hash.split('insee=')[1].split('&')[0])){
-	// 				res = window.location.hash.split('insee=')[1].split('&')[0]
-	// 			} else {
-	// 				alert(window.location.hash.split('insee=')[1].split('&')[0]+' n\'est pas un code INSEE de commune\n\nAbandon')
-	// 			}
-	// 		}
-	// 	}
-	// 	return res
-	// }
+
 	function start(){
 		insee = check_url_for_insee()
 		if (insee){
@@ -37,6 +24,7 @@
 			$('#input_insee')[0].value = insee
 			listing_fantoir()
 		}
+    update_menu_visits()
 	}
 	function listing_fantoir(){
 		$('body').css('cursor','progress');
@@ -124,7 +112,8 @@
             stickyHeaders_attachTo : '#reponse'
           }
       });
-
+      update_storage_visits(nom_commune,insee,'Fichier TOPO',window.location.href.split('?')[0].split('/').pop(),'insee')
+      update_menu_visits()
 		})
     history.replaceState("", "", window.location.pathname+"?insee="+$('#input_insee')[0].value)
 		$('body').css('cursor','default');

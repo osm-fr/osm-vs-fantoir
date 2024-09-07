@@ -16,7 +16,7 @@
     }
     function check_url_for_dept(){
         var res
-        if (window.location.hash){
+        if (window.location.hash != ""){
             if (window.location.hash.split('dept=')[1]){
                 if (window.location.hash.split('dept=')[1].split('&')[0]){
                     if (is_valid_dept(window.location.hash.split('dept=')[1].split('&')[0])){
@@ -301,7 +301,7 @@
                 });
             }
         }
-        if (couche_carto == 'BAN_point'||
+        if (couche_carto == 'BAN_point_transparent'||
             couche_carto == 'OSM_point'||
             couche_carto == 'filaire_transparent'||
             couche_carto.indexOf('points_nommes_') == 0){
@@ -381,7 +381,7 @@
         //------- POINTS D'ADRESSE et NOMS DE VOIES OU LIEUX-DITS RAPPROCHES (VERTS) -------
         //----------------------------------------------------------------------------------
 
-        if (couche_carto == 'BAN_point' || couche_carto == 'OSM_point' || couche_carto.indexOf('points_nommes_rapproches') == 0){
+        if (couche_carto == 'BAN_point_transparent' || couche_carto == 'OSM_point' || couche_carto.indexOf('points_nommes_rapproches') == 0){
             map.on('click', couche_carto, (e) => {
 
                 nom = e.features[0].properties.nom;
@@ -394,7 +394,7 @@
 
                 reset_panneau_map()
 
-                if (couche_carto == 'BAN_point' || couche_carto == 'OSM_point') {
+                if (couche_carto == 'BAN_point_transparent' || couche_carto == 'OSM_point') {
                     $('#panneau_map h2').attr('texte_a_copier',nom).text(numero+' '+nom)
                 } else {
                     $('#panneau_map h2').attr('texte_a_copier',nom).text(nom)
@@ -493,7 +493,7 @@
 
                         //Mettre à jour le nom de la rue
                         if (nom_osm != null){
-                            if (couche_carto == 'BAN_point' || couche_carto == 'OSM_point') {
+                            if (couche_carto == 'BAN_point_transparent' || couche_carto == 'OSM_point') {
                                 $('#panneau_map h2').attr('texte_a_copier',nom_osm).text(numero+' '+nom_osm)
                             } else {
                                 $('#panneau_map h2').attr('texte_a_copier',nom_osm).text(nom_osm)
@@ -501,7 +501,7 @@
                         }
 
                         //Infos sur le numéro
-                        if (couche_carto == 'BAN_point' || couche_carto == 'OSM_point') {
+                        if (couche_carto == 'BAN_point_transparent' || couche_carto == 'OSM_point') {
                             $('#infos_numero').append($('<h3>').text('Le point d\'adresse :'));
 
                             $('#infos_numero').append($('<ul>'));
@@ -610,7 +610,7 @@
                             add_josm_link(table,xmin,xmax,ymin,ymax,code_insee,nom_commune)
                             add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
                         
-                        if (couche_carto == 'BAN_point' || couche_carto == 'OSM_point') {
+                        if (couche_carto == 'BAN_point_transparent' || couche_carto == 'OSM_point') {
                             if (is_place) {
                                 $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Intégrer les adresses dans JOSM'))))
                             }
@@ -832,7 +832,7 @@
         }
         interactions_souris('noms_de_communes')
         interactions_souris('simple-tiles')
-        interactions_souris('BAN_point')
+        interactions_souris('BAN_point_transparent')
         interactions_souris('OSM_point')
         interactions_souris('filaire_transparent')
         interactions_souris('points_nommes_rapproches_lieudit')
@@ -883,8 +883,8 @@
             console.log("Pas de geolocalisation disponible");
         }
     }
-    function update_storage_visits(name,code,type){
-        const v = {nom:name,code:code,type:type}
+    function update_storage_visits(name,code,type,page,parametre){
+        const v = {nom:name,code:code,type:type,page:page,parametre:parametre}
         if (localStorage.visits == undefined){
             localStorage.setItem('visits',JSON.stringify([v]))
         }
@@ -903,4 +903,12 @@
             visits = visits.slice(0,5)
         }
         localStorage.setItem('visits',JSON.stringify(visits))
+    }
+    function update_menu_visits(){
+        $('#menu_recent #liens').empty()
+        visits = JSON.parse(localStorage.visits)
+        for (i=0;i<visits.length;i++){
+            $('#menu_recent #liens').append($('<h2>').append($('<a>').attr('href',visits[i].page+'?'+visits[i].parametre+'='+visits[i].code).append(visits[i].nom+' - '+visits[i].type)))
+        }
+
     }

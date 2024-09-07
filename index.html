@@ -74,6 +74,7 @@
                            .append($('<span>').append('Localisation en cours...'));
                                     getLocation();
         })
+        update_menu_visits()
     };
 
     function commune_aleatoire(){
@@ -199,7 +200,9 @@
             $('#pifostats').css('visibility','visible');
 
             code_insee = $('#input_insee')[0].value
-            update_storage_visits(nom_commune,code_insee,'pifometre')
+            update_storage_visits(nom_commune,code_insee,'Pifomètre',window.location.href.split('?')[0].split('/').pop(),'insee')
+            update_menu_visits()
+
             update_csv_url()
             $('#wait_ajax').empty()
                            .css('visibility','visible')
@@ -371,7 +374,7 @@
 
                     //--- Code Fantoir ---
                     if (has_code_fantoir) {
-                        $('#'+table+' tbody').append($('<tr>').attr('id',tr_id).append($('<td>').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir_affiche)))                    
+                        $('#'+table+' tbody').append($('<tr>').attr('id',tr_id).append($('<td>').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir_affiche)))
                     }
                     else {
                         $('#'+table+' tbody').append($('<tr>').attr('id',tr_id).append($('<td>').attr('colspan','3').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir_affiche))) 

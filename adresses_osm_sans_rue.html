@@ -29,6 +29,7 @@
     function start(){
         document.title = titre
         dept = check_url_for_dept()
+        update_menu_visits()
         if (dept){
             $('#input_dept').empty()
             $('#input_dept')[0].value = dept
@@ -151,7 +152,9 @@
                     }
                 });
             })
-            window.location.hash="#dept="+$('#input_dept')[0].value
+            history.replaceState("", "", window.location.pathname+"?dept="+dept);
+            update_storage_visits(dept,dept,'Adresses OSM sans rue',window.location.href.split('?')[0].split('/').pop(),'dept')
+            update_menu_visits()
         };
     }
 </script>

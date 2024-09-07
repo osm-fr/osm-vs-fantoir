@@ -23,6 +23,7 @@
         document.title = titre
         let [a_menus_labels,STATUS_FANTOIR] = get_labels_statut_fantoir()
         numero_dept = check_url_for_dept()
+        update_menu_visits()
         if (numero_dept){
             $('#input_dept').empty()
             $('#input_dept')[0].value = numero_dept
@@ -167,6 +168,9 @@
 
             })
             history.replaceState("", "", window.location.pathname+"?dept="+numero_dept+'&offset='+offset);
+            update_storage_visits(numero_dept,numero_dept,'Adresses manquantes',window.location.href.split('?')[0].split('/').pop(),'dept')
+            update_menu_visits()
+
         };
     }
 </script>

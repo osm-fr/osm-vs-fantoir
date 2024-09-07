@@ -23,6 +23,7 @@
             $('#input_dept')[0].value = numero_dept
             requete_fantoir_errone_dept();
         }
+        update_menu_visits()
     }
     function requete_fantoir_errone_dept(){
         if (check_form_for_dept()){
@@ -106,7 +107,9 @@
                       stickyHeaders_attachTo : '#reponse'
                     }
                 });
-                window.location.hash="#dept="+code_dept
+                history.replaceState("", "", window.location.pathname+"?dept="+code_dept);
+                update_storage_visits(numero_dept,numero_dept,'Codes Fantoir erronés',window.location.href.split('?')[0].split('/').pop(),'dept')
+                update_menu_visits()
                 $('body').css('cursor','default');
             })
         }

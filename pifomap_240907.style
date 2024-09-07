@@ -376,6 +376,17 @@
             }
         },
         {
+            "id": "BAN_point_transparent",
+            "source": "adresses_BAN",
+            "type": "circle",
+            "minzoom" : 12,
+            "paint": {
+                "circle-radius":10,
+                "circle-color": "white",
+                "circle-opacity": 0
+            }
+        },
+        {
             "id": "BAN_texte",
             "source": "adresses_BAN",
             "type": "symbol",
