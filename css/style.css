@@ -69,8 +69,8 @@ hr {
 	font-size: 1.6em;
 }
 #aide_contenu h3 {
-	font-size: 1.3em;
-	color: darkgreen;
+	font-size: 1.4em;
+	color: #5B9328;
 }
 #aide_contenu p img {
     display: inline-block;
@@ -79,10 +79,16 @@ hr {
 #aide_contenu .titre_para {
 	font-weight: bold;
 }
-.aide_capture {
+.aide_capture_lien {
 	width: 600px;
 	border: 2px solid #B1DE89;
 	padding: 5px;
+}
+
+.aide_capture {
+	width: 1100px;
+	border: 1px solid #222;
+	padding: 3px;
 }
 
 /*-------------------------------------------------------------------------------------*/

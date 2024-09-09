@@ -18,20 +18,15 @@
 	<h1>Aide</h1>
 
 	<h2>Pifomètre</h2>
-	<h3>(Page d'Interconnexion Fantoir-OSM pour Minimiser l'Enorme Tas des Rues Egarées)</h3>
+	<h3>(Page d'Interconnexion Fantoir-OSM pour Minimiser l'Énorme Tas des Rues Égarées)</h3>
 
-	<p><a href="img/aide/aide_pifo_page.png" ><img src="img/aide/aide_pifo_page.png" class="aide_capture"/></a></p>
+	<p><a href="img/aide/aide_pifo_page.png" ><img src="img/aide/aide_pifo_page.png" class="aide_capture_lien"/></a></p>
 
 	<p><span class="titre_para">1. Sélection de la commune.</span> Sélection de la commune par code Insee. Pour les codes des communes en Corse, 'a' et 'b' sont compris (exemple: Ajaccio -> 2A004).</p>
 	<p><span class="titre_para">2. Date du dernier rapprochement</span> entre les données OpenStreetMap et le fichier Topo au sein de <abbr title="Base Adresses Nationale Ouverte">BANO</abbr>.</p>
 
-	<h3>Les boutons</h3>
-	<p><span class="titre_para">3. Communes voisines.</span> Affiche des liens vers les pages Pifomètre des communes environnantes.</p>
-	<p><!-- <img src="img/aide/capture-refresh.png"/> --> <span class="titre_para">4. Mise à jour.</span> Au survol du bouton, une infobulle indique l'heure des dernières données OSM permettant de mettre à jour <abbr title="Base Adresses Nationale Ouverte">BANO</abbr>.
-	<br/>Cliquer sur le bouton force la mise à jour de <abbr title="Base Adresses Nationale Ouverte">BANO</abbr> sur la commune. Par défaut, une mise à jour est faite toutes les nuits. </p>
-	<p><!-- <img src="img/aide/capture-export.png"/>  --><span class="titre_para">5. Export CSV.</span> Télécharge un fichier CSV avec tout le tableau Pifomètre de la commune affichée.</p>
-
-	<h3>6. Les filtres</h3>
+	<h3>3. Les filtres</h3>
+	<p><img src="img/aide/aide_pifo_filtres.png"/></p>
 
 	<p><span class="titre_para">Voies et lieux-dits</span> Pour choisir d'afficher uniquement les voies, ou uniquement les lieux-dits, ou les deux.</p>
 	<p><span class="titre_para">Rapprochement</span>
@@ -44,31 +39,52 @@
 	<br/>• Le filtre rose permet d'afficher ou non les voies/lieux-dits ayant des adresses référencées dans la <abbr title="Base Adresses Nationale">BAN</abbr>.
 	<br/>• Le filtre gris permet d'afficher ou non les voies/lieux-dits n'ayant pas d'adresses référencées dans la <abbr title="Base Adresses Nationale">BAN</abbr>.</p>
 
+	<h3>4. Les statistiques</h3>
+	<p><img src="img/aide/aide_pifo_stats.png"/></p>
+
+	<p>Pour la commune chargée, les stats montrent l'avancement de :</p>
+	<p><span class="titre_para">• l'intégration des noms de voies et lieux-dits</span> : rapport du nombre de voies et lieux-dits avec un <span class="monospace">name</span> présents sur OSM par rapport au nombre de noms présents dans le fichier Topo (ex-Fantoir).</p>
+	<p><span class="titre_para">• l'intégration des noms de voies et lieux-dits comportant des adresses</span> : rapport du nombre de nombre de voies et lieux-dits avec un <span class="monospace">name</span> présents sur OSM par rapport au nombre de noms liés à des adresses recensées par la <abbr title="Base Adresses Nationale">BAN</abbr>.</p>
+	<p><span class="titre_para">• l'intégration des adresses</span> : rapport du nombre de numéros d'adresse présents sur OSM par rapport au nombre recensé par la <abbr title="Base Adresses Nationale">BAN</abbr>.</p>
+
+	<h3>Les boutons</h3>
+	<p><img src="img/aide/aide_pifo_boutons.png"/></p>
+
+	<p><span class="titre_para">A. Géolocalisation.</span> Charge la commune où vous vous trouvez (grâce à la position géographique indiquée par le navigateur) .</p>
+	<p><span class="titre_para">B. Commune aléatoire.</span> Charge une commune au hasard parmi celles où il y a le plus de travail à faire (noms de voies et lieux-dits à ajouter, adresses à intégrer...).</p>
+	<p><span class="titre_para">C. Communes voisines.</span> Affiche des liens vers les pages Pifomètre des communes adjacentes à la commune chargée.</p>
+	<p><!-- <img src="img/aide/capture-refresh.png"/> --> <span class="titre_para">D. Mise à jour.</span> Au survol du bouton, une infobulle indique l'heure des dernières données OSM permettant de mettre à jour <abbr title="Base Adresses Nationale Ouverte">BANO</abbr>.
+	<br/>Cliquer sur le bouton force la mise à jour de <abbr title="Base Adresses Nationale Ouverte">BANO</abbr> sur la commune. Par défaut, une mise à jour est faite toutes les nuits. </p>
+	<p><!-- <img src="img/aide/capture-export.png"/>  --><span class="titre_para">E. Export CSV.</span> Télécharge un fichier CSV avec tout le tableau Pifomètre de la commune affichée.</p>
+	<p><span class="titre_para">F. Aide.</span> C'est ici !</p>
+
 	<h3>Le tableau</h3>
-	<p><span class="titre_para">7. Code Fantoir.</span> Code de la voie ou du lieu-dit trouvé dans le fichier Topo (ex Fantoir) de la commune. Par habitude, on continuera ici à l'appeler code Fantoir, et non code Topo.</p>
+	<p><img src="img/aide/aide_pifo_tableau.png" class="aide_capture"/></p>
 
-	<p><span class="titre_para">8. Date de création.</span> Date de création du code Fantoir (1 janvier 1987 pour les plus anciens).</p>
+	<p><span class="titre_para">5. Code Fantoir.</span> Code de la voie ou du lieu-dit trouvé dans le fichier Topo (ex Fantoir) de la commune. Par habitude, on continuera ici à l'appeler code Fantoir, et non code Topo.</p>
 
-	<p><span class="titre_para">9. Libellé Topo.</span> Nom lié au code Fantoir selon le fichier Topo de la commune.</p>
+	<p><span class="titre_para">6. Date de création.</span> Date de création du code Fantoir (1 janvier 1987 pour les plus anciens).</p>
 
-	<p><span class="titre_para" >10. Libellé OSM.</span> Nom trouvé dans OpenStreetMap. Il peut provenir d'une voie (<span class="monospace">highway</span>), d'un lieu-dit (<span class="monospace">place</span>) ou d'une adresse (<span class="monospace">addr:street</span> ou <span class="monospace">addr:place</span>).
+	<p><span class="titre_para">7. Libellé Topo.</span> Nom lié au code Fantoir selon le fichier Topo de la commune.</p>
+
+	<p><span class="titre_para" >8. Libellé OSM.</span> Nom trouvé dans OpenStreetMap. Il peut provenir d'une voie (<span class="monospace">highway</span>), d'un lieu-dit (<span class="monospace">place</span>) ou d'une adresse (<span class="monospace">addr:street</span> ou <span class="monospace">addr:place</span>).
 	<br/>Si le nom OSM correspond à un nom de voie ou lieu-dit trouvé dans le fichier Topo, il est accompagné d'une pastille ronde et verte : on dit qu'il est «rapproché».
 	<br/>Si aucun nom dans OSM ne correspond à la voie ou au lieu-dit trouvé dans Topo, s'affiche juste une pastille orange en forme de losange.
 	</p>
 
-	<p><span class="titre_para">11. Libellé <abbr title="Base Adresses Nationale">BAN</abbr> ou Cadastre.</span> Nom trouvé dans la <abbr title="Base Adresses Nationale">BAN</abbr> pour les voies, ou dans le Cadastre pour les lieux-dits. La source est précisée sur chaque ligne avec un pictogramme <img src="img/ban_logo.png" height="16px"/> BAN ou <img src="img/cadastre.png"/> Cadastre.</p>
+	<p><span class="titre_para">9. Libellé <abbr title="Base Adresses Nationale">BAN</abbr> ou Cadastre.</span> Nom trouvé dans la <abbr title="Base Adresses Nationale">BAN</abbr> pour les voies, ou dans le Cadastre pour les lieux-dits. La source est précisée sur chaque ligne avec un pictogramme <img src="img/ban_logo.png" height="16px"/> BAN ou <img src="img/cadastre.png"/> Cadastre.</p>
 
-	<p><span class="titre_para">12. Carte.</span> Lien vers la carte Openstreetmap.org centrée sur la voie ou le lieu-dit.</p>
+	<p><span class="titre_para">10. Carte.</span> Lien vers la carte Openstreetmap.org, et vers la page Pifomap de la commune – centrés sur la voie ou le lieu-dit sélectionné·e.</p>
 
-	<p><span class="titre_para">13. Édition.</span> Liens ouvrant l'éditeur en ligne iD centré sur la voie ou le lieu-dit, ou le chargeant dans <abbr title="le logiciel JOSM">JOSM</abbr> s'il est déjà ouvert.</p>
+	<p><span class="titre_para">11. Édition.</span> Liens ouvrant l'éditeur en ligne iD centré sur la voie ou le lieu-dit, ou le chargeant dans <abbr title="le logiciel JOSM">JOSM</abbr> s'il est déjà ouvert.</p>
 
-	<p><span class="titre_para">14. Statut du nom.</span> Liste des «anomalies» que peut comporter une voie ou un lieu-dit venant du ficheir Topo. Statut attribué à chaque voie ou lieu-dit disposant d'un code Fantoir, pour indiquer un éventuel problème empêchant ou non le rapprochement avec OSM. </p>
+	<p><span class="titre_para">12. Statut du nom.</span> Liste des «anomalies» que peut comporter une voie ou un lieu-dit venant du fichier Topo. Statut attribué à chaque voie ou lieu-dit disposant d'un code Fantoir, pour indiquer un éventuel problème empêchant ou non le rapprochement avec OSM. </p>
 
-	<p><span class="titre_para">15. Intégrer les adresses.</span> Liens permettant d'intégrer dans OpenStreetMap les adresses affectées à cette voie ou ce lieu-dit selon la <abbr title="Base Adresses Nationale">BAN</abbr>. Le nombre affiché correspond au nombre de numéros d'adresses recensés par la <abbr title="Base Adresses Nationale">BAN</abbr> et non encore présents dans OSM.
+	<p><span class="titre_para">13. Intégrer les adresses.</span> Liens permettant d'intégrer dans OpenStreetMap les adresses affectées à cette voie ou ce lieu-dit selon la <abbr title="Base Adresses Nationale">BAN</abbr>. Le nombre affiché correspond au nombre de numéros d'adresses recensés par la <abbr title="Base Adresses Nationale">BAN</abbr> et non encore présents dans OSM.
 	<br/>Cliquer sur le lien ouvre un nouveau calque sur <abbr title="le logiciel JOSM">JOSM</abbr>, comportant lesdites adresses soit sous forme de points (<span class="monospace">addr:housenumber</span> et <span class="monospace">addr:street</span> ou <span class="monospace">addr:place</span>) soit par relation <span class="monospace">associatedStreet</span>.
 	<br/>Si toutes les adresses recensées par la <abbr title="Base Adresses Nationale">BAN</abbr> sont déjà existantes dans OSM, cette colonne affiche «✔ Adresses intégrées».</p>
 
-	<p><span class="titre_para">16. Qualifier les adresses.</span> Liens vers la page de qualification des adresses. Cette page affiche une carte de la voie ou du lieu-dit, avec les adresses déjà présentes dans OSM, les adresses venant de la <abbr title="Base Adresses Nationale">BAN</abbr> pas encore intégrées dans OSM, et un tableau listant les adresses et leurs anomalies éventuelles (sur le même modèle que les «statuts du nom».
+	<p><span class="titre_para">14. Qualifier les adresses.</span> Liens vers la page de qualification des adresses. Cette page affiche une carte de la voie ou du lieu-dit, avec les adresses déjà présentes dans OSM, les adresses venant de la <abbr title="Base Adresses Nationale">BAN</abbr> pas encore intégrées dans OSM, et un tableau listant les adresses et leurs anomalies éventuelles (sur le même modèle que les «statuts du nom».
 
 	<p>&nbsp;</p>
 
