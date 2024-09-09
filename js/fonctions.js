@@ -403,7 +403,7 @@
                 $('#panneau_map #espace_bouton_copier #copier_voie').click(function(){
 
                     //Copie le nom de la voie dans le presse-papier
-                    navigator.clipboard.writeText($('h2').attr('texte_a_copier'))
+                    navigator.clipboard.writeText($('#panneau_map h2').attr('texte_a_copier'))
                     //Affiche le picto copie en vert
                     $(this).addClass('ok')
                     //Affiche le message de confirmation
@@ -628,9 +628,9 @@
             });
         }
 
-        //----------------------------------------------------------
-        //------- NOMS DE VOIES OU LIEUX-DITS NON RAPPROCHES -------
-        //----------------------------------------------------------
+        //-------------------------------------------------------------------
+        //------- NOMS DE VOIES OU LIEUX-DITS NON RAPPROCHES (ORANGE) -------
+        //-------------------------------------------------------------------
 
         if (couche_carto.indexOf('points_nommes_non_rapproches') == 0){
             map.on('click', couche_carto, (e) => {
@@ -650,7 +650,7 @@
                 $('#panneau_map #espace_bouton_copier #copier_voie').click(function(){
 
                     //Copie le nom de la voie dans le presse-papier
-                    navigator.clipboard.writeText($('h2').attr('texte_a_copier'))
+                    navigator.clipboard.writeText($('#panneau_map h2').attr('texte_a_copier'))
                     //Affiche le picto copie en vert
                     $(this).addClass('ok')
                     //Affiche le message de confirmation
