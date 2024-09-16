@@ -1,0 +1,44 @@
+{   "version": 8,
+    "sources": {
+        "OSM-standard-tiles": {
+            "type": "raster",
+            "tiles": [
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+            ],
+            "tileSize": 256,
+            "attribution":
+                "Données © Communauté <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a>"
+        },
+        "croisement": {
+             "type": "vector",
+             "tiles": [
+                  "https://bano.openstreetmap.fr/pifometre/tiles_croisement/{z}/{x}/{y}.pbf"
+                  ],
+            "minzoom":6,
+            "maxzoom":6
+        }
+    },
+    "glyphs": "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
+    "sprite": "https://demotiles.maplibre.org/styles/osm-bright-gl-style/sprite",
+    "layers": [
+        {
+            "id": "OSM-standard-tiles",
+            "type": "raster",
+            "source": "OSM-standard-tiles",
+            "minzoom": 0,
+            "maxzoom": 22
+        },
+        {
+            "id": "highway",
+            "source": "croisement",
+            "source-layer": "croisement_voies_limites",
+            "type": "line",
+            "minzoom" : 6,
+            "maxzoom": 12,
+            "paint": {
+                "line-width": 4,
+                "line-color": "green"
+            }
+        }
+    ]
+}

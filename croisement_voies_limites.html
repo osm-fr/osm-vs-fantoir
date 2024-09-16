@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rues et routes nommées croisant des limites administratives</title>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src='https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js'></script>
+    <link rel="stylesheet" href="css/style.css" type="text/css"/>
+    <!-- <style> -->
+        <!-- body { margin: 0; padding: 0; } -->
+        <!-- html, body, #map { height: 100%; } -->
+    <!-- </style> -->
+</head>
+<body>
+<!-- <div id="map"></div> -->
+    <div id="reponse" class="pifomap">
+        <div id="panneau_map">
+            <h2></h2> <!-- Nom commune -->
+            <div id="contenu">
+                <div id="infos_numero"></div>
+                <div id="infos_voie_lieudit"></div>
+                <table id="pifomap_table_liens"></table>
+            </div>
+        </div>
+        <div id="map_div"></div>
+    </div>
+
+<script>
+    const map = new maplibregl.Map({
+        container: 'map_div',
+        style:
+            'croisement_voies_limites_240915.style',
+        center: [-0.49925, 46.85417],
+        zoom: 12,
+        hash: 'map',
+    });
+    map.on('load', () => {
+        map_setup()
+    });
+    function map_setup(){
+        map.addControl(new maplibregl.NavigationControl());
+        interactions_souris('highway')
+    }
+    function reset_panneau_map(){
+        $('#panneau_map h2').empty()
+        $('#panneau_map #espace_bouton_copier').empty()
+        $('#infos_numero').empty();
+        $('#infos_voie_lieudit').empty();
+        $('#pifomap_table_liens').empty();
+    }
+    function interactions_souris(couche_carto){
+        //-----------------------------------------------
+        //---------------- RAZ PANNEAU ------------------
+        //-----------------------------------------------
+        if (couche_carto == 'simple-tiles'){
+            map.on('click', (e) => {
+                if (typeof e.features == 'undefined'){
+                    reset_panneau_map()
+                }
+            })
+        }
+
+        //---------------------------------------------
+        //------------------ AU CLIC ------------------
+        //---------------------------------------------
+
+        //----------------------------
+        //------- RUES NOMMÉES -------
+        //----------------------------
+
+        if (couche_carto == 'highway'){
+            map.on('click', couche_carto, (e) => {
+                nom = e.features[0].properties.nom_osm;
+                nom_commune_debut = e.features[0].properties.nom_commune_debut;
+                nom_commune_fin = e.features[0].properties.nom_commune_fin;
+                code_insee_debut = e.features[0].properties.code_insee_debut;
+                code_insee_fin = e.features[0].properties.code_insee_fin;
+                lon = e.lngLat.lng
+                lat = e.lngLat.lat
+
+                console.log(nom + ' '+ nom_commune_debut+' '+nom_commune_fin)
+            });
+        }
+    }
+</script>
+</body>
+</html>
