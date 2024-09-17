@@ -12,10 +12,10 @@
         "croisement": {
              "type": "vector",
              "tiles": [
-                  "https://bano.openstreetmap.fr/pifometre/tiles_croisement/{z}/{x}/{y}.pbf"
+                  "https://bano.openstreetmap.fr/pifometre/tiles_croisement_240916/{z}/{x}/{y}.pbf"
                   ],
-            "minzoom":6,
-            "maxzoom":6
+            "minzoom":5,
+            "maxzoom":12
         }
     },
     "glyphs": "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
@@ -33,8 +33,8 @@
             "source": "croisement",
             "source-layer": "croisement_voies_limites",
             "type": "line",
-            "minzoom" : 6,
-            "maxzoom": 12,
+            "minzoom" : 5,
+            "maxzoom": 20,
             "paint": {
                 "line-width": 4,
                 "line-color": "green"
