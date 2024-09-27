@@ -1,87 +1,134 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>Rues et routes nommées croisant des limites administratives</title>
     <meta charset='utf-8'>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src='https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js'></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rues et routes nommées croisant des limites administratives</title>
+    <script src="js/jquery-3.6.4.min.js"></script>
+    <script src="js/fonctions.js"></script>
+    <script defer src="js/menu.js"></script>
+    <script src='https://unpkg.com/maplibre-gl@3.2.1/dist/maplibre-gl.js'></script>
+    <link rel="preload" href="css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@3.2.1/dist/maplibre-gl.css' />
     <link rel="stylesheet" href="css/style.css" type="text/css"/>
-    <!-- <style> -->
-        <!-- body { margin: 0; padding: 0; } -->
-        <!-- html, body, #map { height: 100%; } -->
-    <!-- </style> -->
+    <link rel="stylesheet" href="css/responsive.css" type="text/css"/>
 </head>
+
 <body>
-<!-- <div id="map"></div> -->
+    <header>
+        <!--#include file="includes/menu.html" -->
+    </header>
+    <div id="barre-jaune"></div>
+    <div id="bandeau"></div>
     <div id="reponse" class="pifomap">
         <div id="panneau_map">
-            <h2></h2> <!-- Nom commune -->
+            <h2></h2> <!-- Nom voie -->
             <div id="contenu">
-                <div id="infos_numero"></div>
-                <div id="infos_voie_lieudit"></div>
+                <div class="infos_ville 1"></div>
+                <div class="infos_ville 2"></div>
                 <table id="pifomap_table_liens"></table>
             </div>
         </div>
-        <div id="map_div"></div>
+        <div id="map_div">
+            <button id="bouton_fond_carte" title="Changer le fond de carte"></button>
+        </div>
     </div>
 
-<script>
-    const map = new maplibregl.Map({
-        container: 'map_div',
-        style:
-            'croisement_voies_limites_240915.style',
-        center: [-0.49925, 46.85417],
-        zoom: 12,
-        hash: 'map',
-    });
-    map.on('load', () => {
-        map_setup()
-    });
-    function map_setup(){
-        map.addControl(new maplibregl.NavigationControl());
-        interactions_souris('highway')
-    }
-    function reset_panneau_map(){
-        $('#panneau_map h2').empty()
-        $('#panneau_map #espace_bouton_copier').empty()
-        $('#infos_numero').empty();
-        $('#infos_voie_lieudit').empty();
-        $('#pifomap_table_liens').empty();
-    }
-    function interactions_souris(couche_carto){
-        //-----------------------------------------------
-        //---------------- RAZ PANNEAU ------------------
-        //-----------------------------------------------
-        if (couche_carto == 'simple-tiles'){
-            map.on('click', (e) => {
-                if (typeof e.features == 'undefined'){
-                    reset_panneau_map()
-                }
-            })
+    <footer>
+    <!--#include file="includes/footer.html" -->
+    </footer>
+    <div id="josm_target" style="visibility : hidden"></div>
+
+    <script>
+        update_menu_visits()
+
+        const map = new maplibregl.Map({
+            container: 'map_div',
+            style:
+                'croisement_voies_limites_240915.style',
+            center: [-0.49925, 46.85417],
+            zoom: 12,
+            hash: 'map',
+        });
+        map.on('load', () => {
+            map_setup()
+        });
+
+        //Bouton changement fond
+        $('#bouton_fond_carte').click(function(){
+            bascule_fond_raster();
+        })
+
+        function map_setup(){
+            map.addControl(new maplibregl.NavigationControl());
+            interactions_souris('highway')
         }
-
-        //---------------------------------------------
-        //------------------ AU CLIC ------------------
-        //---------------------------------------------
-
-        //----------------------------
-        //------- RUES NOMMÉES -------
-        //----------------------------
-
-        if (couche_carto == 'highway'){
-            map.on('click', couche_carto, (e) => {
-                nom = e.features[0].properties.nom_osm;
-                nom_commune_debut = e.features[0].properties.nom_commune_debut;
-                nom_commune_fin = e.features[0].properties.nom_commune_fin;
-                code_insee_debut = e.features[0].properties.code_insee_debut;
-                code_insee_fin = e.features[0].properties.code_insee_fin;
-                lon = e.lngLat.lng
-                lat = e.lngLat.lat
-
-                console.log(nom + ' '+ nom_commune_debut+' '+nom_commune_fin)
-            });
+        function reset_panneau_map(){
+            $('#panneau_map h2').empty()
+            $('.infos_ville').empty();
+            $('#pifomap_table_liens').empty();
         }
-    }
-</script>
+        function interactions_souris(couche_carto){
+            //-----------------------------------------------
+            //---------------- RAZ PANNEAU ------------------
+            //-----------------------------------------------
+            if (couche_carto == 'highway'){
+                map.on('click', (e) => {
+                    if (typeof e.features == 'undefined'){
+                        reset_panneau_map()
+                    }
+                })
+            }
+
+            //---------------------------------------------
+            //------------------ AU CLIC ------------------
+            //---------------------------------------------
+
+            //------- RUES NOMMÉES -------
+            if (couche_carto == 'highway'){
+                map.on('click', couche_carto, (e) => {
+                    nom = e.features[0].properties.nom_osm;
+                    nom_commune_debut = e.features[0].properties.nom_commune_debut;
+                    nom_commune_fin = e.features[0].properties.nom_commune_fin;
+                    code_insee_debut = e.features[0].properties.code_insee_debut;
+                    code_insee_fin = e.features[0].properties.code_insee_fin;
+                    lon = e.lngLat.lng
+                    lat = e.lngLat.lat
+
+                    DELTA = 0.0008
+                    xmin  = lon-DELTA
+                    xmax  = lon+DELTA
+                    ymin  = lat-DELTA
+                    ymax  = lat+DELTA
+
+                    console.log(nom + ' '+ nom_commune_debut+' '+nom_commune_fin)
+                    $('#panneau_map h2').text(nom)
+
+                    $('#panneau_map div.infos_ville.1') .append($('<h3>').text('Commune où commence la voie :'))
+                                                        .append($('<span>').text(nom_commune_debut+' ('))
+                                                        .append($('<a>').attr('href', 'index.html?insee='+code_insee_debut).text('Pifomètre'))
+                                                        .append($('<span>').text(' / '))
+                                                        .append($('<a>').attr('href', 'pifomap.html?insee='+code_insee_debut+'#map='+'15/'+lat+'/'+lon).text('Pifomap'))
+                                                        .append($('<span>').text(')'))
+                                                        .append($('<hr>'))
+                                                                
+                    $('#panneau_map div.infos_ville.2') .append($('<h3>').text('Commune où finit la voie :'))
+                                                        .append($('<span>').text(nom_commune_fin+' ('))
+                                                        .append($('<a>').attr('href', 'index.html?insee='+code_insee_fin).text('Pifomètre'))
+                                                        .append($('<span>').text(' / '))
+                                                        .append($('<a>').attr('href', 'pifomap.html?insee='+code_insee_fin+'#map='+'15/'+lat+'/'+lon).text('Pifomap'))
+                                                        .append($('<span>').text(')'))
+                                                        .append($('<hr>'))
+
+                    table = 'pifomap_table_liens'
+                        $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Éditer la zone sur'))))
+                        $('#'+table).append($('<tr>'))
+                            add_josm_link(table,xmin,xmax,ymin,ymax,code_insee_debut,nom_commune_debut)
+                            //Changer le comm du changeset ? Quelle ville choisir, les deux ?
+                            add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
+                });
+            }
+        }
+    </script>
 </body>
 </html>

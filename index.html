@@ -7,6 +7,7 @@
 <script src="js/jquery-3.6.4.min.js"></script>
 <script src="js/jquery.tablesorter.combined.min.js"></script>
 <script src="js/fonctions.js"></script>
+<script defer src="js/menu.js"></script>
 <link rel="preload" href="css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/bulma/bulma.min.css" type="text/css"/>
 <link rel="stylesheet" href="css/bulma/main.min.css" type="text/css"/>
@@ -54,7 +55,6 @@
         $('#table_communes_voisines > .fermer').click(function(){
             $('#table_communes_voisines').css('visibility','hidden');
         })
-
         $('#bouton_refresh').click(function(event){
                                 refresh();
                                 event.stopPropagation();
