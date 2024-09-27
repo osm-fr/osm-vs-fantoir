@@ -12,7 +12,7 @@
         "croisement": {
              "type": "vector",
              "tiles": [
-                  "https://bano.openstreetmap.fr/pifometre/tiles_croisement_240916/{z}/{x}/{y}.pbf"
+                  "https://bano.openstreetmap.fr/pifometre/tiles_croisement/{z}/{x}/{y}.pbf"
                   ],
             "minzoom":5,
             "maxzoom":12
@@ -31,13 +31,89 @@
         {
             "id": "highway",
             "source": "croisement",
-            "source-layer": "croisement_voies_limites",
+            "source-layer": "cvl_voie",
             "type": "line",
             "minzoom" : 5,
             "maxzoom": 20,
             "paint": {
-                "line-width": 4,
+                "line-width": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        5,1,
+                        13,4],
                 "line-color": "green"
+            }
+        },
+        {
+            "id": "highway_transparent",
+            "source": "croisement",
+            "source-layer": "cvl_voie",
+            "type": "line",
+            "minzoom" : 5,
+            "maxzoom": 20,
+            "paint": {
+                "line-width": 24,
+                "line-color": "white",
+                "line-opacity" : 0
+            }
+        },
+        {
+            "id": "point_debut",
+            "source": "croisement",
+            "source-layer": "cvl_point_debut",
+            "type": "circle",
+            "minzoom" : 5,
+            "maxzoom": 20,
+            "paint": {
+                "circle-radius": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        5,1,
+                        13,5],
+                "circle-color": ["case",
+                                ["boolean",["get","rapproche_debut"]],"green",
+                                "red"]
+            }
+        },
+        {
+            "id": "point_fin",
+            "source": "croisement",
+            "source-layer": "cvl_point_fin",
+            "type": "circle",
+            "minzoom" : 5,
+            "maxzoom": 20,
+            "paint": {
+                "circle-radius": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        5,1,
+                        13,5],
+                "circle-color": ["case",
+                                ["boolean",["get","rapproche_fin"]],"green",
+                                "red"]
+            }
+        },
+        {
+            "id": "point_croisement",
+            "source": "croisement",
+            "source-layer": "cvl_point_croisement",
+            "type": "symbol",
+            "minzoom" : 5,
+            "maxzoom": 20,
+            "layout": {
+                "text-field": "*",
+                "text-justify": "auto",
+                "text-size": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        9,0,
+                        13,16],
+                "symbol-placement": "point"
+                },
+            "paint": {
+                "text-color":"black",
+                "text-halo-color": "white",
+                "text-halo-width": 3
             }
         }
     ]
