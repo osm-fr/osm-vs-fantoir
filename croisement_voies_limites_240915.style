@@ -12,7 +12,7 @@
         "croisement": {
              "type": "vector",
              "tiles": [
-                  "https://bano.openstreetmap.fr/pifometre/tiles_croisement/{z}/{x}/{y}.pbf"
+                  "https://bano.openstreetmap.fr/pifometre/tiles_croisement_240929/{z}/{x}/{y}.pbf"
                   ],
             "minzoom":5,
             "maxzoom":12
@@ -29,11 +29,75 @@
             "maxzoom": 22
         },
         {
+            "id": "highway_detourage",
+            "source": "croisement",
+            "source-layer": "cvl_voie",
+            "type": "line",
+            "minzoom" : 8,
+            "maxzoom": 20,
+            "paint": {
+                "line-width": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        5,1,
+                        13,9],
+                "line-color": "white"
+            }
+        },
+        {
+            "id": "point_debut_detourage",
+            "source": "croisement",
+            "source-layer": "cvl_point_debut",
+            "type": "circle",
+            "minzoom" : 5,
+            "maxzoom": 20,
+            "paint": {
+                "circle-radius": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        5,1,
+                        13,7],
+                "circle-color": ["case",
+                                ["boolean",["get","rapproche_debut"]],"yellowgreen",
+                                "orangered"],
+                "circle-stroke-color": "white",
+                "circle-stroke-width": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        10,0,
+                        13,4]
+            }
+        },
+        {
+            "id": "point_fin_detourage",
+            "source": "croisement",
+            "source-layer": "cvl_point_fin",
+            "type": "circle",
+            "minzoom" : 5,
+            "maxzoom": 20,
+            "paint": {
+                "circle-radius": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        5,1,
+                        13,7],
+                "circle-color": ["case",
+                                ["boolean",["get","rapproche_fin"]],"yellowgreen",
+                                "orangered"],
+                "circle-stroke-color": "white",
+                "circle-stroke-width": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        10,0,
+                        13,4]
+            }
+        },
+        {
             "id": "highway",
             "source": "croisement",
             "source-layer": "cvl_voie",
             "type": "line",
-            "minzoom" : 5,
+            "minzoom" : 8,
             "maxzoom": 20,
             "paint": {
                 "line-width": ["interpolate",
@@ -49,12 +113,38 @@
             "source": "croisement",
             "source-layer": "cvl_voie",
             "type": "line",
-            "minzoom" : 5,
+            "minzoom" : 8,
             "maxzoom": 20,
             "paint": {
                 "line-width": 24,
                 "line-color": "white",
                 "line-opacity" : 0
+            }
+        },
+        {
+            "id": "point_debut_surbrillance",
+            "source": "croisement",
+            "source-layer": "cvl_point_debut",
+            "filter" : ["==",["get", "code_insee_debut"], " "],
+            "type": "circle",
+            "minzoom" : 8,
+            "maxzoom": 20,
+            "paint": {
+                "circle-radius": 20,
+                "circle-color": "yellow"
+            }
+        },
+        {
+            "id": "point_fin_surbrillance",
+            "source": "croisement",
+            "source-layer": "cvl_point_fin",
+            "filter" : ["==",["get", "code_insee_fin"], " "],
+            "type": "circle",
+            "minzoom" : 8,
+            "maxzoom": 20,
+            "paint": {
+                "circle-radius": 20,
+                "circle-color": "yellow"
             }
         },
         {
@@ -69,10 +159,16 @@
                         ["linear"],
                         ["zoom"],
                         5,1,
-                        13,5],
+                        13,7],
                 "circle-color": ["case",
-                                ["boolean",["get","rapproche_debut"]],"green",
-                                "red"]
+                                ["boolean",["get","rapproche_debut"]],"yellowgreen",
+                                "orangered"],
+                "circle-stroke-color": "green",
+                "circle-stroke-width": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        10,0,
+                        11,1.5]
             }
         },
         {
@@ -87,10 +183,16 @@
                         ["linear"],
                         ["zoom"],
                         5,1,
-                        13,5],
+                        13,7],
                 "circle-color": ["case",
-                                ["boolean",["get","rapproche_fin"]],"green",
-                                "red"]
+                                ["boolean",["get","rapproche_fin"]],"yellowgreen",
+                                "orangered"],
+                "circle-stroke-color": "green",
+                "circle-stroke-width": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        10,0,
+                        11,1.5]
             }
         },
         {
@@ -101,19 +203,20 @@
             "minzoom" : 5,
             "maxzoom": 20,
             "layout": {
-                "text-field": "*",
+                "text-field": "==",
+                "text-rotate": ["+",["get","degres"],90],
                 "text-justify": "auto",
                 "text-size": ["interpolate",
                         ["linear"],
                         ["zoom"],
                         9,0,
-                        13,16],
+                        13,24],
                 "symbol-placement": "point"
                 },
             "paint": {
-                "text-color":"black",
-                "text-halo-color": "white",
-                "text-halo-width": 3
+                "text-color":"purple",
+                "text-halo-color": "purple",
+                "text-halo-width": 0.5
             }
         }
     ]
