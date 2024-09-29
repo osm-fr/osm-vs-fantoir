@@ -61,7 +61,7 @@
 
         function map_setup(){
             map.addControl(new maplibregl.NavigationControl());
-            interactions_souris('highway')
+            interactions_souris('highway_transparent')
         }
         function reset_panneau_map(){
             $('#panneau_map h2').empty()
@@ -72,7 +72,7 @@
             //-----------------------------------------------
             //---------------- RAZ PANNEAU ------------------
             //-----------------------------------------------
-            if (couche_carto == 'highway'){
+            if (couche_carto == 'highway_transparent'){
                 map.on('click', (e) => {
                     if (typeof e.features == 'undefined'){
                         reset_panneau_map()
@@ -85,7 +85,7 @@
             //---------------------------------------------
 
             //------- RUES NOMMÉES -------
-            if (couche_carto == 'highway'){
+            if (couche_carto == 'highway_transparent'){
                 map.on('click', couche_carto, (e) => {
                     nom = e.features[0].properties.nom_osm;
                     nom_commune_debut = e.features[0].properties.nom_commune_debut;
@@ -111,6 +111,13 @@
                                                         .append($('<a>').attr('href', 'pifomap.html?insee='+code_insee_debut+'#map='+'15/'+lat+'/'+lon).text('Pifomap'))
                                                         .append($('<span>').text(')'))
                                                         .append($('<hr>'))
+                    $('#panneau_map div.infos_ville.1') .on("mouseenter", function() {
+                        map.setFilter('point_debut_surbrillance',["all",["==",["get", "code_insee_debut"],code_insee_debut],["==",["get","nom_osm"],nom]]);
+                    } );
+
+                    $('#panneau_map div.infos_ville.1') .on("mouseleave", function() {
+                        map.setFilter('point_debut_surbrillance',["==",["get", "code_insee_debut"], " "]);
+                    } );
                                                                 
                     $('#panneau_map div.infos_ville.2') .append($('<h3>').text('Commune où finit la voie :'))
                                                         .append($('<span>').text(nom_commune_fin+' ('))
@@ -119,6 +126,12 @@
                                                         .append($('<a>').attr('href', 'pifomap.html?insee='+code_insee_fin+'#map='+'15/'+lat+'/'+lon).text('Pifomap'))
                                                         .append($('<span>').text(')'))
                                                         .append($('<hr>'))
+                    $('#panneau_map div.infos_ville.2') .on("mouseenter", function() {
+                        map.setFilter('point_fin_surbrillance',["all",["==",["get", "code_insee_fin"],code_insee_fin],["==",["get","nom_osm"],nom]]);
+                    } );
+                    $('#panneau_map div.infos_ville.2') .on("mouseleave", function() {
+                        map.setFilter('point_fin_surbrillance',["==",["get", "code_insee_fin"], " "]);
+                    } );
 
                     table = 'pifomap_table_liens'
                         $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Éditer la zone sur'))))

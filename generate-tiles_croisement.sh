@@ -5,6 +5,8 @@
 
 set -e
 
+RACINE_CIBLE=tiles_croisement_240929
+
 function cvl_voie() {
   tz=$1
   tx=$2
@@ -96,6 +98,7 @@ FROM ( SELECT osm_id,
               nom_osm,
               code_insee_debut,
               code_insee_fin,
+              degres,
               ST_AsMvtGeom(
                 geometrie_3857,
                 BBox($tx, $ty, $tz),
@@ -113,8 +116,8 @@ z=$1
 x=$2
 y=$3
 
-mkdir -p ./tiles_croisement/$z/$x
-ofile="tiles_croisement/$z/$x/$y.pbf"
+mkdir -p ./${RACINE_CIBLE}/$z/$x
+ofile="${RACINE_CIBLE}/$z/$x/$y.pbf"
 {
   psql -d bano -U cadastre -tq -c "$(cvl_voie $z $x $y)" | xxd -r -p ;
   psql -d bano -U cadastre -tq -c "$(cvl_point_debut $z $x $y)" | xxd -r -p ;
