@@ -87,21 +87,26 @@
             //------- RUES NOMMÉES -------
             if (couche_carto == 'highway_transparent'){
                 map.on('click', couche_carto, (e) => {
+                    osm_id = e.features[0].properties.osm_id;
                     nom = e.features[0].properties.nom_osm;
                     nom_commune_debut = e.features[0].properties.nom_commune_debut;
                     nom_commune_fin = e.features[0].properties.nom_commune_fin;
                     code_insee_debut = e.features[0].properties.code_insee_debut;
                     code_insee_fin = e.features[0].properties.code_insee_fin;
+
+                    coordinates = e.features[0].geometry.coordinates;
+                    bounds = coordinates.reduce((bounds, coord) => {
+                        return bounds.extend(coord);},
+                        new maplibregl.LngLatBounds(coordinates[0], coordinates[0]));
+
                     lon = e.lngLat.lng
                     lat = e.lngLat.lat
 
-                    DELTA = 0.0008
-                    xmin  = lon-DELTA
-                    xmax  = lon+DELTA
-                    ymin  = lat-DELTA
-                    ymax  = lat+DELTA
+                    xmin = bounds._sw.lng
+                    xmax = bounds._ne.lng
+                    ymin = bounds._sw.lat
+                    ymax = bounds._ne.lat
 
-                    console.log(nom + ' '+ nom_commune_debut+' '+nom_commune_fin)
                     $('#panneau_map h2').text(nom)
 
                     $('#panneau_map div.infos_ville.1') .append($('<h3>').text('Commune où commence la voie :'))
@@ -136,8 +141,7 @@
                     table = 'pifomap_table_liens'
                         $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Éditer la zone sur'))))
                         $('#'+table).append($('<tr>'))
-                            add_josm_link(table,xmin,xmax,ymin,ymax,code_insee_debut,nom_commune_debut)
-                            //Changer le comm du changeset ? Quelle ville choisir, les deux ?
+                            add_josm_croisement_link(table,xmin,xmax,ymin,ymax,nom_commune_debut,code_insee_debut,nom_commune_fin,code_insee_fin,osm_id)
                             add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
                 });
             }

@@ -136,6 +136,17 @@
                                     })
                                 )
     }
+    function add_josm_croisement_link(table,xl,xr,yb,yt,commune1,insee1,commune2,insee2,wayid){
+        $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-josm')
+                                    .attr('xleft',xl).attr('xright',xr).attr('ybottom',yb).attr('ytop',yt)
+                                    .text('JOSM')
+                                    .click(function(){
+                                        srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xl+'&right='+xr+'&top='+yt+'&bottom='+yb+'&select=way'+wayid+'&changeset_tags='+get_changeset_tags_croisement((xl+xr)/2,(yb+yt)/2,commune1,insee1,commune2,insee2);
+                                        $('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
+                                        $(this).addClass('clicked');
+                                    })
+                                )
+    }
     function add_josm_addr_link(table,code_insee,nom_commune,fantoir,nom_fantoir,nombre,fantoir_dans_relation,is_place){
         stringToRemove = window.location.href.split('?')[0].split('/').pop()
         $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-adresses'))
@@ -173,6 +184,9 @@
     }
     function get_changeset_tags_noms(code_insee,nom_commune){
         return "source=https://bano.openstreetmap.fr/pifometre/index.html?insee="+code_insee+"%7Chashtags=%23BANO %23Pifometre%7Ccomment=Intégration de noms de voies et lieux-dits - "+nom_commune+" ("+code_insee+")"
+    }
+    function get_changeset_tags_croisement(x,y,commune1,insee1,commune2,insee2){
+        return "source=https://bano.openstreetmap.fr/pifometre/croisement_voies_limites.html%23map=15/"+y+"/"+x+"%7Chashtags=%23BANO %23Pifometre%7Ccomment=Correction des rues et routes à cheval entre "+commune1+" ("+insee1+" ) et "+commune2+" ("+insee2+")"
     }
     function check_josm_remote_control(){
         $.ajax({
