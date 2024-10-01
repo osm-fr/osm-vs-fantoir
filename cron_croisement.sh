@@ -111,3 +111,5 @@ rm ${LOCKFILE}
 echo `wc -l ${TILESFILE}` "tuiles produites" >> ${LOGFILE}
 echo `date` >> ${LOGFILE}
 echo fin >> ${LOGFILE}
+
+tail -1000 ${LOGFILE} > foo.bar && mv foo.bar ${LOGFILE}
