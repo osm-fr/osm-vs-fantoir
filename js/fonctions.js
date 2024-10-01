@@ -302,6 +302,28 @@
             })
         }
         //-----------------------------------------------
+        //---------------- CLIC DROIT -------------------
+        //-----------------------------------------------
+        if (couche_carto == 'simple-tiles'){
+            map.on('contextmenu', (e) => {
+                if (typeof e.features == 'undefined'){
+                    lon = e.lngLat.lng
+                    lat = e.lngLat.lat
+                    $.ajax({
+                        url: "insee_from_coords.py?lat="+lat+"&lon="+lon
+                    })
+                    .done(function( data ) {
+                        if ($('#input_insee')[0].value != data[0][0]){
+                            $('#input_insee')[0].value = data[0][0]
+                            reset_panneau_map();
+                            requete_pifometre();
+                        }
+                    })
+                }
+            })
+        }
+
+        //-----------------------------------------------
         //------------------ AU SURVOL ------------------
         //-----------------------------------------------
         if (couche_carto == 'noms_de_communes'){
