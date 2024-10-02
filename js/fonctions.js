@@ -313,10 +313,49 @@
                         url: "insee_from_coords.py?lat="+lat+"&lon="+lon
                     })
                     .done(function( data ) {
-                        if ($('#input_insee')[0].value != data[0][0]){
-                            $('#input_insee')[0].value = data[0][0]
-                            reset_panneau_map();
-                            requete_pifometre();
+                        code_insee = data[0][0]
+                        nom_commune = data[0][1]
+                        if ($('#input_insee')[0].value != code_insee){
+                            // $('#input_insee')[0].value = code_insee
+                            // reset_panneau_map();
+                            // requete_pifometre();
+                            // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                            //     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                            // }
+                    // $('#infos_voie_lieudit').append($('<h3>').text('Voir le lieu sur : '));
+
+                            xmin  = lon-DELTA
+                            xmax  = lon+DELTA
+                            ymin  = lat-DELTA
+                            ymax  = lat+DELTA
+                            table = 'popup_table_liens'
+
+                            new maplibregl.Popup()
+                                            .setLngLat(e.lngLat)
+                                            .setHTML('<div id="popup_context">')
+                                            .addTo(map);
+
+                            $('#popup_context').append($('<h2>').text(nom_commune))
+                                               .append($('<div>').text('Pifomap').click(function(){
+                                                    $('#input_insee')[0].value = code_insee
+                                                    reset_panneau_map();
+                                                    requete_pifometre();
+                                               }))
+                                           .append($('<a>')
+                                           .attr('target','blank')
+                                           .attr('href','./liste_brute_fantoir.html?insee='+code_insee)
+                                           .text('Topo'))
+                                           .append($('<br>'))
+                                           .append($('<a>')
+                                           .attr('target','blank')
+                                           .attr('href','index.html?insee='+code_insee)
+                                           .text('Pifomètre'))
+                                           .append($('<table>').attr('id',table))
+
+                            $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Éditer la zone sur'))))
+                            $('#'+table).append($('<tr>'))
+                            add_josm_link(table,xmin,xmax,ymin,ymax,code_insee,nom_commune)
+                            add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
                         }
                     })
                 }

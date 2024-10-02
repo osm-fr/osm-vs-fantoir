@@ -6,14 +6,15 @@ AS
             WHEN 'ARM' THEN 1
             WHEN 'COM' THEN 2
             ELSE 3
-          END sort_order
+          END sort_order,
+          nom
 FROM      polygones_insee
 JOIN      cog_commune c
 ON        (com = code_insee)
 WHERE     ST_Contains(geometrie,ST_SetSRID(ST_Point(__lon__,__lat__),4326))
 UNION ALL
-SELECT    '404',99)
-SELECT    code_insee
+SELECT    '404',99,'Perdu !')
+SELECT    code_insee,nom
 FROM      s
 ORDER BY  sort_order
 LIMIT 1;
