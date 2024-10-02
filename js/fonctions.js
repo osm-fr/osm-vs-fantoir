@@ -1,4 +1,5 @@
     let hoveredStateId = null;
+    let context_menu = null;
 
     function is_valid_dept(d){
         pattern_dept = new RegExp('^([01]|[3-8])([0-9])$|^2([aAbB]|[1-9])$|^9([0-5]|7[1-4]|76)$')
@@ -330,7 +331,10 @@
                             ymax  = lat+DELTA
                             table = 'popup_table_liens'
 
-                            new maplibregl.Popup()
+                            if (context_menu !== null){
+                                context_menu.remove()
+                            }
+                            context_menu = new maplibregl.Popup()
                                             .setLngLat(e.lngLat)
                                             .setHTML('<div id="popup_context">')
                                             .addTo(map);
