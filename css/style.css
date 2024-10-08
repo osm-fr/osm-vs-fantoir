@@ -60,7 +60,6 @@ hr {
 /*---------------                                                       ---------------*/
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
-
 #aide_contenu {
 	margin: 50px 2% 0 2%;
 	font-size: 0.9em;
@@ -89,6 +88,24 @@ hr {
 	width: 1100px;
 	border: 1px solid #222;
 	padding: 3px;
+}
+
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+/*---------------                                                       ---------------*/
+/*---------------                   FICHES D'AIDE                       ---------------*/
+/*---------------                                                       ---------------*/
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+.bloc_fiche {
+	width: 30%;
+	margin: 10px 0;
+	padding:5px;
+	background-color: #FAFF99;
+	border-radius: 20px;
+}
+#aide_contenu .bloc_fiche h2{
+	font-size: 1.2em;
 }
 
 /*-------------------------------------------------------------------------------------*/
@@ -1077,7 +1094,10 @@ hr {
   margin: 2px 5px 0 0;
 }
 
-/*--- CARTE ---*/
+/*----------------------------------------------------------------------*/
+/*--------------                    CARTE                 --------------*/
+/*----------------------------------------------------------------------*/
+
 #reponse #map_div {
 	float: left;
 	margin:0 0 0 -3px;
@@ -1097,9 +1117,48 @@ hr {
 	height: 29px;
 	width: 29px;
 	border-radius: 4px;
-	 box-shadow: 0 0 0 2px rgba(0,0,0,.1);
+	box-shadow: 0 0 0 2px rgba(0,0,0,.1);
 }
 
+/*-------------------------------------------------------------*/
+/*-------------          MENU CLIC DROIT          -------------*/
+/*-------------------------------------------------------------*/
+.maplibregl-popup-content {
+	padding: 0 0 5px 0;
+	border-radius: 4px;
+	box-shadow: 0 0 0 2px rgba(0,0,0,.1);
+}
+.maplibregl-popup-tip {
+	display: none;
+}
+
+#contenu_popup_context h2 {
+	text-align: center;
+	margin: 0.5em 0.7em;
+	line-height: 1.1em;
+}
+#contenu_popup_context hr {
+	margin:5px;
+	height: 1px;
+	border:0;
+	background: #888;
+}
+
+.item_context_menu, .chapo_context_menu {
+	padding: 0 8px;
+}
+.item_context_menu {
+	cursor: pointer;
+}
+.item_context_menu:hover {
+	background-color:#FCFFB7;
+}
+
+#contenu_popup_context a, #contenu_popup_context .item_context_menu {
+	font-weight: bold;
+	color: #333;
+	text-decoration: none;
+}
 #pifomap_table_liens {
 	font-size: 1em;
 }
