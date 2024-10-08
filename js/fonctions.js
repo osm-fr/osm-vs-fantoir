@@ -334,32 +334,37 @@
                             if (context_menu !== null){
                                 context_menu.remove()
                             }
-                            context_menu = new maplibregl.Popup()
+                            context_menu = new maplibregl.Popup({anchor:'top-left'})
                                             .setLngLat(e.lngLat)
-                                            .setHTML('<div id="popup_context">')
+                                            .setHTML('<div id="contenu_popup_context">')
                                             .addTo(map);
 
-                            $('#popup_context').append($('<h2>').text(nom_commune))
-                                               .append($('<div>').text('Pifomap').click(function(){
-                                                    $('#input_insee')[0].value = code_insee
-                                                    reset_panneau_map();
-                                                    requete_pifometre();
-                                               }))
-                                           .append($('<a>')
-                                           .attr('target','blank')
-                                           .attr('href','./liste_brute_fantoir.html?insee='+code_insee)
-                                           .text('Topo'))
-                                           .append($('<br>'))
-                                           .append($('<a>')
-                                           .attr('target','blank')
-                                           .attr('href','index.html?insee='+code_insee)
-                                           .text('Pifomètre'))
-                                           .append($('<table>').attr('id',table))
+                            $('#contenu_popup_context')
+                                .append($('<h2>').text(nom_commune))
+                                .append($('<div class="item_context_menu">').text('Charger la commune').click(function(){
+                                    $('#input_insee')[0].value = code_insee
+                                    reset_panneau_map();
+                                    requete_pifometre();
+                               }))
+                               .append($('<hr>'))
+                               .append($('<a>').attr('target','blank').attr('href','./liste_brute_fantoir.html?insee='+code_insee)
+                                    .append($('<div class="item_context_menu">').text('Topo')))
+                               .append($('<a>').attr('target','blank').attr('href','index.html?insee='+code_insee)
+                                    .append($('<div class="item_context_menu">').text('Pifomètre')))
 
-                            $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Éditer la zone sur'))))
-                            $('#'+table).append($('<tr>'))
-                            add_josm_link(table,xmin,xmax,ymin,ymax,code_insee,nom_commune)
-                            add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
+                               .append($('<hr>'))
+                               .append($('<a>').attr('target','blank').attr('href','http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon)
+                                    .append($('<div class="item_context_menu">').text('Éditer sur ID')))
+
+                               .append($('<div class="item_context_menu">').text('Éditer sur JOSM').click(function(){
+                                        srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xmin+'&right='+xmax+'&top='+ymin+'&bottom='+ymax+'&changeset_tags='+get_changeset_tags_noms(code_insee,nom_commune);
+                                        $('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
+                                        $(this).addClass('clicked');
+                                }))
+
+                               /*.append($('<table>').attr('id',table))
+                                $('#'+table).append($('<tr>'))
+                                add_josm_link(table,xmin,xmax,ymin,ymax,code_insee,nom_commune)*/
                         }
                     })
                 }
