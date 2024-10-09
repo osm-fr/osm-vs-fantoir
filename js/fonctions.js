@@ -316,19 +316,10 @@
                     .done(function( data ) {
                         code_insee = data[0][0]
                         nom_commune = data[0][1]
-                        if ($('#input_insee')[0].value != code_insee){
-                            // $('#input_insee')[0].value = code_insee
-                            // reset_panneau_map();
-                            // requete_pifometre();
-                            // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                            //     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                            // }
-                    // $('#infos_voie_lieudit').append($('<h3>').text('Voir le lieu sur : '));
-
-                            xmin  = lon-DELTA
-                            xmax  = lon+DELTA
-                            ymin  = lat-DELTA
-                            ymax  = lat+DELTA
+                            xmin  = lon-DELTA*4
+                            xmax  = lon+DELTA*4
+                            ymin  = lat-DELTA*2
+                            ymax  = lat+DELTA*2
                             table = 'popup_table_liens'
 
                             if (context_menu !== null){
@@ -340,32 +331,34 @@
                                             .addTo(map);
 
                             $('#contenu_popup_context')
-                                .append($('<h2>').text(nom_commune))
-                                .append($('<div class="item_context_menu">').text('Charger la commune').click(function(){
-                                    $('#input_insee')[0].value = code_insee
-                                    reset_panneau_map();
-                                    requete_pifometre();
-                               }))
-                               .append($('<hr>'))
-                               .append($('<a>').attr('target','blank').attr('href','./liste_brute_fantoir.html?insee='+code_insee)
-                                    .append($('<div class="item_context_menu">').text('Topo')))
-                               .append($('<a>').attr('target','blank').attr('href','index.html?insee='+code_insee)
-                                    .append($('<div class="item_context_menu">').text('Pifomètre')))
+                                    .append($('<h2>').text(nom_commune))
+                            if ($('#input_insee')[0].value != code_insee){
+                                $('#contenu_popup_context')
+                                    .append($('<div class="item_context_menu">').text('Charger la commune').click(function(){
+                                        $('#input_insee')[0].value = code_insee
+                                        reset_panneau_map();
+                                        requete_pifometre();
+                                    }))
+                            }
+                            $('#contenu_popup_context').append($('<hr>'))
+                                                       .append($('<a>').attr('target','blank')
+                                                                       .attr('href','./liste_brute_fantoir.html?insee='+code_insee)
+                                                                       .append($('<div class="item_context_menu">').text('Topo')))
+                                                       .append($('<a>').attr('target','blank')
+                                                                       .attr('href','index.html?insee='+code_insee)
+                                                                       .append($('<div class="item_context_menu">').text('Pifomètre')))
 
-                               .append($('<hr>'))
-                               .append($('<a>').attr('target','blank').attr('href','http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon)
-                                    .append($('<div class="item_context_menu">').text('Éditer sur ID')))
-
-                               .append($('<div class="item_context_menu">').text('Éditer sur JOSM').click(function(){
-                                        srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xmin+'&right='+xmax+'&top='+ymin+'&bottom='+ymax+'&changeset_tags='+get_changeset_tags_noms(code_insee,nom_commune);
-                                        $('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
-                                        $(this).addClass('clicked');
-                                }))
-
-                               /*.append($('<table>').attr('id',table))
-                                $('#'+table).append($('<tr>'))
-                                add_josm_link(table,xmin,xmax,ymin,ymax,code_insee,nom_commune)*/
-                        }
+                                                       .append($('<hr>'))
+                                                       .append($('<a>').attr('target','blank')
+                                                                       .attr('href','http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon)
+                                                                       .append($('<div class="item_context_menu">').text('Éditer sur ID')))
+                                                       .append($('<div class="item_context_menu">').text('Éditer sur JOSM')
+                                                                                                   .click(function(){
+                                                                srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xmin+'&right='+xmax+'&top='+ymax+'&bottom='+ymin+'&changeset_tags='+get_changeset_tags_noms(code_insee,nom_commune);
+                                                                $('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
+                                                                $(this).addClass('clicked');
+                                                                })
+                                                        )
                     })
                 }
             })
