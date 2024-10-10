@@ -23,6 +23,7 @@
 				url: "insee_from_coords.py?lat="+lat+"&lon="+lon
 			})
 			.done(function( data ) {
+				data=data[0]
                 window.location.replace('pifomap.html?insee='+data[0]+'&ratio=no#map=17/'+lat+'/'+lon)
 			})
 

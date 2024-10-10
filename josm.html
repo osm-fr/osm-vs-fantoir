@@ -23,6 +23,7 @@
 				url: "insee_from_coords.py?lat="+lat+"&lon="+lon
 			})
 			.done(function( data ) {
+				data=data[0]
                 window.location.replace('index.html?insee='+data[0]+'&from=josm')
 			})
 
