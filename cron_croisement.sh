@@ -67,6 +67,9 @@ parallel -j $PARALLEL_JOBS -a ${DEPTFILE} bano croisement_voies_limites {1}
 echo `wc -l ${DEPTFILE}` "départements traités" >> ${LOGFILE}
 cd -
 
+# Suppression des faux positifs
+$pgsql_BANO -f sql/croisement_faux_positifs.sql
+
 rm ${TILESFILE}
 for zoom in {5..12}
 do
