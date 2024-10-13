@@ -70,6 +70,9 @@ cd -
 # Suppression des faux positifs
 $pgsql_BANO -f sql/croisement_faux_positifs.sql
 
+# Stats
+$pgsql_BANO -c "INSERT INTO stats_voies_a_cheval(nombre_cas_restant) SELECT count(*) FROM croisement_voies_limites;"
+
 rm ${TILESFILE}
 for zoom in {5..12}
 do
