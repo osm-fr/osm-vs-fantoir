@@ -25,8 +25,6 @@
     FILTRES_STATUT = [["rapproches",true],
                ["non_rapproches",true]]
 
-    DELTA = 0.0008
-
     EMPTY_GEOJSON = {'type': 'FeatureCollection',
                           'features': []}
 
@@ -430,7 +428,6 @@
 
             url_map_org_part1 = 'http://www.openstreetmap.org/'
             url_edit_part1 = 'http://www.openstreetmap.org/edit?editor='
-            delta = 0.0008
             url_hash_coords = '15/'+lat_commune+'/'+lon_commune
             url_listing_fantoir = './liste_brute_fantoir.html?insee='+$('#input_insee')[0].value
 

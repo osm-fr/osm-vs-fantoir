@@ -1,5 +1,6 @@
     let hoveredStateId = null;
     let context_menu = null;
+    DELTA = 0.0008
 
     function is_valid_dept(d){
         pattern_dept = new RegExp('^([01]|[3-8])([0-9])$|^2([aAbB]|[1-9])$|^9([0-5]|7[1-4]|76)$')
@@ -291,6 +292,71 @@
         }
         return fantoir
     }
+    function add_context_menu(){
+        map.on('contextmenu', (e) => {
+            if (typeof e.features == 'undefined'){
+                lon = e.lngLat.lng
+                lat = e.lngLat.lat
+                $.ajax({
+                    url: "insee_from_coords.py?lat="+lat+"&lon="+lon
+                })
+                .done(function( data ) {
+                    code_insee = data[0][0]
+                    nom_commune = data[0][1]
+                        xmin  = lon-DELTA*4
+                        xmax  = lon+DELTA*4
+                        ymin  = lat-DELTA*2
+                        ymax  = lat+DELTA*2
+                        table = 'popup_table_liens'
+
+                        if (context_menu !== null){
+                            context_menu.remove()
+                        }
+                        context_menu = new maplibregl.Popup({anchor:'top-left'})
+                                        .setLngLat(e.lngLat)
+                                        .setHTML('<div id="contenu_popup_context">')
+                                        .addTo(map);
+
+                        $('#contenu_popup_context')
+                                .append($('<h2>').text(nom_commune))
+                        page = window.location.href.split('?')[0].split('#')[0].split('/').pop()
+                        if (page == 'pifomap.html'){
+                            if ($('#input_insee')[0].value != code_insee){
+                                $('#contenu_popup_context')
+                                    .append($('<div class="item_context_menu">').text('Charger la commune').click(function(){
+                                        $('#input_insee')[0].value = code_insee
+                                        reset_panneau_map();
+                                        requete_pifometre();
+                                    }))
+                            }
+                        } else {
+                            $('#contenu_popup_context').append($('<a>').attr('target','blank')
+                                                                   .attr('href','pifomap.html?insee='+code_insee+'#map=17/'+lat+'/'+lon)
+                                                                   .append($('<div class="item_context_menu">').text('Pifomap')))
+                        }
+                        $('#contenu_popup_context').append($('<hr>'))
+                                                   .append($('<a>').attr('target','blank')
+                                                                   .attr('href','./liste_brute_fantoir.html?insee='+code_insee)
+                                                                   .append($('<div class="item_context_menu">').text('Topo')))
+                                                   .append($('<a>').attr('target','blank')
+                                                                   .attr('href','index.html?insee='+code_insee)
+                                                                   .append($('<div class="item_context_menu">').text('Pifomètre')))
+
+                                                   .append($('<hr>'))
+                                                   .append($('<a>').attr('target','blank')
+                                                                   .attr('href','http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon)
+                                                                   .append($('<div class="item_context_menu">').text('Éditer sur ID')))
+                                                   .append($('<div class="item_context_menu">').text('Éditer sur JOSM')
+                                                                                               .click(function(){
+                                                            srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xmin+'&right='+xmax+'&top='+ymax+'&bottom='+ymin+'&changeset_tags='+get_changeset_tags_noms(code_insee,nom_commune);
+                                                            $('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
+                                                            $(this).addClass('clicked');
+                                                            })
+                                                    )
+                })
+            }
+        })
+    }
     function interactions_souris(couche_carto){
         //-----------------------------------------------
         //---------------- RAZ PANNEAU ------------------
@@ -306,62 +372,7 @@
         //---------------- CLIC DROIT -------------------
         //-----------------------------------------------
         if (couche_carto == 'simple-tiles'){
-            map.on('contextmenu', (e) => {
-                if (typeof e.features == 'undefined'){
-                    lon = e.lngLat.lng
-                    lat = e.lngLat.lat
-                    $.ajax({
-                        url: "insee_from_coords.py?lat="+lat+"&lon="+lon
-                    })
-                    .done(function( data ) {
-                        code_insee = data[0][0]
-                        nom_commune = data[0][1]
-                            xmin  = lon-DELTA*4
-                            xmax  = lon+DELTA*4
-                            ymin  = lat-DELTA*2
-                            ymax  = lat+DELTA*2
-                            table = 'popup_table_liens'
-
-                            if (context_menu !== null){
-                                context_menu.remove()
-                            }
-                            context_menu = new maplibregl.Popup({anchor:'top-left'})
-                                            .setLngLat(e.lngLat)
-                                            .setHTML('<div id="contenu_popup_context">')
-                                            .addTo(map);
-
-                            $('#contenu_popup_context')
-                                    .append($('<h2>').text(nom_commune))
-                            if ($('#input_insee')[0].value != code_insee){
-                                $('#contenu_popup_context')
-                                    .append($('<div class="item_context_menu">').text('Charger la commune').click(function(){
-                                        $('#input_insee')[0].value = code_insee
-                                        reset_panneau_map();
-                                        requete_pifometre();
-                                    }))
-                            }
-                            $('#contenu_popup_context').append($('<hr>'))
-                                                       .append($('<a>').attr('target','blank')
-                                                                       .attr('href','./liste_brute_fantoir.html?insee='+code_insee)
-                                                                       .append($('<div class="item_context_menu">').text('Topo')))
-                                                       .append($('<a>').attr('target','blank')
-                                                                       .attr('href','index.html?insee='+code_insee)
-                                                                       .append($('<div class="item_context_menu">').text('Pifomètre')))
-
-                                                       .append($('<hr>'))
-                                                       .append($('<a>').attr('target','blank')
-                                                                       .attr('href','http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon)
-                                                                       .append($('<div class="item_context_menu">').text('Éditer sur ID')))
-                                                       .append($('<div class="item_context_menu">').text('Éditer sur JOSM')
-                                                                                                   .click(function(){
-                                                                srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xmin+'&right='+xmax+'&top='+ymax+'&bottom='+ymin+'&changeset_tags='+get_changeset_tags_noms(code_insee,nom_commune);
-                                                                $('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
-                                                                $(this).addClass('clicked');
-                                                                })
-                                                        )
-                    })
-                }
-            })
+            add_context_menu()
         }
 
         //-----------------------------------------------

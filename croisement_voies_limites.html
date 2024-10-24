@@ -62,6 +62,8 @@
         function map_setup(){
             map.addControl(new maplibregl.NavigationControl());
             interactions_souris('highway_transparent')
+            //---------------- CLIC DROIT -------------------
+            add_context_menu()
         }
         function reset_panneau_map(){
             $('#panneau_map h2').empty()
