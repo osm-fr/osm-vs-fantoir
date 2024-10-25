@@ -148,6 +148,14 @@
                 });
             }
         }
+        function bilto(casaque_debut,casaque_fin){
+            $.ajax({
+                url: "bilto.py?debut="+casaque_debut+"&fin="+casaque_fin
+            })
+            .done(function( bbox_diagonale ) {
+                map.fitBounds(bbox_diagonale.coordinates)
+            })
+        }
     </script>
 </body>
 </html>
