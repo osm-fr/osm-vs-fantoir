@@ -8,8 +8,7 @@ r
 AS
 (SELECT ST_AsGeoJSON(ST_BoundingDiagonal(geometrie_osm)) json_bounds,
         ST_Distance(point_debut_3857,geometrie_3857)::integer dd,
-        ST_Distance(point_fin_3857,geometrie_3857)::integer df,
-        ST_Y(geometrie)::text||'/'||ST_X(geometrie)::text latlon
+        ST_Distance(point_fin_3857,geometrie_3857)::integer df
 FROM    croisement_voies_limites c
 JOIN    single
 USING   (osm_id)
