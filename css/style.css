@@ -239,13 +239,18 @@ hr {
 .navigation h1 a {
 	display:block;
 	padding: 5px 10px 5px 20px;
-	margin-bottom: 5px;
+	margin: 3px 0;
 	text-decoration: none;
 	transition: all .1s ease;
 }
 
 .navigation h1 a:hover {
 	background: #B1DE89;
+}
+.navigation hr {
+	width: 95%;
+	margin-top: 0;
+	margin-bottom: 0;
 }
 
 /*En-tête pages récemment consultées*/
