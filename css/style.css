@@ -13,7 +13,12 @@ body{
     margin: 0;
     padding: 0;
 }
-
+.only_desktop {
+	display: initial;
+}
+.only_mobile {
+	display: none;
+}
 button {
 	border: none;
 	background: transparent;
@@ -24,6 +29,9 @@ h1 {
 	margin: 0;
 	font-size: 1.8em;
 }
+#descriptif h1 {
+	margin-top:5px;
+}
 h2 {
 	font-size: 1.4em;
 	line-height: 0.5em;
@@ -33,6 +41,9 @@ h2 {
 }
 h3 {
 	font-size: 0.9em;
+}
+#descriptif h3 {
+	margin: 10px 0;
 }
 h4 {
 	font-size: 0.9em;
@@ -63,6 +74,9 @@ hr {
 #aide_contenu {
 	margin: 50px 2% 0 2%;
 	font-size: 0.9em;
+}
+#aide_contenu h1 {
+	margin:10px 0;
 }
 #aide_contenu h2 {
 	font-size: 1.6em;
@@ -97,13 +111,27 @@ hr {
 /*---------------                                                       ---------------*/
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
-.bloc_fiche {
-	width: 30%;
-	margin: 10px 0;
-	padding:5px;
-	background-color: #FAFF99;
-	border-radius: 20px;
+.encadre_aide {
+	background: url("../img/info.png") no-repeat #FCFFC4 left 5px top 50%;
+	background-size: 15px;
+	padding: 3px 0 3px 30px;
+	border-radius: 5px;
+	width: 50%;
+	font-size: 0.9em;
+	box-shadow: 3px 2px 2px whitesmoke;
 }
+.encadre_aide a {
+	text-decoration: none;
+	font-weight: bold;
+}
+.bloc_fiche {
+	width: 50%;
+	margin: 20px 0;
+	padding:5px 5px 5px 15px;
+	border-radius: 15px;
+}
+.bloc_fiche.b1 {background-color: #FCFFB9; /*jaune clair*/}
+.bloc_fiche.b2 {background-color: #D3FFB9; /*vert clair*/}
 #aide_contenu .bloc_fiche h2{
 	font-size: 1.2em;
 }
@@ -365,7 +393,7 @@ hr {
     border-bottom: 2px salmon solid;
     border-radius: 6px;
 }
-#bouton_aleatoire {
+#bouton_aleatoire, #bouton_aleatoire_vert_vert, #bouton_aleatoire_vert_rouge, #bouton_aleatoire_rouge_rouge {
 	cursor: pointer;
 	position: fixed;
 	top: 40px;
@@ -376,6 +404,22 @@ hr {
 	height: 40px;
 	border-bottom: 2px #8E68D7 solid; /*gris*/
 	border-radius: 6px;
+}
+
+#bouton_aleatoire_vert_vert {
+	right: 215px;
+	background: url("../img/des_vert_vert.png") #E0D5F4 no-repeat center;
+	background-size: 37px;
+}
+#bouton_aleatoire_vert_rouge {
+	right: 165px;
+	background: url("../img/des_rouge_vert.png") #E0D5F4 no-repeat center;
+	background-size: 37px;
+}
+#bouton_aleatoire_rouge_rouge {
+	right: 115px;
+	background: url("../img/des_rouge_rouge.png") #E0D5F4 no-repeat center;
+	background-size: 37px;
 }
 
 #bouton_export_csv{
@@ -702,6 +746,56 @@ hr {
 	margin-left: 5px;
 }
 
+/*--- Pifodrome ---*/
+#pifostats.pifodrome {
+	width:30%;
+	top:90px;
+	height: 85px;
+}
+#pifostats.pifodrome span {
+	font-weight: bold;
+	font-size: unset;
+}
+#pifostats p {
+	margin-left: 10px;
+	font-size: 0.8em;
+	line-height: 1em;
+}
+
+#stats_contenu.bien {
+	background: url("../img/cheval_endroit.png") no-repeat top 0 right 10px;
+}
+#stats_contenu.nul {
+	background: url("../img/cheval_envers.png") no-repeat top 0 right 10px;
+}
+#stats_contenu.stagne {
+	background: url("../img/cheval_arret.png") no-repeat top 0 right 10px;
+}
+#stats_contenu.bien, #stats_contenu.nul, #stats_contenu.stagne {
+	background-size: 50px;
+}
+#cheval_bien {
+	background: url("../img/ca_descend.png") no-repeat top 0 left 0;
+	background-size: 30px;
+	height: 35px;
+	vertical-align: middle;
+	padding:8px 0 0 40px;
+}
+#cheval_nul {
+	background: url("../img/ca_monte.png") no-repeat top 0 left 0;
+	background-size: 30px;
+	height: 35px;
+	vertical-align: middle;
+	padding:8px 0 0 40px;
+}
+#cheval_stagne {
+	background: url("../img/ca_stagne.png") no-repeat top 0 left 0;
+	background-size: 30px;
+	height: 35px;
+	vertical-align: middle;
+	padding:8px 0 0 40px;
+}
+
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
 /*---------------                                                       ---------------*/
@@ -893,7 +987,8 @@ hr {
 	color:black;
 }
 
-#legende.pifomap {
+#legende.pifomap, #legende.pifodrome {
+	z-index: 5;
 	position:fixed;
 	top:40px;
 	right:10px;
@@ -909,7 +1004,17 @@ hr {
 	font-size: 0.9em;
 }
 
-#legende.pifomap .fermer {
+#legende.pifodrome {
+	height:40%;	
+}
+
+#legende.pifodrome img {
+	vertical-align: middle;
+	width:30px;
+	padding-right: 10px;	
+}
+
+#legende.pifomap .fermer, #legende.pifodrome .fermer {
 	color: black;
 	float: right;
 	margin-top: 10px;
@@ -1464,7 +1569,7 @@ span.remontee_suppr_numero {
 	margin-top:265px;
 	height: 65%;
 }
-#reponse.pifomap{
+#reponse.pifomap, #reponse.voies_a_cheval{
 	margin-top:200px;
 	height:calc(100vh - 200px);
 }
