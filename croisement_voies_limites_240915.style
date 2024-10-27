@@ -206,6 +206,7 @@
                 "text-field": "==",
                 "text-rotate": ["+",["get","degres"],90],
                 "text-justify": "auto",
+                "text-overlap":"always",
                 "text-size": ["interpolate",
                         ["linear"],
                         ["zoom"],
