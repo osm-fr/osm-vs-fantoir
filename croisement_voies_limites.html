@@ -7,9 +7,9 @@
     <script src="js/jquery-3.6.4.min.js"></script>
     <script src="js/fonctions.js"></script>
     <script defer src="js/menu.js"></script>
-    <script src='https://unpkg.com/maplibre-gl@3.2.1/dist/maplibre-gl.js'></script>
+    <script src='https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js'></script>
     <link rel="preload" href="css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@3.2.1/dist/maplibre-gl.css' />
+    <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css' />
     <link rel="stylesheet" href="css/style.css" type="text/css"/>
     <link rel="stylesheet" href="css/responsive.css" type="text/css"/>
 </head>
@@ -120,6 +120,13 @@
         $('#bouton_fond_carte').click(function(){
             bascule_fond_raster();
         })
+        $('#bouton_localise_moi').click(function(){
+                                $('body').css('cursor','progress');
+                                $('#wait_ajax').empty()
+                                               .css('visibility','visible')
+                                               .append($('<span>').append('Localisation en cours...'));
+                                getLocation();
+                            })
 
         function map_setup(){
             map.addControl(new maplibregl.NavigationControl());
@@ -238,9 +245,22 @@
             })
         }
 
-        //Localise-moi
-
-   
+        function localise_moi(position){
+            $.ajax({
+                url: "insee_from_coords.py?lat="+position.coords.latitude+"&lon="+position.coords.longitude
+            })
+            .done(function( data ) {
+                $('#wait_ajax').empty()
+                               .css('visibility','visible')
+                 .append($('<span>').append('Atterrissage en cours...'));
+                bbox_diagonale = data[0][2]
+                map.fitBounds(bbox_diagonale.coordinates, {padding: 0})
+                map.on('moveend', () => {
+                    $('#wait_ajax').empty()
+                               .css('visibility','hidden')
+                });
+            })
+        }
     </script>
 </body>
 </html>
