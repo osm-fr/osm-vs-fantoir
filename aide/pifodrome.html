@@ -1,0 +1,46 @@
+	<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Comment corriger les voies à cheval ?</title>
+	<script src="../js/jquery-3.6.4.min.js"></script>
+	<script src="../js/fonctions.js"></script>
+	<script defer src="../js/menu.js"></script>
+	<link rel="preload" href="../css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="stylesheet" href="../css/style.css" type="text/css"/>
+	<link rel="stylesheet" href="../css/responsive.css" type="text/css"/>
+</head>
+<body>
+	<header>
+		<!--#include virtual="../includes/menu.html" -->
+	</header>
+
+<div id="aide_contenu">
+	<h1>Comment corriger les voies à cheval ?</h1>
+     <div class="encadre_aide only_mobile">NB : La carte des voies à cheval n'est pas adaptée à un usage mobile.</a></div>
+	<div class="bloc_fiche b1">
+		<h2>C'est quoi, une voie à cheval ?</h2>
+		<p>C'est une route ou une rue nommée (avec un tag <span class="monospace">name</span> sur OSM) croisant au moins une limite administrative, donc débordant sur au moins 2 communes.</p>
+	</div>
+	<div class="bloc_fiche b2">
+		<h2>Pourquoi ça pose problème ?</h2>
+		<p>Souvent, le nom attribué est bien celui de la voie dans une commune A, mais il a été tagué sur un tronçon trop long qui déborde sur une commune B. Or, il y a de fortes chances pour que cette voie porte un nom différent dans la commune B.</p>
+		<p>Parfois, le <span class="monospace">name</span> identique est justifié des deux côtés de la frontière : quand les deux communes ont effectivement choisi le même nom, ou pour les noms d'autoroutes par exemple ("Autoroute du Soleil"...).</p>
+		<p>Mais dans tous les cas, <strong>il est toujours utile et important de couper la voie au niveau de toutes les limites administratives qu'elle traverse</strong>. Cela permet par exemple de pouvoir exporter le plan d'une ville avec des voies qui s'arrêtent bien aux frontières.</p>
+	</div>
+	<div class="bloc_fiche b1">
+		<h2>Que faire ?</h2>
+		<p><strong>Couper la voie</strong></p>
+		<p>Dans tous les cas, il faut couper la voie quand elle traverse une limite administratives. Dans votre éditeur  préféré (ID, JOSM...), ajoutez un noeud à l'intersection entre la voie et la frontière.</p>
+		<p><strong>Vérifier les noms</strong></p>
+		<p>Utilisez la page Pifomètre, la carte Pifomap ou le fichier Topo de la commune pour vérifier si le nom de la voie à cheval est bien référencé parmi les voies de la commune A, et celles de la commune B.</p>
+	</div>
+</div>
+
+</div>
+    <footer>
+		<!--#include virtual="../includes/footer.html" -->
+    </footer>
+</body>
+</html>

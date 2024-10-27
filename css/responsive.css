@@ -135,6 +135,8 @@
 /*-----------------------------------------------------------------------*/
 
 @media only screen and (max-width: 600px) {
+    .only_mobile {display: initial;}
+    .only_desktop {display: none;}
     .navigation {
         left:-112%;
         width: 100%;
@@ -164,12 +166,23 @@
         width: 30px;
         height: 30px;
     }
+    #bouton_aleatoire_vert_vert, #bouton_aleatoire_vert_rouge, #bouton_aleatoire_rouge_rouge {
+        top: 15px;
+        background-size: 25px;
+        width: 30px;
+        height: 30px;
+    }
+    #bouton_aleatoire_rouge_rouge {right:45px;}
+    #bouton_aleatoire_vert_rouge {right:80px;}
+    #bouton_aleatoire_vert_vert {right:115px;}
     #recentrer_commune {margin-left:10px; width: 30px; height: 30px;}
     #barre-jaune input[type="text"] {width: 50px;}
     #bandeau {height: 110px;}
     #bandeau #descriptif {width: 100%;}
     #bandeau #descriptif #infos_commune_col1, #bandeau #descriptif #infos_commune_col2 {margin:4px 0;}
     #descriptif.pifo #infos_commune_col2 h1 {margin: 0; font-size: 0.9em;}
+    .encadre_aide {width:88%; padding-left: 25px; font-size: 0.85em}
+    .bloc_fiche {width: 92%;}
     #filtre_lieuxdits_mobile {
         display:block;
         cursor: pointer;
@@ -182,7 +195,8 @@
         border-bottom: 1px peru solid;
         border-radius: 6px;       
     }
-    #reponse.pifomap{margin-top: 160px;}
+    #reponse.pifomap{margin-top: 160px;} 
+    #reponse.voies_a_cheval{margin-top:240px;}
     #reponse #map_div {
         margin:0;
         border:none;

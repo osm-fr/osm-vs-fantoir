@@ -3,7 +3,7 @@
 <head>
     <meta charset='utf-8'>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rues et routes nommées croisant des limites administratives</title>
+    <title>Pifodrome - Voies à cheval sur des limites administratives</title>
     <script src="js/jquery-3.6.4.min.js"></script>
     <script src="js/fonctions.js"></script>
     <script defer src="js/menu.js"></script>
@@ -19,8 +19,41 @@
         <!--#include file="includes/menu.html" -->
     </header>
     <div id="barre-jaune"></div>
-    <div id="bandeau"></div>
-    <div id="reponse" class="pifomap">
+    <div id="bandeau">
+
+        <div id="wait_ajax" class="pifomap"></div>
+        <div id="wait_ajax_mobile" class="pifomap"></div>
+        <button id="bouton_localise_moi" title="Centrer sur la commune où je me trouve"></button>
+        <button id="bouton_aleatoire_vert_vert" title="Une commune au pif"></button>
+        <button id="bouton_aleatoire_vert_rouge" title="Une commune au pif"></button>
+        <button id="bouton_aleatoire_rouge_rouge" title="Une commune au pif"></button>
+        <div id="bouton_legende"><p>Légende</p></div>
+
+        <div id="pifostats" class="pifodrome">
+            <div><h3>Progression</h3></div>
+            <div id="stats_contenu">
+                <p>Aujourd'hui, il y a <span id="stat_now"></span> voies à cheval. La semaine dernière, il y en avait <span id="stat_previous"></span>.</p>
+            </div>
+        </div>
+
+        <div id="descriptif">
+            <h1>Pifodrome : la carte des voies à cheval</h1>
+            <h3>Cette carte montre toutes les routes et rues nommées (ayant un tag <span class="monospace">name</span>) croisant au moins une limite administrative<span class="only_desktop">, donc débordant sur au moins 2 communes. Il faudrait couper la voie au niveau de la frontière, et vérifier son nom de chaque côté</span>.</h3>
+            <div class="encadre_aide only_mobile">La carte des voies à cheval n'est pas adaptée à un usage mobile.</a></div>
+            <div class="encadre_aide"><a href="aide/pifodrome.html" target="_blank">Aide : Comment corriger les voies à cheval ?</a></div>
+        </div>
+    </div>
+
+    <div id="legende" class="pifodrome">
+        <div class="fermer">X</div>
+        <h3>Légende :</h3>
+        <p><img src="img/aide/vac_rond_vert.png"/><strong>Rond vert</strong> : extrémité dans une commune où la voie est rapprochée (son nom existe dans le fichier Topo ou la BAN de la commune)</p>
+        <p><img src="img/aide/vac_rond_rouge.png"/><strong>Rond rouge</strong> : extrémité dans une commune où la voie n'est pas rapprochée</p>
+        <p><img src="img/aide/vac_limite.png"/><strong>Frontière</strong> : marque un franchissement de limite administrative</p>
+        <div class="encadre_aide"><a href="aide/pifodrome.html" target="_blank">Aide : Comment corriger les voies à cheval ?</a></div>
+    </div>
+
+    <div id="reponse" class="voies_a_cheval">
         <div id="panneau_map">
             <h2></h2> <!-- Nom voie -->
             <div id="contenu">
@@ -41,6 +74,35 @@
 
     <script>
         update_menu_visits()
+
+        $('#pifostats').css('visibility','visible');
+
+        function voies_a_cheval_stats(){
+            $.ajax({
+                url: "voies_a_cheval_stats.py"
+            })
+            .done(function( data ) {
+                stat_now = data[0][2]
+                stat_previousweek = data[1][2]
+
+                $('#stat_now').text(stat_now)
+                $('#stat_previous').text(stat_previousweek)
+
+                if(stat_now-stat_previousweek>=10) {
+                    $('#pifostats #stats_contenu').addClass('nul')
+                    $('#pifostats #stats_contenu').append($('<p id="cheval_nul">').text('Ca va dans le mauvais sens ! Il va falloir jouer de la cravache.'))
+                }
+                else if (stat_now-stat_previousweek<=-10) {
+                    $('#pifostats #stats_contenu').addClass('bien')
+                    $('#pifostats #stats_contenu').append($('<p id="cheval_bien">').text('Ca va dans le bon sens ! Beau travail.'))
+                }
+                else {
+                    $('#pifostats #stats_contenu').addClass('stagne')
+                    $('#pifostats #stats_contenu').append($('<p id="cheval_stagne">').text('Ca stagne.'))
+                }
+            })
+        }
+        voies_a_cheval_stats();
 
         const map = new maplibregl.Map({
             container: 'map_div',
@@ -148,6 +210,25 @@
                 });
             }
         }
+
+        //Légende
+        $('#bouton_legende').click(function(){
+            $('#legende').css('visibility','visible');
+        })
+        $('#legende > .fermer').click(function(){
+            $('#legende').css('visibility','hidden');
+        })
+
+        //Commune au pif
+        $('#bouton_aleatoire_vert_vert').click(function(){
+            bilto('vert','vert')
+        })
+        $('#bouton_aleatoire_vert_rouge').click(function(){
+            bilto('vert','rouge')
+        })
+        $('#bouton_aleatoire_rouge_rouge').click(function(){
+            bilto('rouge','rouge')
+        })
         function bilto(casaque_debut,casaque_fin){
             $.ajax({
                 url: "bilto.py?debut="+casaque_debut+"&fin="+casaque_fin
@@ -156,6 +237,10 @@
                 map.fitBounds(bbox_diagonale.coordinates)
             })
         }
+
+        //Localise-moi
+
+   
     </script>
 </body>
 </html>
