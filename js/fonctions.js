@@ -188,7 +188,12 @@
         return "source=https://bano.openstreetmap.fr/pifometre/index.html?insee="+code_insee+"%7Chashtags=%23BANO %23Pifometre%7Ccomment=Intégration de noms de voies et lieux-dits - "+nom_commune+" ("+code_insee+")"
     }
     function get_changeset_tags_croisement(x,y,commune1,insee1,commune2,insee2){
-        return "source=https://bano.openstreetmap.fr/pifometre/croisement_voies_limites.html%23map=15/"+y+"/"+x+"%7Chashtags=%23BANO %23Pifometre%7Ccomment=Correction des rues et routes à cheval entre "+commune1+" ("+insee1+" ) et "+commune2+" ("+insee2+")"
+        if (commune2 != undefined && insee2 != undefined){
+            comment = "Correction des rues et routes à cheval entre "+commune1+" ("+insee1+" ) et "+commune2+" ("+insee2+")"
+        } else {
+            comment = "Correction des rues et routes à cheval vers "+commune1+" ("+insee1+" )"
+        }
+        return "source=https://bano.openstreetmap.fr/pifometre/pifodrome.html%23map=15/"+y+"/"+x+"%7Chashtags=%23BANO %23Pifometre%7Ccomment="+comment
     }
     function check_josm_remote_control(){
         $.ajax({
@@ -334,6 +339,19 @@
                                                                    .attr('href','pifomap.html?insee='+code_insee+'#map=17/'+lat+'/'+lon)
                                                                    .append($('<div class="item_context_menu">').text('Pifomap')))
                         }
+
+                        // Tags de changeset selon la page
+                        if (page == 'pifodrome.html'){
+                            changeset_tags = get_changeset_tags_croisement(lon,lat,nom_commune,code_insee)
+                        } else {
+                            changeset_tags = get_changeset_tags_noms(code_insee,nom_commune)
+                        }
+                        // Historique de visite au clic uniquement si Pifodrome
+                        if (page == 'pifodrome.html'){
+                            update_storage_visits(nom_commune,-9999,'Pifodrome',window.location.href.split('#')[0].split('?')[0].split('/').pop(),'noparam',location.hash)
+                            update_menu_visits()
+                        }
+
                         $('#contenu_popup_context').append($('<hr>'))
                                                    .append($('<a>').attr('target','blank')
                                                                    .attr('href','./liste_brute_fantoir.html?insee='+code_insee)
@@ -348,7 +366,7 @@
                                                                    .append($('<div class="item_context_menu">').text('Éditer sur ID')))
                                                    .append($('<div class="item_context_menu">').text('Éditer sur JOSM')
                                                                                                .click(function(){
-                                                            srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xmin+'&right='+xmax+'&top='+ymax+'&bottom='+ymin+'&changeset_tags='+get_changeset_tags_noms(code_insee,nom_commune);
+                                                            srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xmin+'&right='+xmax+'&top='+ymax+'&bottom='+ymin+'&changeset_tags='+changeset_tags;
                                                             $('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
                                                             $(this).addClass('clicked');
                                                             })
@@ -971,8 +989,8 @@
             console.log("Pas de geolocalisation disponible");
         }
     }
-    function update_storage_visits(name,code,type,page,parametre){
-        const v = {nom:name,code:code,type:type,page:page,parametre:parametre}
+    function update_storage_visits(name,code,type,page,parametre,hash){
+        const v = {nom:name,code:code,type:type,page:page,parametre:parametre,hash:hash}
         if (localStorage.visits == undefined){
             localStorage.setItem('visits',JSON.stringify([v]))
         }
@@ -996,7 +1014,15 @@
         $('#menu_recent #liens').empty()
         visits = JSON.parse(localStorage.visits)
         for (i=0;i<visits.length;i++){
-            $('#menu_recent #liens').append($('<h2>').append($('<a>').attr('href',visits[i].page+'?'+visits[i].parametre+'='+visits[i].code).append(visits[i].nom+' - '+visits[i].type)))
+            search = ''
+            hash = ''
+            if (visits[i].code != '-9999'){
+                search = '?'+visits[i].parametre+'='+visits[i].code
+            }
+            if (visits[i].hash != undefined){
+                hash = visits[i].hash
+            }
+            $('#menu_recent #liens').append($('<h2>').append($('<a>').attr('href',visits[i].page+search+hash).append(visits[i].nom+' - '+visits[i].type)))
         }
 
     }
