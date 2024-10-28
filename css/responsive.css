@@ -69,6 +69,10 @@
     #infos_commune_col1 {
         font-size: 0.8em;
     }
+    .bloc_fiche {
+        width: 92%;
+        margin: 2%
+    }
 }
 
 @media only screen and (max-width: 1120px) {
@@ -182,7 +186,10 @@
     #bandeau #descriptif #infos_commune_col1, #bandeau #descriptif #infos_commune_col2 {margin:4px 0;}
     #descriptif.pifo #infos_commune_col2 h1 {margin: 0; font-size: 0.9em;}
     .encadre_aide {width:88%; padding-left: 25px; font-size: 0.85em}
-    .bloc_fiche {width: 92%;}
+    .bloc_fiche {
+        width: 92%;
+        margin: 2%
+    }
     #filtre_lieuxdits_mobile {
         display:block;
         cursor: pointer;
