@@ -30,9 +30,9 @@
         <div id="bouton_legende"><p>Légende</p></div>
 
         <div id="pifostats" class="pifodrome">
-            <div><h3>Progression</h3></div>
+            <h3>Progression</h3>
             <div id="stats_contenu">
-                <p>Aujourd'hui, il y a <span id="stat_now"></span> voies à cheval. La semaine dernière, il y en avait <span id="stat_previous"></span>.</p>
+                <p>Aujourd'hui, il y a <span id="stat_now"></span> voies à cheval.</p>
             </div>
         </div>
 
@@ -77,32 +77,40 @@
 
         $('#pifostats').css('visibility','visible');
 
-        function voies_a_cheval_stats(){
-            $.ajax({
-                url: "voies_a_cheval_stats.py"
-            })
-            .done(function( data ) {
-                stat_now = data[0][2]
-                stat_previousweek = data[1][2]
+        $.ajax({
+            url: "pifodrome_avancement.py"
+        })
+        .done(function( data ) {
+            stat_now = data[0][2]
+            stat_previousday = data[1][2]
+            stat_previousweek = data[2][2]
 
-                $('#stat_now').text(stat_now)
-                $('#stat_previous').text(stat_previousweek)
+            $('#pifostats #stats_contenu #stat_now').text(stat_now);
 
-                if(stat_now-stat_previousweek>=10) {
-                    $('#pifostats #stats_contenu').addClass('nul')
-                    $('#pifostats #stats_contenu').append($('<p id="cheval_nul">').text('Ca va dans le mauvais sens ! Il va falloir jouer de la cravache.'))
-                }
-                else if (stat_now-stat_previousweek<=-10) {
-                    $('#pifostats #stats_contenu').addClass('bien')
-                    $('#pifostats #stats_contenu').append($('<p id="cheval_bien">').text('Ca va dans le bon sens ! Beau travail.'))
-                }
-                else {
-                    $('#pifostats #stats_contenu').addClass('stagne')
-                    $('#pifostats #stats_contenu').append($('<p id="cheval_stagne">').text('Ca stagne.'))
-                }
-            })
-        }
-        voies_a_cheval_stats();
+            //Commentaire avancement jour
+            if(stat_now-stat_previousday>0) {
+                $('#pifostats #stats_contenu').append($('<p class="avancement_jour monte">').text('Hier, il y en avait ').append($('<span class="stat_previous">').append(stat_previousday)).append('.'))
+            }
+            else if (stat_now-stat_previousday<0) {
+                $('#pifostats #stats_contenu').append($('<p class="avancement_jour baisse">').append('Hier, il y en avait ').append($('<span class="stat_previous">').append(stat_previousday)).append('.'))
+            }
+            else {
+                $('#pifostats #stats_contenu').append($('<p class="avancement_jour stagne">').append('Hier, il y en avait ').append($('<span class="stat_previous">').append(stat_previousday)).append('.'))
+            }
+            //Commentaire avancement semaine
+            if(stat_now-stat_previousweek>=10) {
+                $('#pifostats #stats_contenu').addClass('nul')
+                $('#pifostats #stats_contenu').append($('<p class="avancement_semaine monte">').append('La semaine dernière, il y en avait ').append($('<span class="stat_previous">').append(stat_previousweek)).append('. Ca va dans le mauvais sens !'))
+            }
+            else if (stat_now-stat_previousweek<=-10) {
+                $('#pifostats #stats_contenu').addClass('bien')
+                $('#pifostats #stats_contenu').append($('<p class="avancement_semaine baisse">').append('La semaine dernière, il y en avait ').append($('<span class="stat_previous">').append(stat_previousweek)).append('. On avance !'))
+            }
+            else {
+                $('#pifostats #stats_contenu').addClass('stagne')
+                $('#pifostats #stats_contenu').append($('<p class="avancement_semaine stagne">').append('La semaine dernière, il y en avait ').append($('<span class="stat_previous">').append(stat_previousweek)).append('. Ca stagne.'))
+            }
+        })
 
         const map = new maplibregl.Map({
             container: 'map_div',

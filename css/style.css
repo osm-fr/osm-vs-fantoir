@@ -776,9 +776,10 @@ hr {
 #pifostats p {
 	margin: 0.5em 0 0 10px;
 	font-size: 0.8em;
-	line-height: 1.3em;
+	line-height: 1.1em;
 }
 
+/* Picto cheval pour qualifier avancement global */
 #stats_contenu.bien {
 	background: url("../img/cheval_endroit.png") no-repeat top 0 right 10px;
 }
@@ -792,21 +793,21 @@ hr {
 	padding-right: 50px;
 	background-size: 50px;
 }
-
-#cheval_bien {
+/* Courbes qui montent et descendent pour avancement jour et semaine */
+#stats_contenu .baisse {
 	background: url("../img/ca_descend.png") no-repeat top 0 left 0;
 }
-#cheval_nul {
+#stats_contenu .monte {
 	background: url("../img/ca_monte.png") no-repeat top 0 left 0;
 }
-#cheval_stagne {
+#stats_contenu .stagne {
 	background: url("../img/ca_stagne.png") no-repeat top 0 left 0;
 }
-#cheval_bien, #cheval_nul, #cheval_stagne {
-	padding-left: 40px;
+#stats_contenu .monte, #stats_contenu .baisse, #stats_contenu .stagne {
+	padding-left: 30px;
 	vertical-align: middle;
-	height: 35px;
-	background-size: 30px;
+	height: 18px;
+	background-size: 25px;
 }
 
 /*-------------------------------------------------------------------------------------*/

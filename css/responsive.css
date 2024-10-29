@@ -5,14 +5,15 @@
     #reponse.pifo {height: 60%;}
     .tablesorter-default {font-size: 0.9em;}
     .barre_noms_tous, .barre_noms_avec_adresses_tous, .barre_adresses_tous {width:35%;}
+    #pifostats.pifodrome h3 {font-size: 0.8em}
+    #stats_contenu .monte, #stats_contenu .baisse, #stats_contenu .stagne {padding-left: 30px; background-size: 20px;}
+    #pifostats.pifodrome p {font-size: 0.75em;  margin: 0.4em 0 0 10px;}
 }
 
 @media only screen and (max-width: 1600px) {
     #descriptif h1 {font-size: 1.5em;}
     #infos_commune_col2 {max-width: 370px;}
     #stats_contenu.bien, #stats_contenu.nul, #stats_contenu.stagne {padding-right: 40px; background-size: 40px;}
-    #cheval_bien, #cheval_nul, #cheval_stagne {padding-left: 30px; background-size: 25px;
-}
 }
 
 @media only screen and (max-width: 1500px) {
@@ -27,7 +28,6 @@
     #infos_commune_col1 {font-size: 0.9em;}
     #infos_commune_col2 {max-width: 340px;}
     .barre_noms, .barre_noms_avec_adresses, .barre_adresses {margin:4px 5px;}
-    #pifostats p {font-size: 0.75em;}
 }
 
 @media only screen and (max-width: 1400px) {
