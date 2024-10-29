@@ -6,4 +6,4 @@ import json
 from sql import sql_get_data
 
 print("Content-Type: application/json\n")
-print(json.JSONEncoder().encode(sql_get_data('voies_a_cheval_stats',dict())))
+print(json.JSONEncoder().encode(sql_get_data('pifodrome_avancement',dict())))
