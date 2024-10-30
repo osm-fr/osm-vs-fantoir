@@ -63,7 +63,7 @@
             </div>
         </div>
         <div id="map_div">
-            <button id="bouton_fond_carte" title="Changer le fond de carte"></button>
+            <!-- <button id="bouton_fond_carte" title="Changer le fond de carte"></button> -->
         </div>
     </div>
 
@@ -115,9 +115,10 @@
         const map = new maplibregl.Map({
             container: 'map_div',
             style:
-                'croisement_voies_limites_240915.style',
+                'pifodrome_241030.style',
             center: [4, 46],
             zoom: 5,
+            maxZoom: 19,
             hash: 'map',
         });
         map.on('load', () => {
@@ -125,9 +126,9 @@
         });
 
         //Bouton changement fond
-        $('#bouton_fond_carte').click(function(){
-            bascule_fond_raster();
-        })
+        // $('#bouton_fond_carte').click(function(){
+        //     bascule_fond_raster();
+        // })
         $('#bouton_localise_moi').click(function(){
                                 $('body').css('cursor','progress');
                                 $('#wait_ajax').empty()

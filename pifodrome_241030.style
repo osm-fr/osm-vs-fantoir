@@ -26,7 +26,7 @@
             "type": "raster",
             "source": "OSM-standard-tiles",
             "minzoom": 0,
-            "maxzoom": 22
+            "maxzoom": 19
         },
         {
             "id": "highway_detourage",
