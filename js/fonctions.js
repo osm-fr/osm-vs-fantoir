@@ -1011,18 +1011,19 @@
         localStorage.setItem('visits',JSON.stringify(visits))
     }
     function update_menu_visits(){
-        $('#menu_recent #liens').empty()
-        visits = JSON.parse(localStorage.visits)
-        for (i=0;i<visits.length;i++){
-            search = ''
-            hash = ''
-            if (visits[i].code != '-9999'){
-                search = '?'+visits[i].parametre+'='+visits[i].code
+        if (localStorage.visits != undefined){
+            $('#menu_recent #liens').empty()
+            visits = JSON.parse(localStorage.visits)
+            for (i=0;i<visits.length;i++){
+                search = ''
+                hash = ''
+                if (visits[i].code != '-9999'){
+                    search = '?'+visits[i].parametre+'='+visits[i].code
+                }
+                if (visits[i].hash != undefined){
+                    hash = visits[i].hash
+                }
+                $('#menu_recent #liens').append($('<h2>').append($('<a>').attr('href',visits[i].page+search+hash).append(visits[i].nom+' - '+visits[i].type)))
             }
-            if (visits[i].hash != undefined){
-                hash = visits[i].hash
-            }
-            $('#menu_recent #liens').append($('<h2>').append($('<a>').attr('href',visits[i].page+search+hash).append(visits[i].nom+' - '+visits[i].type)))
         }
-
     }
