@@ -1007,7 +1007,7 @@ hr {
 	top:40px;
 	right:10px;
 	width:400px;
-	height:80%;
+	height:85%;
 	padding: 10px;
 	border-radius: 8px;
 	border:1px solid #FA9D64;
@@ -1103,6 +1103,9 @@ hr {
 }
 #legende.pifomap p .point.osm_seulement {
 	background-color: blue;
+}
+#legende.pifomap p .point.non_rapproche {
+	background-color: red;
 }
 
 /* Intégration gradient */
