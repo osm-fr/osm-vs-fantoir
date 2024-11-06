@@ -48,9 +48,9 @@ $pgsql_BANO --csv -t -c "SELECT last_value FROM osm2pgsql_line_uniqid_seq" > ${I
 
 touch ${LOCKFILE}
 
-# Département des communes où des modifs ont eu lieu dans planet_osm_line depuis la dernière passe
+# Département des communes où des modifs ont eu lieu dans osm2pgsql_line depuis la dernière passe
 $pgsql_BANO --csv -t -c "SELECT distinct dep
-                         FROM (SELECT way FROM planet_osm_line WHERE id >= ${lastindex}) l
+                         FROM (SELECT way FROM osm2pgsql_line WHERE id >= ${lastindex}) l
                                JOIN   polygones_insee p
                                ON     way && geometrie
                                JOIN   cog_commune c
@@ -68,7 +68,7 @@ echo `wc -l ${DEPTFILE}` "départements traités" >> ${LOGFILE}
 cd -
 
 # Suppression des faux positifs
-$pgsql_BANO -f sql/croisement_faux_positifs.sql
+$pgsql_BANO -f sql/pifodrome_petits_chevauchements.sql
 
 # Stats
 $pgsql_BANO -c "INSERT INTO stats_voies_a_cheval(nombre_cas_restant)
