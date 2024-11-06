@@ -12,7 +12,7 @@ pip install -qe .
 cd $SCRIPT_DIR
 
 LOCKFILE=${SCRIPT_DIR}/croisement.lock
-INDEXFILE=${SCRIPT_DIR}/imposm_line.index
+INDEXFILE=${SCRIPT_DIR}/osm2pgsql_line.index
 DEPTFILE=${SCRIPT_DIR}/depts_croisement.csv
 TILESFILE=${SCRIPT_DIR}/tiles_croisement.csv
 LOGFILE=${SCRIPT_DIR}/cron_croisement.log
@@ -35,7 +35,7 @@ fi
 # utile à l'initialisation
 if test ! -f ${INDEXFILE}
 then
-    $pgsql_BANO --csv -t -c "SELECT last_value - 1 FROM planet_osm_line_id_seq" > ${INDEXFILE}
+    $pgsql_BANO --csv -t -c "SELECT last_value - 1 FROM osm2pgsql_line_uniqid_seq" > ${INDEXFILE}
     echo ${pgsql_BANO}
 fi
 
@@ -44,7 +44,7 @@ lastindex=`cat ${INDEXFILE}`
 echo "last index : ${lastindex}" >> $LOGFILE
 
 # En prévision de la prochaine passe
-$pgsql_BANO --csv -t -c "SELECT last_value FROM planet_osm_line_id_seq" > ${INDEXFILE}
+$pgsql_BANO --csv -t -c "SELECT last_value FROM osm2pgsql_line_uniqid_seq" > ${INDEXFILE}
 
 touch ${LOCKFILE}
 
@@ -77,7 +77,7 @@ $pgsql_BANO -c "INSERT INTO stats_voies_a_cheval(nombre_cas_restant)
                 (SELECT nombre_cas_restant FROM stats_voies_a_cheval
                 ORDER BY epoch DESC LIMIT 1);"
 
-rm ${TILESFILE}
+rm -f ${TILESFILE}
 for zoom in {5..12}
 do
    psql -d bano -U cadastre --csv -t -c "SELECT ${zoom}||' '||
