@@ -50,7 +50,7 @@ touch ${LOCKFILE}
 
 # Département des communes où des modifs ont eu lieu dans osm2pgsql_line depuis la dernière passe
 $pgsql_BANO --csv -t -c "SELECT distinct dep
-                         FROM (SELECT way FROM osm2pgsql_line WHERE id >= ${lastindex}) l
+                         FROM (SELECT way FROM osm2pgsql_line WHERE uniqid >= ${lastindex}) l
                                JOIN   polygones_insee p
                                ON     way && geometrie
                                JOIN   cog_commune c
