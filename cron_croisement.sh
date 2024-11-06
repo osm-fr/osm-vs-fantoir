@@ -35,7 +35,7 @@ fi
 # utile à l'initialisation
 if test ! -f ${INDEXFILE}
 then
-    $pgsql_BANO --csv -t -c "SELECT last_value - 1 FROM planet_osm_line_id_seq" > ${INDEXFILE}
+    $pgsql_BANO --csv -t -c "SELECT last_value - 1 FROM osm2pgsql_line_uniqid_seq" > ${INDEXFILE}
     echo ${pgsql_BANO}
 fi
 
@@ -44,7 +44,7 @@ lastindex=`cat ${INDEXFILE}`
 echo "last index : ${lastindex}" >> $LOGFILE
 
 # En prévision de la prochaine passe
-$pgsql_BANO --csv -t -c "SELECT last_value FROM planet_osm_line_id_seq" > ${INDEXFILE}
+$pgsql_BANO --csv -t -c "SELECT last_value FROM osm2pgsql_line_uniqid_seq" > ${INDEXFILE}
 
 touch ${LOCKFILE}
 
