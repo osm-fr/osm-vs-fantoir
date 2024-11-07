@@ -30,13 +30,10 @@ html{box-sizing:border-box}
 body{
 	font-size:1em;
 	font-weight:400;
-	line-height:1.5;
 }
-
 body, #boutons-filtres * {
 	box-sizing: inherit;
 }
-
 
 /*
 *,*::before,*::after{box-sizing:inherit}

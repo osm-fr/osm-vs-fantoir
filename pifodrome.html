@@ -10,6 +10,8 @@
     <script src='https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js'></script>
     <link rel="preload" href="css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css' />
+    <link rel="stylesheet" href="css/bulma/bulma.min.css" type="text/css"/>
+    <link rel="stylesheet" href="css/bulma/main.min.css" type="text/css"/>
     <link rel="stylesheet" href="css/style.css" type="text/css"/>
     <link rel="stylesheet" href="css/responsive.css" type="text/css"/>
 </head>
@@ -21,18 +23,40 @@
     <div id="barre-jaune"></div>
     <div id="bandeau">
 
+        <!--Boutons tout en haut à droite-->
         <div id="wait_ajax" class="pifomap"></div>
         <div id="wait_ajax_mobile" class="pifomap"></div>
+        <div id="onglets" class="pifodrome">
+            <div id="bouton_pifostats"><p>Pifostats</p></div>
+            <div id="bouton_pifofiltres"><p>Filtres</p></div>
+        </div>
         <button id="bouton_localise_moi" title="Centrer sur la commune où je me trouve"></button>
         <button id="bouton_aleatoire_vert_vert" title="Une commune au pif"></button>
         <button id="bouton_aleatoire_vert_rouge" title="Une commune au pif"></button>
         <button id="bouton_aleatoire_rouge_rouge" title="Une commune au pif"></button>
         <div id="bouton_legende"><p>Légende</p></div>
 
+        <!-----------------------   Pifostats   ----------------------->
         <div id="pifostats" class="pifodrome">
             <h3>Progression</h3>
             <div id="stats_contenu">
                 <p>Aujourd'hui, il y a <span id="stat_now"></span> voies à cheval.</p>
+            </div>
+        </div>
+        <!-----------------------   Pifofiltres  ----------------------->
+        <div id="pifofiltres" class="pifodrome">
+            <h3>Afficher ou masquer...</h3>
+            <div class="ligne-boutons-filtres">
+                <div>
+                    <ul>
+                        <li>
+                            <label class="switch is-rounded is-small">
+                            <input type="checkbox" id="check_petits_dep"  critere="petits_dep" checked/>
+                            <span class="check is-orange"></span>
+                            <span class="control-label">Petits dépassements</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -75,7 +99,28 @@
     <script>
         update_menu_visits()
 
+        //Initialiser les onglets
+        $('#bouton_pifostats').addClass('onglet_actif');
         $('#pifostats').css('visibility','visible');
+        $('#pifofiltres').css('visibility','hidden');
+
+        //Changement d'onglet
+        $('#bouton_pifofiltres').click(function(){
+            if (!$(this).hasClass('onglet_actif')) { 
+                $(this).addClass('onglet_actif')
+                $('#bouton_pifostats').removeClass('onglet_actif');
+                $('#pifostats').css('visibility','hidden');
+                $('#pifofiltres').css('visibility','visible');              
+            }
+        })
+        $('#bouton_pifostats').click(function(){
+            if (!$(this).hasClass('onglet_actif')) {
+                $(this).addClass('onglet_actif')
+                $('#bouton_pifofiltres').removeClass('onglet_actif');
+                $('#pifofiltres').css('visibility','hidden');
+                $('#pifostats').css('visibility','visible');
+            }
+        })
 
         $.ajax({
             url: "pifodrome_avancement.py"
@@ -256,7 +301,9 @@
                 map.fitBounds(bbox_diagonale.coordinates)
             })
         }
+        function filtre_pifodrome(){
 
+        }
         function localise_moi(position){
             $.ajax({
                 url: "insee_from_coords.py?lat="+position.coords.latitude+"&lon="+position.coords.longitude

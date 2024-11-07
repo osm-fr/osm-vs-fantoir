@@ -448,7 +448,6 @@ hr {
 	width: 40px;
 	background-size: 40px;
 }
-
 #bouton_export_csv a{
 	color: white;
 	font-weight: bold;
@@ -459,10 +458,9 @@ hr {
 	width: 50px;
 }
 
-/*-------------------------------------------------------------*/
-/*---------------------- COMMUNES VOISINES --------------------*/
-/*-------------------------------------------------------------*/
-
+/*-------------------------------------------*/
+/*------------ COMMUNES VOISINES ------------*/
+/*-------------------------------------------*/
 #bouton_communes_voisines{
 	cursor: pointer;
 	position: fixed;
@@ -505,7 +503,6 @@ hr {
 	border-radius: 4px;
 	cursor: default;
 }
-
 #table_communes_voisines .fermer {
 	color: black;
 	float: right;
@@ -519,10 +516,9 @@ hr {
 	cursor:pointer;
 }
 
-/*------------------------------------------------------------------*/
-/*----------------------------- REFRESH ----------------------------*/
-/*------------------------------------------------------------------*/
-
+/*-----------------------------------------*/
+/*---------------- REFRESH ----------------*/
+/*-----------------------------------------*/
 #bouton_refresh{
 	cursor: pointer;
 	position: fixed;
@@ -554,10 +550,9 @@ hr {
 	font-weight: bold;
 }
 
-/*-------------------------------------------------------------------*/
-/*-------------------------------- AIDE -----------------------------*/
-/*-------------------------------------------------------------------*/
-
+/*-----------------------------------------*/
+/*------------------ AIDE -----------------*/
+/*-----------------------------------------*/
 #bouton_aide {
 	cursor: pointer;
 	position: fixed;
@@ -601,7 +596,6 @@ hr {
   	border-radius: 6px;
 	cursor:pointer;
 }
-
 #aide_stats h3{
 	margin-top: 30px;
 	margin-left: 10px;
@@ -614,12 +608,6 @@ hr {
 	margin-top: 0px;
 	margin-bottom: 10px;
 	margin-left: 3px;
-}
-
-/*-----Spécificités mobile-----*/
-
-#filtre_lieuxdits_mobile {
-	display: none;
 }
 
 /*-------------------------------------------------------------------------------------*/
@@ -678,10 +666,207 @@ hr {
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
 /*---------------                                                       ---------------*/
-/*---------------              PIFOSTATS EN HAUT A DROITE               ---------------*/
+/*---------------                         PIFOMAP                       ---------------*/
 /*---------------                                                       ---------------*/
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
+
+#infos_commune_col2 h1 {
+	display: inline-block;
+}
+
+#recentrer_commune {
+	cursor: pointer;
+	vertical-align: middle;
+	margin-left: 20px;
+	width: 30px;
+	height: 30px;
+	background: url("../img/centrer.png") whitesmoke no-repeat top 5px left 5px;
+	background-size: 20px;
+	border-bottom: 2px lightgrey solid;
+	border-radius: 6px;
+}
+
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+/*---------------                                                       ---------------*/
+/*---------------                         ONGLETS                       ---------------*/
+/*---------------                                                       ---------------*/
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------*/
+/*-------------        Onglets - Boutons        -------------*/
+/*-----------------------------------------------------------*/
+
+#onglets {
+	position: fixed;
+	top: 40px;
+	right: 315px;
+	width: 400px;
+	height: 38px;
+}
+.onglet_actif {
+	cursor: default !important;
+	background-color: burlywood !important;
+}
+
+.onglet_non_cliquable {
+	cursor: default !important;
+	background-color: whitesmoke !important;
+	border-bottom: 2px darkgrey solid !important;
+}
+.onglet_non_cliquable p {
+	color: grey !important;
+}
+
+#bouton_pifostats, #bouton_pifofiltres, #bouton_pifoprogression {
+	cursor: pointer;
+	float: left;
+	background-color: wheat;
+	width: 33%;
+	height: 100%;
+	border-bottom: 2px sienna solid;
+}
+#bouton_pifostats {
+	border-right: 1px solid darkgrey;
+	border-bottom-left-radius: 6px;
+	border-top-left-radius: 6px;
+	background: url("../img/stats2.png") no-repeat wheat right 12px bottom 5px;
+	background-size: 28px;
+}
+
+#bouton_pifofiltres {
+	border-right: 1px solid darkgrey;
+	background: url("../img/lieudit-fil.png") no-repeat wheat right 12px bottom 5px;
+	background-size: 28px;
+}
+
+#bouton_pifoprogression {
+	background: lightsalmon;
+	border-bottom-right-radius: 6px;
+	border-top-right-radius: 6px;
+	background: url("../img/france-fil.png") no-repeat wheat right 6px bottom 5px;
+	background-size: 26px;
+}
+
+#bouton_pifostats p, #bouton_pifofiltres p, #bouton_pifoprogression p {
+	text-align: center;
+	vertical-align:middle;
+	padding-right: 30px;
+	font-size:0.85em;
+	line-height: 0.85em;
+	font-weight: bold;
+	color:black;
+}
+
+/*-------------------------------------*/
+/*--------    Sur Pifodrome    --------*/
+/*-------------------------------------*/
+#onglets.pifodrome {
+	position: fixed;
+	right: 310px;
+	width: 266px;
+}
+.pifodrome #bouton_pifostats, .pifodrome #bouton_pifofiltres {
+	width: 49%;
+}
+.pifodrome #bouton_pifofiltres {
+	border-bottom-right-radius: 6px;
+	border-top-right-radius: 6px;
+	background: url("../img/cheval_jouet.png") no-repeat wheat right 12px bottom 5px;
+	background-size: 28px;
+}
+
+/*-------------------------------------------------------------*/
+/*---------     Bloc Pifofiltre ou Pifoprogression    ---------*/
+/*-------------------------------------------------------------*/
+
+#pifofiltres, #pifoprogression {
+	position:fixed;
+	width:40%;
+	height:90px;
+	top:90px;
+	right:1%;
+	padding: 5px;
+	background-color: white;
+	border:1px solid wheat;
+	border-bottom: 3px sienna solid;
+	border-radius: 8px;
+	line-height:35px;
+	visibility: hidden;
+}
+
+#pifofiltres h3, #pifoprogression h3 {
+	text-align: left;
+	font-size: 0.8em;
+	margin: 0 0 5px 7px;
+	line-height: 0.9em;
+}
+
+#pifofiltres div {
+	width: auto;
+	display: inline-block;
+}
+
+#pifofiltres ul {
+	list-style-type: none;
+	margin:0;
+	padding: 0 10px;
+}
+#pifofiltres ul li {
+	margin: 0.2em 0;
+}
+
+#pifofiltres span {
+	font-size: 0.8em;
+}
+#pifofiltres.pifomap span {
+	font-size: 0.75em;
+}
+/*-----Spécificités mobile-----*/
+#filtre_lieuxdits_mobile {
+	display: none;
+}
+
+#pifoprogression #france_points {
+	width: 60px;
+}
+
+#pifoprogression div {
+	float: left;
+}
+
+#pifoprogression div h3 {
+	text-align: left;
+	margin: 6px 0;
+}
+
+#pifoprogression div img {
+	margin: 15px 10px 0 10px;
+}
+
+#pifoprogression p {
+	margin: 0;
+	font-size: 0.75em;
+	line-height: 0.75em;
+}
+#pifoprogression label {
+	line-height: 1.6em;
+}
+
+/*-------------------------------------*/
+/*--------    Sur Pifodrome    --------*/
+/*-------------------------------------*/
+#pifofiltres.pifodrome {
+	width:30%;
+	min-width: 300px;
+	height: 85px;
+}
+
+/*-------------------------------------------------------------*/
+/*--------------          Bloc Pifostats         --------------*/
+/*-------------------------------------------------------------*/
 
 #pifostats {
 	position:fixed;
@@ -762,7 +947,9 @@ hr {
 	margin-left: 5px;
 }
 
-/*--- Pifodrome ---*/
+/*-------------------------------------*/
+/*--------    Sur Pifodrome    --------*/
+/*-------------------------------------*/
 #pifostats.pifodrome {
 	width:30%;
 	min-width: 300px;
@@ -772,6 +959,10 @@ hr {
 #pifostats.pifodrome span {
 	font-weight: bold;
 	font-size: unset;
+}
+#pifostats.pifodrome h3, #pifofiltres.pifodrome h3 {
+	font-size: 0.8em;
+	margin:5px 0 8px 10px;
 }
 #pifostats p {
 	margin: 0.5em 0 0 10px;
@@ -813,172 +1004,10 @@ hr {
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
 /*---------------                                                       ---------------*/
-/*---------------                         PIFOMAP                       ---------------*/
+/*---------------                         LÉGENDE                       ---------------*/
 /*---------------                                                       ---------------*/
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
-
-#infos_commune_col2 h1 {
-	display: inline-block;
-}
-
-#recentrer_commune {
-	cursor: pointer;
-	vertical-align: middle;
-	margin-left: 20px;
-	width: 30px;
-	height: 30px;
-	background: url("../img/centrer.png") whitesmoke no-repeat top 5px left 5px;
-	background-size: 20px;
-	border-bottom: 2px lightgrey solid;
-	border-radius: 6px;
-}
-
-/*----------------------------------------------------------------------*/
-/*--------------             ONGLETS - BOUTON             --------------*/
-/*----------------------------------------------------------------------*/
-
-#onglets {
-	position: fixed;
-	top: 40px;
-	right: 315px;
-	width: 400px;
-	height: 38px;
-}
-
-.onglet_actif {
-	background-color: burlywood !important; 
-}
-
-.onglet_non_cliquable {
-	cursor: default !important;
-	background-color: whitesmoke !important;
-	border-bottom: 2px darkgrey solid !important;
-}
-
-.onglet_non_cliquable p {
-	color: grey !important;
-}
-
-#bouton_pifostats, #bouton_pifofiltres, #bouton_pifoprogression {
-	cursor: pointer;
-	float: left;
-	background-color: wheat;
-	width: 33%;
-	height: 100%;
-	border-bottom: 2px sienna solid;
-}
-
-#bouton_pifostats {
-	border-right: 1px solid darkgrey;
-	border-bottom-left-radius: 6px;
-	border-top-left-radius: 6px;
-	background: url("../img/stats2.png") no-repeat wheat right 12px bottom 5px;
-	background-size: 28px;
-}
-
-#bouton_pifofiltres {
-	border-right: 1px solid darkgrey;
-	background: url("../img/lieudit-fil.png") no-repeat wheat right 12px bottom 5px;
-	background-size: 28px;
-}
-
-#bouton_pifoprogression {
-	background: lightsalmon;
-	border-bottom-right-radius: 6px;
-	border-top-right-radius: 6px;
-	background: url("../img/france-fil.png") no-repeat wheat right 6px bottom 5px;
-	background-size: 26px;
-}
-
-#bouton_pifostats p, #bouton_pifofiltres p, #bouton_pifoprogression p {
-	text-align: center;
-	vertical-align:middle;
-	padding-right: 30px;
-	font-size:0.85em;
-	line-height: 0.85em;
-	font-weight: bold;
-	color:black;
-}
-
-
-/*----------------------------------------------------------------------*/
-/*--------------              ONGLETS - BLOC              --------------*/
-/*----------------------------------------------------------------------*/
-
-#pifofiltres, #pifoprogression {
-	position:fixed;
-	width:40%;
-	height:90px;
-	top:90px;
-	right:1%;
-	padding: 5px;
-	background-color: white;
-	border:1px solid wheat;
-	border-bottom: 3px sienna solid;
-	border-radius: 8px;
-	line-height:35px;
-	visibility: hidden;
-}
-
-#pifofiltres h3, #pifoprogression h3 {
-	text-align: left;
-	font-size: 0.8em;
-	margin: 0 0 5px 7px;
-	line-height: 0.9em;
-}
-
-#pifofiltres div {
-	width: auto;
-	display: inline-block;
-}
-
-#pifofiltres ul {
-  list-style-type: none;
-  margin:0;
-}
-
-#pifofiltres ul li {
-  margin: 0.2em 0;
-}
-
-#pifofiltres span {
-	font-size: 0.8em;
-}
-#pifofiltres.pifomap span {
-	font-size: 0.75em;
-}
-
-#pifoprogression #france_points {
-	width: 60px;
-}
-
-#pifoprogression div {
-	float: left;
-}
-
-#pifoprogression div h3 {
-	text-align: left;
-	margin: 6px 0;
-}
-
-#pifoprogression div img {
-	margin: 15px 10px 0 10px;
-}
-
-#pifoprogression p {
-	margin: 0;
-	font-size: 0.75em;
-	line-height: 0.75em;
-}
-#pifoprogression label {
-	line-height: 1.6em;
-}
-
-/*-------------------------------------------*/
-/*------------------ LÉGENDE ----------------*/
-/*-------------------------------------------*/
-
 #bouton_legende {
 	cursor: pointer;
 	position: fixed;
@@ -991,7 +1020,6 @@ hr {
 	border-bottom: 2px #FA9D64 solid;
 	border-radius: 6px;
 }
-
 #bouton_legende p {
 	text-align: center;
 	vertical-align:middle;
@@ -1007,7 +1035,7 @@ hr {
 	top:40px;
 	right:10px;
 	width:400px;
-	height:80%;
+	height:85%;
 	padding: 10px;
 	border-radius: 8px;
 	border:1px solid #FA9D64;
@@ -1104,6 +1132,9 @@ hr {
 #legende.pifomap p .point.osm_seulement {
 	background-color: blue;
 }
+#legende.pifomap p .point.non_rapproche {
+	background-color: red;
+}
 
 /* Intégration gradient */
 #legende.pifomap table {
@@ -1133,6 +1164,7 @@ hr {
 #legende.pifomap .petit {
 	font-size: 0.8em;
 }
+
 /*------------------------------------------------------*/
 /*------------------ PANNEAU LATÉRAL -------------------*/
 /*------------------------------------------------------*/
