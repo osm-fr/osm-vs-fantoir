@@ -12,7 +12,7 @@
         "croisement": {
              "type": "vector",
              "tiles": [
-                  "https://bano.openstreetmap.fr/pifometre/tiles_croisement_240929/{z}/{x}/{y}.pbf"
+                  "https://bano.openstreetmap.fr/pifometre/tiles_croisement_241107/{z}/{x}/{y}.pbf"
                   ],
             "minzoom":5,
             "maxzoom":12
@@ -211,7 +211,8 @@
                         ["linear"],
                         ["zoom"],
                         9,0,
-                        13,24],
+                        13,8,
+                        14,24],
                 "symbol-placement": "point"
                 },
             "paint": {

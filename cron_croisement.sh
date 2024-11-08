@@ -16,6 +16,7 @@ INDEXFILE=${SCRIPT_DIR}/osm2pgsql_line.index
 DEPTFILE=${SCRIPT_DIR}/depts_croisement.csv
 TILESFILE=${SCRIPT_DIR}/tiles_croisement.csv
 LOGFILE=${SCRIPT_DIR}/cron_croisement.log
+DISTANCE_PETIT_CHEVAUCHEMENT=1
 
 echo `date`>> ${LOGFILE}
 echo debut >> ${LOGFILE}
@@ -114,7 +115,7 @@ do
                                          ORDER BY 1" >> ${TILESFILE}
 done
 
-parallel -a ${TILESFILE} --colsep ' ' -j 4 ./generate-tiles_croisement.sh {1} {2} {3}
+parallel -a ${TILESFILE} --colsep ' ' -j 4 ./generate-tiles_croisement.sh {1} {2} {3} ${DISTANCE_PETIT_CHEVAUCHEMENT}
 
 rm ${LOCKFILE}
 
