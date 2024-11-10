@@ -53,7 +53,7 @@
                             <label class="switch is-rounded is-small">
                             <input type="checkbox" id="check_petits_dep"  critere="petits_dep" checked/>
                             <span class="check is-orange"></span>
-                            <span class="control-label">Petits dépassements</span>
+                            <span class="control-label">Petits dépassements (moins de 1m)</span>
                         </li>
                     </ul>
                 </div>
@@ -160,7 +160,7 @@
         const map = new maplibregl.Map({
             container: 'map_div',
             style:
-                'pifodrome_241107_pre.style',
+                'pifodrome_241110.style',
             center: [4, 46],
             zoom: 5,
             maxZoom: 19,
@@ -293,6 +293,12 @@
         $('#bouton_aleatoire_rouge_rouge').click(function(){
             bilto('rouge','rouge')
         })
+
+        // Filtre petits rapprochements
+        $('#pifofiltres.pifodrome input').click(function(){
+            filtre_pifodrome()
+        })
+
         function bilto(casaque_debut,casaque_fin){
             $.ajax({
                 url: "bilto.py?debut="+casaque_debut+"&fin="+casaque_fin
@@ -302,7 +308,15 @@
             })
         }
         function filtre_pifodrome(){
-
+            if ($('#pifofiltres.pifodrome input#check_petits_dep').is(':checked')){
+                filtre = undefined
+            } else {
+                filtre = ["==",["get", "ppc"], false]
+            }
+            layers = ['highway_detourage','point_debut_detourage','point_fin_detourage','highway','highway_transparent','point_debut','point_fin','point_croisement']
+            for (i=0;i<layers.length;i++){
+                map.setFilter(layers[i],filtre)
+            }
         }
         function localise_moi(position){
             $.ajax({

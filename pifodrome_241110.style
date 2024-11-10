@@ -9,12 +9,20 @@
             "attribution":
                 "Données © Communauté <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a>"
         },
-        "croisement": {
+        "points": {
              "type": "vector",
              "tiles": [
-                  "https://bano.openstreetmap.fr/pifometre/tiles_croisement_241107/{z}/{x}/{y}.pbf"
+                  "https://bano.openstreetmap.fr/pifometre/tiles_pifodrome_241110/points/{z}/{x}/{y}.pbf"
                   ],
             "minzoom":5,
+            "maxzoom":12
+        },
+        "lignes": {
+             "type": "vector",
+             "tiles": [
+                  "https://bano.openstreetmap.fr/pifometre/tiles_pifodrome_241110/lignes/{z}/{x}/{y}.pbf"
+                  ],
+            "minzoom":8,
             "maxzoom":12
         }
     },
@@ -30,8 +38,8 @@
         },
         {
             "id": "highway_detourage",
-            "source": "croisement",
-            "source-layer": "cvl_voie",
+            "source": "lignes",
+            "source-layer": "pifodrome_voie",
             "type": "line",
             "minzoom" : 8,
             "maxzoom": 20,
@@ -39,15 +47,15 @@
                 "line-width": ["interpolate",
                         ["linear"],
                         ["zoom"],
-                        5,1,
+                        8,2,
                         13,9],
                 "line-color": "white"
             }
         },
         {
             "id": "point_debut_detourage",
-            "source": "croisement",
-            "source-layer": "cvl_point_debut",
+            "source": "points",
+            "source-layer": "pifodrome_point_debut",
             "type": "circle",
             "minzoom" : 5,
             "maxzoom": 20,
@@ -70,8 +78,8 @@
         },
         {
             "id": "point_fin_detourage",
-            "source": "croisement",
-            "source-layer": "cvl_point_fin",
+            "source": "points",
+            "source-layer": "pifodrome_point_fin",
             "type": "circle",
             "minzoom" : 5,
             "maxzoom": 20,
@@ -94,8 +102,8 @@
         },
         {
             "id": "highway",
-            "source": "croisement",
-            "source-layer": "cvl_voie",
+            "source": "lignes",
+            "source-layer": "pifodrome_voie",
             "type": "line",
             "minzoom" : 8,
             "maxzoom": 20,
@@ -103,15 +111,17 @@
                 "line-width": ["interpolate",
                         ["linear"],
                         ["zoom"],
-                        5,1,
+                        8,1,
                         13,4],
-                "line-color": "green"
+                "line-color": ["case",
+                                ["boolean",["get","ppc"]],"green",
+                                "green"]
             }
         },
         {
             "id": "highway_transparent",
-            "source": "croisement",
-            "source-layer": "cvl_voie",
+            "source": "lignes",
+            "source-layer": "pifodrome_voie",
             "type": "line",
             "minzoom" : 8,
             "maxzoom": 20,
@@ -123,8 +133,8 @@
         },
         {
             "id": "point_debut_surbrillance",
-            "source": "croisement",
-            "source-layer": "cvl_point_debut",
+            "source": "points",
+            "source-layer": "pifodrome_point_debut",
             "filter" : ["==",["get", "code_insee_debut"], " "],
             "type": "circle",
             "minzoom" : 8,
@@ -136,8 +146,8 @@
         },
         {
             "id": "point_fin_surbrillance",
-            "source": "croisement",
-            "source-layer": "cvl_point_fin",
+            "source": "points",
+            "source-layer": "pifodrome_point_fin",
             "filter" : ["==",["get", "code_insee_fin"], " "],
             "type": "circle",
             "minzoom" : 8,
@@ -149,8 +159,8 @@
         },
         {
             "id": "point_debut",
-            "source": "croisement",
-            "source-layer": "cvl_point_debut",
+            "source": "points",
+            "source-layer": "pifodrome_point_debut",
             "type": "circle",
             "minzoom" : 5,
             "maxzoom": 20,
@@ -173,8 +183,8 @@
         },
         {
             "id": "point_fin",
-            "source": "croisement",
-            "source-layer": "cvl_point_fin",
+            "source": "points",
+            "source-layer": "pifodrome_point_fin",
             "type": "circle",
             "minzoom" : 5,
             "maxzoom": 20,
@@ -197,10 +207,10 @@
         },
         {
             "id": "point_croisement",
-            "source": "croisement",
-            "source-layer": "cvl_point_croisement",
+            "source": "points",
+            "source-layer": "pifodrome_point_croisement",
             "type": "symbol",
-            "minzoom" : 5,
+            "minzoom" : 9,
             "maxzoom": 20,
             "layout": {
                 "text-field": "==",
