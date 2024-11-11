@@ -28,6 +28,7 @@ FROM ( SELECT osm_id,
                 true
               ) AS geom
        FROM croisement_voies_limites
+       WHERE geometrie_osm_3857 && ST_TileEnvelope($tz, $tx, $ty)
     ) AS q
   ) TO STDOUT;
   "
@@ -57,6 +58,7 @@ FROM ( SELECT osm_id,
                 true
               ) AS geom
        FROM croisement_voies_limites
+       WHERE point_debut_3857 && ST_TileEnvelope($tz, $tx, $ty)
     ) AS q
   ) TO STDOUT;
   "
@@ -86,6 +88,7 @@ FROM ( SELECT osm_id,
                 true
               ) AS geom
        FROM croisement_voies_limites
+       WHERE point_fin_3857 && ST_TileEnvelope($tz, $tx, $ty)
     ) AS q
   ) TO STDOUT;
   "
@@ -113,6 +116,7 @@ FROM ( SELECT osm_id,
                 true
               ) AS geom
        FROM point_croisement_voies_limites
+       WHERE geometrie_3857 && ST_TileEnvelope($tz, $tx, $ty)
     ) AS q
   ) TO STDOUT;
   "
