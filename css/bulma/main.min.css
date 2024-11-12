@@ -29,6 +29,8 @@
 .switch input[type=checkbox]+.check.input[type=checkbox]+.switch input[type=checkbox]+.check.check{background:'pink'}
 .switch input[type=checkbox]+.check.is-blue-passive,.switch input[type=checkbox]+.check:hover{background:#3e8ed0}
 .switch input[type=checkbox]+.check.input[type=checkbox]+.switch input[type=checkbox]+.check.check{background:'pink'}
+.switch input[type=checkbox]+.check.is-indigo-passive,.switch input[type=checkbox]+.check:hover{background:indigo}
+.switch input[type=checkbox]+.check.input[type=checkbox]+.switch input[type=checkbox]+.check.check{background:'pink'}
 .switch input[type=checkbox]+.check.is-green-passive,.switch input[type=checkbox]+.check:hover{background:#00A779}
 .switch input[type=checkbox]+.check.input[type=checkbox]+.switch input[type=checkbox]+.check.check{background:'pink'}
 .switch input[type=checkbox]+.check.is-yellow-passive,.switch input[type=checkbox]+.check:hover{background:#ffe08a}
@@ -48,6 +50,7 @@
 .switch input[type=checkbox]:checked+.check.is-link{background:#485fc7}
 .switch input[type=checkbox]:checked+.check.is-pink{background:#EC0080}
 .switch input[type=checkbox]:checked+.check.is-blue{background:#56B4E9}
+.switch input[type=checkbox]:checked+.check.is-indigo{background:indigo}
 .switch input[type=checkbox]:checked+.check.is-green{background:#00A779}
 .switch input[type=checkbox]:checked+.check.is-yellow{background:#ffe08a}
 .switch input[type=checkbox]:checked+.check.is-orange{background:#EFA500}
@@ -65,7 +68,7 @@
 .switch:hover input[type=checkbox]+.check.is-link-passive{background:rgba(72,95,199,0.9)}
 .switch:hover input[type=checkbox]+.check.is-pink-passive{background:rgba(211,58,139,0.9)}
 .switch:hover input[type=checkbox]+.check.is-blue-passive{background:rgba(4,87,179,0.9)}
-.switch:hover input[type=checkbox]+.check.is-green-passive{background:rgba(72,199,142,0.9)}
+.switch:hover input[type=checkbox]+.check.is-indigo-passive{background:rgba(75,0,130,0.9)}
 .switch:hover input[type=checkbox]+.check.is-yellow-passive{background:rgba(255,224,138,0.9)}
 .switch:hover input[type=checkbox]+.check.is-orange-passive{background:rgba(241,172,69,0.9)}
 .switch:hover input[type=checkbox]+.check.is-red-passive{background:rgba(241,70,104,0.9)}
@@ -78,6 +81,7 @@
 .switch:hover input[type=checkbox]:checked+.check.is-link{background:rgba(72,95,199,0.9)}
 .switch:hover input[type=checkbox]:checked+.check.is-pink{background:rgba(211,58,139,0.9)}
 .switch:hover input[type=checkbox]:checked+.check.is-blue{background:rgba(4,87,179,0.9)}
+.switch:hover input[type=checkbox]:checked+.check.is-indigo{background:rgba(75,0,130,0.9)}
 .switch:hover input[type=checkbox]:checked+.check.is-green{background:rgba(72,199,142,0.9)}
 .switch:hover input[type=checkbox]:checked+.check.is-yellow{background:rgba(255,224,138,0.9)}
 .switch:hover input[type=checkbox]:checked+.check.is-orange{background:rgba(241,172,69,0.9)}
@@ -110,6 +114,9 @@
 .switch.is-outlined input[type=checkbox]+.check.is-blue-passive{border:0.1rem solid rgba(4,87,179,0.9)}
 .switch.is-outlined input[type=checkbox]+.check.is-blue-passive:before{background:#3e8ed0}
 .switch.is-outlined input[type=checkbox]+.check.is-blue-passive:hover{border-color:rgba(4,87,179,0.9)}
+.switch.is-outlined input[type=checkbox]+.check.is-indigo-passive{border:0.1rem solid rgba(75,0,130,0.9)}
+.switch.is-outlined input[type=checkbox]+.check.is-indigo-passive:before{background:indigo}
+.switch.is-outlined input[type=checkbox]+.check.is-indigo-passive:hover{border-color:rgba(75,0,130,0.9)}
 .switch.is-outlined input[type=checkbox]+.check.is-green-passive{border:0.1rem solid rgba(72,199,142,0.9)}
 .switch.is-outlined input[type=checkbox]+.check.is-green-passive:before{background:#00A779}
 .switch.is-outlined input[type=checkbox]+.check.is-green-passive:hover{border-color:rgba(72,199,142,0.9)}
@@ -140,6 +147,8 @@
 .switch.is-outlined input[type=checkbox]:checked+.check.is-pink:before{background:#EC0080}
 .switch.is-outlined input[type=checkbox]:checked+.check.is-blue{background:transparent;border-color:#56B4E9}
 .switch.is-outlined input[type=checkbox]:checked+.check.is-blue:before{background:#56B4E9}
+.switch.is-outlined input[type=checkbox]:checked+.check.is-indigo{background:transparent;border-color:indigo}
+.switch.is-outlined input[type=checkbox]:checked+.check.is-indigo:before{background:indigo}
 .switch.is-outlined input[type=checkbox]:checked+.check.is-green{background:transparent;border-color:#00A779}
 .switch.is-outlined input[type=checkbox]:checked+.check.is-green:before{background:#00A779}
 .switch.is-outlined input[type=checkbox]:checked+.check.is-yellow{background:transparent;border-color:#ffe08a}
@@ -159,6 +168,7 @@
 .switch.is-outlined:hover input[type=checkbox]:checked+.check.is-link{border-color:rgba(72,95,199,0.9)}
 .switch.is-outlined:hover input[type=checkbox]:checked+.check.is-pink{border-color:rgba(211,58,139,0.9)}
 .switch.is-outlined:hover input[type=checkbox]:checked+.check.is-blue{border-color:rgba(4,87,179,0.9)}
+.switch.is-outlined:hover input[type=checkbox]:checked+.check.is-indigo{border-color:rgba(75,0,130,0.9)}
 .switch.is-outlined:hover input[type=checkbox]:checked+.check.is-green{border-color:rgba(72,199,142,0.9)}
 .switch.is-outlined:hover input[type=checkbox]:checked+.check.is-yellow{border-color:rgba(255,224,138,0.9)}
 .switch.is-outlined:hover input[type=checkbox]:checked+.check.is-orange{border-color:rgba(241,172,69,0.9)}
