@@ -371,8 +371,37 @@
                                                             $(this).addClass('clicked');
                                                             })
                                                     )
+                        // WIP Rafraichissement des tuiles PBF uniquement si Pifodrome
+                        // if (page == 'pifodrome.html'){
+                        //     $('#contenu_popup_context').append($('<hr>'))
+                        //                                .append($('<div id="menu_maj_pbf" class="item_context_menu">').text('Màj des tuiles'))
+                        //     $('#menu_maj_pbf').click(function(){
+                        //         refresh_pifodrome_pbf(lon,lat)
+                        //     })
+                        // }
                 })
             }
+        })
+    }
+    function refresh_pifodrome_pbf(lon,lat){
+        $('body').css('cursor','progress');
+        $('#wait_ajax').empty()
+                       .css('visibility','visible')
+                       .append($('<span>').append('Mise à jour des tuiles vectorielles en cours...'));
+        $('#wait_ajax_mobile').css('visibility','visible');
+        $.ajax({
+            url: "pifodrome_refresh_pbf.py?lon="+lon+'&lat='+lat,
+        })
+        .done(function( data ){
+            if (data == '1'){
+                $('#wait_ajax').empty()
+                       .append($('<span>').append('Mise à jour des tuiles vectorielles OK'));
+            } else {
+                alert('Problème lors de la mise à jour')
+            }
+            $('body').css('cursor','default');
+            $('#wait_ajax').css('visibility','hidden');
+            $('#wait_ajax_mobile').css('visibility','hidden');
         })
     }
     function interactions_souris(couche_carto){
