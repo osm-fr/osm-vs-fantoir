@@ -114,8 +114,8 @@
                         8,1,
                         13,4],
                 "line-color": ["case",
-                                ["boolean",["get","ppc"]],"green",
-                                "green"]
+                                ["boolean",["get","ppc"]],
+                                "magenta","indigo"]
             }
         },
         {

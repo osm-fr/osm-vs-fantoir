@@ -314,10 +314,14 @@
             })
         }
         function filtre_pifodrome(){
-            if ($('#pifofiltres.pifodrome input#check_petits_dep').is(':checked')){
+            if ($('#pifofiltres.pifodrome input#check_petits_dep').is(':checked') && $('#pifofiltres.pifodrome input#check_grands_dep').is(':checked')){
                 filtre = undefined
-            } else {
+            } else if ($('#pifofiltres.pifodrome input#check_petits_dep').is(':checked')) {
+                filtre = ["==",["get", "ppc"], true]
+            } else if ($('#pifofiltres.pifodrome input#check_grands_dep').is(':checked')) {
                 filtre = ["==",["get", "ppc"], false]
+            } else {
+                filtre = ["==",["get", "ppc"], 'vide']
             }
             layers = ['highway_detourage','point_debut_detourage','point_fin_detourage','highway','highway_transparent','point_debut','point_fin','point_croisement']
             for (i=0;i<layers.length;i++){
