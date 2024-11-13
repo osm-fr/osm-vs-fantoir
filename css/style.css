@@ -793,7 +793,7 @@ hr {
 	border:1px solid wheat;
 	border-bottom: 3px sienna solid;
 	border-radius: 8px;
-	line-height:35px;
+	line-height:30px;
 	visibility: hidden;
 }
 
@@ -889,14 +889,9 @@ hr {
 
 #pifostats h3 {
 	text-align: left;
-	font-size: 0.85em;
-	line-height: 1em;
-	margin: 0.5em 0 0.7em 10px;
-}
-
-#pifostats.pifomap h3 {
 	font-size: 0.8em;
-	margin: 0.5em 0 5px 7px;
+	line-height: 0.8em;
+	margin: 0.3em 5px;
 }
 
 #pifostats span {
@@ -908,8 +903,8 @@ hr {
 
 .barre_noms, .barre_noms_avec_adresses, .barre_adresses {
 	float: left;
-	margin: 6px 8px;
-	width: 100%;
+	margin: 6px 5px;
+	width: calc(100% - 10px);
 }
 
 .barre_noms_texte, .barre_noms_avec_adresses_texte, .barre_adresses_texte {
@@ -959,9 +954,9 @@ hr {
 	font-weight: bold;
 	font-size: unset;
 }
-#pifostats.pifodrome h3, #pifofiltres.pifodrome h3 {
+#pifofiltres.pifodrome h3 {
 	font-size: 0.8em;
-	margin: 0 0 5px 7px;
+	margin: 0.5em 0 5px 7px;
 }
 #pifostats p {
 	margin: 0.5em 0 0 10px;
@@ -1612,7 +1607,8 @@ span.remontee_suppr_numero {
 }
 #reponse.pifo{
 	margin-top:265px;
-	height: 65%;
+	height: 600px;
+	border-bottom: 1px solid lightgrey;
 }
 #reponse.pifomap, #reponse.voies_a_cheval{
 	margin-top:200px;
