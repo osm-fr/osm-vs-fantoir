@@ -83,37 +83,44 @@ $pgsql_BANO -c "INSERT INTO stats_voies_a_cheval(nombre_cas_restant)
 rm -f ${TILESFILE}
 for zoom in {5..12}
 do
-   psql -d bano -U cadastre --csv -t -c "SELECT ${zoom}||' '||
+   psql -d bano -U cadastre --csv -t -c "WITH
+                                         id_new
+                                         AS
+                                         (SELECT id FROM croisement_voies_limites c
+                                         EXCEPT
+                                         SELECT id FROM croisement_voies_limites_precedent),
+                                         id_old
+                                         AS
+                                         (SELECT id FROM croisement_voies_limites_precedent c
+                                         EXCEPT
+                                         SELECT id FROM croisement_voies_limites)
+                                         SELECT ${zoom}||' '||
                                                 lon2tile(ST_X(ST_StartPoint(c.geometrie_osm)),${zoom})||' '|| 
                                                 lat2tile(ST_Y(ST_StartPoint(c.geometrie_osm)),${zoom})
                                          FROM   croisement_voies_limites c
-                                         LEFT JOIN croisement_voies_limites_precedent p
-                                         USINg (id)
-                                         WHERE  p.id IS NULL
+                                         JOIN   id_new
+                                         USING  (id)
                                          UNION
                                          SELECT ${zoom}||' '||
                                                 lon2tile(ST_X(ST_EndPoint(c.geometrie_osm)),${zoom})||' '|| 
                                                 lat2tile(ST_Y(ST_EndPoint(c.geometrie_osm)),${zoom})
                                          FROM   croisement_voies_limites c
-                                         LEFT JOIN croisement_voies_limites_precedent p
-                                         USINg (id)
-                                         WHERE  p.id IS NULL
+                                         JOIN   id_new
+                                         USING  (id)
                                          UNION
                                          SELECT ${zoom}||' '||
                                                 lon2tile(ST_X(ST_StartPoint(p.geometrie_osm)),${zoom})||' '|| 
                                                 lat2tile(ST_Y(ST_StartPoint(p.geometrie_osm)),${zoom})
                                          FROM   croisement_voies_limites_precedent p
-                                         LEFT JOIN croisement_voies_limites c
-                                         USINg (id)
-                                         WHERE  c.id IS NULL
+                                         JOIN   id_old
+                                         USING  (id)
                                          UNION
                                          SELECT ${zoom}||' '||
                                                 lon2tile(ST_X(ST_EndPoint(p.geometrie_osm)),${zoom})||' '|| 
                                                 lat2tile(ST_Y(ST_EndPoint(p.geometrie_osm)),${zoom})
                                          FROM   croisement_voies_limites_precedent p
-                                         LEFT JOIN croisement_voies_limites c
-                                         USINg (id)
-                                         WHERE  c.id IS NULL
+                                         JOIN   id_old
+                                         USING  (id)
                                          ORDER BY 1" >> ${TILESFILE}
 done
 
