@@ -71,7 +71,7 @@ echo `wc -l ${DEPTFILE}` "départements traités" >> ${LOGFILE}
 cd -
 
 # Suppression des faux positifs
-$pgsql_BANO -f sql/pifodrome_plus_petit_chevauchement.sql
+$pgsql_BANO -f sql/pifodrome_finalisation.sql
 
 # Stats
 $pgsql_BANO -c "INSERT INTO stats_voies_a_cheval(nombre_cas_restant)
