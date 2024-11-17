@@ -805,7 +805,7 @@ hr {
 }
 
 #pifofiltres div {
-	width: auto;
+	/*width: auto;*/
 	display: inline-block;
 }
 
@@ -861,6 +861,24 @@ hr {
 #pifofiltres.pifodrome {
 	width:30%;
 	min-width: 300px;
+}
+
+#bouton_theme_route_de {
+	cursor: pointer;
+	position: relative;
+	top: 0;
+	right: 10px;
+	background: url("../img/ampoule_off.png") no-repeat center;
+	background-size: 72px;
+	width: 72px;
+	height: 90px;
+	font-weight: bold;
+	color: #333;
+}
+
+#bouton_theme_route_de.actif {
+	background: url("../img/ampoule.png") no-repeat center;
+	background-size: 72px;
 }
 
 /*-------------------------------------------------------------*/
@@ -1465,6 +1483,14 @@ hr {
 
 #descriptif.pifo #infos_commune_col2 h1 {
 	margin:revert;
+}
+
+/*-------------------------------------*/
+/*--------    Sur Pifodrome    --------*/
+/*-------------------------------------*/
+.zone-boutons-filtres {
+	float: left;
+	width: 49%;
 }
 
 /*-------------------------------------------------------------------*/

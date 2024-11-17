@@ -45,8 +45,8 @@
         </div>
         <!-----------------------   Pifofiltres  ----------------------->
          <div id="pifofiltres" class="pifodrome">
-            <h3>Afficher ou masquer...</h3>
-            <div class="ligne-boutons-filtres">
+            <div class="zone-boutons-filtres">
+                <h3>Afficher ou masquer...</h3>
                 <div>
                     <ul>
                         <li>
@@ -63,6 +63,9 @@
                         </li>
                     </ul>
                 </div>
+            </div>
+            <div class="zone-boutons-themes">
+                <button id="bouton_theme_route_de">Les<br/>Routes de...</button>
             </div>
         </div>
 
@@ -303,6 +306,14 @@
         // Filtre petits rapprochements
         $('#pifofiltres.pifodrome input').click(function(){
             filtre_pifodrome()
+        })
+
+        //Idées
+        $('#pifofiltres.pifodrome button').click(function(){
+            if($(this).hasClass('actif')) {
+                $(this).removeClass('actif')
+            }
+            else $(this).addClass('actif')
         })
 
         function bilto(casaque_debut,casaque_fin){
