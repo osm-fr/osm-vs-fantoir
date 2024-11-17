@@ -70,7 +70,7 @@ parallel -j $PARALLEL_JOBS -a ${DEPTFILE} bano croisement_voies_limites {1}
 echo `wc -l ${DEPTFILE}` "départements traités" >> ${LOGFILE}
 cd -
 
-# Suppression des faux positifs
+# Criteres d'affichage
 $pgsql_BANO -f sql/pifodrome_finalisation.sql
 
 # Stats

@@ -16,7 +16,7 @@ WHERE  c.osm_id = a.osm_id;
 DROP TABLE IF EXISTS pifodrome_criteres CASCADE;
 CREATE TABLE pifodrome_criteres
 AS
-SELECT osm_id,
+SELECT DISTINCT osm_id,
        CASE
            WHEN plus_petit_chevauchement BETWEEN 0 AND 1 THEN 0
            WHEN plus_petit_chevauchement BETWEEN 1 AND 500 THEN 1
@@ -31,4 +31,5 @@ SELECT osm_id,
            ELSE 0
        END AS nom_inclus
 FROM   croisement_voies_limites;
+ALTER TABLE pifodrome_criteres ADD COLUMN criteres text GENERATED ALWAYS AS (distance_mini||nom_inclus)::text STORED;
 CREATE INDEX idx_pifodrome_criteres_osm_id ON pifodrome_criteres(osm_id);
