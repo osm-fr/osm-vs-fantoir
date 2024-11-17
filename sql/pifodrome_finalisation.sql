@@ -31,5 +31,5 @@ SELECT DISTINCT osm_id,
            ELSE 0
        END AS nom_inclus
 FROM   croisement_voies_limites;
-ALTER TABLE pifodrome_criteres ADD COLUMN criteres text GENERATED ALWAYS AS (distance_mini||nom_inclus)::text STORED;
+ALTER TABLE pifodrome_criteres ADD COLUMN criteres text GENERATED ALWAYS AS (distance_mini::text||nom_inclus::text) STORED;
 CREATE INDEX idx_pifodrome_criteres_osm_id ON pifodrome_criteres(osm_id);
