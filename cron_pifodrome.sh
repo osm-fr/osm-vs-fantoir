@@ -75,7 +75,7 @@ $pgsql_BANO -f sql/pifodrome_finalisation.sql
 
 # Stats
 $pgsql_BANO -c "INSERT INTO stats_voies_a_cheval(nombre_cas_restant)
-                SELECT count(*) FROM croisement_voies_limites
+                SELECT count(DISTINCT osm_id) FROM croisement_voies_limites
                 EXCEPT
                 (SELECT nombre_cas_restant FROM stats_voies_a_cheval
                 ORDER BY epoch DESC LIMIT 1);"
