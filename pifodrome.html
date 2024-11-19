@@ -45,8 +45,8 @@
         </div>
         <!-----------------------   Pifofiltres  ----------------------->
          <div id="pifofiltres" class="pifodrome">
-            <h3>Afficher ou masquer...</h3>
-            <div class="ligne-boutons-filtres">
+            <div class="zone-boutons-filtres">
+                <h3>Afficher ou masquer...</h3>
                 <div>
                     <ul>
                         <li>
@@ -63,6 +63,9 @@
                         </li>
                     </ul>
                 </div>
+            </div>
+            <div class="zone-boutons-themes">
+                <button id="bouton_theme_route_de">Les<br/>Routes de...</button>
             </div>
         </div>
 
@@ -136,30 +139,30 @@
             stat_previousday = data[1][2]
             stat_previousweek = data[2][2]
 
-            $('#pifostats #stats_contenu #stat_now').text(stat_now);
+            $('#pifostats #stats_contenu #stat_now').text(stat_now.toLocaleString());
 
             //Commentaire avancement jour
             if(stat_now-stat_previousday>0) {
-                $('#pifostats #stats_contenu').append($('<p class="avancement_jour monte">').text('Hier, il y en avait ').append($('<span class="stat_previous">').append(stat_previousday)).append('.'))
+                $('#pifostats #stats_contenu').append($('<p class="avancement_jour monte">').text('Hier, il y en avait ').append($('<span class="stat_previous">').append(stat_previousday.toLocaleString())).append('.'))
             }
             else if (stat_now-stat_previousday<0) {
-                $('#pifostats #stats_contenu').append($('<p class="avancement_jour baisse">').append('Hier, il y en avait ').append($('<span class="stat_previous">').append(stat_previousday)).append('.'))
+                $('#pifostats #stats_contenu').append($('<p class="avancement_jour baisse">').append('Hier, il y en avait ').append($('<span class="stat_previous">').append(stat_previousday.toLocaleString())).append('.'))
             }
             else {
-                $('#pifostats #stats_contenu').append($('<p class="avancement_jour stagne">').append('Hier, il y en avait ').append($('<span class="stat_previous">').append(stat_previousday)).append('.'))
+                $('#pifostats #stats_contenu').append($('<p class="avancement_jour stagne">').append('Hier, il y en avait ').append($('<span class="stat_previous">').append(stat_previousday.toLocaleString())).append('.'))
             }
             //Commentaire avancement semaine
             if(stat_now-stat_previousweek>=10) {
                 $('#pifostats #stats_contenu').addClass('nul')
-                $('#pifostats #stats_contenu').append($('<p class="avancement_semaine monte">').append('La semaine dernière, il y en avait ').append($('<span class="stat_previous">').append(stat_previousweek)).append('. Ca va dans le mauvais sens !'))
+                $('#pifostats #stats_contenu').append($('<p class="avancement_semaine monte">').append('La semaine dernière, il y en avait ').append($('<span class="stat_previous">').append(stat_previousweek.toLocaleString())).append('. Ca va dans le mauvais sens !'))
             }
             else if (stat_now-stat_previousweek<=-10) {
                 $('#pifostats #stats_contenu').addClass('bien')
-                $('#pifostats #stats_contenu').append($('<p class="avancement_semaine baisse">').append('La semaine dernière, il y en avait ').append($('<span class="stat_previous">').append(stat_previousweek)).append('. On avance !'))
+                $('#pifostats #stats_contenu').append($('<p class="avancement_semaine baisse">').append('La semaine dernière, il y en avait ').append($('<span class="stat_previous">').append(stat_previousweek.toLocaleString())).append('. On avance !'))
             }
             else {
                 $('#pifostats #stats_contenu').addClass('stagne')
-                $('#pifostats #stats_contenu').append($('<p class="avancement_semaine stagne">').append('La semaine dernière, il y en avait ').append($('<span class="stat_previous">').append(stat_previousweek)).append('. Ca stagne.'))
+                $('#pifostats #stats_contenu').append($('<p class="avancement_semaine stagne">').append('La semaine dernière, il y en avait ').append($('<span class="stat_previous">').append(stat_previousweek.toLocaleString())).append('. Ca stagne.'))
             }
         })
 
@@ -303,6 +306,14 @@
         // Filtre petits rapprochements
         $('#pifofiltres.pifodrome input').click(function(){
             filtre_pifodrome()
+        })
+
+        //Idées
+        $('#pifofiltres.pifodrome button').click(function(){
+            if($(this).hasClass('actif')) {
+                $(this).removeClass('actif')
+            }
+            else $(this).addClass('actif')
         })
 
         function bilto(casaque_debut,casaque_fin){
