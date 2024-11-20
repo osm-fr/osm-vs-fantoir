@@ -12,7 +12,7 @@
         "points": {
              "type": "vector",
              "tiles": [
-                  "https://bano.openstreetmap.fr/pifometre/tiles_pifodrome_241110/points/{z}/{x}/{y}.pbf"
+                  "https://bano.openstreetmap.fr/pifometre/tiles_pifodrome_241119/points/{z}/{x}/{y}.pbf"
                   ],
             "minzoom":5,
             "maxzoom":12
@@ -20,7 +20,7 @@
         "lignes": {
              "type": "vector",
              "tiles": [
-                  "https://bano.openstreetmap.fr/pifometre/tiles_pifodrome_241110/lignes/{z}/{x}/{y}.pbf"
+                  "https://bano.openstreetmap.fr/pifometre/tiles_pifodrome_241119/lignes/{z}/{x}/{y}.pbf"
                   ],
             "minzoom":8,
             "maxzoom":12

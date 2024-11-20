@@ -17,7 +17,7 @@ DEPTFILE=${SCRIPT_DIR}/depts_croisement.csv
 TILESFILE=${SCRIPT_DIR}/tiles_croisement.csv
 LOGFILE=${SCRIPT_DIR}/cron_pifodrome.log
 DISTANCE_PETIT_CHEVAUCHEMENT=1
-RACINE_CIBLE=tiles_pifodrome_241110
+RACINE_CIBLE=tiles_pifodrome_241119
 
 
 echo `date`>> ${LOGFILE}

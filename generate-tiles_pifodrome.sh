@@ -19,7 +19,8 @@ FROM ( SELECT osm_id,
               code_insee_debut,
               nom_commune_fin,
               code_insee_fin,
-              (plus_petit_chevauchement BETWEEN 0 AND $d)::boolean AS ppc,
+              (distance_mini = 0)::boolean AS ppc,
+              criteres,
               ST_AsMvtGeom(
                 geometrie_osm_3857,
                 BBox($tx, $ty, $tz),
@@ -28,6 +29,8 @@ FROM ( SELECT osm_id,
                 true
               ) AS geom
        FROM croisement_voies_limites
+       JOIN pifodrome_criteres
+       USING (osm_id)
        WHERE geometrie_osm_3857 && ST_TileEnvelope($tz, $tx, $ty)
     ) AS q
   ) TO STDOUT;
@@ -49,7 +52,8 @@ FROM ( SELECT osm_id,
               nom_commune_fin,
               code_insee_fin,
               rapproche_debut,
-              (plus_petit_chevauchement BETWEEN 0 AND $d)::boolean AS ppc,
+              (distance_mini = 0)::boolean AS ppc,
+              criteres,
               ST_AsMvtGeom(
                 point_debut_3857,
                 BBox($tx, $ty, $tz),
@@ -58,6 +62,8 @@ FROM ( SELECT osm_id,
                 true
               ) AS geom
        FROM croisement_voies_limites
+       JOIN pifodrome_criteres
+       USING (osm_id)
        WHERE point_debut_3857 && ST_TileEnvelope($tz, $tx, $ty)
     ) AS q
   ) TO STDOUT;
@@ -79,7 +85,8 @@ FROM ( SELECT osm_id,
               nom_commune_fin,
               code_insee_fin,
               rapproche_fin,
-              (plus_petit_chevauchement BETWEEN 0 AND $d)::boolean AS ppc,
+              (distance_mini = 0)::boolean AS ppc,
+              criteres,
               ST_AsMvtGeom(
                 point_fin_3857,
                 BBox($tx, $ty, $tz),
@@ -88,6 +95,8 @@ FROM ( SELECT osm_id,
                 true
               ) AS geom
        FROM croisement_voies_limites
+       JOIN pifodrome_criteres
+       USING (osm_id)
        WHERE point_fin_3857 && ST_TileEnvelope($tz, $tx, $ty)
     ) AS q
   ) TO STDOUT;
@@ -107,7 +116,8 @@ FROM ( SELECT osm_id,
               code_insee_debut,
               code_insee_fin,
               degres,
-              (plus_petit_chevauchement BETWEEN 0 AND $d)::boolean AS ppc,
+              (distance_mini = 0)::boolean AS ppc,
+              criteres,
               ST_AsMvtGeom(
                 geometrie_3857,
                 BBox($tx, $ty, $tz),
@@ -116,6 +126,8 @@ FROM ( SELECT osm_id,
                 true
               ) AS geom
        FROM point_croisement_voies_limites
+       JOIN pifodrome_criteres
+       USING (osm_id)
        WHERE geometrie_3857 && ST_TileEnvelope($tz, $tx, $ty)
     ) AS q
   ) TO STDOUT;
