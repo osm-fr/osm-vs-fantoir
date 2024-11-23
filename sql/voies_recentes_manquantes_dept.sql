@@ -82,4 +82,4 @@ ON      co.com = f.code_insee
 LEFT OUTER JOIN statut_fantoir
 USING   (fantoir)
 CROSS JOIN (SELECT count(*) AS nb_ligne_total FROM liste_fantoir) lf
-ORDER BY date_creation DESC,3,4;
+ORDER BY date_creation DESC,4;
