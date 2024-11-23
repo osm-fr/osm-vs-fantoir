@@ -95,6 +95,12 @@ hr {
     height: auto;
     width: auto;
 }
+#aide_contenu p img.medium {
+    max-width: 100%;
+    max-height: 100%;
+    height: auto;
+    width: auto;
+}
 #aide_contenu p img.capture {
     width: 95%;
 }
@@ -793,7 +799,7 @@ hr {
 	border:1px solid wheat;
 	border-bottom: 3px sienna solid;
 	border-radius: 8px;
-	line-height:30px;
+	line-height:1.5em;
 	visibility: hidden;
 }
 
@@ -1633,7 +1639,8 @@ span.remontee_suppr_numero {
 }
 #reponse.pifo{
 	margin-top:265px;
-	height: 600px;
+	height: 650px;
+	max-height: 100%;
 	border-bottom: 1px solid lightgrey;
 }
 #reponse.pifomap, #reponse.voies_a_cheval{
