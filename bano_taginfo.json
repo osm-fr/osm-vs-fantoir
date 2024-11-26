@@ -1,0 +1,30 @@
+{
+       "data_format": 1,
+       "data_url": "http://bano.openstreetmap.fr/bano_taginfo.json",
+       "project": {
+           "name": "BANO project (Base d'Adresses Nationale Ouverte) - France",
+           "description": "Open Adresses Database for France",
+           "project_url": "http://openstreetmap.fr/bano",
+           "contact_name": "Christian Quest",
+           "contact_email": "bano@openstreetmap.fr"
+       },
+       "tags": [
+	    	{
+    			"key": "addr:housenumber",
+       			"object_types": ["node","way"]
+			},
+	    	{
+    			"key": "name",
+       			"object_types": ["way"]
+			},
+	    	{
+    			"key": "ref:FR:FANTOIR",
+       			"object_types": ["node","way","relation"]
+			},
+	    	{
+    			"key": "place",
+       			"object_types": ["node","way"]
+			}
+   		]
+}
+   
