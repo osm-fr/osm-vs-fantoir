@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statistiques nationales par département</title>
+<script src="../pifometre/js/jquery-3.6.4.min.js"></script>
+<script src="../pifometre/js/tablesorter/jquery.tablesorter.js"></script>
+<script src="../pifometre/js/jquery.tablesorter.combined.min.js"></script>
+<script src="../pifometre/js/fonctions.js"></script>
+<script defer src="../pifometre/js/menu.js"></script>
+<link rel="preload" href="../pifometre/css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../pifometre/css/tablesorter/theme.default.min.css" type="text/css"/>
+<link rel="stylesheet" href="../pifometre/css/style.css" type="text/css"/>
+<link rel="stylesheet" href="../pifometre/css/responsive.css" type="text/css"/>
+
+</head>
+<body>
+	<header>
+		<!--#include virtual="../includes/menu.html" -->
+	</header>
+
+	<div id="barre-jaune">
+	</div>
+
+	<div id="bandeau">
+	    <div id="descriptif">
+			<h1>Statistiques nationales par département</h1>
+		</div>
+		<!-- <button id="bouton_export_csv" title="Exporter le tableau en CSV" onclick="window.open(urlCSV, '_blank');"></button> -->
+		<div id="wait_ajax" class="bas"></div>
+	</div>
+
+	<div id="reponse" class="haut">
+		<table id="stats_nat" class="tablesorter"></table>
+	</div>
+
+	<footer>
+	 <!--#include virtual="../includes/footer.html" -->
+	</footer>
+
+    <script>
+        update_menu_visits()
+
+		var a_champs_stats = ['dep','nom_dep','nb_com','nb_addr_osm','nb_addr_ban','nb_voies_ban','nb_voies_ban_a_rapprocher','nb_bal']
+
+        function requete_stats_nat(){
+        	$('body').css('cursor','progress');
+	        $('#wait_ajax').empty()
+	                        .css('visibility','visible')
+	                        .append($('<p>').append('Chargement des statistiques...'));
+
+			$.ajax({
+				url: "stats_france_par_dept.py"
+			})
+
+			.done(function( data ) {
+				$('body').css('cursor','default');
+				$('#wait_ajax').css('visibility','hidden');
+
+				$('#stats_nat').empty().append($('<thead>').append($('<tr>')))
+
+				stats = data[1] /* ??? */
+				for (c=0;c<a_champs_stats.length;c++){
+					$('#stats_nat > thead > tr:last').append($('<th>').append(a_champs_stats[c]))
+				}
+				$('#stats_nat').append($('<tbody>'))
+				for (c=0;c<stats.length;c++){
+					$('#stats_nat').append($('<tr>'))
+					$('#stats_nat tr:last').append($('<td>').append(stats[c][d]))
+				}
+
+	            //Sticky headers : le tableau scrolle dans son contenant
+	            $('#stats_nat').tablesorter({
+	                widthFixed : true,
+	                headerTemplate : '{content} {icon}', // Add icon for various themes
+	                widgets: [ 'stickyHeaders', 'filter' ],
+	                widgetOptions: {
+	                  stickyHeaders_attachTo : '#reponse'
+	            	}
+	        	});
+
+			})
+        }
+
+	</script>
+</body>
+</html>
