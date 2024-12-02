@@ -15,74 +15,86 @@
 <link rel="stylesheet" href="../pifometre/css/responsive.css" type="text/css"/>
 
 </head>
-<body>
-	<header>
-		<!--#include virtual="../includes/menu.html" -->
-	</header>
+<body onload="start()">
+    <header>
+        <!--#include virtual="../includes/menu.html" -->
+    </header>
 
-	<div id="barre-jaune">
-	</div>
+    <div id="barre-jaune">
+    </div>
 
-	<div id="bandeau">
-	    <div id="descriptif">
-			<h1>Statistiques nationales par département</h1>
-		</div>
-		<!-- <button id="bouton_export_csv" title="Exporter le tableau en CSV" onclick="window.open(urlCSV, '_blank');"></button> -->
-		<div id="wait_ajax" class="bas"></div>
-	</div>
+    <div id="bandeau">
+        <div id="descriptif">
+            <h1>Statistiques nationales par département</h1>
+        </div>
+        <!-- <button id="bouton_export_csv" title="Exporter le tableau en CSV" onclick="window.open(urlCSV, '_blank');"></button> -->
+        <div id="wait_ajax" class="bas"></div>
+    </div>
 
-	<div id="reponse" class="haut">
-		<table id="stats_nat" class="tablesorter"></table>
-	</div>
+    <div id="reponse" class="haut">
+        <table id="stats_cumul_fra"></table>
+        <table id="stats_nat" class="tablesorter"></table>
+    </div>
 
-	<footer>
-	 <!--#include virtual="../includes/footer.html" -->
-	</footer>
+    <footer>
+     <!--#include virtual="../includes/footer.html" -->
+    </footer>
 
     <script>
-        update_menu_visits()
 
-		var a_champs_stats = ['dep','nom_dep','nb_com','nb_addr_osm','nb_addr_ban','nb_voies_ban','nb_voies_ban_a_rapprocher','nb_bal']
+        // var a_champs_stats = ['Département','Communes','Addresses OSM','Addresses BAN','% OSM/BAN','Voies BAN rapprochées','Voies BAN','% rapprochées','BAL']
 
-        function requete_stats_nat(){
-        	$('body').css('cursor','progress');
-	        $('#wait_ajax').empty()
-	                        .css('visibility','visible')
-	                        .append($('<p>').append('Chargement des statistiques...'));
+        function start(){
+            update_menu_visits()
+            $('body').css('cursor','progress');
+            $('#wait_ajax').empty()
+                            .css('visibility','visible')
+                            .append($('<p>').append('Chargement des statistiques...'));
+            $.ajax({
+                url: "../pifometre/stats_france_par_dept.py"
+            })
+            .done(function( data ) {
+                $('body').css('cursor','default');
+                $('#wait_ajax').css('visibility','hidden');
 
-			$.ajax({
-				url: "stats_france_par_dept.py"
-			})
+                $('#stats_cumul_fra').empty().append($('<thead>').append($('<tr>')))
+                $('#stats_nat').empty().append($('<thead>').append($('<tr>')))
 
-			.done(function( data ) {
-				$('body').css('cursor','default');
-				$('#wait_ajax').css('visibility','hidden');
+                date_du_calcul = data["date_du_calcul"]
+                colonnes = data["colonnes"]
+                france = data["france"]
+                departements = data["departements"]
 
-				$('#stats_nat').empty().append($('<thead>').append($('<tr>')))
+                for (c=0;c<colonnes.length;c++){
+                    $('#stats_cumul_fra > thead > tr:last').append($('<th>').append(colonnes[c]))
+                    $('#stats_nat > thead > tr:last').append($('<th>').append(colonnes[c]))
+                }
+                $('#stats_cumul_fra').append($('<tbody>'))
+                $('#stats_nat').append($('<tbody>'))
+                for (c=0;c<departements.length;c++){
+                    $('#stats_nat').append($('<tr>'))
+                    for (d=0;d<departements[c].length;d++){
+                        $('#stats_nat tr:last').append($('<td>').append(departements[c][d].toLocaleString()))
+                    }
+                }
+                $('#stats_cumul_fra').append($('<tr>'))
+                for (d=0;d<france.length;d++){
+                    $('#stats_cumul_fra tr:last').append($('<td>').append(france[d].toLocaleString()))
+                }
 
-				stats = data[1] /* ??? */
-				for (c=0;c<a_champs_stats.length;c++){
-					$('#stats_nat > thead > tr:last').append($('<th>').append(a_champs_stats[c]))
-				}
-				$('#stats_nat').append($('<tbody>'))
-				for (c=0;c<stats.length;c++){
-					$('#stats_nat').append($('<tr>'))
-					$('#stats_nat tr:last').append($('<td>').append(stats[c][d]))
-				}
+                //Sticky headers : le tableau scrolle dans son contenant
+                $('#stats_nat').tablesorter({
+                    widthFixed : true,
+                    headerTemplate : '{content} {icon}', // Add icon for various themes
+                    widgets: [ 'stickyHeaders', 'filter' ],
+                    widgetOptions: {
+                      stickyHeaders_attachTo : '#reponse'
+                    }
+                });
 
-	            //Sticky headers : le tableau scrolle dans son contenant
-	            $('#stats_nat').tablesorter({
-	                widthFixed : true,
-	                headerTemplate : '{content} {icon}', // Add icon for various themes
-	                widgets: [ 'stickyHeaders', 'filter' ],
-	                widgetOptions: {
-	                  stickyHeaders_attachTo : '#reponse'
-	            	}
-	        	});
-
-			})
+            })
         }
 
-	</script>
+    </script>
 </body>
 </html>
