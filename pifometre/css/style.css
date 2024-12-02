@@ -1359,6 +1359,7 @@ hr {
 	top:60px;
 	padding-top:0;
 	width:100%;
+	height: 200px;
 }
 
 #bandeau.haut{
@@ -1628,19 +1629,18 @@ span.remontee_suppr_numero {
 #reponse{
 	position:relative;
 	margin-top:240px;
-	width: 100%;
 	font-size:0.9em;
-	height: 70%;
+	width: 100%;
+	height: calc(100vh - 260px);
 	overflow-y: auto;
 }
 #reponse.haut{
 	margin-top:200px;
-	height: 73%;
+	height: calc(100vh - 220px);
 }
 #reponse.pifo{
-	margin-top:265px;
-	height: 650px;
-	max-height: 100%;
+	margin-top:260px;
+	height: calc(100vh - 280px);
 	border-bottom: 1px solid lightgrey;
 }
 #reponse.pifomap, #reponse.voies_a_cheval{

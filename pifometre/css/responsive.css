@@ -2,7 +2,6 @@
     #descriptif, #infos_commune_col2 {margin:0 10px;}
     #boutons-filtres.pifo {font-size: 0.7em;}
     #boutons-filtres ul {padding: 0;}
-    #reponse.pifo {height: 60%; max-height: 600px;}
     .tablesorter-default {font-size: 0.9em;}
     .barre_noms_tous, .barre_noms_avec_adresses_tous, .barre_adresses_tous {width:35%;}
     #pifostats.pifodrome h3 {font-size: 0.8em}
@@ -114,12 +113,8 @@
 }
 
 @media only screen and (max-width: 1050px) {
-    #reponse.pifo {
-    margin-top:280px;
-    }
-    #infos_commune_col1 {
-        font-size: 0.9em;
-    }
+    #reponse.pifo {margin-top:290px; height: calc(100vh - 310px);}
+    #infos_commune_col1 {font-size: 0.9em;}
 }
 
 @media only screen and (max-width: 950px) {
