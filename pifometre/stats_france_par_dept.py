@@ -7,16 +7,13 @@ import json
 
 from sql import sql_get_data
 
+def format_csv(col,data):
+    data_lignes = '\n'.join(f"{s[0]};{s[1]};{s[2]};{s[3]};{s[4]};{s[5]};{s[6]};{s[7]};{s[8]}" for s in data)
+    return f"{','.join(col)}\n{data_lignes}"
 
-
-def format_csv(fetch):
-    return ('Code INSEE;Commune;Pct adresses certifiées BAN;Voies avec adresses rapprochées (a);Toutes voies rapprochées (b)...;...dont voies rapprochées sur lieux-dits FANTOIR;Voies FANTOIR (c);Voies et lieux-dits FANTOIR (d);Voies avec adresses voies FANTOIR (a/c) en %;Voies rapprochées voies FANTOIR (b/c) en %;Voies rapprochées voies et lieux-dits FANTOIR (b/d) en %;Adresses OSM;Adresses BAN;Adresses BAN sans voie rapprochées;Adresse BAN avec voie rapprochée en %;Indice 2020\n'+'\n'.join([f'{c[0]};{c[1]};{c[2]};{c[3]};{c[4]};{c[5]};{c[6]};{c[7]};{c[8]};{c[9]};{c[10]};{c[11]};{c[12]};{c[13]};{c[14]};{c[15]}' for c in fetch]))
-
-# cgitb.enable()
-# params = cgi.FieldStorage()
-# format = params.getvalue('format','json')
-
-format = 'json'
+cgitb.enable()
+params = cgi.FieldStorage()
+format = params.getvalue('format','json')
 
 raw_data_depts = sql_get_data('stats_france_par_dept',{})
 
@@ -25,10 +22,11 @@ date_du_calcul = raw_data_depts[0][-1]
 data_france = raw_data_depts[-1]
 data_depts = [d[0:-1] for d in raw_data_depts[0:-1]]
 
+# print(data_depts)
 if format == 'json':
     print("Content-Type: application/json\n")
     print(json.JSONEncoder().encode({"date_du_calcul":date_du_calcul, "colonnes":colonnes, "france":data_france, "departements":data_depts}))
 
 if format == 'csv':
-    print(f'Content-Type: text/csv\nContent-Disposition: Attachment; filename="Dept {dept} - statistiques BANO par commune.csv"\n')
-    print(format_csv(sql_get_data('stats_dept',{'dept':dept})))
+    print(f'Content-Type: text/csv\nContent-Disposition: Attachment; filename="statistiques BANO France par departement.csv"\n')
+    print(format_csv(colonnes,[data_france]+data_depts))
