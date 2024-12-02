@@ -7,6 +7,7 @@
 <script src="../pifometre/js/jquery-3.6.4.min.js"></script>
 <script src="../pifometre/js/tablesorter/jquery.tablesorter.js"></script>
 <script src="../pifometre/js/jquery.tablesorter.combined.min.js"></script>
+<script src="../pifometre/js/tablesorter/widgets/widget-staticRow.min.js"></script>
 <script src="../pifometre/js/fonctions.js"></script>
 <script defer src="../pifometre/js/menu.js"></script>
 <link rel="preload" href="../pifometre/css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -32,8 +33,7 @@
     </div>
 
     <div id="reponse" class="haut">
-        <table id="stats_cumul_fra"></table>
-        <table id="stats_nat" class="tablesorter"></table>
+        <table id="stats_fra_par_dept" class="tablesorter"></table>
     </div>
 
     <footer>
@@ -57,8 +57,7 @@
                 $('body').css('cursor','default');
                 $('#wait_ajax').css('visibility','hidden');
 
-                $('#stats_cumul_fra').empty().append($('<thead>').append($('<tr>')))
-                $('#stats_nat').empty().append($('<thead>').append($('<tr>')))
+                $('#stats_fra_par_dept').empty().append($('<thead>').append($('<tr>')))
 
                 date_du_calcul = data["date_du_calcul"]
                 colonnes = data["colonnes"]
@@ -66,27 +65,27 @@
                 departements = data["departements"]
 
                 for (c=0;c<colonnes.length;c++){
-                    $('#stats_cumul_fra > thead > tr:last').append($('<th>').append(colonnes[c]))
-                    $('#stats_nat > thead > tr:last').append($('<th>').append(colonnes[c]))
+                    $('#stats_fra_par_dept > thead > tr:last').append($('<th>').append(colonnes[c]))
                 }
-                $('#stats_cumul_fra').append($('<tbody>'))
-                $('#stats_nat').append($('<tbody>'))
-                for (c=0;c<departements.length;c++){
-                    $('#stats_nat').append($('<tr>'))
-                    for (d=0;d<departements[c].length;d++){
-                        $('#stats_nat tr:last').append($('<td>').append(departements[c][d].toLocaleString()))
-                    }
-                }
-                $('#stats_cumul_fra').append($('<tr>'))
+                $('#stats_fra_par_dept').append($('<tbody>'))
+
+                //test
+                $('#stats_fra_par_dept').append($('<tr>'))
                 for (d=0;d<france.length;d++){
-                    $('#stats_cumul_fra tr:last').append($('<td>').append(france[d].toLocaleString()))
+                    $('#stats_fra_par_dept tr:last').addClass('static').append($('<td>').append(france[d].toLocaleString()))
                 }
 
-                //Sticky headers : le tableau scrolle dans son contenant
-                $('#stats_nat').tablesorter({
+                for (c=0;c<departements.length;c++){
+                    $('#stats_fra_par_dept').append($('<tr>'))
+                    for (d=0;d<departements[c].length;d++){
+                        $('#stats_fra_par_dept tr:last').append($('<td>').append(departements[c][d].toLocaleString()))
+                    }
+                }
+
+                $('#stats_fra_par_dept').tablesorter({
                     widthFixed : true,
                     headerTemplate : '{content} {icon}', // Add icon for various themes
-                    widgets: [ 'stickyHeaders', 'filter' ],
+                    widgets: [ 'stickyHeaders', 'staticRow', 'filter' ],
                     widgetOptions: {
                       stickyHeaders_attachTo : '#reponse'
                     }
