@@ -68,6 +68,8 @@
                 $('#stats_fra_par_dept').empty().append($('<thead>').append($('<tr>')))
 
                 date_du_calcul = data["date_du_calcul"]
+                $('span#date_du_calcul').text(date_du_calcul)
+
                 colonnes = data["colonnes"]
                 france = data["france"]
                 departements = data["departements"]
