@@ -2,77 +2,104 @@
 <html lang="fr">
 <head>
 	<meta charset='UTF-8'>
-	<title>Le projet BANO - La Base Adresses Nationale Ouverte, par OpenStreetMap France</title>
-	<link
-	href='style.css'
-	media='screen'
-	rel='stylesheet'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Projet BANO - La Base Adresses Nationale Ouverte, par OpenStreetMap France</title>
+	<script src="/pifometre/js/jquery-3.6.4.min.js"></script>
+	<script src="/pifometre/js/fonctions.js"></script>
+    <script defer src="/pifometre/js/menu.js"></script>
+
+	<link rel="icon" type="image/png" href="pifometre/img/logo/favicon-96x96.png" sizes="96x96" />
+	<link rel="icon" type="image/svg+xml" href="pifometre/img/logo/favicon.svg" />
+	<link rel="shortcut icon" href="pifometre/img/logo/favicon.ico" />
+	<link rel="apple-touch-icon" sizes="180x180" href="pifometre/img/logo/apple-touch-icon.png" />
+	<link rel="manifest" href="pifometre/img/logo/site.webmanifest" />
+
+    <link rel="preload" href="pifometre/css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel='stylesheet' href='style.css' type="text/css">
+	<link rel='stylesheet' href='pifometre/css/style.css' type="text/css">
+    <link rel="stylesheet" href="pifometre/css/responsive.css" type="text/css"/>
 </head>
+
 <body>
-	<div id='content'>
-		<header>
-			<h1>
-				<img
-				class=' logo'
-				src='img/OSM-FR.svg'
-				alt='Logo OpenStreetMap'>
-				BANO – La Base Adresses Nationale Ouverte, par OpenStreetMap France
-			</h1>
-		</header>
-		<main>
-			<div class="alert alert-warning">
-				<b><a href="http://tile.openstreetmap.fr/~cquest/leaflet/bano.html" target="_blank">
-					La couche cartographique BANO est à nouveau disponible.</a></b></div>
-				<article>
-					<img
-					class='aside-img'
-					src='img/400px-Plaque-adresse-42.jpg' width="400" height="300" alt="Adresse numéro 42, si vous lisez ceci vous avez tout compris">
-					<p>La Base Adresses Nationale Ouverte (BANO) est une initiative d’<a href='https://www.openstreetmap.fr'>OpenStreetMap France</a>. Elle a pour objet la constitution d’une base libre la plus complète possible de points d’adresse à
-						l’échelle de la France. Vous trouverez sur cette page les accès aux différentes
-						problématiques soulevées par la constitution d’une base d’adresses.<br>
-						Plus d'informations sur <a href='https://wiki.openstreetmap.org/wiki/FR:France/WikiProject_Base_Adresses_Nationale_Ouverte_(BANO)'>le Wiki d'OpenStreetMap</a>
-					</p>
-					<h2>Les données produites par BANO</h2>
-					<p>Elles sont régénérées et publiées chaque nuit avec les améliorations faites dans OpenStreetMap au cours de la
-						journée précédente. Elles intègrent aussi à J+1 les publications de données au format BAL de <a href='https://adresse.data.gouv.fr/'>https://adresse.data.gouv.fr/</a> (Cadastre et BAL locales)</p>
-						<a href="data" class="btn btn-primary">Accès aux données</a><br>
-						<br>
-						<h2>Plusieurs manières de contribuer</h2>
-						<p>Chacun·e peut améliorer la BANO en contribuant à OpenStreetMap sur la thématique des adresses.</p>
-						<h3>Outils spécifiques pour BANO</h3>
-						<ul>
-							<li>
-								<a href='/pifometre'>Pifomètre</a>, le rapprochement OSM/FANTOIR qui permet de visualiser sous forme de liste les voies rapprochées et non rapprochées, par commune.
-							</li>
-							<li>
-								La liste des <a href='/pifometre/fantoir_errone.html'>codes FANTOIR erronés</a> à corriger
-							</li>
-							<li >
-								La liste des <a href='/pifometre/fantoir_annule.html' >codes FANTOIR annulés</a > à remplacer</br>
+	<header>
+        <!--#include virtual="includes/menu.html" -->
+	</header>
+    <div id="aide_contenu" class="test fiche">
+		<h1><img class='logo' src='img/OSM-FR.svg' alt='Logo OpenStreetMap'/>Bienvenue sur le projet Bano</h1>
 
-							</li >
-							<li>
-								Quelques <a href='/pifometre/stats_dept.html'>statistiques des rapprochements par commune</a>
-							</li>
-							<li>
-								Les <a href='/pifometre/top_adresses_manquantes.html'>voies non rapprochées avec un maximum d'adresses</a>
-							</li>
-							<li>
-								Les <a href='/pifometre/voies_recentes_manquantes.html'>voies les plus récentes</a> manquantes dans OpenStreetMap
-							</li>
-						</ul>
+		<div class="bloc_fiche bano">
+			<h2>C'est quoi, Bano ?</h2>
+			<p><img class='droite' src='img/400px-Plaque-adresse-42.jpg' width="400" alt="Adresse numéro 42, si vous lisez ceci vous avez tout compris">La Base Adresses Nationale Ouverte (Bano) est une initiative d’<a href='https://www.openstreetmap.fr'>OpenStreetMap France</a>. Elle a pour objet la constitution d’une base libre la plus complète possible de points d’adresse à l’échelle de la France.</p>
+			<p><span class="lien_aide">> Plus d'informations sur <a href='https://wiki.openstreetmap.org/wiki/FR:France/WikiProject_Base_Adresses_Nationale_Ouverte_(BANO)'>le Wiki d'OpenStreetMap</a></span>
+			</p>
+			<!-- <h2>Quelles données contient Bano ?</h2> -->
+			<p>Les données de Bano sont régénérées et publiées chaque nuit avec les améliorations faites dans OpenStreetMap au cours de la journée précédente.</p>
+			<p>Elles intègrent aussi à J+1 les données publiées par <a href='https://adresse.data.gouv.fr/'>adresse.data.gouv.fr</a>, venant du cadastre et des Bases Adresse Locales (BAL).</p>
+			<a class="lien_aide" href="/data">> Accès aux données</a>
+			<h2>Comment améliorer Bano ?</h2>
+			<p>Chacun·e peut améliorer Bano en contribuant à OpenStreetMap sur la thématique des adresses.</p>
+		</div>
 
-						<!--a href="/fantoir/maj_population_2017.html">Mise à jour des données de population par commune</a><br>-->
-						<!--<a href="/fantoir/cantons_sans_admin_centre.html">Liste des cantons sans chef-lieu / rôle admin_centre</a><br>-->
-						<p>
-							Le code source est disponible sur GitHub via 2 projets : <a href='https://github.com/osm-fr/bano'>le projet BANO</a> et <a href='https://github.com/osm-fr/osm-vs-fantoir'>les outils de visualisation et d'analyse FANTOIR</a>
-						</p>
-					</article>
-				</main>
-				<hr>
-				<footer>Contacts : bano [at] openstreetmap [dot] fr – <a href='https://twitter.com/ProjetBANO'>@ProjetBANO</a> – <a href='https://twitter.com/pifosm'>@pifosm</a>
-				</footer>
+		<div class="bloc_fiche b2">
+			<h2>Les outils Pifo</h2>
+			<p>Ils permettent de faciliter l'intégration des voies, des lieux-dits et des adresses dans OpenStreetMap.</p>
+			<ul>
+				<li>
+					<strong><a href='/pifometre'>Pifomètre</a></strong> affiche sous forme de tableau, pour chaque commune française, la liste de ses voies et lieux-dits. La liste est alimentée par les données OpenStreetMap d'une part, et par le fichier Topo (ex-Fantoir), le cadastre et la <abbr title="Base Adresses Nationale">BAN</abbr> d'autre part. Le tableau indique si les voies et lieux-dits sont «rapprochés» entre ces deux sources. <a href='pifometre/aide.html'>Voir l'aide.</a>
+				</li>
+				<li>
+					<strong><a href='/pifometre/pifomap'>Pifomap</a></strong> permet de visualiser les communes sous forme de carte. On y retrouve les voies et lieux-dits, ainsi que tous les points d'adresse, affichés de différentes couleurs selon qu'ils sont rapprochés ou non. 
+				</li>
+				<li>
+					<strong><a href='/pifometre/pifodrome'>Pifodrome</a></strong> affiche la carte de France de toutes les «voies à cheval», c'est-à-dire les routes et rues nommées croisant au moins une limite administrative, donc débordant sur au moins 2 communes. C'est un vivier de voies potentiellement problématiques, à redécouper proprement et dont il faut vérifier le nom. 
+				</li>
+			</ul>
+			<p><strong>Tableaux :</strong></p>
+			<ul>
+				<li>
+					La liste des <a href='/pifometre/fantoir_errone.html'>codes Fantoir erronés</a> à corriger
+				</li>
+				<li>
+					La liste des <a href='/pifometre/fantoir_annule.html'>codes Fantoir annulés</a > à remplacer
+				</li>
+				<li>
+					Les <a href='/pifometre/top_adresses_manquantes.html'>voies non rapprochées avec un maximum d'adresses</a>
+				</li>
+				<li>
+					Les <a href='/pifometre/voies_recentes_manquantes.html'>voies les plus récentes</a> qui manquent dans OpenStreetMap
+				</li>
+			</ul>
+		</div>
 
-			</div>
-		</body>
-		</html>
+		<div class="bloc_fiche b1">
+			<h2>Statistiques</h2>
+			<ul>
+				<li>
+					<a href='/stats/france_par_dept.html'>Statistiques nationales : chiffres par département</a>
+				</li>
+				<li>
+					<a href='/pifometre/stats_dept.html'>Statistiques départementales : chiffres par commune</a>
+				</li>
+			</ul>
+		</div>
+
+		<div class="bloc_fiche b2">
+			<h2>A vous de jouer !</h2>
+			<p>> Je veux intégrer des voies et des lieux-dits.</p>
+			<p>> Je veux corriger des voies.</p>
+			<p>> Je veux intégrer des adresses.</p>
+		</div>
+
+		<div class="bloc_fiche b1">
+			<h2>Infos</h2>
+			<p>Le code source est disponible sur GitHub via 2 projets : <a href='https://github.com/osm-fr/bano'>le projet BANO</a> et <a href='https://github.com/osm-fr/osm-vs-fantoir'>les outils de visualisation et d'analyse FANTOIR</a></p>
+			<p>Contact :bano [at] openstreetmap [dot] fr</p>
+			<p>Sur les réseaux : <a href='https://twitter.com/ProjetBANO'>@ProjetBANO</a> – <a href='https://twitter.com/pifosm'>@pifosm</p>
+		</div>
+	</div>
+
+	<script>
+		update_menu_visits();
+	</script>
+</body>
+</html>

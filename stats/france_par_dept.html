@@ -10,6 +10,13 @@
 <script src="../pifometre/js/tablesorter/widgets/widget-staticRow.min.js"></script>
 <script src="../pifometre/js/fonctions.js"></script>
 <script defer src="../pifometre/js/menu.js"></script>
+
+    <link rel="icon" type="image/png" href="../pifometre/img/logo/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../pifometre/img/logo/favicon.svg" />
+    <link rel="shortcut icon" href="../pifometre/img/logo/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../pifometre/img/logo/apple-touch-icon.png" />
+    <link rel="manifest" href="../pifometre/img/logo/site.webmanifest" />
+
 <link rel="preload" href="../pifometre/css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../pifometre/css/tablesorter/theme.default.min.css" type="text/css"/>
 <link rel="stylesheet" href="../pifometre/css/style.css" type="text/css"/>
@@ -27,6 +34,7 @@
     <div id="bandeau">
         <div id="descriptif">
             <h1>Statistiques nationales par département</h1>
+            <h3>Ce tableau est rafraîchi tous les jours. La dernière mise à jour date du <span id="date_du_calcul"></span>.</h3>
         </div>
         <button id="bouton_export_csv" title="Exporter le tableau en CSV" onclick="window.open('../pifometre/stats_france_par_dept.py?format=csv', '_blank');"></button>
         <div id="wait_ajax" class="bas"></div>
