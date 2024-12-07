@@ -79,15 +79,26 @@
                 }
                 $('#stats_fra_par_dept').append($('<tbody>'))
 
-                //test
+                /*Ligne statique : total France*/
                 $('#stats_fra_par_dept').append($('<tr>'))
                 for (d=0;d<france.length;d++){
                     $('#stats_fra_par_dept tr:last').addClass('static').append($('<td>').append(france[d].toLocaleString()))
                 }
 
+                /*Lignes départements*/
                 for (c=0;c<departements.length;c++){
                     $('#stats_fra_par_dept').append($('<tr>'))
-                    for (d=0;d<departements[c].length;d++){
+                    if (c<96) {
+                        $('#stats_fra_par_dept tr:last').append($('<td>')
+                                                        .append($('<a>').attr('href','../pifometre/stats_dept.html?dept='+departements[c][0].substr(0, 2))
+                                                        .append(departements[c][0].toLocaleString())))
+                    }
+                    else {
+                        $('#stats_fra_par_dept tr:last').append($('<td>')
+                                                        .append($('<a>').attr('href','../pifometre/stats_dept.html?dept='+departements[c][0].substr(0, 3))
+                                                        .append(departements[c][0].toLocaleString())))
+                    }
+                    for (d=1;d<departements[c].length;d++){
                         $('#stats_fra_par_dept tr:last').append($('<td>').append(departements[c][d].toLocaleString()))
                     }
                 }
