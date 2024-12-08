@@ -397,7 +397,7 @@
             commune_valide = true;
             code_insee = $('#input_insee')[0].value
 
-            update_storage_visits(nom_commune,code_insee,'Pifomap',window.location.href.split('?')[0].split('/').pop(),'insee')
+            update_storage_visits(nom_commune,code_insee,'Pifomap',window.location.pathname,'insee',undefined,VERSION_MENU)
             update_menu_visits()
 
             $('#bouton_pifostats').removeClass('onglet_non_cliquable').addClass('onglet_actif');

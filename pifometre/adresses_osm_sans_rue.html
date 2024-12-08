@@ -161,7 +161,7 @@
                 });
             })
             history.replaceState("", "", window.location.pathname+"?dept="+dept);
-            update_storage_visits(dept,dept,'Adresses OSM sans rue',window.location.href.split('?')[0].split('/').pop(),'dept')
+            update_storage_visits(dept,dept,'Adresses OSM sans rue',window.location.pathname,'dept',undefined,VERSION_MENU)
             update_menu_visits()
         };
     }

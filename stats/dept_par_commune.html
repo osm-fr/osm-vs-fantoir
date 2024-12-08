@@ -4,25 +4,26 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Statistiques départementales par commune</title>
-	<script src="js/jquery-3.6.4.min.js"></script>
-	<script src="js/tablesorter/jquery.tablesorter.js"></script>
-	<script src="js/jquery.tablesorter.combined.min.js"></script>
-	<script src="js/fonctions.js"></script>
-	<script defer src="js/menu.js"></script>
+	<script src="../pifometre/js/jquery-3.6.4.min.js"></script>
+	<script src="../pifometre/js/tablesorter/jquery.tablesorter.js"></script>
+	<script src="../pifometre/js/jquery.tablesorter.combined.min.js"></script>
+	<script src="../pifometre/js/fonctions.js"></script>
+	<script defer src="../pifometre/js/menu.js"></script>
 
-    <link rel="icon" type="image/png" href="img/logo/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="img/logo/favicon.svg" />
-    <link rel="shortcut icon" href="img/logo/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="img/logo/apple-touch-icon.png" />
-    <link rel="manifest" href="img/logo/site.webmanifest" />
+    <link rel="icon" type="image/png" href="../pifometre/img/logo/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../pifometre/img/logo/favicon.svg" />
+    <link rel="shortcut icon" href="../pifometre/img/logo/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../pifometre/img/logo/apple-touch-icon.png" />
+    <link rel="manifest" href="../pifometre/img/logo/site.webmanifest" />
 
-	<link rel="preload" href="css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
-	<link rel="stylesheet" href="css/tablesorter/theme.default.min.css" type="text/css"/>
-	<link rel="stylesheet" href="css/style.css" type="text/css"/>
-	<link rel="stylesheet" href="css/style_stats_dept.css" type="text/css"/>
-	<link rel="stylesheet" href="css/responsive.css" type="text/css"/>
+	<link rel="preload" href="../pifometre/css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="stylesheet" href="../pifometre/css/tablesorter/theme.default.min.css" type="text/css"/>
+	<link rel="stylesheet" href="../pifometre/css/style.css" type="text/css"/>
+	<link rel="stylesheet" href="../pifometre/css/style_stats_dept.css" type="text/css"/>
+	<link rel="stylesheet" href="../pifometre/css/responsive.css" type="text/css"/>
 
 <script>
+	PYDIR = '../pifometre/'
 	var menu_labels
 	var a_champs_stats = ['Code Insee','Commune','% adresses certifiées BAN','Voies avec adresses<br/>rapprochées (a)','Toutes voies<br/>rapprochées (b)...','...dont voies rapprochées sur<br/>lieux-dits Topo','Voies Topo (c)','Voies et lieux-dits<br/>Topo (d)','Voies avec adresses /<br/>voies Topo (a/c)<br/>en %','Voies rapprochées /<br/>voies Topo (b/c)<br/>en %','Voies rapprochées /<br/>voies et lieux-dits Topo (b/d)<br/>en %','Adresses OSM','Adresses BAN','Adresses BAN sans voie rapprochées','Adresse BAN avec voie rapprochée<br/>en %','Indice 2020']
 	function is_valid_dept(d){
@@ -50,7 +51,7 @@
 		}
 	}
 	function update_csv_url(dept){
-   		urlCSV = "stats_dept.py?dept="+dept+'&format=csv';
+   		urlCSV = PYDIR+"stats_dept.py?dept="+dept+'&format=csv';
 	}
 	function requete_stats_dept(){
 		if (!is_valid_dept($('#input_dept')[0].value)){
@@ -68,7 +69,7 @@
 		update_csv_url($('#input_dept')[0].value)
 		$('#input_dept')[0].value = $('#input_dept')[0].value.toUpperCase()
 		$.ajax({
-			url: "stats_dept.py?dept="+$('#input_dept')[0].value
+			url: PYDIR+"stats_dept.py?dept="+$('#input_dept')[0].value
 		})
 		.done(function( data ) {
 			nom_dept = data[0][0][1]
@@ -95,7 +96,7 @@
 					if (d==0){
 						$('#stats_dept tr:last').append($('<td>')
 												.append($('<a>')
-												.attr('href','./index.html?insee='+stats[c][0])
+												.attr('href','../pifometre/index.html?insee='+stats[c][0])
 												.text(stats[c][0])))
 					} else {
 						$('#stats_dept tr:last').append($('<td>').append(stats[c][d]))
@@ -121,7 +122,7 @@
 		})
 		// window.location.hash="#dept="+$('#input_dept')[0].value
         history.replaceState("", "", window.location.pathname+"?dept="+dept);
-        update_storage_visits(dept,dept,'Stats par commune',window.location.href.split('?')[0].split('/').pop(),'dept')
+        update_storage_visits(dept,dept,'Stats par commune',window.location.pathname,'dept',undefined,VERSION_MENU)
         update_menu_visits()
 	}
 </script>

@@ -1,6 +1,7 @@
     let hoveredStateId = null;
     let context_menu = null;
     DELTA = 0.0008
+    VERSION_MENU = 2
 
     function is_valid_dept(d){
         pattern_dept = new RegExp('^([01]|[3-8])([0-9])$|^2([aAbB]|[1-9])$|^9([0-5]|7[1-4]|76)$')
@@ -348,7 +349,7 @@
                         }
                         // Historique de visite au clic uniquement si Pifodrome
                         if (page == 'pifodrome.html'){
-                            update_storage_visits(nom_commune,-9999,'Pifodrome',window.location.href.split('#')[0].split('?')[0].split('/').pop(),'noparam',location.hash)
+                            update_storage_visits(nom_commune,-9999,'Pifodrome',window.location.pathname,'noparam',location.hash,VERSION_MENU)
                             update_menu_visits()
                         }
 
@@ -1018,8 +1019,8 @@
             console.log("Pas de geolocalisation disponible");
         }
     }
-    function update_storage_visits(name,code,type,page,parametre,hash){
-        const v = {nom:name,code:code,type:type,page:page,parametre:parametre,hash:hash}
+    function update_storage_visits(name,code,type,page,parametre,hash,version){
+        const v = {nom:name,code:code,type:type,page:page,parametre:parametre,hash:hash,version:version}
         if (localStorage.visits == undefined){
             localStorage.setItem('visits',JSON.stringify([v]))
         }
@@ -1046,13 +1047,15 @@
             for (i=0;i<visits.length;i++){
                 search = ''
                 hash = ''
-                if (visits[i].code != '-9999'){
-                    search = '?'+visits[i].parametre+'='+visits[i].code
+                if (visits[i].version == VERSION_MENU ){
+                    if (visits[i].code != '-9999'){
+                        search = '?'+visits[i].parametre+'='+visits[i].code
+                    }
+                    if (visits[i].hash != undefined){
+                        hash = visits[i].hash
+                    }
+                    $('#menu_recent #liens').append($('<h2>').append($('<a>').attr('href',visits[i].page+search+hash).append(visits[i].nom+' - '+visits[i].type)))
                 }
-                if (visits[i].hash != undefined){
-                    hash = visits[i].hash
-                }
-                $('#menu_recent #liens').append($('<h2>').append($('<a>').attr('href',visits[i].page+search+hash).append(visits[i].nom+' - '+visits[i].type)))
             }
         }
     }

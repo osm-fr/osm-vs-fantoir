@@ -121,7 +121,7 @@
                   }
                 });
                 history.replaceState("", "", window.location.pathname+"?dept="+code_dept);
-                update_storage_visits(numero_dept,numero_dept,'Codes Fantoir annulés',window.location.href.split('?')[0].split('/').pop(),'dept')
+                update_storage_visits(numero_dept,numero_dept,'Codes Fantoir annulés',window.location.pathname,'dept',undefined,VERSION_MENU)
                 update_menu_visits()
                 $('body').css('cursor','default');
             })

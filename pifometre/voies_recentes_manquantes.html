@@ -183,7 +183,7 @@
             })//fin fonction done
 
             history.replaceState("", "", window.location.pathname+"?dept="+numero_dept+'&offset='+offset);
-            update_storage_visits(numero_dept,numero_dept,'Voies manquantes',window.location.href.split('?')[0].split('/').pop(),'dept')
+            update_storage_visits(numero_dept,numero_dept,'Voies manquantes',window.location.pathname,'dept',undefined,VERSION_MENU)
             update_menu_visits()
 
         };

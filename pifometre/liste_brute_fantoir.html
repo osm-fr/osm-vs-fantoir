@@ -120,7 +120,7 @@
             stickyHeaders_attachTo : '#reponse'
           }
       });
-      update_storage_visits(nom_commune,insee,'Fichier TOPO',window.location.href.split('?')[0].split('/').pop(),'insee')
+      update_storage_visits(nom_commune,insee,'Fichier TOPO',window.location.pathname,'insee',undefined,VERSION_MENU)
       update_menu_visits()
 		})
     history.replaceState("", "", window.location.pathname+"?insee="+$('#input_insee')[0].value)

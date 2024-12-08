@@ -207,7 +207,7 @@
             $('#pifostats').css('visibility','visible');
 
             code_insee = $('#input_insee')[0].value
-            update_storage_visits(nom_commune,code_insee,'Pifomètre',window.location.href.split('?')[0].split('/').pop(),'insee')
+            update_storage_visits(nom_commune,code_insee,'Pifomètre',window.location.pathname,'insee',undefined,VERSION_MENU)
             update_menu_visits()
 
             update_csv_url()
