@@ -90,12 +90,12 @@
                     $('#stats_fra_par_dept').append($('<tr>'))
                     if (c<96) {
                         $('#stats_fra_par_dept tr:last').append($('<td>')
-                                                        .append($('<a>').attr('href','../pifometre/stats_dept.html?dept='+departements[c][0].substr(0, 2))
+                                                        .append($('<a>').attr('href','dept_par_commune.html?dept='+departements[c][0].substr(0, 2))
                                                         .append(departements[c][0].toLocaleString())))
                     }
                     else {
                         $('#stats_fra_par_dept tr:last').append($('<td>')
-                                                        .append($('<a>').attr('href','../pifometre/stats_dept.html?dept='+departements[c][0].substr(0, 3))
+                                                        .append($('<a>').attr('href','dept_par_commune.html?dept='+departements[c][0].substr(0, 3))
                                                         .append(departements[c][0].toLocaleString())))
                     }
                     for (d=1;d<departements[c].length;d++){

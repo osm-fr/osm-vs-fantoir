@@ -74,6 +74,7 @@
 		.done(function( data ) {
 			nom_dept = data[0][0][1]
 			$('#nom_dept').empty()
+            $('#stats_dept').trigger("destroy");
 			$('#stats_dept').empty().append($('<thead>').append($('<tr>')))
 
 			if (nom_dept.length == 0){

@@ -73,6 +73,7 @@
                 $('#bandeau h2').empty().append(nom_dept+' ('+numero_dept+')')
                 $('#bandeau h1').empty().append(titre_bandeau)
 
+                $('#'+table).trigger("destroy");
                 $('#'+table).empty()
                 $('.pagination').empty()
 

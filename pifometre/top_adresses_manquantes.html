@@ -70,7 +70,8 @@
                 $('#bandeau h2').empty().append(nom_dept+' ('+numero_dept+')')
                 $('#bandeau h1').empty().append(titre_bandeau)
 
-                $('#'+table).empty()
+                $('#'+table).trigger("destroy");
+                $('#'+table).empty();
                 $('.pagination').empty()
 
                 url_map_org_part1 = 'http://www.openstreetmap.org/'
