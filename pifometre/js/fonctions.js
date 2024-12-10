@@ -777,9 +777,11 @@
                             $('#'+table).append($('<tr>'))
                             add_josm_addr_link(table,code_insee,nom_commune,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
 
-                            $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Qualifier les adresses sur Pifomètre')))) 
-                            $('#'+table).append($('<tr>'))
-                            add_addr_inspector_link(table,code_insee,fantoir,'BAN')
+                            if (has_code_fantoir){
+                                $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Qualifier les adresses sur Pifomètre'))))
+                                $('#'+table).append($('<tr>'))
+                                add_addr_inspector_link(table,code_insee,fantoir,'BAN')
+                            }
                         }
                 })
             });
