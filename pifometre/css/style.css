@@ -1227,30 +1227,26 @@ img.logo {
 	border:2px solid lightblue;
 	border-bottom: 2px solid lightblue;
 }
-
-#panneau_map #espace_bouton_copier {
-	display: inline-block;
-	float: right;
-	margin: 10px 20px 0 0;
-	vertical-align: middle;
-	text-align: center;
-	width: 40px;
-	height: 40px;
+#panneau_map li {
+	line-height: 1.6em;
 }
 
-#panneau_map #espace_bouton_copier #copier_voie {
+#copier_voie, #copier_fantoir {
 	cursor: pointer;
 	background: url("../img/copier.png") no-repeat center;
-	width: 20px;
-	height: 25px;
+	width: 15px;
+	height: 20px;
+	vertical-align: middle;
+	position:relative;
+	top:-3px;
+	left: 6px;
 }
 
-#panneau_map #espace_bouton_copier #copier_voie.ok {
+#copier_voie.ok, #copier_fantoir.ok {
 	background: url("../img/copier_vert.png") no-repeat center;
 }
 
-
-#confirmation_copie {
+#confirm_copie {
 	opacity: 0;
     transition: opacity 0.5s ease;
 	display:inline-block;
@@ -1263,7 +1259,7 @@ img.logo {
 
     width: 55px;
     padding: 0px;
-    margin-left: 0px;
+    margin-left: 10px;
 
     color: #33A672;
 }

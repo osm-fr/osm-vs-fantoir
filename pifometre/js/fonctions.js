@@ -531,28 +531,29 @@
                 reset_panneau_map()
 
                 if (couche_carto == 'BAN_point_transparent' || couche_carto == 'OSM_point') {
-                    $('#panneau_map h2').attr('texte_a_copier',nom).text(numero+' '+nom)
+                    $('#panneau_map h2').attr('texte_voie_a_copier',nom).text(numero+' '+nom)
                 } else {
-                    $('#panneau_map h2').attr('texte_a_copier',nom).text(nom)
+                    $('#panneau_map h2').attr('texte_voie_a_copier',nom).text(nom)
                 }
-                $('#panneau_map #espace_bouton_copier').append('<button id="copier_voie" title="Copier le nom de la voie"></button>')
-                $('#panneau_map #espace_bouton_copier #copier_voie').click(function(){
+                $('#panneau_map h2').after('<button id="copier_voie" title="Copier le nom de la voie"></button>')
+                $('#copier_voie').click(function(){
 
                     //Copie le nom de la voie dans le presse-papier
-                    navigator.clipboard.writeText($('#panneau_map h2').attr('texte_a_copier'))
+                    navigator.clipboard.writeText($('#panneau_map h2').attr('texte_voie_a_copier'))
                     //Affiche le picto copie en vert
                     $(this).addClass('ok')
                     //Affiche le message de confirmation
-                    $('#panneau_map #espace_bouton_copier').append($('<span id="confirmation_copie">').text('✔ Copié'));
+                    $('#copier_voie').append($('<span id="confirm_copie">').text('✔ Copié'));
 
                     setTimeout(function(){
-                        $('#panneau_map #espace_bouton_copier #confirmation_copie').css('opacity', '1');
+                        $('#copier_voie #confirm_copie').css('opacity', '1');
                         setTimeout(function(){
-                            $('#panneau_map #espace_bouton_copier #confirmation_copie').css('opacity', '0');
-                        }, 800);
+                            $('#copier_voie #confirm_copie').css('opacity', '0');
+                        }, 400);
                         setTimeout(function(){
-                            $('#panneau_map #espace_bouton_copier #confirmation_copie').remove();
-                        }, 1500);
+                            $('#copier_voie #confirm_copie').remove();
+                            $('#copier_voie').removeClass('ok');
+                        }, 750);
                     }, 50);
 
                 })
@@ -630,9 +631,9 @@
                         //Mettre à jour le nom de la rue
                         if (nom_osm != null){
                             if (couche_carto == 'BAN_point_transparent' || couche_carto == 'OSM_point') {
-                                $('#panneau_map h2').attr('texte_a_copier',nom_osm).text(numero+' '+nom_osm)
+                                $('#panneau_map h2').attr('texte_voie_a_copier',nom_osm).text(numero+' '+nom_osm)
                             } else {
-                                $('#panneau_map h2').attr('texte_a_copier',nom_osm).text(nom_osm)
+                                $('#panneau_map h2').attr('texte_voie_a_copier',nom_osm).text(nom_osm)
                             }
                         }
 
@@ -705,8 +706,28 @@
                                                         )
                                                         .append($('<li>')
                                                             .append($('<span class="gras">').text('Code Fantoir : '))
-                                                            .append($('<span>').text(fantoir_affiche))
-                                                        );
+                                                            .append($('<span id="code_fantoir">').attr('texte_fantoir_a_copier',fantoir_affiche).text(fantoir_affiche))
+                                                            .append('<button id="copier_fantoir" title="Copier le code Fantoir"></button>')
+                                                        )
+                                                        $('#copier_fantoir').click(function(){
+                                                                //Copie le nom de la voie dans le presse-papier
+                                                                navigator.clipboard.writeText($('#code_fantoir').attr('texte_fantoir_a_copier'));
+                                                                //Affiche le picto copie en vert
+                                                                $(this).addClass('ok');
+                                                                //Affiche le message de confirmation
+                                                                $('#copier_fantoir').append($('<span id="confirm_copie">')
+                                                                                                            .text('✔ Copié'));
+                                                                setTimeout(function(){
+                                                                    $('#confirm_copie').css('opacity', '1');
+                                                                    setTimeout(function(){
+                                                                        $('#confirm_copie').css('opacity', '0');
+                                                                    }, 400);
+                                                                    setTimeout(function(){
+                                                                        $('#confirm_copie').remove();
+                                                                        $('#copier_fantoir').removeClass('ok');
+                                                                    }, 750);
+                                                                }, 50)
+                                                            })
                         }
                         else {
                             $('#infos_voie_lieudit ul') .append($('<li>')
@@ -781,25 +802,26 @@
                 lon = e.lngLat.lng
                 lat = e.lngLat.lat
 
-                $('#panneau_map h2').attr('texte_a_copier',nom).text(nom)
-                $('#panneau_map #espace_bouton_copier').append('<button id="copier_voie" title="Copier le nom de la voie"></button>')
-                $('#panneau_map #espace_bouton_copier #copier_voie').click(function(){
+                $('#panneau_map h2').attr('texte_voie_a_copier',nom).text(nom)
+                $('#panneau_map h2').after('<button id="copier_voie" title="Copier le nom de la voie"></button>')
+                $('#copier_voie').click(function(){
 
                     //Copie le nom de la voie dans le presse-papier
-                    navigator.clipboard.writeText($('#panneau_map h2').attr('texte_a_copier'))
+                    navigator.clipboard.writeText($('#panneau_map h2').attr('texte_voie_a_copier'))
                     //Affiche le picto copie en vert
                     $(this).addClass('ok')
                     //Affiche le message de confirmation
-                    $('#panneau_map #espace_bouton_copier').append($('<span id="confirmation_copie">').text('✔ Copié'));
+                    $('#copier_voie').append($('<span id="confirm_copie">').text('✔ Copié'));
 
                     setTimeout(function(){
-                        $('#panneau_map #espace_bouton_copier #confirmation_copie').css('opacity', '1');
+                        $('#confirm_copie').css('opacity', '1');
                         setTimeout(function(){
-                            $('#panneau_map #espace_bouton_copier #confirmation_copie').css('opacity', '0');
-                        }, 800);
+                            $('#confirm_copie').css('opacity', '0');
+                        }, 400);
                         setTimeout(function(){
-                            $('#panneau_map #espace_bouton_copier #confirmation_copie').remove();
-                        }, 1500);
+                            $('#confirm_copie').remove();
+                            $('#copier_voie').removeClass('ok');
+                        }, 750);
                     }, 50);
                     
                 })
@@ -832,11 +854,29 @@
                                             );
                     $('#infos_voie_lieudit ul').append($('<li>')
                                                     .append($('<span class="gras">').text('Code Fantoir : '))
-                                                    .append($('<span>').text(fantoir))
+                                                    .append($('<span id="code_fantoir">').attr('texte_fantoir_a_copier',fantoir).text(fantoir))
+                                                    .append('<button id="copier_fantoir" title="Copier le code Fantoir"></button>')
                                             );
-
+                    $('#copier_fantoir').click(function(){
+                            //Copie le nom de la voie dans le presse-papier
+                            navigator.clipboard.writeText($('#code_fantoir').attr('texte_fantoir_a_copier'));
+                            //Affiche le picto copie en vert
+                            $(this).addClass('ok');
+                            //Affiche le message de confirmation
+                            $('#copier_fantoir').append($('<span id="confirm_copie">')
+                                                                        .text('✔ Copié'));
+                            setTimeout(function(){
+                                $('#confirm_copie').css('opacity', '1');
+                                setTimeout(function(){
+                                    $('#confirm_copie').css('opacity', '0');
+                                }, 400);
+                                setTimeout(function(){
+                                    $('#confirm_copie').remove();
+                                    $('#copier_fantoir').removeClass('ok');
+                                }, 750);
+                            }, 50)
+                        })
                     //LIENS DE VISU
-
                     $('#infos_voie_lieudit').append($('<hr>'));
                     $('#infos_voie_lieudit').append($('<h3>').text('Voir le point sur : '));
 
@@ -849,9 +889,7 @@
                                                     )
                                                 )
                                             );
-
                     //LIENS D'EDITION
-
                     $('#infos_voie_lieudit').append($('<hr>'));
                     $('#infos_voie_lieudit').append($('<h3>').text('Édition'));
 
@@ -873,7 +911,7 @@
     }
     function reset_panneau_map(){
         $('#panneau_map h2').empty()
-        $('#panneau_map #espace_bouton_copier').empty()
+        $('#panneau_map #copier_voie').remove()
         $('#infos_numero').empty();
         $('#infos_voie_lieudit').empty();
         $('#pifomap_table_liens').empty();
