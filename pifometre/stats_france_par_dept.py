@@ -17,7 +17,7 @@ format = params.getvalue('format','json')
 
 raw_data_depts = sql_get_data('stats_france_par_dept',{})
 
-colonnes = ['Territoire','Communes','Adresses OSM','Adresses BAN','% OSM/BAN','Voies BAN rapprochées','Voies BAN','% rapprochées','BAL']
+colonnes = ['Territoire';'Communes';'Adresses OSM';'Adresses BAN';'% OSM/BAN';'Voies BAN rapprochées';'Voies BAN';'% rapprochées';'BAL']
 date_du_calcul = raw_data_depts[0][-1]
 data_france = raw_data_depts[-1]
 data_depts = [d[0:-1] for d in raw_data_depts[0:-1]]
