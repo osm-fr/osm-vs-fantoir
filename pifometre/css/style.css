@@ -167,15 +167,13 @@ img.logo {
 	margin-bottom: 0.8em;
 }
 
-
-/*--TEST--*/
-#aide_contenu.test{
+#aide_contenu.home{
 	font-size: 0.9em;
-	columns: 3;
+	columns: 2;
 	column-fill: auto;
 	height: calc(100vh - 75px);
 }
-#aide_contenu.test .bloc_fiche {
+#aide_contenu.home .bloc_fiche {
 	float: left;
 	break-inside: avoid;
 	width: 95%;
