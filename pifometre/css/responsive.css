@@ -89,6 +89,7 @@
 }
 
 @media only screen and (max-width: 1100px) {
+    #aide_contenu.home{columns: 1; height:initial;}
     #alerte_commune, #wait_ajax.pifo {
         width: 20%;
         font-size: 0.75em;
