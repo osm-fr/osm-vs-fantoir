@@ -53,12 +53,12 @@
         insee=check_url_for_insee()
 
         $('#bouton_pifoprogression').click(function(){
-            if (!$(this).hasClass('onglet_actif')) { 
+            if (!$(this).hasClass('onglet_actif')) {
                 $(this).addClass('onglet_actif')
                 $('#bouton_pifostats').removeClass('onglet_actif');
                 $('#pifostats').css('visibility','hidden');
                 $('#bouton_pifofiltres').removeClass('onglet_actif');
-                $('#pifofiltres').css('visibility','hidden');              
+                $('#pifofiltres').css('visibility','hidden');
                 $('#pifoprogression').css('visibility','visible');
             }
         })
@@ -130,7 +130,7 @@
         $('#bouton_localise_moi').click(function(){
                                 $('body').css('cursor','progress');
                                 $('#wait_ajax').empty()
-                                               .css('visibility','visible') 
+                                               .css('visibility','visible')
                                                .append($('<span>').append('Localisation en cours...'));
                                 getLocation();
                             })
@@ -155,7 +155,7 @@
         }
         $('body').css('cursor','progress');
         $('#wait_ajax').empty()
-                       .css('visibility','visible') 
+                       .css('visibility','visible')
                        .append($('<span>').append('Mise à jour BANO en cours...'));
         $('#wait_ajax_mobile').css('visibility','visible');
         $.ajax({
@@ -238,7 +238,7 @@
         min_lat = 90
         max_lat = -90
         $('#wait_ajax').empty()
-                       .css('visibility','visible') 
+                       .css('visibility','visible')
                        .append($('<span>').append('Chargement...'));
         $('#wait_ajax_mobile').css('visibility','visible');
         $.ajax({
@@ -281,7 +281,7 @@
                     poly] = polydata[s]
                 if (poly.type == 'Polygon'){
                     res.features.push(get_geojson_poly(poly,{'fantoir':get_fantoir_affiche(fantoir),'nom':nom_ban,'statut':label_statut}))
-                } 
+                }
             }
             map.getSource('polygones_convexhull').setData(res)
 
@@ -527,7 +527,7 @@
             $('#pifostats .barre_noms_avec_adresses_osm').attr('aria-valuenow', Math.min(100, Math.round(pourcent_noms_avec_adresses_osm)))
 
             $('#pifostats .barre_adresses_texte').text(nb_adresses_osm+' adresses OSM'+' (soit '+Math.round(pourcent_adresses_osm)+'% des '+nb_adresses_ban+' adresses BAN)')
-            
+
             $('#pifostats .barre_adresses_osm').attr('aria-valuenow', Math.min(100, Math.round(pourcent_adresses_osm)))
 
 
@@ -649,22 +649,22 @@
         <div id="pifostats" class="pifomap">
             <div><h3>Intégration des voies et adresses de la commune</h3></div>
 
-            <div class="barre_noms"> 
-                <div class="barre_noms_texte"></div> 
+            <div class="barre_noms">
+                <div class="barre_noms_texte"></div>
                 <div class="barre_noms_tous" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100">
                     <div class="barre_noms_osm"></div>
                 </div>
             </div>
 
-            <div class="barre_noms_avec_adresses"> 
-                <div class="barre_noms_avec_adresses_texte"></div> 
+            <div class="barre_noms_avec_adresses">
+                <div class="barre_noms_avec_adresses_texte"></div>
                 <div class="barre_noms_avec_adresses_tous" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100">
                     <div class="barre_noms_avec_adresses_osm"></div>
                 </div>
            </div>
 
-            <div class="barre_adresses"> 
-                <div class="barre_adresses_texte"></div> 
+            <div class="barre_adresses">
+                <div class="barre_adresses_texte"></div>
                 <div class="barre_adresses_tous" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100">
                     <div class="barre_adresses_osm"></div>
                 </div>
@@ -791,7 +791,7 @@
         </tr>
         </table>
         <p><span class="petit">Ce rapport correspond à :<br/>- nombre de noms de voies présentes sur OSM / Nombre de noms de voies recensés dans le fichier Topo
-            <br/>- nombre d'adresses présentes sur OSM / Nombre d'adresses recensées par la <abbr title="Base Adresses Nationale">BAN</abbr></span></p>
+            <br/>- nombre d'adresses présentes sur OSM / Nombre d'adresses recensées par la <abbr title="Base Adresse Nationale">BAN</abbr></span></p>
     </div>
 
     <footer>
