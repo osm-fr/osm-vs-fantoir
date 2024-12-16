@@ -63,72 +63,12 @@ img.logo {
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
 /*---------------                                                       ---------------*/
-/*---------------                      PAGE AIDE                        ---------------*/
-/*---------------                                                       ---------------*/
-/*-------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------*/
-#aide_contenu {
-	float: left;
-	margin: 40px 1%;
-	font-size: 0.9em;
-}
-#aide_contenu h1 {
-	margin:10px 0;
-}
-#aide_contenu h2 {
-	font-size: 1.6em;
-}
-#aide_contenu h3 {
-	font-size: 1.4em;
-	color: #5B9328;
-}
-#aide_contenu p img {
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 10px;
-}
-#aide_contenu p img.picto {
-    max-width: 30px;
-    max-height: 30px;
-    height: auto;
-    width: auto;
-}
-#aide_contenu p img.medium {
-    max-width: 100%;
-    max-height: 100%;
-    height: auto;
-    width: auto;
-}
-#aide_contenu p img.capture {
-    width: 95%;
-}
-#aide_contenu p img.droite {
-	float: right;
-    width: 30%;
-}
-#aide_contenu .titre_para {
-	font-weight: bold;
-}
-.aide_capture_lien {
-	width: 600px;
-	border: 2px solid #B1DE89;
-	padding: 5px;
-}
-
-.aide_capture {
-	width: 1100px;
-	border: 1px solid #222;
-	padding: 3px;
-}
-
-/*-------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------*/
-/*---------------                                                       ---------------*/
 /*---------------                   FICHES D'AIDE                       ---------------*/
 /*---------------                                                       ---------------*/
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
-.encadre_aide {
+
+.encadre_aide { /*-- Appels dans les pages vers les fiches d'aide--*/
 	background: url("../img/info.png") no-repeat #FCFFC4 left 5px top 50%;
 	background-size: 15px;
 	padding: 3px 0 3px 30px;
@@ -142,44 +82,109 @@ img.logo {
 	text-decoration: none;
 	font-weight: bold;
 }
-.lien_aide {
-	background: #F8FF66;
-	padding: 2px 5px;
-	border:1px solid gold;
-	border-radius: 4px;
-	font-weight: bold;
-}
-.bloc_fiche {
+#aide_contenu {
 	float: left;
-	width: 46%;
-	margin: 1%;
-	padding:5px 5px 5px 15px;
-	border-radius: 15px;
-}
-.bloc_fiche.bano {background-color: powderblue; /*jaune clair*/}
-.bloc_fiche.b1 {background-color: #FCFFB9; /*jaune clair*/}
-.bloc_fiche.b2 {background-color: #D3FFB9; /*vert clair*/}
-#aide_contenu .bloc_fiche h2{
-	font-size: 1.2em;
-	line-height: 1.2em;
-}
-.bloc_fiche ul li {
-	margin-bottom: 0.8em;
-}
-
-#aide_contenu.home{
+	margin: 40px 1%;
 	font-size: 0.9em;
 	columns: 2;
-	column-fill: auto;
-	height: calc(100vh - 75px);
 }
-#aide_contenu.home .bloc_fiche {
+#aide_contenu .bloc_fiche {
 	float: left;
 	break-inside: avoid;
 	width: 95%;
 	margin: 1%;
 	padding:5px 10px 5px 15px;
 	border-radius: 15px;
+}
+.bloc_fiche.bano {background-color: powderblue; /*jaune clair*/}
+.bloc_fiche.b1 {background-color: #FCFFB9; /*jaune clair*/}
+.bloc_fiche.b2 {background-color: #D3FFB9; /*vert clair*/}
+
+/*------------------------------------------------*/
+/*-------------------- TEXTES --------------------*/
+/*------------------------------------------------*/
+#aide_contenu h1 {
+	margin:10px 0;
+}
+#aide_contenu h2 {
+	display: inline-block;
+	font-size: 1.6em;
+}
+#aide_contenu h3 {
+	font-size: 1.4em;
+	color: #5B9328;
+}
+#aide_contenu .titre_para {
+	font-weight: bold;
+}
+#aide_contenu .bloc_fiche h2{
+	font-size: 1.2em;
+	line-height: 1.2em;
+	margin: 0.3em 0;
+}
+#aide_contenu .bloc_fiche p{
+	margin: 0.5em 0;
+}
+.bloc_fiche ul li {
+	margin-bottom: 0.8em;
+}
+.lien_aide { /*Encadré jaune dans les blocs*/
+	display: block;
+	width: fit-content;
+	background: #F8FF66;
+	margin: 10px 0;
+	padding: 2px 5px;
+	border:1px solid gold;
+	border-radius: 4px;
+	font-weight: bold;
+}
+
+/*------------------------------------------------*/
+/*-------------------- IMAGES --------------------*/
+/*------------------------------------------------*/
+#aide_contenu p img {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+#aide_contenu p img.picto {
+    max-width: 30px;
+    max-height: 30px;
+    height: auto;
+    width: auto;
+}
+#aide_contenu img.picto_grand {
+	width: 30px;
+	height: 30px;
+	display: inline-block;
+	margin: 0 5px 0 5px;
+    max-width: 30px;
+    max-height: 30px;
+    height: auto;
+    width: auto;
+}
+#aide_contenu p img.medium {
+    max-width: 100%;
+    max-height: 100%;
+    height: auto;
+    width: auto;
+}
+#aide_contenu p img.capture {
+    max-width: 95%;
+}
+#aide_contenu p img.droite {
+	float: right;
+    width: 30%;
+    margin-left: 10px;
+}
+.capture_lien {
+	max-width: 90%;
+	border: 2px solid #B1DE89;
+	padding: 5px;
+}
+.capture {
+	max-width: 95%;
+	padding: 3px;
 }
 
 /*-------------------------------------------------------------------------------------*/
@@ -319,7 +324,6 @@ img.logo {
 #menu_recent  #liens h2 a:hover {
 	background: #B1DE89;
 }
-
 
 /*-----------------------------------------------------------------------*/
 /*------------------------------ MENU JAUNE -----------------------------*/
