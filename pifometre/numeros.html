@@ -287,6 +287,9 @@
                                         lat_osm,
                                         ban_id] = data[l]
                                     parite = Number.parseInt(numero) % 2 == 0 ? 'pair':'impair';
+                                    if (ban_id != undefined) {
+                                        ban_id_voie = ban_id.slice(0, 10);
+                                    }
 
                                     $('#'+table+' tbody:last').append($('<tr>').attr('id',l))
 
@@ -314,9 +317,9 @@
                                     //---COLONNE REMONTÉE DES SIGNALEMENTS---
                                     if (lon_ban != undefined){
                                         json_args = JSON.stringify({"comment":labels_statut[statut]})
-                                        $('#'+table+' tr:last').append($('<td class="remontee_edit_numero">')
+                                        $('#'+table+' tr:last').append($('<td class="remontee_ban">')
                                                                     .append($('<a class="remontee_edit_numero" target="_blank" title="Signaler un problème dans la BAN : Numéro à modifier">')
-                                                                    .attr('href', 'https://mes-signalements.mes-adresses.fr/#/'+ban_id+'?sourceId=e32cd3e1-b19d-4a49-9aee-31a7929a8ead&type=LOCATION_TO_UPDATE')
+                                                                    .attr('href', 'https://signalement.adresse.data.gouv.fr/#/'+ban_id+'?sourceId=e32cd3e1-b19d-4a49-9aee-31a7929a8ead&type=LOCATION_TO_UPDATE')
                                                                         .append($('<span class="remontee_edit_numero">')
                                                                         )
                                                                     )
@@ -328,8 +331,17 @@
                                         update_url_mes_adresses_commentaire(l,ban_id)
                                     }
                                     else {
-                                        $('#'+table+' tr:last').append($('<td>'))
+                                        $('#'+table+' tr:last').append($('<td class="remontee_ban">')
+                                                                    .append($('<a class="remontee_ajout_numero" target="_blank" title="Signaler un problème dans la BAN : Numéro à ajouter">')
+                                                                    .attr('href', 'https://signalement.adresse.data.gouv.fr/#/'+ban_id_voie+'?sourceId=e32cd3e1-b19d-4a49-9aee-31a7929a8ead&type=LOCATION_TO_CREATE&changesRequested=%7B%22numero%22%3A%20'+numero+'%7D')
+                                                                        .append($('<span class="remontee_ajout_numero">')
+                                                                        )
+                                                                    )
+                                                                )
                                     }
+
+                                    //LIENS SIGNALEMENTS AU-DESSUS DU TABLEAU
+                                    $('.remontee_edit_voie').attr('href', 'https://signalement.adresse.data.gouv.fr/#/'+ban_id_voie+'?sourceId=e32cd3e1-b19d-4a49-9aee-31a7929a8ead&type=LOCATION_TO_UPDATE')
 
                                     //---COLONNE ZOOMER---
                                     $('#'+table+' tr:last').append($('<td class="zoom">')
@@ -402,7 +414,7 @@
             json_args = JSON.stringify({"comment":labels_statut[current_statut]})
             changesRequested = '&changesRequested='+json_args
         }
-        $('#table_inspect_adresse tr#'+num_ligne+' a.remontee_suppr_numero').attr('href','https://mes-signalements.mes-adresses.fr/#/'+ban_id+'?sourceId=e32cd3e1-b19d-4a49-9aee-31a7929a8ead&type=LOCATION_TO_DELETE'+changesRequested)
+        $('#table_inspect_adresse tr#'+num_ligne+' a.remontee_suppr_numero').attr('href','https://signalement.adresse.data.gouv.fr/#/'+ban_id+'?sourceId=e32cd3e1-b19d-4a49-9aee-31a7929a8ead&type=LOCATION_TO_DELETE'+changesRequested)
     }
 
     function refresh(){
@@ -430,69 +442,75 @@
                 <h1></h1>
             </div>
 
-        <div id="boutons-filtres" class="page_numeros">
-            <p id="ligne-afficher">Afficher sur la carte :</p>
-            <div class="ligne-boutons-filtres">
-                <div>
-                    <p>Source</p>
-                    <ul>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_numero_osm" checked/>
-                            <span class="check is-dark"></span>
-                            <span class="control-label" critere="numero_osm">Adresses OSM<span></span></span>
-                        </li>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_numero_ban" checked/>
-                            <span class="check is-dark"></span>
-                            <span class="control-label" critere="numero_ban">Adresses BAN<span></span></span>
-                        </li>
-                    </ul>
+            <div id="boutons-filtres" class="page_numeros">
+                <p id="ligne-afficher">Afficher sur la carte :</p>
+                <div class="ligne-boutons-filtres">
+                    <div>
+                        <p>Source</p>
+                        <ul>
+                            <li>
+                                <label class="switch is-rounded is-small">
+                                <input type="checkbox" id="check_numero_osm" checked/>
+                                <span class="check is-dark"></span>
+                                <span class="control-label" critere="numero_osm">Adresses OSM<span></span></span>
+                            </li>
+                            <li>
+                                <label class="switch is-rounded is-small">
+                                <input type="checkbox" id="check_numero_ban" checked/>
+                                <span class="check is-dark"></span>
+                                <span class="control-label" critere="numero_ban">Adresses BAN<span></span></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul>
+                            <li>
+                                <label class="switch is-rounded is-small">
+                                <input type="checkbox" id="check_en_commun" checked/>
+                                <span class="check is-green"></span>
+                                <span class="control-label" critere="en_commun">Adresses rapprochées BAN-OSM<span></span></span>
+                            </li>
+                            <li>
+                                <label class="switch is-rounded is-small">
+                                <input type="checkbox" id="check_ban_seulement" checked/>
+                                <span class="check is-orange"></span>
+                                <span class="control-label" critere="ban_seulement">Adresses BAN non integrées<span></span></span>
+                            </li>
+                            <li>
+                                <label class="switch is-rounded is-small">
+                                <input type="checkbox" id="check_osm_seulement" checked/>
+                                <span class="check is-blue"></span>
+                                <span class="control-label" critere="osm_seulement">Adresses OSM hors BAN<span></span></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul>
+                            <li>
+                                <label class="switch is-rounded is-small">
+                                <input type="checkbox" id="check_pair" checked/>
+                                <span class="check is-dark"></span>
+                                <span class="control-label" critere="pair">Numéros pairs<span></span></span>
+                            </li>
+                            <li>
+                                <label class="switch is-rounded is-small">
+                                <input type="checkbox" id="check_impair" checked/>
+                                <span class="check is-dark"></span>
+                                <span class="control-label" critere="impair">Numéros impairs<span></span></span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div>
-                    <ul>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_en_commun" checked/>
-                            <span class="check is-green"></span>
-                            <span class="control-label" critere="en_commun">Adresses rapprochées BAN-OSM<span></span></span>
-                        </li>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_ban_seulement" checked/>
-                            <span class="check is-orange"></span>
-                            <span class="control-label" critere="ban_seulement">Adresses BAN non integrées<span></span></span>
-                        </li>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_osm_seulement" checked/>
-                            <span class="check is-blue"></span>
-                            <span class="control-label" critere="osm_seulement">Adresses OSM hors BAN<span></span></span>
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <ul>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_pair" checked/>
-                            <span class="check is-dark"></span>
-                            <span class="control-label" critere="pair">Numéros pairs<span></span></span>
-                        </li>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_impair" checked/>
-                            <span class="check is-dark"></span>
-                            <span class="control-label" critere="impair">Numéros impairs<span></span></span>
-                        </li>
-                    </ul>
-                </div>
+            </div> 
+
+            <div id="remontees_ban">
+                <h3>Signaler un problème dans la Base Adresse Nationale</h3>
+                <a class="remontee_edit_voie" target="_blank">
+                    <span>Voie à modifier</span>
+                </a>
             </div>
-        </div> 
 
         </div>
-
 
         <div id="legende_map">
              <p><span class="legende_numero numero_osm">Rond</span> : Adresses venant d'OSM</p>
@@ -501,9 +519,7 @@
              <p><span class="legende_numero en_commun">Vert</span> : ✔ Adresses rapprochées BAN-OSM</p>
              <p><span class="legende_numero ban_seulement">Orange</span> : Adresses de la BAN non intégrées sur OSM</p>
              <p><span class="legende_numero osm_seulement">Bleu</span> : Adresses trouvées sur OSM mais inconnues de la BAN</p>
-
          </div> 
-
     </div>
 
     <div id="reponse_et_map">

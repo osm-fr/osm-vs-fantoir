@@ -1613,10 +1613,40 @@ img.logo {
 /*------------------------------------------------------*/
 /*--------------------- PAGE NUMEROS -------------------*/
 /*------------------------------------------------------*/
+#remontees_ban {
+	float: left;
+	min-width: 400px;
+	max-width: 40%;
+	margin: 1% 0 0 2%;
+	padding: 2px;
+	background: url("../img/ban_logo.png") no-repeat #FCFFC4 left 6px top 6px;
+	background-size: 20px;
+	border-radius: 5px;
+	border-bottom: 1px solid #EFA500;
+	font-size: 0.8em;
+}
+#remontees_ban h3{
+	margin: 10px 0 0 30px;
+	font-size: 1em;
+	line-height: 1em;
+}
+.remontee_edit_voie  {
+	display: inline-block;
+	margin: 5px 0 0 30px;
+	padding-left: 35px;
+	height: 3em;
+	background: url("../img/remontee-edit-30.png") no-repeat left 0px top 4px;
+	background-size: 30px;
+}
+.remontee_edit_voie > span {
+	font-weight: bold;
+	position: relative;
+	top: 20%;
+}
 
 #reponse_et_map {
 	position:relative;
-	margin-top:310px;
+	margin-top:320px;
 	margin-left: 2%;
 	width: 98%;
 	height:65%;
@@ -1629,13 +1659,12 @@ img.logo {
 	padding-left: 33px;
 }
 
-td.remontee_suppr_numero {
-	text-align: center;
+td.remontee_ban {
 	padding:3px 0 2px 0;
 	height: 30px;
 }
 
-span.remontee_edit_numero, span.remontee_suppr_numero {
+span.remontee_edit_numero, span.remontee_suppr_numero, span.remontee_ajout_numero {
 	padding: 0px 15px 0px 25px;
 	margin: 0;
 	border-radius: 5px;
@@ -1646,9 +1675,11 @@ span.remontee_edit_numero, span.remontee_suppr_numero {
 span.remontee_edit_numero {
 	background: url("../img/remontee-edit-30.png") no-repeat;
 }
-
 span.remontee_suppr_numero {
 	background: url("../img/remontee-suppr-30.png") no-repeat;
+}
+span.remontee_ajout_numero {
+	background: url("../img/remontee-ajout-30.png") no-repeat;
 }
 
 /*------------------------------------------------------*/
