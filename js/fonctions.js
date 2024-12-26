@@ -197,17 +197,22 @@
         return "source=https://bano.openstreetmap.fr/pifometre/pifodrome.html%23map=15/"+y+"/"+x+"%7Chashtags=%23BANO %23Pifometre%7Ccomment="+comment
     }
     function check_josm_remote_control(){
-        $.ajax({
-            url: "http://127.0.0.1:8111/version"
-        })
-        .done(function(data){
-            if (data){
-                console.log('Télécommande JOSM OK')
-            }
-        })
-        .fail(function(data){
-            alert("La télécommande JOSM ne répond pas.\nCertains liens sur la page nécessitent que JOSM soit démarré avec la télécommande activée\n\nPour de l'aide sur la télécommande : https://josm.openstreetmap.de/wiki/Help/Preferences/RemoteControl")
-        })
+        if (localStorage.PreferencesJOSMRemoteControlWarning == undefined){
+            localStorage.setItem('PreferencesJOSMRemoteControlWarning','true')
+        }
+        if (eval(localStorage.PreferencesJOSMRemoteControlWarning)){
+            $.ajax({
+                url: "http://127.0.0.1:8111/version"
+            })
+            .done(function(data){
+                if (data){
+                    console.log('Télécommande JOSM OK')
+                }
+            })
+            .fail(function(data){
+                alert("La télécommande JOSM ne répond pas.\nCertains liens sur la page nécessitent que JOSM soit démarré avec la télécommande activée\n\nPour de l'aide sur la télécommande : https://josm.openstreetmap.de/wiki/Help/Preferences/RemoteControl")
+            })
+        }
     }
     function get_labels_statut_fantoir(){
         STATUS_FANTOIR = []
