@@ -138,7 +138,7 @@
             .done(function( data ) {
                 if(data == statut){
                     $('tr#'+id_ligne).removeClass().addClass('statut'+statut).attr('statut',statut);
-                    update_url_mes_adresses_commentaire(id_ligne,ban_id)
+                    update_url_mes_adresses_commentaire_delete(id_ligne,ban_id)
 
                     //Afficher l'infobulle de confirmation
                     if (statut != '0') {
@@ -328,12 +328,19 @@
                                                                         )
                                                                     )
                                                                 )
-                                        update_url_mes_adresses_commentaire(l,ban_id)
+                                        update_url_mes_adresses_commentaire_delete(l,ban_id)
                                     }
                                     else {
+                                        json_resp = {}
+                                        numero_int = parseInt(numero)
+                                        if (numero != numero_int){
+                                            json_resp['suffixe'] = numero.slice(numero_int.toString().length)
+                                        }
+                                        json_resp['numero'] = numero_int
+                                        json_resp['positions'] = [{'point':{type:'Point',coordinates:[lat_osm,lon_osm]}}]
                                         $('#'+table+' tr:last').append($('<td class="remontee_ban">')
                                                                     .append($('<a class="remontee_ajout_numero" target="_blank" title="Signaler un problème dans la BAN : Numéro à ajouter">')
-                                                                    .attr('href', 'https://signalement.adresse.data.gouv.fr/#/'+ban_id_voie+'?sourceId=e32cd3e1-b19d-4a49-9aee-31a7929a8ead&type=LOCATION_TO_CREATE&changesRequested=%7B%22numero%22%3A%20'+numero+'%7D')
+                                                                    .attr('href', 'https://signalement.adresse.data.gouv.fr/#/'+ban_id_voie+'?sourceId=e32cd3e1-b19d-4a49-9aee-31a7929a8ead&type=LOCATION_TO_CREATE&changesRequested='+JSON.stringify(json_resp))
                                                                         .append($('<span class="remontee_ajout_numero">')
                                                                         )
                                                                     )
@@ -406,7 +413,7 @@
                             })
     }
 
-    function update_url_mes_adresses_commentaire(num_ligne,ban_id){
+    function update_url_mes_adresses_commentaire_delete(num_ligne,ban_id){
         current_statut = $('#table_inspect_adresse tr#'+num_ligne).attr('statut')
         changesRequested = ''
         // transfert du statut comme commentaire si différent de 'Ok'
