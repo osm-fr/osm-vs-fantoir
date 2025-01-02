@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset='UTF-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Pifo-paramètres</title>
+    <script src="js/jquery-3.6.4.min.js"></script>
+	<script src="js/fonctions.js"></script>
+    <script defer src="js/menu.js"></script>
+	
+	<link rel="icon" type="image/png" href="pifometre/img/logo/favicon-96x96.png" sizes="96x96" />
+	<link rel="icon" type="image/svg+xml" href="pifometre/img/logo/favicon.svg" />
+	<link rel="shortcut icon" href="pifometre/img/logo/favicon.ico" />
+	<link rel="apple-touch-icon" sizes="180x180" href="pifometre/img/logo/apple-touch-icon.png" />
+	<link rel="manifest" href="pifometre/img/logo/site.webmanifest" />
+
+    <link rel="preload" href="pifometre/css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel='stylesheet' href='pifometre/css/style.css' type="text/css">
+    <link rel="stylesheet" href="pifometre/css/responsive.css" type="text/css"/>
+</head>
+<body>
+    <header>
+        <!--#include virtual="../includes/menu.html" -->
+    </header>
+    <div id="aide_contenu" class="parametres">
+        <h1>Préférences</h1>
+
+		<div class="bloc_fiche b1">
+			<h2>Paramètres généraux</h2>
+			<fieldset>
+				<legend>Afficher un avertissement si JOSM n'est pas lancé</legend>
+				<p>
+					<input type="radio" name="pref_teleco" id="teleco_on" value="teleco_on" checked /> 
+					<label for="teleco_on">Oui</label>
+				</p>
+				<p>
+					<input type="radio" name="pref_teleco" id="teleco_off" value="teleco_off" /> 
+					<label for="teleco_off">Non</label>
+				</p>
+			</fieldset>
+
+			<!-- <fieldset>
+				<legend>Édition OSM : afficher le lien vers...</legend>
+				<p>
+					<input type="radio" name="pref_editeur" id="editeur_josm" value="editeur_josm" checked /> 
+					<label for="editeur_josm">JOSM</label>
+				</p>
+				<p>
+					<input type="radio" name="pref_editeur" id="editeur_id" value="editeur_id" /> 
+					<label for="editeur_id">ID</label>
+				</p>
+			</fieldset> -->
+		</div>
+		<div class="bloc_fiche b2">
+			<h2>Paramètres Pifomap</h2>
+			<fieldset>
+				<legend>Masquer les lieux-dits</legend>
+				<p>
+					<input type="radio" name="pref_lieuxdits" id="jamais" value="jamais" checked /> 
+					<label for="jamais">Jamais</label>
+				</p>
+				<p>
+					<input type="radio" name="pref_lieuxdits" id="1jour" value="1jour" /> 
+					<label for="1jour">Pendant 1 jour</label>
+				</p>
+				<p>
+					<input type="radio" name="pref_lieuxdits" id="1semaine" value="1semaine" /> 
+					<label for="1semaine">Pendant 1 semaine</label>
+				</p>
+				<p>
+					<input type="radio" name="pref_lieuxdits" id="toujours" value="toujours" />
+					<label for="toujours">Toujours</label>
+				</p>
+			</fieldset>
+		</div>
+	</div>
+
+	<script>
+		update_menu_visits();
+	</script>
+</body>
+</html>

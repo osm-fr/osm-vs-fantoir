@@ -59,6 +59,12 @@ img.logo {
   margin:-2px 5px 0 0;
   vertical-align:middle
 }
+fieldset {
+	margin: 15px 5px;
+}
+fieldset legend {
+	font-weight: bold;
+}
 
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
@@ -88,6 +94,10 @@ img.logo {
 	font-size: 0.9em;
 	columns: 2;
 }
+#aide_contenu.parametres {
+	margin: 5% 20%;
+	font-size:1em;
+}
 #aide_contenu .bloc_fiche {
 	float: left;
 	break-inside: avoid;
@@ -106,6 +116,10 @@ img.logo {
 #aide_contenu h1 {
 	margin:10px 0;
 }
+#aide_contenu.parametres h1 {
+	column-span: all;
+	margin: 10px 0 30px 0;
+}
 #aide_contenu h2 {
 	display: inline-block;
 	font-size: 1.6em;
@@ -121,6 +135,9 @@ img.logo {
 	font-size: 1.2em;
 	line-height: 1.2em;
 	margin: 0.3em 0;
+}
+#aide_contenu.parametres .bloc_fiche h2 {
+	margin-bottom:1em;
 }
 #aide_contenu .bloc_fiche p{
 	margin: 0.5em 0;
