@@ -7,7 +7,8 @@
     <script src="js/jquery-3.6.4.min.js"></script>
 	<script src="js/fonctions.js"></script>
     <script defer src="js/menu.js"></script>
-
+	<script type="text/javascript" src="https://click123.ca/dist/js/snow.js"></script>
+	
 	<link rel="icon" type="image/png" href="pifometre/img/logo/favicon-96x96.png" sizes="96x96" />
 	<link rel="icon" type="image/svg+xml" href="pifometre/img/logo/favicon.svg" />
 	<link rel="shortcut icon" href="pifometre/img/logo/favicon.ico" />
@@ -23,7 +24,7 @@
 	<header>
         <!--#include virtual="includes/menu.html" -->
 	</header>
-    <div id="aide_contenu" class="home fiche">
+    <div id="aide_contenu">
 		<h1><img class='logo' src='img/OSM-FR.svg' alt='Logo OpenStreetMap'/>Bienvenue sur le projet Bano</h1>
 
 		<div class="bloc_fiche bano">
@@ -46,12 +47,10 @@
 		</div>
 
 		<div class="bloc_fiche b2">
-			<h2>Les outils Pifo</h2>
+			<h2>Les outils autour de Bano</h2>
 			<p>Ils permettent de faciliter l'intégration des voies, des lieux-dits et des adresses dans OpenStreetMap.</p>
+			<p><strong>Les cartes :</strong></p>
 			<ul>
-				<li>
-					<img src="/pifometre/img/logo/favicon-96x96.png" class="picto"/><strong><a href='/pifometre'>Pifomètre</a></strong> affiche sous forme de tableau, pour chaque commune française, la liste de ses voies et lieux-dits. La liste est alimentée par les données OpenStreetMap d'une part, et par le fichier Topo (ex-Fantoir), le cadastre et la <abbr title="Base Adresses Nationale">BAN</abbr> d'autre part. Le tableau indique si les voies et lieux-dits sont «rapprochés» entre ces deux sources. <a href='pifometre/aide.html'>Voir l'aide.</a>
-				</li>
 				<li>
 					<img src="/pifometre/img/logo/favicon-96x96-vert.png" class="picto"/><strong><a href='/pifometre/pifomap'>Pifomap</a></strong> permet de visualiser les communes sous forme de carte. On y retrouve les voies et lieux-dits, ainsi que tous les points d'adresse, affichés de différentes couleurs selon qu'ils sont rapprochés ou non. 
 				</li>
@@ -59,8 +58,11 @@
 					<img src="/pifometre/img/logo/favicon-96x96-ocre.png" class="picto"/><strong><a href='/pifometre/pifodrome'>Pifodrome</a></strong> affiche la carte de France de toutes les «voies à cheval», c'est-à-dire les routes et rues nommées croisant au moins une limite administrative, donc débordant sur au moins 2 communes. C'est un vivier de voies potentiellement problématiques, à redécouper proprement et dont il faut vérifier le nom.  <a href='pifometre/aide/pifodrome.html'>Voir l'aide.</a>
 				</li>
 			</ul>
-			<p><strong>Tableaux :</strong></p>
+			<p><strong>Les tableaux :</strong></p>
 			<ul>
+				<li>
+					<img src="/pifometre/img/logo/favicon-96x96.png" class="picto"/><strong><a href='/pifometre'>Pifomètre</a></strong> affiche sous forme de tableau, pour chaque commune française, la liste de ses voies et lieux-dits. La liste est alimentée par les données OpenStreetMap d'une part, et par le fichier Topo (ex-Fantoir), le cadastre et la <abbr title="Base Adresses Nationale">BAN</abbr> d'autre part. Le tableau indique si les voies et lieux-dits sont «rapprochés» entre ces deux sources. <a href='pifometre/aide.html'>Voir l'aide.</a>
+				</li>
 				<li>
 					La liste des <a href='/pifometre/fantoir_errone.html'>codes Fantoir erronés</a> à corriger
 				</li>
@@ -98,5 +100,6 @@
 	<script>
 		update_menu_visits();
 	</script>
+
 </body>
 </html>
