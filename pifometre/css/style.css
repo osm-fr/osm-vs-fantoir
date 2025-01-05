@@ -96,6 +96,11 @@ fieldset legend {
 }
 #aide_contenu.parametres {
 	margin: 5% 20%;
+}
+#aide_contenu.videos {
+	margin: 3% 10%;
+}
+#aide_contenu.parametres {
 	font-size:1em;
 }
 #aide_contenu .bloc_fiche {
@@ -104,12 +109,24 @@ fieldset legend {
 	width: 95%;
 	margin: 1%;
 	padding:5px 10px 5px 15px;
-	border-radius: 15px;
+	border-radius: 12px;
 }
 .bloc_fiche.bano {background-color: powderblue; /*jaune clair*/}
 .bloc_fiche.b1 {background-color: #FCFFB9; /*jaune clair*/}
 .bloc_fiche.b2 {background-color: #D3FFB9; /*vert clair*/}
 
+.container_video {
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+	padding-top: 56.25%; /*16:9 Aspect Ratio (divide 9 by 16 = 0.5625)*/
+}
+.iframe_video {
+    position:absolute;
+    top:0;
+    width:100%;
+    height:100%;
+}
 /*------------------------------------------------*/
 /*-------------------- TEXTES --------------------*/
 /*------------------------------------------------*/
@@ -121,12 +138,19 @@ fieldset legend {
 	margin: 10px 0 30px 0;
 }
 #aide_contenu h2 {
-	display: inline-block;
 	font-size: 1.6em;
+}
+#aide_contenu.videos h1, #aide_contenu.videos h4 {
+	column-span: all;
 }
 #aide_contenu h3 {
 	font-size: 1.4em;
 	color: #5B9328;
+}
+#aide_contenu.videos h3 {
+	font-size: 1em;
+	color: unset;
+	margin: 20px 0 10px 0;
 }
 #aide_contenu .titre_para {
 	font-weight: bold;

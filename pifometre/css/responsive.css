@@ -34,6 +34,7 @@
     h1 {font-size: 1.3em;}
     h2 {font-size: 1.2em;}
     h3 {font-size: 0.9em;}
+    #aide_contenu.videos {margin: 3% 5%;}
     #boutons-filtres.pifo {font-size: 0.65em;}
     #alerte_commune {
         right: 1%;
@@ -47,9 +48,7 @@
 
 @media only screen and (max-width: 1330px) {
     h1 {font-size: 1.5em;}
-    #boutons-filtres.pifo {
-        margin-left: 1%;
-    }
+    #boutons-filtres.pifo {margin-left: 1%;}
     #alerte_commune, #wait_ajax.pifo {
         width: 30%;
         font-size: 0.85em;
@@ -69,12 +68,8 @@
         width: 25%;
         line-height:25px;
     }
-    #descriptif {
-        width: 60%;
-    }
-    #infos_commune_col1 {
-        font-size: 0.8em;
-    }
+    #descriptif {width: 60%;}
+    #infos_commune_col1 {font-size: 0.8em;}
     .bloc_fiche {
         width: 92%;
         margin: 2%
@@ -127,6 +122,7 @@
 }
 
 @media only screen and (max-width: 700px) {
+    #aide_contenu.videos {columns:1;}
     #wait_ajax {
     background: url("../img/skate.gif") no-repeat lightblue left 5% top 70%;
     background-size: 40px;
