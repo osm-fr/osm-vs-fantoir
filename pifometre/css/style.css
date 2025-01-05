@@ -97,7 +97,7 @@ fieldset legend {
 #aide_contenu.parametres {
 	margin: 5% 20%;
 }
-#aide_contenu.videos {
+#aide_contenu.bano, #aide_contenu.videos, #aide_contenu.outils {
 	margin: 3% 10%;
 }
 #aide_contenu.parametres {
@@ -314,8 +314,22 @@ fieldset legend {
 	overflow: hidden;
 	transition: left 0.3s;
 	width: 30%;
-	padding: 50px 0 0 0;
+	padding: 10px 0 0 0;
 	z-index: 50;
+}
+ .navigation #nav_boutons_haut {
+ 	height: 40px;
+ }
+
+ .navigation #bouton_parametres {
+    display:block;
+    cursor: pointer;
+    float: right;
+    margin-right: 50px;
+    background: url("../img/param.png") no-repeat center;
+    background-size: 40px;
+    width: 40px;
+    height: 40px;
 }
 
 .navigation h1, h1 a {
@@ -323,11 +337,9 @@ fieldset legend {
 	color: #111;
 	z-index: 99;
 }
-
 .navigation h1 {
 	font-size: 1.2em;
 }
-
 .navigation h1 a {
 	display:block;
 	padding: 5px 10px 5px 20px;
