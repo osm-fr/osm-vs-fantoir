@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset='UTF-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Outils divers - Autour de Bano</title>
+    <script src="js/jquery-3.6.4.min.js"></script>
+	<script src="js/fonctions.js"></script>
+    <script defer src="js/menu.js"></script>
+	
+	<link rel="icon" type="image/png" href="pifometre/img/logo/favicon-96x96.png" sizes="96x96" />
+	<link rel="icon" type="image/svg+xml" href="pifometre/img/logo/favicon.svg" />
+	<link rel="shortcut icon" href="pifometre/img/logo/favicon.ico" />
+	<link rel="apple-touch-icon" sizes="180x180" href="pifometre/img/logo/apple-touch-icon.png" />
+	<link rel="manifest" href="pifometre/img/logo/site.webmanifest" />
+
+    <link rel="preload" href="pifometre/css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel='stylesheet' href='pifometre/css/style.css' type="text/css">
+    <link rel="stylesheet" href="pifometre/css/responsive.css" type="text/css"/>
+</head>
+<body>
+    <header>
+        <!--#include virtual="../includes/menu.html" -->
+    </header>
+    <div id="aide_contenu" class="outils">
+        <h1><img class='logo' src='/pifometre/img/outils.png' alt=''/>Outils divers</h1>
+
+		<div class="bloc_fiche b1">
+			<h2>Liens de redirection depuis JOSM</h2>
+			<p>Dans le logiciel JOSM, le plug-in UtilsPlugin2 permet d'ouvrir une page web grâce aux coordonnées du centre de la zone qu'on édite.</p>
+			<p>Certains sites thématiques comme Pifomètre, Clochers.org ou MemorialGenWeb, utilisent les communes françaises comme point d'entrée.</p>
+			<p>Bano.openstreetmap.fr héberge un outil qui fait le lien entre les deux : il identifie, d'après les coordonnées JOSM, la commune française où l'on se trouve et permet donc d'ouvrir directement la page correspondante sur le site cible.</p>
+			<p><strong>Les liens :</strong></p>
+			<ul>
+				<li><strong>Pifomètre :</strong> <span class="monospace">https://bano.openstreetmap.fr/outils/josm.html?lat={#lat}&lon={#lon}</span></li>
+				<p>Pour ouvrir la page de la commune sur Pifomètre.</p>
+				<li><strong>Pifomap :</strong> <span class="monospace">https://bano.openstreetmap.fr/outils/josm_pifomap.html?lat={#lat}&lon={#lon}</span></li>
+				<p>Pour ouvrir la page de la commune sur Pifomap.</p>
+				<li><strong>Topo :</strong> <span class="monospace">https://bano.openstreetmap.fr/outils/josm_topo.html?lat={#lat}&lon={#lon}</span></li>
+				<p>Pour ouvrir la page de la commune sur la page "fichier Topo".</p>
+				<li><strong>MemorialGenWeb :</strong> <span class="monospace">https://bano.openstreetmap.fr/outils/memorialgenweb.html?lat={#lat}&lon={#lon}</span></li>
+				<p>Pour ouvrir la page de la commune sur MemorialGenWeb et voir la liste de ses monuments aux morts, dont le numéro de relevé est la valeur attendue pour le tag ref:FR:MemorialGenWeb.</p>
+				<li><strong>Clochers.org :</strong> <span class="monospace">https://bano.openstreetmap.fr/outils/clochers.html?lat={#lat}&lon={#lon}</span></li>
+				<p>Pour ouvrir la page de la commune sur Clochers.org et voir la liste de ses clochers, dont le numéro de relevé est la valeur attendue pour le tag ref:clochers.org.</p>
+			</ul>
+			<p><img class="capture" src="/pifometre/img/aide/aide_josm_liens.png"/></p>
+			<p><strong>Pour paramétrer un raccourci :</strong></p>
+			<ul><li>Si ce n'est pas déjà fait : dans JOSM, installer le plug-in UtilsPlugin2 (touche F12 > colonne de gauche > Greffons)</li>
+				<li>Aller dans les paramètres de ce plug-in (touche F12 > colonne de gauche > Paramètres de UtilsPlugin2)</li>
+				<li>insérez une ligne dans la colonne de droite et un nom dans la colonne de gauche</li>
+			</ul>
+			<p><strong>Pour utiliser le raccourci :</strong></p>
+			<p>Dans JOSM, si le centre de votre affichage est sur une commune française, tapez Maj + H et choisissez le site souhaité (Pifomètre, MemorialGenWeb...) dans la liste. Une page web va s’ouvrir dans votre navigateur par défaut.</p>
+			<p>Si vous décochez par erreur la case "Demander à chaque fois" et que la pop-up de choix n'apparaît plus quand vous faites Maj + H, allez dans les paramètres avancés de JOSM (F12 > Paramètres avancés), cherchez le paramètre <span class="monospace">utilsplugin2.askurl</span> et passez la valeur de <span class="monospace">false</span> à <span class="monospace">true</span>.</p>
+		</div>
+
+		<div class="bloc_fiche b2">
+			<h2>Calques dans JOSM</h2>
+			<p><strong>Limites communales :</strong></p>
+			<p>Ce calque permet de visualiser dans JOSM les limites de communes fournies par le Cadastre et préparées par data.gouv.fr. On peut l'afficher par-dessus un calque d'imagerie, par exemple. Comme chaque commune définit ses propres limites, la frontière entre deux communes apparaît souvent dédoublée, et c'est normal. Aucune n'est plus "juste" que l'autre a priori.</p>
+			<p><a title="Voir l'image en grand" href="/pifometre/img/aide/aide_josm_calque_limites_jaune.jpg" ><img class="capture_lien" src="/pifometre/img/aide/aide_josm_calque_limites_jaune.jpg"/></a></p>
+			<p><strong>Les URL :</strong></p>
+			<ul>
+				<li>Limites en jaune : <span class="monospace">https://bano.openstreetmap.fr/outils/cadastre_communes_jaune.json</span></li>
+				<li>Limites en mauve : <span class="monospace">https://bano.openstreetmap.fr/outils/cadastre_communes_mauve.json</span></li>
+				<li>Limites en vert : <span class="monospace">https://bano.openstreetmap.fr/outils/cadastre_communes_vert.json</span></li>
+			</ul>
+			<p><strong>Comment configurer le calque :</strong></p>
+			<ul><li>Dans JOSM, ouvrir le menu Imagerie > Préférences d'imagerie</li>
+				<li>En bas à droite de la fenêtre, cliquer sur le bouton «+ MVT». Une pop-up s'ouvre.</li>
+				<li>Dans la première zone, collez l'URL selon la couleur souhaitée.</li>
+				<li>Dans la deuxième zone (niveau de zoom), indiquez "24".</li>
+				<li>Dans la quatrième et dernière zone, indiquez le nom souhaité pour votre calque (par ex : "Limites jaune")</li>
+			</ul>
+			<p><img class="capture" src="/pifometre/img/aide/aide_josm_calque_limites.png"/></p>
+			<p>Une fois cette configuration validée, le calque apparaît dans la liste des calques disponibles dans le menu Imagerie.</p>
+		</div>
+	</div>
+
+	<script>
+		update_menu_visits();
+	</script>
+</body>
+</html>
