@@ -212,6 +212,8 @@
             .fail(function(data){
                 alert("La télécommande JOSM ne répond pas.\nCertains liens sur la page nécessitent que JOSM soit démarré avec la télécommande activée\n\nPour de l'aide sur la télécommande : https://josm.openstreetmap.de/wiki/Help/Preferences/RemoteControl")
             })
+        } else {
+            console.log("Pas de controle du lancement de JOSM. Pour changer ce réglage : Menu > Préférences")
         }
     }
     function get_labels_statut_fantoir(){

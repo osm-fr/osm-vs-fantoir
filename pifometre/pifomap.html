@@ -895,13 +895,18 @@
         affichage_par_defaut_lieux_dits()
     }
     function affichage_par_defaut_lieux_dits(){
-        if (localStorage.PreferencesPifomapAffichage_lieuxdits == undefined){
-            localStorage.setItem('PreferencesPifomapAffichage_lieuxdits','true')
+        maintenant = new Date().getTime()
+        if (localStorage.PreferencesPifomapMasquage_lieuxditsTerme == undefined){
+            localStorage.setItem('PreferencesPifomapMasquage_lieuxditsTerme',-1)
+            localStorage.setItem('PreferencesPifomapMasquage_lieuxditsRadioId','jamais')
         }
-        if (! eval(localStorage.PreferencesPifomapAffichage_lieuxdits)){
+        if (eval(localStorage.PreferencesPifomapMasquage_lieuxditsTerme) > maintenant){
             $('#pifofiltres.pifomap input#check_'+FILTRES_TYPE[1][0]+":checkbox").prop("checked", false).trigger("change")
             update_filtres()
             filtre_pifomap()
+        } else {
+            localStorage.setItem('PreferencesPifomapMasquage_lieuxditsTerme',-1)
+            localStorage.setItem('PreferencesPifomapMasquage_lieuxditsRadioId','jamais')
         }
     }
     function requete_pifometre(){

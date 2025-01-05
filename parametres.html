@@ -18,7 +18,7 @@
 	<link rel='stylesheet' href='pifometre/css/style.css' type="text/css">
     <link rel="stylesheet" href="pifometre/css/responsive.css" type="text/css"/>
 </head>
-<body>
+<body onload="start()">
     <header>
         <!--#include virtual="../includes/menu.html" -->
     </header>
@@ -27,7 +27,7 @@
 
 		<div class="bloc_fiche b1">
 			<h2>Paramètres généraux</h2>
-			<fieldset>
+			<fieldset id="field_telco_josm">
 				<legend>Afficher un avertissement si JOSM n'est pas lancé</legend>
 				<p>
 					<input type="radio" name="pref_teleco" id="teleco_on" value="teleco_on" checked /> 
@@ -53,30 +53,89 @@
 		</div>
 		<div class="bloc_fiche b2">
 			<h2>Paramètres Pifomap</h2>
-			<fieldset>
+			<fieldset id="field_pifomap_ld">
 				<legend>Masquer les lieux-dits</legend>
 				<p>
-					<input type="radio" name="pref_lieuxdits" id="jamais" value="jamais" checked /> 
+					<input type="radio" name="pref_lieuxdits" id="jamais" value="-1" checked /> 
 					<label for="jamais">Jamais</label>
 				</p>
 				<p>
-					<input type="radio" name="pref_lieuxdits" id="1jour" value="1jour" /> 
-					<label for="1jour">Pendant 1 jour</label>
+					<input type="radio" name="pref_lieuxdits" id="1jour" value="86400" /> 
+					<label for="1jour">Pendant 1 jour </label><span id="date_fin_1jour" class="monospace"></span>
 				</p>
 				<p>
-					<input type="radio" name="pref_lieuxdits" id="1semaine" value="1semaine" /> 
-					<label for="1semaine">Pendant 1 semaine</label>
+					<input type="radio" name="pref_lieuxdits" id="1semaine" value="604800" /> 
+					<label for="1semaine">Pendant 1 semaine </label><span id="date_fin_1semaine" class="monospace"></span>
 				</p>
 				<p>
-					<input type="radio" name="pref_lieuxdits" id="toujours" value="toujours" />
+					<input type="radio" name="pref_lieuxdits" id="toujours" value="604800000" />
 					<label for="toujours">Toujours</label>
 				</p>
 			</fieldset>
 		</div>
 	</div>
 
-	<script>
-		update_menu_visits();
-	</script>
+<script>
+function start(){
+	update_menu_visits();
+    
+// General : Telecommande JOSM
+    if (localStorage.PreferencesJOSMRemoteControlWarning == undefined){
+    	localStorage.setItem('PreferencesJOSMRemoteControlWarning','true')
+    }
+
+    if (eval(localStorage.PreferencesJOSMRemoteControlWarning)){
+    	$('input#teleco_on').prop("checked", true).trigger("change")
+    	$('input#teleco_off').prop("checked", false).trigger("change")
+    } else {
+    	$('input#teleco_on').prop("checked", false).trigger("change")
+    	$('input#teleco_off').prop("checked", true).trigger("change")    	
+    }
+
+	$('#field_telco_josm').click(function(){
+		if ($('input#teleco_on').prop("checked")){
+			localStorage.setItem('PreferencesJOSMRemoteControlWarning','true')
+		} else {
+			localStorage.setItem('PreferencesJOSMRemoteControlWarning','false')
+		}
+	})
+
+// Pifomap : Masquage des lieux-dits
+    maintenant = new Date().getTime()
+    if (localStorage.PreferencesPifomapMasquage_lieuxditsTerme == undefined){
+    	localStorage.setItem('PreferencesPifomapMasquage_lieuxditsTerme',-1)
+        localStorage.setItem('PreferencesPifomapMasquage_lieuxditsRadioId','jamais')
+    }
+    // RAZ au terme du setting
+    if (eval(localStorage.PreferencesPifomapMasquage_lieuxditsTerme) < maintenant){
+    	localStorage.setItem('PreferencesPifomapMasquage_lieuxditsTerme',-1)
+        localStorage.setItem('PreferencesPifomapMasquage_lieuxditsRadioId','jamais')
+    } else {
+
+    }
+    $('input[name=pref_lieuxdits]') .each(function(){
+    	$(this).prop("checked", false)
+    })
+    $('input[name=pref_lieuxdits]#'+localStorage.getItem('PreferencesPifomapMasquage_lieuxditsRadioId')).prop("checked", true)
+	format_date_de_fin(localStorage.getItem('PreferencesPifomapMasquage_lieuxditsRadioId'))
+
+	$('input[name=pref_lieuxdits]').click(function(){
+        maintenant = new Date().getTime() // heure du clic, possiblement différente de l'heure de chargement de la page
+		localStorage.setItem('PreferencesPifomapMasquage_lieuxditsRadioId',$(this).attr('id'))
+    	localStorage.setItem('PreferencesPifomapMasquage_lieuxditsTerme',maintenant+$(this).val()*1000)
+
+    	$('fieldset#field_pifomap_ld span').each(function(){
+    		$(this).empty()
+    	})
+    	if ($(this).attr('id') == '1jour'||$(this).attr('id') == '1semaine'){
+    		format_date_de_fin($(this).attr('id'))
+    	}
+	})
+}
+
+function format_date_de_fin(id_span){
+	$('span#date_fin_'+id_span).text('(jusqu\'au '+new Date(eval(localStorage.getItem('PreferencesPifomapMasquage_lieuxditsTerme'))).toLocaleString()+')')
+}
+</script>
 </body>
 </html>
