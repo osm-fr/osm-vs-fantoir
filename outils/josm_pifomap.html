@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Pifomètre depuis JOSM</title>
+<title>Pifomap depuis JOSM</title>
 <script src="../js/jquery-3.6.4.min.js"></script>
 <script>
 	function start(){
@@ -18,16 +18,16 @@
 			}
 		}
 		if (-90 < lat && lat < 90 && -180 < lon && lon < 180){
-			console.log('ok')
 				$.ajax({
-				url: "insee_from_coords.py?lat="+lat+"&lon="+lon
+				url: "../pifometre/insee_from_coords.py?lat="+lat+"&lon="+lon
 			})
 			.done(function( data ) {
-                location.assign("https://www.memorialgenweb.org/memorial3/html/fr/resultinsee.php?insee="+data[0])
+				data=data[0]
+                window.location.replace('../pifometre/pifomap.html?insee='+data[0]+'&ratio=no#map=17/'+lat+'/'+lon)
 			})
 
 		} else {
-            window.location.replace('index.html?insee=404')
+            window.location.replace('../pifometre/pifomap.html?insee=404')
 		}
 	}
 </script>

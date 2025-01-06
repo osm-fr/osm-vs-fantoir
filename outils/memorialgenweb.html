@@ -18,17 +18,15 @@
 			}
 		}
 		if (-90 < lat && lat < 90 && -180 < lon && lon < 180){
-			console.log('ok')
 				$.ajax({
-				url: "insee_from_coords.py?lat="+lat+"&lon="+lon
+				url: "../pifometre/insee_from_coords.py?lat="+lat+"&lon="+lon
 			})
 			.done(function( data ) {
-				data=data[0]
-                window.location.replace('index.html?insee='+data[0]+'&from=josm')
+                location.assign("https://www.memorialgenweb.org/memorial3/html/fr/resultinsee.php?insee="+data[0])
 			})
 
 		} else {
-            window.location.replace('index.html?insee=404')
+            location.assign("https://www.memorialgenweb.org")
 		}
 	}
 </script>

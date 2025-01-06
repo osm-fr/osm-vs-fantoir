@@ -1,9 +1,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>clochers.org depuis JOSM</title>
+<title>Pifomap depuis JOSM</title>
 <script src="../js/jquery-3.6.4.min.js"></script>
-<script src="../js/fonctions.js"></script>
 <script>
 	function start(){
 		check_url_for_coords()
@@ -21,16 +20,15 @@
 		if (-90 < lat && lat < 90 && -180 < lon && lon < 180){
 			console.log('ok')
 				$.ajax({
-				url: "insee_from_coords.py?lat="+lat+"&lon="+lon
+				url: "../pifometre/insee_from_coords.py?lat="+lat+"&lon="+lon
 			})
 			.done(function( data ) {
-				code_insee = data[0][0]
-				dept = get_dept_from_insee(code_insee)
-                location.assign("https://clochers.org/Fichiers_HTML/Accueil/Accueil_clochers/"+dept+"/accueil_"+code_insee+".htm")
+				data=data[0]
+                window.location.replace('../pifometre/liste_brute_fantoir.html?insee='+data[0])
 			})
 
 		} else {
-            window.location.replace('index.html?insee=404')
+            window.location.replace('../pifometre/liste_brute_fantoir.html?insee=404')
 		}
 	}
 </script>
