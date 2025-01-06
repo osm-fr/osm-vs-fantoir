@@ -1,0 +1,28 @@
+{   "version": 8,
+    "name": "Cadastre",
+    "sources": {
+        "cadastre": {
+             "type": "vector",
+             "tiles": [
+                  "https://bano.openstreetmap.fr/tuiles/cadastre_communes/{z}/{x}/{y}.pbf"
+                  ],
+            "minzoom":12,
+            "maxzoom":14
+        }
+    },
+    "layers": [
+        {
+            "id": "communes_vert",
+            "source": "cadastre",
+            "source-layer": "cadastre_communes",
+            "type": "line",
+            "minzoom" : 12,
+            "maxzoom" : 24,
+            "paint": {
+                "line-color":"lime",
+                "line-width": 3,
+                "line-dasharray": [12,5]
+            }
+        }
+    ]
+}
