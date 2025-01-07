@@ -34,7 +34,7 @@
     h1 {font-size: 1.3em;}
     h2 {font-size: 1.2em;}
     h3 {font-size: 0.9em;}
-    #aide_contenu.videos {margin: 3% 5%;}
+    #aide_contenu.videos, #aide_contenu.videos, #aide_contenu.outils {margin: 3% 5%; margin-top:max(30px, 3%);}
     #boutons-filtres.pifo {font-size: 0.65em;}
     #alerte_commune {
         right: 1%;

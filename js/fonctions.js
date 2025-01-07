@@ -120,8 +120,9 @@
     }
     function add_id_link(table,href,text){
         $('#'+table+' tr:last')     .append($('<td>').addClass('zone-clic-id')
-                                        .append($('<a>').attr('href',href).attr('target',"blank")                                    
-                                            .text(text)
+                                        .append($('<a>').attr('href',href).attr('target',"blank")
+                                            .append($('<img class="picto_josm">').attr('src','img/logo_id.png'))                          
+                                            /*.text(text)*/
                                         )
                                         .click(function(){
                                             $(this).addClass('clicked');
@@ -131,13 +132,14 @@
     function add_josm_link(table,xl,xr,yb,yt,code_insee,nom_commune){
         $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-josm')
                                     .attr('xleft',xl).attr('xright',xr).attr('ybottom',yb).attr('ytop',yt)
-                                    .text('JOSM')
+                                    .append($('<img class="picto_josm">').attr('src','img/logo_josm.png')
+                                    /*.text('JOSM')*/
                                     .click(function(){
                                         srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xl+'&right='+xr+'&top='+yt+'&bottom='+yb+'&changeset_tags='+get_changeset_tags_noms(code_insee,nom_commune);
                                         $('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
                                         $(this).addClass('clicked');
                                     })
-                                )
+                                ))
     }
     function add_josm_croisement_link(table,xl,xr,yb,yt,commune1,insee1,commune2,insee2,wayid){
         $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-josm')
@@ -256,10 +258,10 @@
 
                     //Afficher l'infobulle de confirmation
                     if (statut != '0') {
-                        $('tr#'+id_ligne+' td.cell_statut').append($('<span class="enregistrement voies gris">').text('✔ Enregistré'));
+                        $('tr#'+id_ligne+' td.cell_statut').append($('<span class="enregistrement voies gris">').text('✔'));
                     }
                     else {
-                        $('tr#'+id_ligne+' td.cell_statut').append($('<span class="enregistrement voies vert">').text('✔ Enregistré'));
+                        $('tr#'+id_ligne+' td.cell_statut').append($('<span class="enregistrement voies vert">').text('✔'));
                     }
                     setTimeout(function(){
                         $('tr#'+id_ligne+' td.cell_statut span').css('opacity', '1');
