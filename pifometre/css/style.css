@@ -99,6 +99,7 @@ fieldset legend {
 }
 #aide_contenu.bano, #aide_contenu.videos, #aide_contenu.outils {
 	margin: 3% 10%;
+	margin-top:max(30px, 3%);
 }
 #aide_contenu.parametres {
 	font-size:1em;
@@ -1291,11 +1292,10 @@ fieldset legend {
 	background: url("../img/copier.png") no-repeat center;
 	width: 15px;
 	height: 20px;
-	vertical-align: middle;
-	position:relative;
-	top:-3px;
-	left: 6px;
+	vertical-align: top;
 }
+#copier_voie {margin-top: 15px;}
+#copier_fantoir {margin-left: 10px;}
 
 #copier_voie.ok, #copier_fantoir.ok {
 	background: url("../img/copier_vert.png") no-repeat center;
@@ -1313,17 +1313,18 @@ fieldset legend {
     z-index: 1;
 
     width: 55px;
-    padding: 0px;
-    margin-left: 10px;
+    padding: 0;
+    margin: 0;
 
     color: #33A672;
 }
 
 #panneau_map h2 {
 	display: inline-block;
-	margin-left: 20px;
+	margin: 15px;
+	width: 75%;
 	font-size: 1.2em;
-	line-height: 1.5em;
+	line-height: 1.2em;
 }
 
 #panneau_map h3 {
@@ -1911,6 +1912,10 @@ table tr.static td {
 /*--------------------- LIENS JOSM et ADRESSES ------------------*/
 /*---------------------------------------------------------------*/
 
+.picto_josm, .picto_id {
+	width: 20px;
+	vertical-align: middle;
+}
 .zone-clic-josm,
 .zone-clic-id,
 .zone-clic-adresses {
@@ -1923,6 +1928,7 @@ table tr.static td {
 /*-- Cellules fusionnées pour adresses déjà intégrées --*/
 .zone-adresses {
 	text-align: center;
+	font-size: 0.9em;
 }
 
 .adresses-integrees {
@@ -1996,7 +2002,7 @@ table tr.static td {
 
 /*Place laissée pour le message*/
 td.cell_statut {
-	padding-right: 90px;
+	padding-right: 20px;
 }
 
 .enregistrement {
@@ -2023,7 +2029,7 @@ td.cell_statut {
 	position: absolute;
 	z-index: 2;
 
-	width: 80px;
+	width: 10px;
 	padding: 2px 1px;
 	margin-left: 2px;
 }
