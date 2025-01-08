@@ -121,7 +121,7 @@
     function add_id_link(table,href,text){
         $('#'+table+' tr:last')     .append($('<td>').addClass('zone-clic-id')
                                         .append($('<a>').attr('href',href).attr('target',"blank")
-                                            .append($('<img class="picto_josm">').attr('src','img/logo_id.png'))                          
+                                            .append($('<img class="picto_josm">').attr('src','../img/logo_id.png'))
                                             /*.text(text)*/
                                         )
                                         .click(function(){
@@ -132,7 +132,7 @@
     function add_josm_link(table,xl,xr,yb,yt,code_insee,nom_commune){
         $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-josm')
                                     .attr('xleft',xl).attr('xright',xr).attr('ybottom',yb).attr('ytop',yt)
-                                    .append($('<img class="picto_josm">').attr('src','img/logo_josm.png')
+                                    .append($('<img class="picto_josm">').attr('src','../img/logo_josm.png')
                                     /*.text('JOSM')*/
                                     .click(function(){
                                         srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xl+'&right='+xr+'&top='+yt+'&bottom='+yb+'&changeset_tags='+get_changeset_tags_noms(code_insee,nom_commune);

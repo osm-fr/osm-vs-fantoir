@@ -1,87 +1,87 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Comment corriger les voies à cheval ?</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comment corriger les voies à cheval ?</title>
     <script src="../../js/jquery-3.6.4.min.js"></script>
-	<script src="../../js/fonctions.js"></script>
-	<script defer src="../../js/menu.js"></script>
+    <script src="../../js/fonctions.js"></script>
+    <script defer src="../../js/menu.js"></script>
 
-    <link rel="icon" type="image/png" href="../img/logo/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="../img/logo/favicon.svg" />
-    <link rel="shortcut icon" href="../img/logo/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="../img/logo/apple-touch-icon.png" />
-    <link rel="manifest" href="../img/logo/site.webmanifest" />
+    <link rel="icon" type="image/png" href="../../img/logo/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../../img/logo/favicon.svg" />
+    <link rel="shortcut icon" href="../../img/logo/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../../img/logo/apple-touch-icon.png" />
+    <link rel="manifest" href="../../img/logo/site.webmanifest" />
 
-	<link rel="preload" href="../css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
-	<link rel="stylesheet" href="../css/style.css" type="text/css"/>
-	<link rel="stylesheet" href="../css/responsive.css" type="text/css"/>
+    <link rel="preload" href="../../css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="../../css/style.css" type="text/css"/>
+    <link rel="stylesheet" href="../../css/responsive.css" type="text/css"/>
 </head>
 <body>
-	<header>
-		<!--#include virtual="../../includes/menu.html" -->
-	</header>
+    <header>
+        <!--#include virtual="../../includes/menu.html" -->
+    </header>
 
-	<div id="aide_contenu" class="fiche">
-		<h1><a href="../pifodrome.html"/>Pifodrome</a> : Comment corriger les voies à cheval ?</h1>
-	    <div class="encadre_aide only_mobile">NB : La carte des voies à cheval n'est pas adaptée à un usage mobile.</div>
-		<div class="bloc_fiche b1">
-			<h2>C'est quoi, une voie à cheval ?</h2>
-			<p><strong>C'est une route ou une rue nommée (avec un tag <span class="monospace">name</span> sur OSM) croisant au moins une limite administrative, donc débordant sur au moins 2 communes.</strong></p>
-			<p>Exemple ci-dessous : la Route de Lutzelbourg, majoritairement située sur la commune de Hultehouse, déborde sur la commune de Lutzelbourg.</p>
-			<p><img class="capture" src="../img/aide/aide_pifodrome_exemple.jpg"/></p>
-			<p><em>Il faut cliquer sur la voie pour afficher ses informations dans le panneau de gauche.</em></p>
-			<p><img class="picto" src="../img/aide/vac_rond_vert.png"/><strong>Rond vert</strong> : extrémité dans une commune où la voie est rapprochée – c'est-à-dire que son nom existe à la fois dans OSM et dans le fichier Topo ou la <abbr title="Base Adresse Nationale">BAN</abbr> de la commune.</p>
-	        <p><img class="picto" src="../img/aide/vac_rond_rouge.png"/><strong>Rond rouge</strong> : extrémité dans une commune où la voie n'est pas rapprochée.</p>
-	        <p><img class="picto" src="../img/aide/vac_limite.png"/><strong>Frontière</strong> : marque un franchissement de limite administrative.</p>
-		</div>
-		<div class="bloc_fiche b2">
-			<h2>Pourquoi ça pose problème ?</h2>
-			<p>Souvent, le nom attribué est bien celui de la voie dans une commune A, mais il a été tagué sur un tronçon trop long qui déborde sur une commune B. Or, il y a de fortes chances pour que cette voie porte un nom différent, ou ne porte pas de nom, dans la commune B.</p>
-			<p>Parfois, le <span class="monospace">name</span> identique est justifié des deux côtés de la frontière : quand les deux communes ont effectivement choisi le même nom, ou pour les noms d'autoroutes par exemple ("Autoroute du Soleil"...).</p>
-			<p>Mais dans tous les cas, <strong>il est toujours utile et important de couper la voie au niveau de toutes les limites administratives qu'elle traverse</strong>. Cela permet par exemple de pouvoir exporter le plan d'une ville avec des voies qui s'arrêtent bien aux frontières.</p>
-		</div>
-		<div class="bloc_fiche b1">
-			<h2>Que faire ?</h2>
-			<p><strong>Couper la voie</strong></p>
-			<p><img class="picto" alt="" src="../img/aide/josm_couper_chemin.png"/>Dans tous les cas, il faut couper la voie quand elle traverse une frontière. Dans votre éditeur  préféré (ID, JOSM...), ajoutez un noeud à l'intersection entre la voie et la frontière, puis coupez le chemin à cet endroit.</p>
-			<p><strong>Vérifier et mettre à jour les noms</strong></p>
-			<p>Pour vérifier si le nom de la voie à cheval est bien référencé parmi les voies de la commune A, et celles de la commune B, vous pouvez consulter :
-				<ul><li>la page Pifomètre</li>
-					<li>la carte Pifomap</li>
-					<li>le fichier Topo de la commune</li>
-					<li>le fond Cadastre dans votre éditeur</li>
-				</ul>
-			</p>
-			<p><img class="picto" src="../img/aide/vac_rond_vert.png"/><strong>Côté vert</strong> : A priori, ce côté de la voie est bon. Vérifier quand même (notamment que le nom est sur la bonne rue, au bon endroit).</p>
-	        <p><img class="picto" src="../img/aide/vac_rond_rouge.png"/><strong>Côté rouge</strong>, étudier au moins ces possibilités :
-	        	<ul><li>la rue porte bien ce nom mais avec une divergence d'orthographe par exemple. Corriger le nom, ou, s'il est correct, ajouter le code Fantoir de la voie pour forcer le rapprochement.</li>
-	        		<li>la rue porte un autre nom de ce côté de la frontière. Cela arrive surtout en ville.</li>
-	        		<li>la rue ne porte aucun nom. Cela arrive surtout hors zone urbaine. Exemple typique sur le capture d'écran ci-dessus : la route départementale s'appelle "Route de Lutzelbourg" dans la commune de Hultehouse (côté vert), et n'a pas de nom côté Lutzelbourg (côté rouge).</li>
-	        	</ul>
-			</p>
-			<p><img class="picto" src="../img/info.png"/><strong>La carte se met à jour automatiquement tous les quarts d'heure environ. Les cas corrigés disparaissent.</strong></p>
-		</div>
-		<div class="bloc_fiche b2">
-			<h2>Les filtres</h2>
-			<p>Deux interrupteurs et une ampoule permettent de filtrer les voies à cheval sur la carte.</p>
-			<p><img class="medium" src="../img/aide/aide_pifodrome_filtres.png"/></p>
-			<p><img class="picto" src="../img/aide/vac_filtre_petit.png"/><strong>Le filtre "petits dépassements"</strong> permet d'afficher ou masquer les voies qui dépassent de la limite administrative de moins d'un mètre.</p>
-			<p><img class="picto" src="../img/aide/vac_filtre_grand.png"/><strong>Le filtre "grands dépassements"</strong> permet d'afficher ou masquer les voies qui dépassent de la limite de plus d'un mètre.</p>
-			<p><img class="picto" src="../img/ampoule.png"/><strong>L'ampoule "Routes de..."</strong> donne une idée de voies faciles à corriger : elle permet d'afficher les voies dont le nom contient celui de l'une des communes traversées. Exemple : la "route de Lutzelbourg" déborde sur la commune de Lutzelbourg alors qu'à cet endroit, elle devrait s'appeler autrement (ou ne pas avoir de nom).</p>
-		</div>
-		<div class="bloc_fiche b1">
-			<h2>Jouer aux dés</h2>
-			<p>Vous avez envie de corriger des voies à cheval mais vous ne savez pas où donner de la tête ? Lancez l'un des trois jeux de dés, tout en haut à droite de la page Pifodrome.</p>
-			<p><img class="picto" src="../img/des_vert_vert.png"/><strong>Les dés vert-vert</strong> emmènent vers une voie à cheval où les deux extrémités sont vertes. Ce sont les cas les plus simples, car il suffit souvent de vérifier que les noms sont bons des deux côtés, et de couper le chemin à la frontière.</p>
-			<p><img class="picto" src="../img/des_vert_rouge.png"/><strong>Les dés vert-rouge</strong> emmènent vers une voie à cheval où une extrémité est verte et l'autre rouge. Difficulté intermédiaire : il faut couper la voie et au moins régler le problème côté rouge.</p>
-			<p><img class="picto" src="../img/des_rouge_rouge.png"/><strong>Les dés rouge-rouge</strong> emmènent vers une voie à cheval où les deux extrémités sont rouges. Ce sont les cas difficiles, car en plus de couper la voie, il faut comprendre le problème et le corriger des deux côtés de la frontière.</p>
-		</div>
-	</div>
+    <div id="aide_contenu" class="fiche">
+        <h1><a href="../pifodrome.html"/>Pifodrome</a> : Comment corriger les voies à cheval ?</h1>
+        <div class="encadre_aide only_mobile">NB : La carte des voies à cheval n'est pas adaptée à un usage mobile.</div>
+        <div class="bloc_fiche b1">
+            <h2>C'est quoi, une voie à cheval ?</h2>
+            <p><strong>C'est une route ou une rue nommée (avec un tag <span class="monospace">name</span> sur OSM) croisant au moins une limite administrative, donc débordant sur au moins 2 communes.</strong></p>
+            <p>Exemple ci-dessous : la Route de Lutzelbourg, majoritairement située sur la commune de Hultehouse, déborde sur la commune de Lutzelbourg.</p>
+            <p><img class="capture" src="../../img/aide/aide_pifodrome_exemple.jpg"/></p>
+            <p><em>Il faut cliquer sur la voie pour afficher ses informations dans le panneau de gauche.</em></p>
+            <p><img class="picto" src="../../img/aide/vac_rond_vert.png"/><strong>Rond vert</strong> : extrémité dans une commune où la voie est rapprochée – c'est-à-dire que son nom existe à la fois dans OSM et dans le fichier Topo ou la <abbr title="Base Adresse Nationale">BAN</abbr> de la commune.</p>
+            <p><img class="picto" src="../../img/aide/vac_rond_rouge.png"/><strong>Rond rouge</strong> : extrémité dans une commune où la voie n'est pas rapprochée.</p>
+            <p><img class="picto" src="../../img/aide/vac_limite.png"/><strong>Frontière</strong> : marque un franchissement de limite administrative.</p>
+        </div>
+        <div class="bloc_fiche b2">
+            <h2>Pourquoi ça pose problème ?</h2>
+            <p>Souvent, le nom attribué est bien celui de la voie dans une commune A, mais il a été tagué sur un tronçon trop long qui déborde sur une commune B. Or, il y a de fortes chances pour que cette voie porte un nom différent, ou ne porte pas de nom, dans la commune B.</p>
+            <p>Parfois, le <span class="monospace">name</span> identique est justifié des deux côtés de la frontière : quand les deux communes ont effectivement choisi le même nom, ou pour les noms d'autoroutes par exemple ("Autoroute du Soleil"...).</p>
+            <p>Mais dans tous les cas, <strong>il est toujours utile et important de couper la voie au niveau de toutes les limites administratives qu'elle traverse</strong>. Cela permet par exemple de pouvoir exporter le plan d'une ville avec des voies qui s'arrêtent bien aux frontières.</p>
+        </div>
+        <div class="bloc_fiche b1">
+            <h2>Que faire ?</h2>
+            <p><strong>Couper la voie</strong></p>
+            <p><img class="picto" alt="" src="../../img/aide/josm_couper_chemin.png"/>Dans tous les cas, il faut couper la voie quand elle traverse une frontière. Dans votre éditeur  préféré (ID, JOSM...), ajoutez un noeud à l'intersection entre la voie et la frontière, puis coupez le chemin à cet endroit.</p>
+            <p><strong>Vérifier et mettre à jour les noms</strong></p>
+            <p>Pour vérifier si le nom de la voie à cheval est bien référencé parmi les voies de la commune A, et celles de la commune B, vous pouvez consulter :
+                <ul><li>la page Pifomètre</li>
+                    <li>la carte Pifomap</li>
+                    <li>le fichier Topo de la commune</li>
+                    <li>le fond Cadastre dans votre éditeur</li>
+                </ul>
+            </p>
+            <p><img class="picto" src="../../img/aide/vac_rond_vert.png"/><strong>Côté vert</strong> : A priori, ce côté de la voie est bon. Vérifier quand même (notamment que le nom est sur la bonne rue, au bon endroit).</p>
+            <p><img class="picto" src="../../img/aide/vac_rond_rouge.png"/><strong>Côté rouge</strong>, étudier au moins ces possibilités :
+                <ul><li>la rue porte bien ce nom mais avec une divergence d'orthographe par exemple. Corriger le nom, ou, s'il est correct, ajouter le code Fantoir de la voie pour forcer le rapprochement.</li>
+                    <li>la rue porte un autre nom de ce côté de la frontière. Cela arrive surtout en ville.</li>
+                    <li>la rue ne porte aucun nom. Cela arrive surtout hors zone urbaine. Exemple typique sur le capture d'écran ci-dessus : la route départementale s'appelle "Route de Lutzelbourg" dans la commune de Hultehouse (côté vert), et n'a pas de nom côté Lutzelbourg (côté rouge).</li>
+                </ul>
+            </p>
+            <p><img class="picto" src="../../img/info.png"/><strong>La carte se met à jour automatiquement tous les quarts d'heure environ. Les cas corrigés disparaissent.</strong></p>
+        </div>
+        <div class="bloc_fiche b2">
+            <h2>Les filtres</h2>
+            <p>Deux interrupteurs et une ampoule permettent de filtrer les voies à cheval sur la carte.</p>
+            <p><img class="medium" src="../../img/aide/aide_pifodrome_filtres.png"/></p>
+            <p><img class="picto" src="../../img/aide/vac_filtre_petit.png"/><strong>Le filtre "petits dépassements"</strong> permet d'afficher ou masquer les voies qui dépassent de la limite administrative de moins d'un mètre.</p>
+            <p><img class="picto" src="../../img/aide/vac_filtre_grand.png"/><strong>Le filtre "grands dépassements"</strong> permet d'afficher ou masquer les voies qui dépassent de la limite de plus d'un mètre.</p>
+            <p><img class="picto" src="../../img/ampoule.png"/><strong>L'ampoule "Routes de..."</strong> donne une idée de voies faciles à corriger : elle permet d'afficher les voies dont le nom contient celui de l'une des communes traversées. Exemple : la "route de Lutzelbourg" déborde sur la commune de Lutzelbourg alors qu'à cet endroit, elle devrait s'appeler autrement (ou ne pas avoir de nom).</p>
+        </div>
+        <div class="bloc_fiche b1">
+            <h2>Jouer aux dés</h2>
+            <p>Vous avez envie de corriger des voies à cheval mais vous ne savez pas où donner de la tête ? Lancez l'un des trois jeux de dés, tout en haut à droite de la page Pifodrome.</p>
+            <p><img class="picto" src="../../img/des_vert_vert.png"/><strong>Les dés vert-vert</strong> emmènent vers une voie à cheval où les deux extrémités sont vertes. Ce sont les cas les plus simples, car il suffit souvent de vérifier que les noms sont bons des deux côtés, et de couper le chemin à la frontière.</p>
+            <p><img class="picto" src="../../img/des_vert_rouge.png"/><strong>Les dés vert-rouge</strong> emmènent vers une voie à cheval où une extrémité est verte et l'autre rouge. Difficulté intermédiaire : il faut couper la voie et au moins régler le problème côté rouge.</p>
+            <p><img class="picto" src="../../img/des_rouge_rouge.png"/><strong>Les dés rouge-rouge</strong> emmènent vers une voie à cheval où les deux extrémités sont rouges. Ce sont les cas difficiles, car en plus de couper la voie, il faut comprendre le problème et le corriger des deux côtés de la frontière.</p>
+        </div>
+    </div>
 
-	<script>
-		update_menu_visits();
-	</script>
+    <script>
+        update_menu_visits();
+    </script>
 </body>
 </html>

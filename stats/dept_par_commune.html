@@ -1,113 +1,113 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Statistiques départementales par commune</title>
-	<script src="../js/jquery-3.6.4.min.js"></script>
-	<script src="../js/jquery.tablesorter.combined.min.js"></script>
-	<script src="../js/fonctions.js"></script>
-	<script defer src="../js/menu.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistiques départementales par commune</title>
+    <script src="../js/jquery-3.6.4.min.js"></script>
+    <script src="../js/jquery.tablesorter.combined.min.js"></script>
+    <script src="../js/fonctions.js"></script>
+    <script defer src="../js/menu.js"></script>
 
-    <link rel="icon" type="image/png" href="../pifometre/img/logo/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="../pifometre/img/logo/favicon.svg" />
-    <link rel="shortcut icon" href="../pifometre/img/logo/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="../pifometre/img/logo/apple-touch-icon.png" />
-    <link rel="manifest" href="../pifometre/img/logo/site.webmanifest" />
+    <link rel="icon" type="image/png" href="../img/logo/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../img/logo/favicon.svg" />
+    <link rel="shortcut icon" href="../img/logo/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../img/logo/apple-touch-icon.png" />
+    <link rel="manifest" href="../img/logo/site.webmanifest" />
 
-	<link rel="preload" href="../pifometre/css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
-	<link rel="stylesheet" href="../pifometre/css/tablesorter/theme.default.min.css" type="text/css"/>
-	<link rel="stylesheet" href="../pifometre/css/style.css" type="text/css"/>
-	<link rel="stylesheet" href="../pifometre/css/style_stats_dept.css" type="text/css"/>
-	<link rel="stylesheet" href="../pifometre/css/responsive.css" type="text/css"/>
+    <link rel="preload" href="../css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="../css/tablesorter/theme.default.min.css" type="text/css"/>
+    <link rel="stylesheet" href="../css/style.css" type="text/css"/>
+    <link rel="stylesheet" href="../css/style_stats_dept.css" type="text/css"/>
+    <link rel="stylesheet" href="../css/responsive.css" type="text/css"/>
 
 <script>
-	PYDIR = '../pifometre/'
-	var menu_labels
-	var a_champs_stats = ['Code Insee','Commune','% adresses certifiées BAN','Voies avec adresses<br/>rapprochées (a)','Toutes voies<br/>rapprochées (b)...','...dont voies rapprochées sur<br/>lieux-dits Topo','Voies Topo (c)','Voies et lieux-dits<br/>Topo (d)','Voies avec adresses /<br/>voies Topo (a/c)<br/>en %','Voies rapprochées /<br/>voies Topo (b/c)<br/>en %','Voies rapprochées /<br/>voies et lieux-dits Topo (b/d)<br/>en %','Adresses OSM','Adresses BAN','Adresses BAN sans voie rapprochées','Adresse BAN avec voie rapprochée<br/>en %','Indice 2020']
-	function is_valid_dept(d){
-		pattern_dept = new RegExp('^([01]|[3-8])([0-9])$|^2([aAbB]|[1-9])$|^9([0-5]|7[1-4]|76)$')
-		var res
-		if (pattern_dept.test(d)){
-			res = d
-		}
-		return res
-	}
+    PYDIR = '../pifometre/'
+    var menu_labels
+    var a_champs_stats = ['Code Insee','Commune','% adresses certifiées BAN','Voies avec adresses<br/>rapprochées (a)','Toutes voies<br/>rapprochées (b)...','...dont voies rapprochées sur<br/>lieux-dits Topo','Voies Topo (c)','Voies et lieux-dits<br/>Topo (d)','Voies avec adresses /<br/>voies Topo (a/c)<br/>en %','Voies rapprochées /<br/>voies Topo (b/c)<br/>en %','Voies rapprochées /<br/>voies et lieux-dits Topo (b/d)<br/>en %','Adresses OSM','Adresses BAN','Adresses BAN sans voie rapprochées','Adresse BAN avec voie rapprochée<br/>en %','Indice 2020']
+    function is_valid_dept(d){
+        pattern_dept = new RegExp('^([01]|[3-8])([0-9])$|^2([aAbB]|[1-9])$|^9([0-5]|7[1-4]|76)$')
+        var res
+        if (pattern_dept.test(d)){
+            res = d
+        }
+        return res
+    }
 
-	function start(){
-		$('#bouton_aide').click(function(){
-			$('#aide_stats').css('visibility','visible');
-		})
-		$('#aide_stats > .fermer').click(function(){
-			$('#aide_stats').css('visibility','hidden');
-		})
-		dept = check_url_for_dept()
+    function start(){
+        $('#bouton_aide').click(function(){
+            $('#aide_stats').css('visibility','visible');
+        })
+        $('#aide_stats > .fermer').click(function(){
+            $('#aide_stats').css('visibility','hidden');
+        })
+        dept = check_url_for_dept()
         update_menu_visits()
-		if (dept){
-			$('#input_dept').empty()
-			$('#input_dept')[0].value = dept
-			requete_stats_dept();
-		}
-	}
-	function update_csv_url(dept){
-   		urlCSV = PYDIR+"stats_dept.py?dept="+dept+'&format=csv';
-	}
-	function requete_stats_dept(){
-		if (!is_valid_dept($('#input_dept')[0].value)){
-			alert($('#input_dept')[0].value+" n'est pas un numéro de département valide\n\nAbandon")
-			return;
-		}
+        if (dept){
+            $('#input_dept').empty()
+            $('#input_dept')[0].value = dept
+            requete_stats_dept();
+        }
+    }
+    function update_csv_url(dept){
+        urlCSV = PYDIR+"stats_dept.py?dept="+dept+'&format=csv';
+    }
+    function requete_stats_dept(){
+        if (!is_valid_dept($('#input_dept')[0].value)){
+            alert($('#input_dept')[0].value+" n'est pas un numéro de département valide\n\nAbandon")
+            return;
+        }
 
-		dept = $('#input_dept')[0].value
+        dept = $('#input_dept')[0].value
 
-		$('body').css('cursor','progress');
+        $('body').css('cursor','progress');
         $('#wait_ajax').empty()
                         .css('visibility','visible')
                         .append($('<p>').append('Chargement des statistiques...'));
 
-		update_csv_url($('#input_dept')[0].value)
-		$('#input_dept')[0].value = $('#input_dept')[0].value.toUpperCase()
-		$.ajax({
-			url: PYDIR+"stats_dept.py?dept="+$('#input_dept')[0].value
-		})
-		.done(function( data ) {
-			nom_dept = data[0][0][1]
-			$('#nom_dept').empty()
+        update_csv_url($('#input_dept')[0].value)
+        $('#input_dept')[0].value = $('#input_dept')[0].value.toUpperCase()
+        $.ajax({
+            url: PYDIR+"stats_dept.py?dept="+$('#input_dept')[0].value
+        })
+        .done(function( data ) {
+            nom_dept = data[0][0][1]
+            $('#nom_dept').empty()
             $('#stats_dept').trigger("destroy");
-			$('#stats_dept').empty().append($('<thead>').append($('<tr>')))
+            $('#stats_dept').empty().append($('<thead>').append($('<tr>')))
 
-			if (nom_dept.length == 0){
-				$('#nom_dept').append('dept '+$('#input_dept')[0].value+' : département inconnu')
-				$('body').css('cursor','default');
-				$('#wait_ajax').css('visibility','hidden');
-				return 0;
-			}
-			document.title = nom_dept+' - Statistiques départementales par commune'
+            if (nom_dept.length == 0){
+                $('#nom_dept').append('dept '+$('#input_dept')[0].value+' : département inconnu')
+                $('body').css('cursor','default');
+                $('#wait_ajax').css('visibility','hidden');
+                return 0;
+            }
+            document.title = nom_dept+' - Statistiques départementales par commune'
 
-			$('#nom_dept').append((nom_dept+" ("+$('#input_dept')[0].value+")"))
-			stats = data[1]
-			for (c=0;c<a_champs_stats.length;c++){
-				$('#stats_dept > thead > tr:last').append($('<th>').append(a_champs_stats[c]))
-			}
-			$('#stats_dept').append($('<tbody>'))
-			for (c=0;c<stats.length;c++){
-				$('#stats_dept').append($('<tr>'))
-				for (d=0;d<stats[c].length;d++){
-					if (d==0){
-						$('#stats_dept tr:last').append($('<td>')
-												.append($('<a>')
-												.attr('href','../pifometre/index.html?insee='+stats[c][0])
-												.text(stats[c][0])))
-					} else {
-						$('#stats_dept tr:last').append($('<td>').append(stats[c][d]))
-					}
-					// style des cellules de format
-					$('#stats_dept tr:last td:first').addClass(stats[c][0])
-				}
-			}
-			/*$('#stats_dept').tablesorter();*/
-			$('body').css('cursor','default');
-			$('#wait_ajax').css('visibility','hidden');
+            $('#nom_dept').append((nom_dept+" ("+$('#input_dept')[0].value+")"))
+            stats = data[1]
+            for (c=0;c<a_champs_stats.length;c++){
+                $('#stats_dept > thead > tr:last').append($('<th>').append(a_champs_stats[c]))
+            }
+            $('#stats_dept').append($('<tbody>'))
+            for (c=0;c<stats.length;c++){
+                $('#stats_dept').append($('<tr>'))
+                for (d=0;d<stats[c].length;d++){
+                    if (d==0){
+                        $('#stats_dept tr:last').append($('<td>')
+                                                .append($('<a>')
+                                                .attr('href','../pifometre/index.html?insee='+stats[c][0])
+                                                .text(stats[c][0])))
+                    } else {
+                        $('#stats_dept tr:last').append($('<td>').append(stats[c][d]))
+                    }
+                    // style des cellules de format
+                    $('#stats_dept tr:last td:first').addClass(stats[c][0])
+                }
+            }
+            /*$('#stats_dept').tablesorter();*/
+            $('body').css('cursor','default');
+            $('#wait_ajax').css('visibility','hidden');
 
             //Sticky headers : le tableau scrolle dans son contenant
             $('#stats_dept').tablesorter({
@@ -119,64 +119,64 @@
                 }
             });
 
-		})
-		// window.location.hash="#dept="+$('#input_dept')[0].value
+        })
+        // window.location.hash="#dept="+$('#input_dept')[0].value
         history.replaceState("", "", window.location.pathname+"?dept="+dept);
         update_storage_visits(dept,dept,'Stats par commune',window.location.pathname,'dept',undefined,VERSION_MENU)
         update_menu_visits()
-	}
+    }
 </script>
 </head>
 <body onload="start()">
 
-	<header>
-		<!--#include virtual="../includes/menu.html" -->
-	</header>
+    <header>
+        <!--#include virtual="../includes/menu.html" -->
+    </header>
 
-	<div id="barre-jaune">
-		<span>Département :</span>
-		<form action="javascript:requete_stats_dept()" autocomplete="on">
-			<input type="text" id="input_dept" placeholder="N° de département"/>
-			<input type="submit" value="Afficher"/>
-		</form>
-	</div>
+    <div id="barre-jaune">
+        <span>Département :</span>
+        <form action="javascript:requete_stats_dept()" autocomplete="on">
+            <input type="text" id="input_dept" placeholder="N° de département"/>
+            <input type="submit" value="Afficher"/>
+        </form>
+    </div>
 
-	<div id="bandeau">
-	    <div id="descriptif">
-			<h2 id="nom_dept"></h2>
-			<h1>Statistiques départementales par commune</h1>
+    <div id="bandeau">
+        <div id="descriptif">
+            <h2 id="nom_dept"></h2>
+            <h1>Statistiques départementales par commune</h1>
             <h3>Ce tableau est recalculé à chaque chargement de la page.</h3>
-		</div>
-		<button id="bouton_export_csv" title="Exporter le tableau en CSV" onclick="window.open(urlCSV, '_blank');"></button>
-		<button id="bouton_aide" title="Aide"></button>
-		<div id="wait_ajax" class="bas"></div>
-	</div>
+        </div>
+        <button id="bouton_export_csv" title="Exporter le tableau en CSV" onclick="window.open(urlCSV, '_blank');"></button>
+        <button id="bouton_aide" title="Aide"></button>
+        <div id="wait_ajax" class="bas"></div>
+    </div>
 
 <div id="reponse" class="haut">
-	<table id="stats_dept" class="tablesorter"></table>
+    <table id="stats_dept" class="tablesorter"></table>
 </div>
 
 <div id="aide_stats">
-	<div class="fermer">X</div>
-	<h2>Read The F(ANTOIR) Manual</h2>
-	<h3>Tableau</h3>
-	<p>Les en-têtes de colonnes sont cliquables pour trier le tableau.</p>
-	<p>Les liens dans la colonne "Code Insee" amènent à la page <a href="https://bano.openstreetmap.fr/pifometre/">Pifomètre</a> de la commune et s'ouvrent dans le même onglet.</p>
-	<p>Pour chaque commune, les chiffres sont issus des données BANO au moment du chargement de la page.</p>
-	<h3>Description des colonnes</h3>
-	<li>% adresses certifiées BAN</li><p>Pourcentage d'adresses certifiées. Statistique communiquée via la <a href="https://www.data.gouv.fr/fr/datasets/etat-de-la-base-adresse-nationale-par-commune/"> BAN</a>. Information mise à jour chaque jour à minuit.</p>
-	<li>Voies avec adresses rapprochées (a)</li><p>Nombre de voies dont le nom existe dans OSM, dont on connaît le code Fantoir, et pour lesquelles on trouve des adresses, dans OSM, dans la <a href="https://adresse.data.gouv.fr/">Base Adresse Nationale ou une base adresse locale</a></p>
-	<li>Toutes voies rapprochées (b)</li><p>Nombre de voies dont le nom existe dans OSM et dont on connaît le code Fantoir. Le décompte inclut les voies sans adresses.</p>
-	<li>Voies Topo (c)</li><p>Nombre de voies non annulées, de type 1 ou 2 sur la commune, dans le fichier Topo.</p>
-	<li>Voies et lieux-dits Topo (d)</li><p>Nombre de voies non annulées, de type 1, 2 ou 3 (lieux-dits) sur la commune, dans le fichier Topo.</p>
-	<li>Adresses / voies Topo (a/c) en %</li><p>Pourcentage de voies OSM dont on connaît le code Fantoir, et ayant des adresses, par rapport au nombre de voies de type 1 et 2 dans le fichier Topo.</p>
-	<li>Voies / voies Topo (b/c) en %</li><p>Pourcentage de voies OSM dont on connaît le code Fantoir, y compris des voies sans adresses, par rapport au nombre de voies de type 1 et 2 dans le fichier Topo.</p>
-	<li>Voies / voies et lieux-dits Topo (b/d) en %</li><p>Pourcentage de voies OSM dont on connaît le code Fantoir, y compris des voies sans adresses, par rapport au nombre de voies de type 1, 2 ou 3 dans le fichier Topo.</p>
-	<li>Adresses OSM</li><p>Nombre d'adresses presentes dans OSM sur la commune</p>
-	<li>Adresses BAN</li><p>Nombre d'adresses presentes dans la <a href="https://adresse.data.gouv.fr/">Base Adresse Nationale ou une base adresse locale</a> sur la commune</p>
-	<li>Adresses BAN sans voie rapprochées</li><p>Nombre d'adresses présentes dans la <a href="https://adresse.data.gouv.fr/">Base Adresse Nationale ou une base adresse locale</a> sur la commune dont le nom de rue n'existe pas dans OSM</p>
-	<li>Adresse BAN avec voie rapprochée en %</li><p>Pourcentage d'adresses présentes dans la <a href="https://adresse.data.gouv.fr/">Base Adresse Nationale ou une base adresse locale</a> dont le nom de rue existe dans OSM</p>
-	<li>Indice 2020</li><p>((a/c)*(c-a)) + ((b/c)*(c-b)) + ((b/d)* (d-b))<br>qui qualifie mieux la notion déficitaire que le simple écart relatif (plus le chiffre est gros, plus y a du boulot)</p>
+    <div class="fermer">X</div>
+    <h2>Read The F(ANTOIR) Manual</h2>
+    <h3>Tableau</h3>
+    <p>Les en-têtes de colonnes sont cliquables pour trier le tableau.</p>
+    <p>Les liens dans la colonne "Code Insee" amènent à la page <a href="https://bano.openstreetmap.fr/pifometre/">Pifomètre</a> de la commune et s'ouvrent dans le même onglet.</p>
+    <p>Pour chaque commune, les chiffres sont issus des données BANO au moment du chargement de la page.</p>
+    <h3>Description des colonnes</h3>
+    <li>% adresses certifiées BAN</li><p>Pourcentage d'adresses certifiées. Statistique communiquée via la <a href="https://www.data.gouv.fr/fr/datasets/etat-de-la-base-adresse-nationale-par-commune/"> BAN</a>. Information mise à jour chaque jour à minuit.</p>
+    <li>Voies avec adresses rapprochées (a)</li><p>Nombre de voies dont le nom existe dans OSM, dont on connaît le code Fantoir, et pour lesquelles on trouve des adresses, dans OSM, dans la <a href="https://adresse.data.gouv.fr/">Base Adresse Nationale ou une base adresse locale</a></p>
+    <li>Toutes voies rapprochées (b)</li><p>Nombre de voies dont le nom existe dans OSM et dont on connaît le code Fantoir. Le décompte inclut les voies sans adresses.</p>
+    <li>Voies Topo (c)</li><p>Nombre de voies non annulées, de type 1 ou 2 sur la commune, dans le fichier Topo.</p>
+    <li>Voies et lieux-dits Topo (d)</li><p>Nombre de voies non annulées, de type 1, 2 ou 3 (lieux-dits) sur la commune, dans le fichier Topo.</p>
+    <li>Adresses / voies Topo (a/c) en %</li><p>Pourcentage de voies OSM dont on connaît le code Fantoir, et ayant des adresses, par rapport au nombre de voies de type 1 et 2 dans le fichier Topo.</p>
+    <li>Voies / voies Topo (b/c) en %</li><p>Pourcentage de voies OSM dont on connaît le code Fantoir, y compris des voies sans adresses, par rapport au nombre de voies de type 1 et 2 dans le fichier Topo.</p>
+    <li>Voies / voies et lieux-dits Topo (b/d) en %</li><p>Pourcentage de voies OSM dont on connaît le code Fantoir, y compris des voies sans adresses, par rapport au nombre de voies de type 1, 2 ou 3 dans le fichier Topo.</p>
+    <li>Adresses OSM</li><p>Nombre d'adresses presentes dans OSM sur la commune</p>
+    <li>Adresses BAN</li><p>Nombre d'adresses presentes dans la <a href="https://adresse.data.gouv.fr/">Base Adresse Nationale ou une base adresse locale</a> sur la commune</p>
+    <li>Adresses BAN sans voie rapprochées</li><p>Nombre d'adresses présentes dans la <a href="https://adresse.data.gouv.fr/">Base Adresse Nationale ou une base adresse locale</a> sur la commune dont le nom de rue n'existe pas dans OSM</p>
+    <li>Adresse BAN avec voie rapprochée en %</li><p>Pourcentage d'adresses présentes dans la <a href="https://adresse.data.gouv.fr/">Base Adresse Nationale ou une base adresse locale</a> dont le nom de rue existe dans OSM</p>
+    <li>Indice 2020</li><p>((a/c)*(c-a)) + ((b/c)*(c-b)) + ((b/d)* (d-b))<br>qui qualifie mieux la notion déficitaire que le simple écart relatif (plus le chiffre est gros, plus y a du boulot)</p>
 </div>
 
 <footer>
