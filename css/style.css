@@ -1912,10 +1912,6 @@ table tr.static td {
 /*--------------------- LIENS JOSM et ADRESSES ------------------*/
 /*---------------------------------------------------------------*/
 
-.picto_josm, .picto_id {
-	width: 20px;
-	vertical-align: middle;
-}
 .zone-clic-josm,
 .zone-clic-id,
 .zone-clic-adresses {
@@ -1924,7 +1920,17 @@ table tr.static td {
 	text-decoration: underline;
 	text-align: center;
 }
-
+.zone-clic-id, .zone-clic-josm {
+	height: 20px;
+}
+.zone-clic-josm {
+	background: url('../img/logo_josm.png') no-repeat left 50% top 50%;
+	background-size: 20px;
+}
+.zone-clic-id {
+	background: url('../img/logo_id.png') no-repeat left 50% top 50%;
+	background-size: 20px;	
+}
 /*-- Cellules fusionnées pour adresses déjà intégrées --*/
 .zone-adresses {
 	text-align: center;
