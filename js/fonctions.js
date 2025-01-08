@@ -119,7 +119,7 @@
                                     .text(text)))
     }
     function add_id_link(table,href,text){
-        $('#'+table+' tr:last')     .append($('<td>').addClass('zone-clic-id')
+        $('#'+table+' tr:last')     .append($('<td title="iD">').addClass('zone-clic-id')
                                         .append($('<a>').attr('href',href).attr('target',"blank")
                                             /*.text(text)*/
                                         )
@@ -129,7 +129,7 @@
                                     )
     }
     function add_josm_link(table,xl,xr,yb,yt,code_insee,nom_commune){
-        $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-josm')
+        $('#'+table+' tr:last').append($('<td title="JOSM">').addClass('zone-clic-josm')
                                     .attr('xleft',xl).attr('xright',xr).attr('ybottom',yb).attr('ytop',yt)
                                     /*.text('JOSM')*/
                                     .click(function(){
@@ -140,7 +140,7 @@
                                 )
     }
     function add_josm_croisement_link(table,xl,xr,yb,yt,commune1,insee1,commune2,insee2,wayid){
-        $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-josm')
+        $('#'+table+' tr:last').append($('<td title="JOSM">').addClass('zone-clic-josm')
                                     .attr('xleft',xl).attr('xright',xr).attr('ybottom',yb).attr('ytop',yt)
                                     /*.text('JOSM')*/
                                     .click(function(){
