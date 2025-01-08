@@ -384,7 +384,7 @@
                         $('#'+table+' tbody').append($('<tr>').attr('id',tr_id).append($('<td>').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir_affiche)))
                     }
                     else {
-                        $('#'+table+' tbody').append($('<tr>').attr('id',tr_id).append($('<td>').attr('colspan','3').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir_affiche))) 
+                        $('#'+table+' tbody').append($('<tr>').attr('id',tr_id).append($('<td>').attr('colspan','2').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir_affiche)))
                     }
                     if (annule == -1){
                         $('#'+table+' tr:last td:last').addClass('cell_mauvais_fantoir').attr('title','Code Fantoir annulé, à remplacer dans OSM')
@@ -436,7 +436,7 @@
                                                     .append($('<img>').attr('src','../img/voie.png').attr('title','Voie'))
                                                     .append($('<span>').text(' '+nom_topo)))
                     }
-                    else if (is_osm_hors_fantoir){
+                    else {
                         $('#'+table+' tr:last').append($('<td>'))
                     }
 

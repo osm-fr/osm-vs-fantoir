@@ -1950,7 +1950,6 @@ table tr.static td {
 .zone-clic-josm.clicked,
 #reponse tr:hover td.zone-clic-josm.clicked {
 	background-color:#863602;
-	color: #fff;
 }
 
 .zone-clic-id a {color:#777;} /*Gris*/
@@ -1974,31 +1973,19 @@ table tr.static td {
 /*--------------------------*/
 
 /*Survol des lignes*/
-#reponse #pifomap_table_liens tr:hover td,
-#reponse_numeros #pifomap_table_liens tr:hover td,
-#reponse_haut #pifomap_table_liens tr:hover td {
-	background: none;
+#pifomap_table_liens tr:hover td {
+	background-color: #fff;
 }
 
 /*Survol des cellules*/
-#pifomap_table_liens td.zone-clic-josm.clicked {
-	background:none;
-	color: #863602;
-}
+#pifomap_table_liens td.zone-clic-josm.clicked,
 #pifomap_table_liens tr:hover td.zone-clic-josm.clicked {
-	background:none;
-	color: #863602;
+	background-color:#863602;
 }
 
-#pifomap_table_liens td.zone-clic-id.clicked {
-	background:none;
-}
-#pifomap_table_liens td.zone-clic-id.clicked a {
-	color: #777;
-}
-#pifomap_table_liens tr:hover td.zone-clic-id.clicked a {
-	background:none;
-	color: #777;
+#pifomap_table_liens td.zone-clic-id.clicked,
+#pifomap_table_liens tr:hover td.zone-clic-id.clicked {
+	background-color:lightgrey;
 }
 
 /*---------------------------------------------------------------*/
