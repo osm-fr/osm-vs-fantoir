@@ -1921,7 +1921,13 @@ table tr.static td {
 	text-align: center;
 }
 .zone-clic-id, .zone-clic-josm {
-	height: 20px;
+	height: 25px;
+	width: 25px;
+}
+.zone-clic-id a {
+	display: inline-block;
+	height: 25px;
+	width: 25px;
 }
 .zone-clic-josm {
 	background: url('../img/logo_josm.png') no-repeat left 50% top 50%;
@@ -1952,8 +1958,8 @@ table tr.static td {
 	background-color:#863602;
 }
 
-.zone-clic-id a {color:#777;} /*Gris*/
-.zone-clic-id.clicked, #reponse tr:hover td.zone-clic-id.clicked {background-color:#777;}
+.zone-clic-id a {color:lightgrey;} /*Gris*/
+.zone-clic-id.clicked, #reponse tr:hover td.zone-clic-id.clicked {background-color:lightgrey;}
 .zone-clic-id.clicked a {color: #fff;}
 
 .zone-clic-adresses,
