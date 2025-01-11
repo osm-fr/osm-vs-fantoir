@@ -26,7 +26,7 @@
 <link rel="search" type="application/opensearchdescription+xml" title="Pifomètre BANO" href="opensearch.xml" />
 
 <script>
-    STYLEFILE = 'pifomap_240907'
+    STYLEFILE = 'pifomap_250111'
 
     FILTRES_TYPE = [["voie",true],
                ["lieudit",true]]
@@ -794,13 +794,14 @@
                   fantoir,
                   lon,
                   lat,
+                  label_statut,
                   cat] = point_nomme_data[s]
                  source = cat[0] == 'C'?'CADASTRE':'OSM';
                  rapproche = cat[1] == 'F'?true:false;
                  avec_adresses = cat[2] == 'B'?true:false;
                  nature = cat[3] == 'P'?'lieudit':'voie';
 
-                 res_points_nommes.features.push(get_geojson_point(lon,lat,{'nom':nom,'source':source,'rapproche':rapproche,'fantoir':fantoir,'nature':nature,'nom_com':nom_commune}))
+                 res_points_nommes.features.push(get_geojson_point(lon,lat,{'nom':nom,'source':source,'rapproche':rapproche,'fantoir':fantoir,'nature':nature,'nom_com':nom_commune,'statut':label_statut}))
             }
             map.getSource('points_nommes').setData(res_points_nommes)
 
@@ -862,6 +863,11 @@
         if (!map.hasImage('lieudit_bleu')){
             map.loadImage('./img/lieudit_map_bleu.png', (error, image) => {
                 map.addImage('lieudit_bleu', image);
+            })
+        }
+        if (!map.hasImage('lieudit_gris')){
+            map.loadImage('./img/lieudit_map_gris.png', (error, image) => {
+                map.addImage('lieudit_gris', image);
             })
         }
         interactions_souris('noms_de_communes')
