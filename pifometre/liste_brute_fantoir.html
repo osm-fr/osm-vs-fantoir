@@ -49,7 +49,7 @@
 
 			//Code Insee invalide
 			if (nom_commune.length == 0){
-				$('#descriptif h2').text('INSEE '+$('#input_insee')[0].value+' : commune inconnue');
+				$('#descriptif h2').text('Insee '+$('#input_insee')[0].value+' : commune inconnue');
 				$('body').css('cursor','default');
 				return 0;
 			}
@@ -82,6 +82,12 @@
                                       .attr('href','index.html?insee='+insee)
                                       .text('Pifomètre')
                                   )
+                                  .append(' / ')
+	                               .append($('<a>')
+	                                   .attr('target','blank')
+	                                   .attr('href','pifomap.html?insee='+insee)
+	                                   .text('Pifomap')
+	                               )
                               )
                           
       $('#infos_commune_col2 h2').empty().append(nom_commune)
