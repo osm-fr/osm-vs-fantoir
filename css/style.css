@@ -1287,38 +1287,6 @@ fieldset legend {
 	line-height: 1.6em;
 }
 
-#copier_voie, #copier_fantoir {
-	cursor: pointer;
-	background: url("../img/copier.png") no-repeat center;
-	width: 15px;
-	height: 20px;
-	vertical-align: top;
-}
-#copier_voie {margin-top: 15px;}
-#copier_fantoir {margin-left: 10px;}
-
-#copier_voie.ok, #copier_fantoir.ok {
-	background: url("../img/copier_vert.png") no-repeat center;
-}
-
-#confirm_copie {
-	opacity: 0;
-    transition: opacity 0.5s ease;
-	display:inline-block;
-
-    font-size: 0.8em;
-    font-weight: bold;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-
-    width: 55px;
-    padding: 0;
-    margin: 0;
-
-    color: #33A672;
-}
-
 #panneau_map h2 {
 	display: inline-block;
 	margin: 15px;
@@ -1873,16 +1841,16 @@ table tr.static td {
 /*------------------ PICTO SOURCE BAN ou CADASTRE ---------------*/
 /*---------------------------------------------------------------*/
 
-.picto {
+.picto_tableau {
   width: 18px;
   height: 18px;
   display: inline-block;
   margin: 2px 5px 0 5px;
 }
-.picto.cadastre {
+.picto_tableau.cadastre {
   background: url("../img/cadastre.png") no-repeat;
 }
-.picto.ban {
+.picto_tableau.ban {
   background: url("../img/ban_logo.png") no-repeat;
   background-size: 15px;
 }
@@ -2036,6 +2004,47 @@ td.cell_statut {
 .enregistrement.bleu {color: #56B4E9;}
 .enregistrement.gris {color: #000;}
 .enregistrement.vert {color: #33A672;}
+
+/*------------------------------------------------------*/
+/*------------------- Boutons Copier -------------------*/
+/*------------------------------------------------------*/
+
+#copier_voie, #copier_fantoir, .copier_voie_bancad {
+	cursor: pointer;
+	background: url("../img/copier.png") no-repeat center;
+	width: 15px;
+	height: 20px;
+	vertical-align: top;
+}
+.copier_voie_bancad {
+	background: url("../img/copier_gris.png") no-repeat center;
+}
+
+
+#copier_voie {margin-top: 15px;}
+#copier_fantoir {margin-left: 10px;}
+
+#copier_voie.ok, #copier_fantoir.ok, .copier_voie_bancad.ok {
+	background: url("../img/copier_vert.png") no-repeat center;
+}
+
+#confirm_copie {
+	opacity: 0;
+    transition: opacity 0.5s ease;
+	display:inline-block;
+
+    font-size: 0.8em;
+    font-weight: bold;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+
+    width: 55px;
+    padding: 0;
+    margin: 0;
+
+    color: #33A672;
+}
 
 /*---------------------------------------------------------------*/
 /*---------------------- CARTE DES ADRESSES ---------------------*/

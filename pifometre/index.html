@@ -457,14 +457,41 @@
                     }
                     //--- Nom BAN ou Cadastre ---
                     if (source_nom_ban == 'CADASTRE') {
-                        $('#'+table+' tr:last').append($('<td>').append($('<span class="picto cadastre" title="Nom provenant du cadastre">'))
-                                                                .append($('<span>').text(nom_ban)))
+                        $('#'+table+' tr:last').append($('<td>').append($('<span class="picto_tableau cadastre" title="Nom provenant du cadastre">'))
+                                                                .append($('<span>').attr('texte_voie_a_copier',nom_ban).text(nom_ban)))
+                        if ($('#'+table+' tr:last').hasClass('nom_a_integrer')){
+                        $('#'+table+' tr:last td:last').append($('<button class="picto_tableau copier_voie_bancad" title="Copier le nom du lieu-dit"></button>'))
+                        }
                     }
                     else if (source_nom_ban == 'BAN') {
-                        $('#'+table+' tr:last').append($('<td>').append($('<span class="picto ban" title="Nom provenant de la BAN">'))
-                                                                .append($('<span>').text(nom_ban)))
+                        $('#'+table+' tr:last').append($('<td>').append($('<span class="picto_tableau ban" title="Nom provenant de la BAN">'))
+                                                                .append($('<span class="nom_ban">').attr('texte_voie_a_copier',nom_ban).text(nom_ban))
+                                                        )
+                        if ($('#'+table+' tr:last').hasClass('nom_a_integrer')){
+                        $('#'+table+' tr:last td:last').append($('<button class="picto_tableau copier_voie_bancad" title="Copier le nom de la voie"></button>'))
+                        }                                
                     }
                     else $('#'+table+' tr:last').append($('<td>').text(nom_ban))
+
+                    $('#'+table+' tr:last td:last button.copier_voie_bancad').click(function(){
+                        //Copie le nom de la voie dans le presse-papier
+                        navigator.clipboard.writeText($(this).prev().attr('texte_voie_a_copier'))
+                        //Affiche le picto copie en vert
+                        $(this).addClass('ok')
+                        //Affiche le message de confirmation
+                        $(this).append($('<span id="confirm_copie">').text('✔'));
+
+                        setTimeout(function(){
+                            $('#confirm_copie').css('opacity', '1');
+                            setTimeout(function(){
+                                $('#confirm_copie').css('opacity', '0');
+                            }, 400);
+                            setTimeout(function(){
+                                $('#confirm_copie').remove();
+                                $('.copier_voie_bancad').removeClass('ok');
+                            }, 750);
+                        }, 50);
+                    })                    
 
                     //--- Visu ---
                     xmin  = lon-DELTA
