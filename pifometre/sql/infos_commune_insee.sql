@@ -22,13 +22,13 @@ FROM    (SELECT nom,
                 code_insee = '__code_insee__'
         ORDER BY admin_level
         LIMIT 1)a
-JOIN    bano_stats_communales
-USING   (code_insee)
-LEFT OUTER JOIN  (SELECT code_zone,
-                         date_debut
-                 FROM    batch
-                 WHERE   code_zone = '__code_insee__' AND
-                         etape = 'rapprochement') r
+LEFT OUTER JOIN bano_stats_communales
+USING           (code_insee)
+LEFT OUTER JOIN (SELECT code_zone,
+                        date_debut
+                FROM    batch
+                WHERE   code_zone = '__code_insee__' AND
+                        etape = 'rapprochement') r
 USING   (code_zone)
 CROSS JOIN (SELECT COALESCE(MAX(c),0) commune_composee
            FROM   (SELECT 1 AS c 
