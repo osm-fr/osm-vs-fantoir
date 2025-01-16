@@ -1380,6 +1380,7 @@ fieldset legend {
 	text-decoration: none;
 }
 #pifomap_table_liens {
+	width: 95%;
 	font-size: 1em;
 }
 
@@ -1896,6 +1897,9 @@ table tr.static td {
 	display: inline-block;
 	height: 25px;
 	width: 25px;
+}
+#pifomap_table_liens .zone-clic-id a {
+	width: 100%;
 }
 .zone-clic-josm {
 	background: url('../img/logo_josm.png') no-repeat left 50% top 50%;
