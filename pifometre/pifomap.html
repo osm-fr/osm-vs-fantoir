@@ -627,8 +627,7 @@
         if (couche_carto.indexOf('points_nommes_non_rapproches') == 0){
             map.on('click', couche_carto, (e) => {
                 reset_panneau_map()
-                    console.log('pas rap');
-
+                
                 nom = e.features[0].properties.nom;
                 fantoir = e.features[0].properties.fantoir;
                 rapproche = e.features[0].properties.rapproche;
