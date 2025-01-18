@@ -366,7 +366,10 @@
                 $('#copier_voie').click(function(){
 
                     //Copie le nom de la voie dans le presse-papier
-                    navigator.clipboard.writeText($('#panneau_map h2').attr('texte_voie_a_copier'))
+                    if (eval(localStorage.PreferencesCopierCleValeur)){
+                        navigator.clipboard.writeText('name='+$('#panneau_map h2').attr('texte_voie_a_copier'))
+                    }
+                    else navigator.clipboard.writeText($('#panneau_map h2').attr('texte_voie_a_copier'))
                     //Affiche le picto copie en vert
                     $(this).addClass('ok')
                     //Affiche le message de confirmation
@@ -538,7 +541,10 @@
                                                         )
                                                         $('#copier_fantoir').click(function(){
                                                                 //Copie le nom de la voie dans le presse-papier
-                                                                navigator.clipboard.writeText($('#code_fantoir').attr('texte_fantoir_a_copier'));
+                                                                if (eval(localStorage.PreferencesCopierCleValeur)){
+                                                                    navigator.clipboard.writeText('ref:FR:FANTOIR='+$('#code_fantoir').attr('texte_fantoir_a_copier'))
+                                                                }
+                                                                else navigator.clipboard.writeText($('#code_fantoir').attr('texte_fantoir_a_copier'));
                                                                 //Affiche le picto copie en vert
                                                                 $(this).addClass('ok');
                                                                 //Affiche le message de confirmation
@@ -621,6 +627,7 @@
         if (couche_carto.indexOf('points_nommes_non_rapproches') == 0){
             map.on('click', couche_carto, (e) => {
                 reset_panneau_map()
+                    console.log('pas rap');
 
                 nom = e.features[0].properties.nom;
                 fantoir = e.features[0].properties.fantoir;
@@ -634,9 +641,11 @@
                 $('#panneau_map h2').attr('texte_voie_a_copier',nom).text(nom)
                 $('#panneau_map h2').after('<button id="copier_voie" title="Copier le nom de la voie"></button>')
                 $('#copier_voie').click(function(){
-
                     //Copie le nom de la voie dans le presse-papier
-                    navigator.clipboard.writeText($('#panneau_map h2').attr('texte_voie_a_copier'))
+                    if (eval(localStorage.PreferencesCopierCleValeur)){
+                        navigator.clipboard.writeText('name='+$('#panneau_map h2').attr('texte_voie_a_copier'))
+                    }
+                    else navigator.clipboard.writeText($('#panneau_map h2').attr('texte_voie_a_copier'))
                     //Affiche le picto copie en vert
                     $(this).addClass('ok')
                     //Affiche le message de confirmation
@@ -688,7 +697,10 @@
                                             );
                     $('#copier_fantoir').click(function(){
                             //Copie le nom de la voie dans le presse-papier
-                            navigator.clipboard.writeText($('#code_fantoir').attr('texte_fantoir_a_copier'));
+                            if (eval(localStorage.PreferencesCopierCleValeur)){
+                                navigator.clipboard.writeText('ref:FR:FANTOIR='+$('#code_fantoir').attr('texte_fantoir_a_copier'))
+                            }
+                            else navigator.clipboard.writeText($('#code_fantoir').attr('texte_fantoir_a_copier'));
                             //Affiche le picto copie en vert
                             $(this).addClass('ok');
                             //Affiche le message de confirmation

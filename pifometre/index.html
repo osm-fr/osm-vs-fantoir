@@ -475,7 +475,10 @@
 
                     $('#'+table+' tr:last td:last button.copier_voie_bancad').click(function(){
                         //Copie le nom de la voie dans le presse-papier
-                        navigator.clipboard.writeText($(this).prev().attr('texte_voie_a_copier'))
+                        if (eval(localStorage.PreferencesCopierCleValeur)){
+                            navigator.clipboard.writeText('name='+$(this).prev().attr('texte_voie_a_copier'))
+                        }
+                        else navigator.clipboard.writeText($(this).prev().attr('texte_voie_a_copier'))
                         //Affiche le picto copie en vert
                         $(this).addClass('ok')
                         //Affiche le message de confirmation
