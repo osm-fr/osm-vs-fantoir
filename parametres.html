@@ -38,18 +38,17 @@
                     <label for="teleco_off">Non</label>
                 </p>
             </fieldset>
-
-            <!-- <fieldset>
-                <legend>Édition OSM : afficher le lien vers...</legend>
+            <fieldset id="field_copier">
+                <legend>Comportement du bouton Copier <img src="img/copier.png"/></legend>
                 <p>
-                    <input type="radio" name="pref_editeur" id="editeur_josm" value="editeur_josm" checked />
-                    <label for="editeur_josm">JOSM</label>
+                    <input type="radio" name="pref_copier" id="copier_valeur" value="copier_valeur" checked />
+                    <label for="copier_valeur">Copier les valeurs (nom de voie ou code Fantoir)</label>
                 </p>
                 <p>
-                    <input type="radio" name="pref_editeur" id="editeur_id" value="editeur_id" />
-                    <label for="editeur_id">ID</label>
+                    <input type="radio" name="pref_copier" id="copier_cle_valeur" value="copier_cle_valeur" />
+                    <label for="copier_cle_valeur">Copier les couples clé-valeur (avec <span class="monospace">name</span> ou <span class="monospace">ref:FR:FANTOIR</span>) pour coller  dans JOSM</label>
                 </p>
-            </fieldset> -->
+            </fieldset>
         </div>
         <div class="bloc_fiche b2">
             <h2>Paramètres Pifomap</h2>
@@ -97,6 +96,27 @@ function start(){
             localStorage.setItem('PreferencesJOSMRemoteControlWarning','true')
         } else {
             localStorage.setItem('PreferencesJOSMRemoteControlWarning','false')
+        }
+    })
+
+// Général : bouton Copier
+    if (localStorage.PreferencesCopierCleValeur == undefined){
+        localStorage.setItem('PreferencesCopierCleValeur','false')
+    }
+
+    if (eval(localStorage.PreferencesCopierCleValeur)){
+        $('input#copier_cle_valeur').prop("checked", true).trigger("change")
+        $('input#copier_valeur').prop("checked", false).trigger("change")
+    } else {
+        $('input#copier_cle_valeur').prop("checked", false).trigger("change")
+        $('input#copier_valeur').prop("checked", true).trigger("change")
+    }
+
+    $('#field_copier').click(function(){
+        if ($('input#copier_cle_valeur').prop("checked")){
+            localStorage.setItem('PreferencesCopierCleValeur','true')
+        } else {
+            localStorage.setItem('PreferencesCopierCleValeur','false')
         }
     })
 
