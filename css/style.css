@@ -2024,22 +2024,24 @@ td.cell_statut {
 /*------------------- Boutons Copier -------------------*/
 /*------------------------------------------------------*/
 
-#copier_voie, #copier_fantoir, .copier_voie_bancad {
+.cell_fantoir {
+	white-space: nowrap;
+}
+#copier_voie, #copier_fantoir, .copier_voie_bancad, .copier_fantoir {
 	cursor: pointer;
 	background: url("../img/copier.png") no-repeat center;
 	width: 15px;
 	height: 20px;
 	vertical-align: top;
 }
-.copier_voie_bancad {
+.copier_voie_bancad, .copier_fantoir {
 	background: url("../img/copier_gris.png") no-repeat center;
 }
-
 
 #copier_voie {margin-top: 15px;}
 #copier_fantoir {margin-left: 10px;}
 
-#copier_voie.ok, #copier_fantoir.ok, .copier_voie_bancad.ok {
+#copier_voie.ok, #copier_fantoir.ok, .copier_voie_bancad.ok, .copier_fantoir.ok {
 	background: url("../img/copier_vert.png") no-repeat center;
 }
 

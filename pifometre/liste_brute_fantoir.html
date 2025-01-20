@@ -105,6 +105,7 @@
 					$('tr:last').append($('<td>').attr('class',a_champs_topo_classes[d]).attr('title',a_champs_topo[d]).append($('<span>').append(fantoir[c][d])))
 				}
 
+				//Code couleur rapprochement
 				if ($('tr:last td span')[0].childNodes[0].data == 'OUI'){
 					$($('tr:last td')[0]).append($('<span>').addClass('pastille-verte')).addClass('rapproche')
 				}
@@ -114,6 +115,29 @@
 				else if ($('tr:last td span')[0].childNodes[0].data == 'QUALIFIÉ'){
 					$($('tr:last td')[0]).append($('<span>').addClass('pastille-grise')).addClass('qualifie')
 				}
+
+				//Code Fantoir
+				$($('tr:last td')[3]).append($('<button class="picto_tableau copier_fantoir" title="Copier le code Fantoir"></button>'))
+				$('.copier_fantoir:last').click(function(){
+            if (eval(localStorage.PreferencesCopierCleValeur)){
+                navigator.clipboard.writeText('ref:FR:FANTOIR='+$(this).prev().text())
+            }
+            else navigator.clipboard.writeText($(this).prev().text())
+            $(this).addClass('ok')
+            $(this).append($('<span id="confirm_copie">').text('✔'));
+
+            setTimeout(function(){
+                $('#confirm_copie').css('opacity', '1');
+                setTimeout(function(){
+                    $('#confirm_copie').css('opacity', '0');
+                }, 400);
+                setTimeout(function(){
+                    $('#confirm_copie').remove();
+                    $('.copier_fantoir').removeClass('ok');
+                }, 750);
+            }, 50);
+        })
+
 			}
 
       //Sticky headers : le tableau scrolle dans son contenant
