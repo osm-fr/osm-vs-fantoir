@@ -281,7 +281,7 @@
     function parse_pifometre(categorie,caractere_annul,fantoir) {
         is_voie = false
         is_place = false
-        has_code_fantoir = true
+        has_vrai_code_fantoir = true
         is_osm_hors_fantoir = false
         if (categorie == 0){
             is_voie = true;
@@ -293,11 +293,11 @@
         fantoir_affiche = fantoir
         fantoir_dans_relation = 'ok'
         if (caractere_annul == 'B'){
-            has_code_fantoir = false
+            has_vrai_code_fantoir = false
             fantoir_affiche = 'Voie sans Fantoir'
             fantoir_dans_relation = 'ko'
         }
-        return [is_voie,is_place,is_osm_hors_fantoir,has_code_fantoir,fantoir_affiche,fantoir_dans_relation]
+        return [is_voie,is_place,is_osm_hors_fantoir,has_vrai_code_fantoir,fantoir_affiche,fantoir_dans_relation]
     }
     function get_fantoir_affiche(fantoir){
         if (fantoir.includes('b')){
