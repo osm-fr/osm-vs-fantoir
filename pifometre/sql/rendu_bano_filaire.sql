@@ -65,11 +65,13 @@ AS
         nom AS name
 FROM    nom_fantoir
 WHERE   code_insee = '__code_insee__' AND
-        source = 'OSM')
-SELECT  name,
-        COALESCE(nfp.fantoir,l.fantoir,''),
+        source = 'OSM'),
+unionset
+AS
+(SELECT  name,
+        COALESCE(nfp.fantoir,l.fantoir,'') AS nf,
         within,
-        ST_AsGeoJSON(ST_LineMerge(ST_Collect(way_line)))
+        ST_LineMerge(ST_Collect(way_line)) AS geom
 FROM    lignes_noms l
 LEFT OUTER JOIN nom_fantoir_prioritaire nfp
 USING   (name)
@@ -79,9 +81,26 @@ UNION ALL
 SELECT  name,
         COALESCE(nfp.fantoir,l.fantoir,''),
         within,
-        ST_AsGeoJSON(ST_Collect(way_line))
+        ST_Collect(way_line)
 FROM    lignes_noms l
 LEFT OUTER JOIN nom_fantoir_prioritaire nfp
 USING   (name)
 WHERE   geomtype = 'POINT'
-GROUP BY 1,2,3;
+GROUP BY 1,2,3),
+diag
+AS
+(SELECT name,
+       nf,
+       within,
+       geom,
+       ST_BoundingDiagonal(geom) AS diag
+FROM   unionset)
+SELECT name,
+       nf,
+       within,
+       ST_AsGeoJSON(geom),
+       ST_X(ST_StartPoint(diag)),
+       ST_Y(ST_StartPoint(diag)),
+       ST_X(ST_EndPoint(diag)),
+       ST_Y(ST_EndPoint(diag))
+FROM   diag;

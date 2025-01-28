@@ -301,7 +301,7 @@
                                 ["==",["get","source"],"CADASTRE"],["case",["!=", ["to-string",["get","statut"]],""],"lieudit_gris","lieudit_rouge"],"lieudit_bleu"]
             },
             "paint": {
-                "text-color": ["case",["!=", ["to-string",["get","statut"]],""], "grey","red"],
+                "text-color": ["case",["==",["get","source"],"CADASTRE"],["case",["!=", ["to-string",["get","statut"]],""],"grey","red"],"blue"],
                 "text-halo-color": "white",
                 "text-halo-width": 4
             }
@@ -505,7 +505,7 @@
             "type": "symbol",
             "minzoom" : 15,
             "layout": {
-                "text-field": ["case",["!=", ["to-string",["get","statut"]],""],["format",["get", "nom"],{},"\n",{},["get", "fantoir"],{"font-scale": 0.8},"\n",{},["get", "statut"],{"font-scale": 0.8}],["format",["get", "nom"],{},"\n",{},["get", "fantoir"],{"font-scale": 0.8}]],
+                "text-field": ["case",["!=", ["to-string",["get","statut"]],""],["format",["get", "nom"],{},"\n",{},["get", "fantoir_affiche"],{"font-scale": 0.8},"\n",{},["get", "statut"],{"font-scale": 0.8}],["format",["get", "nom"],{},"\n",{},["get", "fantoir_affiche"],{"font-scale": 0.8}]],
                 "text-overlap":"cooperative",
                 "text-justify": "auto",
                 "symbol-placement": "point"

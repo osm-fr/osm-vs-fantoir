@@ -10,11 +10,11 @@
 <script defer src="../js/menu.js"></script>
 <script src='https://unpkg.com/maplibre-gl@3.2.1/dist/maplibre-gl.js'></script>
 
-    <link rel="icon" type="image/png" href="../img/logo/favicon-96x96-vert.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="../img/logo/favicon-vert.svg" />
-    <link rel="shortcut icon" href="../img/logo/favicon-vert.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="../img/logo/apple-touch-icon-vert.png" />
-    <link rel="manifest" href="../img/logo/site.webmanifest" />
+<link rel="icon" type="image/png" href="../img/logo/favicon-96x96-vert.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="../img/logo/favicon-vert.svg" />
+<link rel="shortcut icon" href="../img/logo/favicon-vert.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="../img/logo/apple-touch-icon-vert.png" />
+<link rel="manifest" href="../img/logo/site.webmanifest" />
 
 <link rel="preload" href="../css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@3.2.1/dist/maplibre-gl.css' />
@@ -26,7 +26,7 @@
 <link rel="search" type="application/opensearchdescription+xml" title="Pifomètre BANO" href="opensearch.xml" />
 
 <script>
-    STYLEFILE = 'pifomap_250111'
+    STYLEFILE = 'pifomap_250126'
 
     FILTRES_TYPE = [["voie",true],
                ["lieudit",true]]
@@ -267,6 +267,7 @@
         if (couche_carto == 'BAN_point_transparent'||
             couche_carto == 'OSM_point'||
             couche_carto == 'filaire_transparent'||
+            couche_carto == 'polygones'||
             couche_carto.indexOf('points_nommes_') == 0){
             map.on('mouseenter', couche_carto, (e) => {
                 // Changer le curseur
@@ -340,102 +341,61 @@
                 });
             }
         }
-        //----------------------------------------------------------------------------------
-        //------- POINTS D'ADRESSE et NOMS DE VOIES OU LIEUX-DITS RAPPROCHES (VERTS) -------
-        //----------------------------------------------------------------------------------
+        //---------------------------------------------------------------
+        //------- POINTS D'ADRESSE et NOMS DE VOIES OU LIEUX-DITS -------
+        //---------------------------------------------------------------
 
-        if (couche_carto == 'BAN_point_transparent' || couche_carto == 'OSM_point' || couche_carto.indexOf('points_nommes_rapproches') == 0){
+        if (couche_carto == 'BAN_point_transparent' ||
+            couche_carto == 'OSM_point' ||
+            couche_carto == 'polygones' ||
+            couche_carto.indexOf('points_nommes') == 0){
             map.on('click', couche_carto, (e) => {
-
-                nom = e.features[0].properties.nom;
                 numero = e.features[0].properties.numero;
-                source = e.features[0].properties.source;
+                nom = e.features[0].properties.nom;
+                fantoir = e.features[0].properties.fantoir;
                 rapproche = e.features[0].properties.rapproche;
-                nom_commune = e.features[0].properties.nom_com;
+                source = e.features[0].properties.source;
+                nom_commune = e.features[0].properties.nom_com
+                nature = e.features[0].properties.nature;
                 lon = e.lngLat.lng
                 lat = e.lngLat.lat
 
                 reset_panneau_map()
 
-                if (couche_carto == 'BAN_point_transparent' || couche_carto == 'OSM_point') {
-                    $('#panneau_map h2').attr('texte_voie_a_copier',nom).text(numero+' '+nom)
-                } else {
-                    $('#panneau_map h2').attr('texte_voie_a_copier',nom).text(nom)
-                }
-                $('#panneau_map h2').after('<button id="copier_voie" title="Copier le nom de la voie"></button>')
-                $('#copier_voie').click(function(){
-
-                    //Copie le nom de la voie dans le presse-papier
-                    if (eval(localStorage.PreferencesCopierCleValeur)){
-                        navigator.clipboard.writeText('name='+$('#panneau_map h2').attr('texte_voie_a_copier'))
-                    }
-                    else navigator.clipboard.writeText($('#panneau_map h2').attr('texte_voie_a_copier'))
-                    //Affiche le picto copie en vert
-                    $(this).addClass('ok')
-                    //Affiche le message de confirmation
-                    $('#copier_voie').append($('<span id="confirm_copie">').text('✔'));
-
-                    setTimeout(function(){
-                        $('#copier_voie #confirm_copie').css('opacity', '1');
-                        setTimeout(function(){
-                            $('#copier_voie #confirm_copie').css('opacity', '0');
-                        }, 400);
-                        setTimeout(function(){
-                            $('#copier_voie #confirm_copie').remove();
-                            $('#copier_voie').removeClass('ok');
-                        }, 750);
-                    }, 50);
-
-                })
-
-                fantoir = e.features[0].properties.fantoir;
+                ajout_infos_titre(couche_carto)
 
                 // Adresses rattachées à une voie OSM seule (liste bleue)
                 if (!fantoir){
-                    $('#infos_numero').append($('<p>').text("Cette adresse (numéro + nom de voie ou lieu-dit) est issue d'OSM et elle est inconnue de la BAN. Son nom est aussi inconnu de Fantoir."));
+                    //Infos sur le numéro
+                    if (numero){
+                        ajout_infos_numero(couche_carto)
+                    }
+
+                    //Infos sur la voie ou le lieu-dit
+                    is_place = nature == 'lieudit'
+                    nom_topo = null
+                    has_vrai_code_fantoir = false
+                    ajout_infos_voie_lieudit(couche_carto)
 
                     //LIENS DE VISU
+                    ajout_liens_de_visu(lon,lat)
 
+                    // SEPARATEUR
                     $('#infos_voie_lieudit').append($('<hr>'));
-                    $('#infos_voie_lieudit').append($('<h3>').text('Voir le lieu sur : '));
-
-                    $('#infos_voie_lieudit').append($('<ul>')
-                                                .append($('<li>')
-                                                    .append($('<a>')
-                                                        .attr('href',url_map_org_part1+'?mlat='+lat+'&mlon='+lon+'#map='+'18/'+lat+'/'+lon)
-                                                        .attr('target','blank')
-                                                        .text('ORG')
-                                                    )
-                                                )
-                                            );
 
                     //LIENS D'EDITION
-
-                    $('#infos_voie_lieudit').append($('<hr>'));
-                    $('#infos_voie_lieudit').append($('<h3>').text('Édition'));
-
-                    xmin  = lon-DELTA
-                    xmax  = lon+DELTA
-                    ymin  = lat-DELTA
-                    ymax  = lat+DELTA
-
-                    table = 'pifomap_table_liens'
-                    $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Éditer la zone sur'))))
-                    $('#'+table).append($('<tr>'))
-                    add_josm_link(table,xmin,xmax,ymin,ymax,code_insee,nom_commune)
-                    add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
+                    ajout_liens_d_edition(lon,lat,couche_carto)
 
                     return 0
                 }
 
-                // cas général
                 code_insee = fantoir.substring(0,5)
 
                 $.ajax({
                     url: "requete_pifometre_voies.py?insee="+code_insee+'&fantoir='+fantoir
                 })
                 .done(function( data ) {
-                    let [fantoir,
+                        [fantoir,
                          date_creation,
                          annule,
                          nom_topo,
@@ -451,7 +411,7 @@
                          categorie,
                          avec_adresses_ban] = data[0]
 
-                    let [is_voie,
+                        let [is_voie,
                         is_place,
                         is_osm_hors_fantoir,
                         has_vrai_code_fantoir,
@@ -468,282 +428,229 @@
                         }
 
                         //Infos sur le numéro
-                        if (couche_carto == 'BAN_point_transparent' || couche_carto == 'OSM_point') {
-                            $('#infos_numero').append($('<h3>').text('Le point d\'adresse :'));
-
-                            $('#infos_numero').append($('<ul>'));
-
-                            $('#infos_numero ul').append($('<li>')
-                                                        .append($('<span class="gras">').text('Numéro : '))
-                                                        .append($('<span>').text(numero))
-                                                    );
-                            $('#infos_numero ul').append($('<li>')
-                                                            .append($('<span class="gras">').text('Source du point : '))
-                                                            .append($('<span>').text(source))
-                                                    );
-
-                            if (is_place) {
-                                $('#infos_numero ul').append($('<li>')
-                                                            .append($('<span class="gras">').text('Rattaché à : '))
-                                                            .append($('<span>').text('un lieu-dit'))
-                                                        );
-                            }
-                            else {
-                                $('#infos_numero ul').append($('<li>')
-                                                            .append($('<span class="gras">').text('Rattaché à : '))
-                                                            .append($('<span>').text('une voie'))
-                                                        );
-                            }                        
-                            $('#infos_numero').append($('<hr>'));
-                        }
+                        ajout_infos_numero(couche_carto)
 
                         //Infos sur la voie ou le lieu-dit
-
-                        e_terminal = 'e'
-                        if (is_place) {
-                            $('#infos_voie_lieudit').append($('<h3>').text('Lieu-dit :'));
-                            e_terminal = ''
-                        } else {
-                            $('#infos_voie_lieudit').append($('<h3>').text('Voie :'));
-                        }
-
-                        if (rapproche) {
-                            title_text = 'rapproché'+e_terminal+' dans OSM'
-                            class_pastille = 'pastille-verte'
-                        } else {
-                            title_text = 'pas rapproché'+e_terminal+' dans OSM'
-                            class_pastille = 'pastille-orange'
-                        }
-
-                        $('#infos_voie_lieudit').append($('<ul>'));
-                        $('#infos_voie_lieudit ul').append($('<li>')
-                                                .append($('<span>').addClass(class_pastille).attr('title',title_text))
-                                                .append($('<span>').text(title_text)));
-
-
-                        $('#infos_voie_lieudit ul').append($('<li>')
-                                                        .append($('<span class="gras">').text('Nom OSM : '))
-                                                        .append($('<span>').text(nom_osm))
-                                                    )
-                                                    .append($('<li>')
-                                                        .append($('<span class="gras">').text('Nom BAN : '))
-                                                        .append($('<span>').text(nom_ban))
-                                                    );
-                        if (has_vrai_code_fantoir) {
-                            $('#infos_voie_lieudit ul') .append($('<li>')
-                                                            .append($('<span class="gras">').text('Libellé Fantoir : '))
-                                                            .append($('<span>').text(nom_topo))
-                                                        )
-                                                        .append($('<li>')
-                                                            .append($('<span class="gras">').text('Code Fantoir : '))
-                                                            .append($('<span id="code_fantoir">').attr('texte_fantoir_a_copier',fantoir_affiche).text(fantoir_affiche))
-                                                            .append('<button id="copier_fantoir" title="Copier le code Fantoir"></button>')
-                                                        )
-                                                        $('#copier_fantoir').click(function(){
-                                                                //Copie le nom de la voie dans le presse-papier
-                                                                if (eval(localStorage.PreferencesCopierCleValeur)){
-                                                                    navigator.clipboard.writeText('ref:FR:FANTOIR='+$('#code_fantoir').attr('texte_fantoir_a_copier'))
-                                                                }
-                                                                else navigator.clipboard.writeText($('#code_fantoir').attr('texte_fantoir_a_copier'));
-                                                                //Affiche le picto copie en vert
-                                                                $(this).addClass('ok');
-                                                                //Affiche le message de confirmation
-                                                                $('#copier_fantoir').append($('<span id="confirm_copie">')
-                                                                                                            .text('✔'));
-                                                                setTimeout(function(){
-                                                                    $('#confirm_copie').css('opacity', '1');
-                                                                    setTimeout(function(){
-                                                                        $('#confirm_copie').css('opacity', '0');
-                                                                    }, 400);
-                                                                    setTimeout(function(){
-                                                                        $('#confirm_copie').remove();
-                                                                        $('#copier_fantoir').removeClass('ok');
-                                                                    }, 750);
-                                                                }, 50)
-                                                            })
-                        }
-                        else {
-                            $('#infos_voie_lieudit ul') .append($('<li>')
-                                                            .append($('<span class="gras">').text('Libellé et code Fantoir : '))
-                                                            .append($('<span>').text('/'))
-                                                        );
-                        }
+                        ajout_infos_voie_lieudit(couche_carto)
 
                         //LIENS DE VISU
+                        ajout_liens_de_visu(lon,lat)
 
+                        // SEPARATEUR
                         $('#infos_voie_lieudit').append($('<hr>'));
-                        $('#infos_voie_lieudit').append($('<h3>').text('Voir le lieu sur : '));
-
-                        $('#infos_voie_lieudit').append($('<ul>')
-                                                    .append($('<li>')
-                                                        .append($('<a>')
-                                                            .attr('href',url_map_org_part1+'?mlat='+lat+'&mlon='+lon+'#map='+'18/'+lat+'/'+lon)
-                                                            .attr('target','blank')
-                                                            .text('ORG')
-                                                        )
-                                                    )
-                                                );
 
                         //LIENS D'EDITION
+                        ajout_liens_d_edition(lon,lat,couche_carto)
 
-                        $('#infos_voie_lieudit').append($('<hr>'));
-                        $('#infos_voie_lieudit').append($('<h3>').text('Édition'));
-
-                        xmin  = lon-DELTA
-                        xmax  = lon+DELTA
-                        ymin  = lat-DELTA
-                        ymax  = lat+DELTA
-
-                        table = 'pifomap_table_liens'
-                        $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Éditer la zone sur'))))
-                        $('#'+table).append($('<tr>'))
-                            add_josm_link(table,xmin,xmax,ymin,ymax,code_insee,nom_commune)
-                            add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
-                        
-                        if (couche_carto == 'BAN_point_transparent' || couche_carto == 'OSM_point') {
-                            if (is_place) {
-                                $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Intégrer les adresses dans JOSM'))))
-                            }
-                            else {
-                                $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Intégrer les adresses de la voie dans JOSM'))))
-                            }
-                            $('#'+table).append($('<tr>'))
-                            add_josm_addr_link(table,code_insee,nom_commune,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
-
-                            if (has_vrai_code_fantoir){
-                                $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Qualifier les adresses sur Pifomètre'))))
-                                $('#'+table).append($('<tr>'))
-                                add_addr_inspector_link(table,code_insee,fantoir,'BAN')
-                            }
-                        }
                 })
             });
         }
+    }
 
-        //-------------------------------------------------------------------
-        //------- NOMS DE VOIES OU LIEUX-DITS NON RAPPROCHES (ORANGE) -------
-        //-------------------------------------------------------------------
+    function ajout_infos_titre(couche_carto){
+        if (numero != undefined) {
+            $('#panneau_map h2').attr('texte_voie_a_copier',nom).text(numero+' '+nom)
+        } else {
+            $('#panneau_map h2').attr('texte_voie_a_copier',nom).text(nom)
+        }
 
-        if (couche_carto.indexOf('points_nommes_non_rapproches') == 0){
-            map.on('click', couche_carto, (e) => {
-                reset_panneau_map()
-                
-                nom = e.features[0].properties.nom;
-                fantoir = e.features[0].properties.fantoir;
-                rapproche = e.features[0].properties.rapproche;
-                source = e.features[0].properties.source;
-                nom_commune = e.features[0].properties.nom_com;
-                nature = e.features[0].properties.nature;
-                lon = e.lngLat.lng
-                lat = e.lngLat.lat
+        $('#panneau_map h2').click(function(){
+            let [xmin,ymin,xmax,ymax] = emprises.get(nom)
+            if ((xmin == xmax) && (ymin == ymax)){
+                map.jumpTo({
+                    center:[xmin,ymin],
+                    zoom:17});
+                console.log('jumpto '+nom)
+            } else {
+                map.fitBounds(emprises.get(nom))
+                console.log('fitbounds '+nom)
+            }
+        // console.log(xmin+' '+xmax+' '+ymin+' '+ymax)
+        })
+        $('#panneau_map h2').after('<button id="copier_voie" title="Copier le nom de la voie"></button>')
+        $('#copier_voie').click(function(){
+            //Copie le nom de la voie dans le presse-papier
+            if (eval(localStorage.PreferencesCopierCleValeur)){
+                navigator.clipboard.writeText('name='+$('#panneau_map h2').attr('texte_voie_a_copier'))
+            }
+            else navigator.clipboard.writeText($('#panneau_map h2').attr('texte_voie_a_copier'))
+            //Affiche le picto copie en vert
+            $(this).addClass('ok')
+            //Affiche le message de confirmation
+            $('#copier_voie').append($('<span id="confirm_copie">').text('✔'));
 
-                $('#panneau_map h2').attr('texte_voie_a_copier',nom).text(nom)
-                $('#panneau_map h2').after('<button id="copier_voie" title="Copier le nom de la voie"></button>')
-                $('#copier_voie').click(function(){
-                    //Copie le nom de la voie dans le presse-papier
-                    if (eval(localStorage.PreferencesCopierCleValeur)){
-                        navigator.clipboard.writeText('name='+$('#panneau_map h2').attr('texte_voie_a_copier'))
-                    }
-                    else navigator.clipboard.writeText($('#panneau_map h2').attr('texte_voie_a_copier'))
-                    //Affiche le picto copie en vert
-                    $(this).addClass('ok')
-                    //Affiche le message de confirmation
-                    $('#copier_voie').append($('<span id="confirm_copie">').text('✔'));
+            setTimeout(function(){
+                $('#copier_voie #confirm_copie').css('opacity', '1');
+                setTimeout(function(){
+                    $('#copier_voie #confirm_copie').css('opacity', '0');
+                }, 400);
+                setTimeout(function(){
+                    $('#copier_voie #confirm_copie').remove();
+                    $('#copier_voie').removeClass('ok');
+                }, 750);
+            }, 50);
 
-                    setTimeout(function(){
-                        $('#confirm_copie').css('opacity', '1');
-                        setTimeout(function(){
-                            $('#confirm_copie').css('opacity', '0');
-                        }, 400);
-                        setTimeout(function(){
-                            $('#confirm_copie').remove();
-                            $('#copier_voie').removeClass('ok');
-                        }, 750);
-                    }, 50);
-                    
-                })
+        })
+    }
 
-                    //Infos sur la voie ou le lieu-dit
+    function ajout_infos_numero(couche_carto){
+        // Points OSM bleus - non rapprochés
+        if (!fantoir && couche_carto == 'OSM_point') {
+            $('#infos_numero').append($('<p>').text("Cette adresse (numéro + nom de voie ou lieu-dit) est issue d'OSM et elle est inconnue de la BAN. Son nom est aussi inconnu de TOPO."));
+        } else if (couche_carto == 'BAN_point_transparent' || couche_carto == 'OSM_point') {
 
-                    e_terminal = 'e'
-                    if (nature == "lieudit") {
-                        $('#infos_voie_lieudit').append($('<h3>').text('Lieu-dit :'));
-                        e_terminal = ''
-                    } else {
-                        $('#infos_voie_lieudit').append($('<h3>').text('Voie (ou assimilé) :'));
-                    }
+            $('#infos_numero').append($('<h3>').text('Le point d\'adresse :'));
 
-                    if (source == 'OSM') {
-                        title_text = 'connu'+e_terminal+' seulement d\'OSM'
-                        class_pastille = 'pastille-bleue'
-                    } else {
-                        title_text = 'pas rapproché'+e_terminal+' dans OSM'
-                        class_pastille = 'pastille-orange'
-                    }
-                    $('#infos_voie_lieudit').append($('<ul>'));
-                    $('#infos_voie_lieudit ul').append($('<li>')
-                                                .append($('<span>').addClass(class_pastille).attr('title',title_text))
-                                                .append($('<span>').text(title_text)));
+            $('#infos_numero').append($('<ul>'));
 
-                    $('#infos_voie_lieudit ul').append($('<li>')
-                                                    .append($('<span class="gras">').text('Source : '))
-                                                    .append($('<span>').text(source))
-                                            );
-                    $('#infos_voie_lieudit ul').append($('<li>')
-                                                    .append($('<span class="gras">').text('Code Fantoir : '))
-                                                    .append($('<span id="code_fantoir">').attr('texte_fantoir_a_copier',fantoir).text(fantoir))
-                                                    .append('<button id="copier_fantoir" title="Copier le code Fantoir"></button>')
-                                            );
-                    $('#copier_fantoir').click(function(){
-                            //Copie le nom de la voie dans le presse-papier
-                            if (eval(localStorage.PreferencesCopierCleValeur)){
-                                navigator.clipboard.writeText('ref:FR:FANTOIR='+$('#code_fantoir').attr('texte_fantoir_a_copier'))
-                            }
-                            else navigator.clipboard.writeText($('#code_fantoir').attr('texte_fantoir_a_copier'));
-                            //Affiche le picto copie en vert
-                            $(this).addClass('ok');
-                            //Affiche le message de confirmation
-                            $('#copier_fantoir').append($('<span id="confirm_copie">')
-                                                                        .text('✔'));
-                            setTimeout(function(){
-                                $('#confirm_copie').css('opacity', '1');
-                                setTimeout(function(){
-                                    $('#confirm_copie').css('opacity', '0');
-                                }, 400);
-                                setTimeout(function(){
-                                    $('#confirm_copie').remove();
-                                    $('#copier_fantoir').removeClass('ok');
-                                }, 750);
-                            }, 50)
-                        })
-                    //LIENS DE VISU
-                    $('#infos_voie_lieudit').append($('<hr>'));
-                    $('#infos_voie_lieudit').append($('<h3>').text('Voir le point sur : '));
+            $('#infos_numero ul').append($('<li>')
+                                        .append($('<span class="gras">').text('Numéro : '))
+                                        .append($('<span>').text(numero))
+                                    );
+            $('#infos_numero ul').append($('<li>')
+                                            .append($('<span class="gras">').text('Source du point : '))
+                                            .append($('<span>').text(source))
+                                    );
 
-                    $('#infos_voie_lieudit').append($('<ul>')
-                                                .append($('<li>')
-                                                    .append($('<a>')
-                                                        .attr('href',url_map_org_part1+'?mlat='+lat+'&mlon='+lon+'#map='+'18/'+lat+'/'+lon)
-                                                        .attr('target','blank')
-                                                        .text('ORG')
-                                                    )
-                                                )
-                                            );
-                    //LIENS D'EDITION
-                    $('#infos_voie_lieudit').append($('<hr>'));
-                    $('#infos_voie_lieudit').append($('<h3>').text('Édition'));
+            if (is_place) {
+                $('#infos_numero ul').append($('<li>')
+                                            .append($('<span class="gras">').text('Rattaché à : '))
+                                            .append($('<span>').text('un lieu-dit'))
+                                        );
+            }
+            else {
+                $('#infos_numero ul').append($('<li>')
+                                            .append($('<span class="gras">').text('Rattaché à : '))
+                                            .append($('<span>').text('une voie'))
+                                        );
+            }
+            $('#infos_numero').append($('<hr>'));
+        }
+    }
 
-                    xmin  = lon-DELTA
-                    xmax  = lon+DELTA
-                    ymin  = lat-DELTA
-                    ymax  = lat+DELTA
+    function ajout_infos_voie_lieudit(couche_carto){
+        e_terminal = 'e'
+        if (is_place) {
+            $('#infos_voie_lieudit').append($('<h3>').text('Lieu-dit :'));
+            e_terminal = ''
+        } else {
+            $('#infos_voie_lieudit').append($('<h3>').text('Voie (ou assimilé) :'));
+        }
 
-                    table = 'pifomap_table_liens'
-                    $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Éditer la zone sur'))))
-                    $('#'+table).append('<tr>')
-                    add_josm_link(table,xmin,xmax,ymin,ymax,code_insee,nom_commune)
-                    add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
-            })
+        if (rapproche) {
+            title_text = 'rapproché'+e_terminal+' dans OSM'
+            class_pastille = 'pastille-verte'
+        } else if (source == 'OSM') {
+            title_text = 'connu'+e_terminal+' seulement d\'OSM'
+            class_pastille = 'pastille-bleue'
+        } else {
+            title_text = 'pas rapproché'+e_terminal+' dans OSM'
+            class_pastille = 'pastille-orange'
+        }
+
+        $('#infos_voie_lieudit').append($('<ul>'));
+        $('#infos_voie_lieudit ul').append($('<li>')
+                                .append($('<span>').addClass(class_pastille).attr('title',title_text))
+                                .append($('<span>').text(title_text)));
+
+        if ((couche_carto == 'BAN_point_transparent' || couche_carto == 'OSM_point') && rapproche) {
+            $('#infos_voie_lieudit ul').append($('<li>')
+                                            .append($('<span class="gras">').text('Nom OSM : '))
+                                            .append($('<span>').text(nom_osm))
+                                        )
+                                        .append($('<li>')
+                                            .append($('<span class="gras">').text('Nom BAN : '))
+                                            .append($('<span>').text(nom_ban))
+                                        );
+        } else if (couche_carto.indexOf('points_nommes_non_rapproches') == 0){
+                $('#infos_voie_lieudit ul').append($('<li>')
+                                            .append($('<span class="gras">').text('Source : '))
+                                            .append($('<span>').text(source))
+                                        );
+        }
+        if (nom_topo){
+            $('#infos_voie_lieudit ul') .append($('<li>')
+                                            .append($('<span class="gras">').text('Libellé Fantoir : '))
+                                            .append($('<span>').text(nom_topo))
+                                        )
+        }
+        if (has_vrai_code_fantoir){
+            $('#infos_voie_lieudit ul') .append($('<li>')
+                                            .append($('<span class="gras">').text('Code Fantoir : '))
+                                            .append($('<span id="code_fantoir">').attr('texte_fantoir_a_copier',fantoir_affiche).text(fantoir_affiche))
+                                            .append('<button id="copier_fantoir" title="Copier le code Fantoir"></button>')
+                                        )
+                                        $('#copier_fantoir').click(function(){
+                                                //Copie le nom de la voie dans le presse-papier
+                                                if (eval(localStorage.PreferencesCopierCleValeur)){
+                                                    navigator.clipboard.writeText('ref:FR:FANTOIR='+$('#code_fantoir').attr('texte_fantoir_a_copier'))
+                                                }
+                                                else navigator.clipboard.writeText($('#code_fantoir').attr('texte_fantoir_a_copier'));
+                                                //Affiche le picto copie en vert
+                                                $(this).addClass('ok');
+                                                //Affiche le message de confirmation
+                                                $('#copier_fantoir').append($('<span id="confirm_copie">')
+                                                                                            .text('✔'));
+                                                setTimeout(function(){
+                                                    $('#confirm_copie').css('opacity', '1');
+                                                    setTimeout(function(){
+                                                        $('#confirm_copie').css('opacity', '0');
+                                                    }, 400);
+                                                    setTimeout(function(){
+                                                        $('#confirm_copie').remove();
+                                                        $('#copier_fantoir').removeClass('ok');
+                                                    }, 750);
+                                                }, 50)
+                                            })
+        } else {
+            $('#infos_voie_lieudit ul') .append($('<li>')
+                                        .append($('<span class="gras">').text('Libellé et code Fantoir : '))
+                                        .append($('<span>').text('/'))
+                                        );
+        }
+    }
+    function ajout_liens_de_visu(lon,lat){
+        $('#infos_voie_lieudit').append($('<hr>'));
+        $('#infos_voie_lieudit').append($('<h3>').text('Voir le lieu sur : '));
+        $('#infos_voie_lieudit').append($('<ul>')
+                                    .append($('<li>')
+                                        .append($('<a>')
+                                            .attr('href',url_map_org_part1+'?mlat='+lat+'&mlon='+lon+'#map='+'18/'+lat+'/'+lon)
+                                            .attr('target','blank')
+                                            .text('ORG')
+                                        )
+                                    )
+                                );
+    }
+    function ajout_liens_d_edition(lon,lat,couche_carto){
+        $('#infos_voie_lieudit').append($('<h3>').text('Édition'));
+
+        xmin  = lon-DELTA
+        xmax  = lon+DELTA
+        ymin  = lat-DELTA
+        ymax  = lat+DELTA
+
+        table = 'pifomap_table_liens'
+        $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Éditer la zone sur'))))
+        $('#'+table).append($('<tr>'))
+        add_josm_link(table,xmin,xmax,ymin,ymax,code_insee,nom_commune)
+        add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
+
+        if (couche_carto == 'BAN_point_transparent' || couche_carto == 'OSM_point') {
+            if (is_place) {
+                $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Intégrer les adresses dans JOSM'))))
+            }
+            else {
+                $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Intégrer les adresses de la voie dans JOSM'))))
+            }
+            $('#'+table).append($('<tr>'))
+            add_josm_addr_link(table,code_insee,nom_commune,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
+
+            if (has_vrai_code_fantoir){
+                $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Qualifier les adresses sur Pifomètre'))))
+                $('#'+table).append($('<tr>'))
+                add_addr_inspector_link(table,code_insee,fantoir,'BAN')
+            }
         }
     }
     function rendu_bano(insee,nom_commune){
@@ -763,7 +670,10 @@
                 filairedata,
                 polydata,
                 point_numero_data,
-                point_nomme_data] = data
+                point_nomme_data,
+                raw_emprises] = data
+
+            emprises = new Map(Object.entries(raw_emprises));
 
             res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
             bbox = polycommunedata[0][0].coordinates
@@ -795,7 +705,7 @@
                     poly] = polydata[s]
                 if (poly.type == 'Polygon'){
                     fantoir_affiche = get_fantoir_affiche(fantoir) == fantoir ?null:get_fantoir_affiche(fantoir)
-                    res.features.push(get_geojson_poly(poly,{'fantoir':fantoir_affiche,'nom':nom_ban,'statut':label_statut}))
+                    res.features.push(get_geojson_poly(poly,{'fantoir':fantoir,'fantoir_affiche':fantoir_affiche,'nom':nom_ban,'statut':label_statut}))
                 }
             }
             map.getSource('polygones_convexhull').setData(res)
@@ -891,6 +801,7 @@
         interactions_souris('points_nommes_non_rapproches_lieudit')
         interactions_souris('points_nommes_rapproches_voie')
         interactions_souris('points_nommes_non_rapproches_voie')
+        interactions_souris('polygones')
 
         $('#pifoprogression').click(function(){
             affiche_ratio_map()
