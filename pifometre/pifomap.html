@@ -454,20 +454,8 @@
             $('#panneau_map h2').attr('texte_voie_a_copier',nom).text(nom)
         }
 
-        $('#panneau_map h2').click(function(){
-            let [xmin,ymin,xmax,ymax] = emprises.get(nom)
-            if ((xmin == xmax) && (ymin == ymax)){
-                map.jumpTo({
-                    center:[xmin,ymin],
-                    zoom:17});
-                console.log('jumpto '+nom)
-            } else {
-                map.fitBounds(emprises.get(nom))
-                console.log('fitbounds '+nom)
-            }
-        // console.log(xmin+' '+xmax+' '+ymin+' '+ymax)
-        })
-        $('#panneau_map h2').after('<button id="copier_voie" title="Copier le nom de la voie"></button>')
+        //Bouton Copier le nom de la voie ou du lieu-dit
+        $('#panneau_map #en_tete #boutons').append('<button id="copier_voie" class="pifomap" title="Copier le nom de la voie"></button>')
         $('#copier_voie').click(function(){
             //Copie le nom de la voie dans le presse-papier
             if (eval(localStorage.PreferencesCopierCleValeur)){
@@ -489,7 +477,23 @@
                     $('#copier_voie').removeClass('ok');
                 }, 750);
             }, 50);
+        })
 
+        //Bouton Centrer sur la voie ou le lieu-dit
+        $('#panneau_map #en_tete #boutons').append($('<button id="centrer_voie_lieudit" title="Centrer la carte sur ce lieu"></button>'))
+
+        $('#centrer_voie_lieudit').click(function(){
+            let [xmin,ymin,xmax,ymax] = emprises.get(nom)
+            if ((xmin == xmax) && (ymin == ymax)){
+                map.jumpTo({
+                    center:[xmin,ymin],
+                    zoom:17});
+                console.log('jumpto '+nom)
+            } else {
+                map.fitBounds(emprises.get(nom))
+                console.log('fitbounds '+nom)
+            }
+        // console.log(xmin+' '+xmax+' '+ymin+' '+ymax)
         })
     }
 
@@ -1236,7 +1240,10 @@
 
     <div id="reponse" class="pifomap">
         <div id="panneau_map">
-            <h2></h2> <!-- Nom commune -->
+            <div id="en_tete">
+                <h2></h2>
+                <div id="boutons"></div>
+            </div>
             <div id="contenu">
                 <div id="infos_numero"></div>
                 <div id="infos_voie_lieudit"></div>

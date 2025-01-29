@@ -1286,16 +1286,37 @@ fieldset legend {
 #panneau_map li {
 	line-height: 1.6em;
 }
+#panneau_map #en_tete {
 
+}
 #panneau_map h2 {
-	display: inline-block;
-	margin: 15px;
-	width: 75%;
+	float: left;
+	margin: 15px 5px;
+	width: calc(100% - 70px);
 	font-size: 1.2em;
 	line-height: 1.2em;
 }
+#panneau_map #boutons {
+	float: right;
+	width: 55px;
+	margin: 15px 2px;
+}
+#copier_voie.pifomap, #centrer_voie_lieudit {
+	margin: 0 3px;
+}
+#centrer_voie_lieudit {
+	cursor: pointer;
+	vertical-align: middle;
+	width: 25px;
+	height: 25px;
+	background: url("../img/centrer.png") whitesmoke no-repeat center;
+	background-size: 17px;
+	border-bottom: 2px lightgrey solid;
+	border-radius: 5px;
+}
 
 #panneau_map h3 {
+	clear: both;
 	text-align: left;
 	font-size: 1.1em;
 	line-height: 1.2em;
