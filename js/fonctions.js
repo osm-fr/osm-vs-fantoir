@@ -417,7 +417,7 @@
     }
     function reset_panneau_map(){
         $('#panneau_map h2').empty()
-        $('#panneau_map #copier_voie').remove()
+        $('#panneau_map #boutons').empty()
         $('#infos_numero').empty();
         $('#infos_voie_lieudit').empty();
         $('#pifomap_table_liens').empty();
