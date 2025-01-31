@@ -26,7 +26,7 @@
 <link rel="search" type="application/opensearchdescription+xml" title="Pifomètre BANO" href="opensearch.xml" />
 
 <script>
-    STYLEFILE = 'pifomap_250126'
+    STYLEFILE = 'pifomap_250131'
 
     FILTRES_TYPE = [["voie",true],
                ["lieudit",true]]
@@ -348,8 +348,14 @@
         if (couche_carto == 'BAN_point_transparent' ||
             couche_carto == 'OSM_point' ||
             couche_carto == 'polygones' ||
+            couche_carto == 'filaire_transparent' ||
             couche_carto.indexOf('points_nommes') == 0){
             map.on('click', couche_carto, (e) => {
+                if (e.originalEvent.defaultPrevented){
+                    return 0
+                }
+                e.originalEvent.preventDefault();
+
                 numero = e.features[0].properties.numero;
                 nom = e.features[0].properties.nom;
                 fantoir = e.features[0].properties.fantoir;
@@ -448,11 +454,30 @@
     }
 
     function ajout_infos_titre(couche_carto){
-        if (numero != undefined) {
-            $('#panneau_map h2').attr('texte_voie_a_copier',nom).text(numero+' '+nom)
+        let [xmin,ymin,xmax,ymax] = emprises.get(nom)
+        if (fantoir){
+            let [xminf,yminf,xmaxf,ymaxf] = emprises.get(fantoir)
+            xmin = Math.min(xmin,xminf)
+            xmax = Math.max(xmax,xmaxf)
+            ymin = Math.min(ymin,yminf)
+            ymax = Math.max(ymax,ymaxf)
+            $('#panneau_map h2').attr('fantoir',fantoir)
         } else {
-            $('#panneau_map h2').attr('texte_voie_a_copier',nom).text(nom)
+            $('#panneau_map h2').removeAttr('fantoir')
         }
+        if (numero){
+            $('#panneau_map h2').attr('numero',numero)
+        } else {
+            $('#panneau_map h2').removeAttr('numero')
+        }
+        titre = numero != undefined ? numero+' '+nom:nom;
+        $('#panneau_map h2').attr('texte_voie_a_copier',nom)
+                            .attr('xmin',xmin)
+                            .attr('xmax',xmax)
+                            .attr('ymin',ymin)
+                            .attr('ymax',ymax)
+                            .attr('nom',nom)
+                            .text(titre)
 
         //Bouton Copier le nom de la voie ou du lieu-dit
         $('#panneau_map #en_tete #boutons').append('<button id="copier_voie" class="pifomap" title="Copier le nom de la voie"></button>')
@@ -483,17 +508,18 @@
         $('#panneau_map #en_tete #boutons').append($('<button id="centrer_voie_lieudit" title="Centrer la carte sur ce lieu"></button>'))
 
         $('#centrer_voie_lieudit').click(function(){
-            let [xmin,ymin,xmax,ymax] = emprises.get(nom)
+            xmin = $('#panneau_map h2').attr('xmin')
+            xmax = $('#panneau_map h2').attr('xmax')
+            ymin = $('#panneau_map h2').attr('ymin')
+            ymax = $('#panneau_map h2').attr('ymax')
+
             if ((xmin == xmax) && (ymin == ymax)){
-                map.jumpTo({
+                map.flyTo({
                     center:[xmin,ymin],
                     zoom:17});
-                console.log('jumpto '+nom)
             } else {
-                map.fitBounds(emprises.get(nom))
-                console.log('fitbounds '+nom)
+                map.fitBounds([xmin,ymin,xmax,ymax])
             }
-        // console.log(xmin+' '+xmax+' '+ymin+' '+ymax)
         })
     }
 
@@ -530,6 +556,16 @@
             }
             $('#infos_numero').append($('<hr>'));
         }
+        $('#infos_numero').on("mouseenter", function() {
+            nom = $('#panneau_map h2').attr('nom')
+            numero = $('#panneau_map h2').attr('numero')
+            map.setFilter('hover_points',["all",["==",["get", "numero"], numero],["==",["get", "nom"], nom]])
+            // map.setFilter('hover_points',["==",["get", "numero"], numero])
+        });
+        $('#infos_numero').on("mouseleave", function() {
+            map.getCanvas().style.cursor = '';
+            map.setFilter('hover_points',["==",["get", "fantoir"], "xxxxxxxxx"])
+        } );
     }
 
     function ajout_infos_voie_lieudit(couche_carto){
@@ -612,6 +648,21 @@
                                         .append($('<span>').text('/'))
                                         );
         }
+        $('#infos_voie_lieudit').on("mouseenter", function() {
+            nom = $('#panneau_map h2').attr('nom')
+            map.setFilter('filaire',["==",["get", "nom"], nom])
+            if ($('#panneau_map h2').attr('fantoir')){
+                fantoir = $('#panneau_map h2').attr('fantoir')
+                map.setFilter('hover_points',["any",["==",["get", "fantoir"], fantoir],["==",["get", "nom"], nom]])
+            } else {
+                map.setFilter('hover_points',["==",["get", "nom"], nom])
+            }
+        });
+        $('#infos_voie_lieudit').on("mouseleave", function() {
+            map.getCanvas().style.cursor = '';
+            map.setFilter('filaire',["==",["get", "nom"], " "])
+            map.setFilter('hover_points',["==",["get", "fantoir"], "xxxxxxxxx"])
+        } );
     }
     function ajout_liens_de_visu(lon,lat){
         $('#infos_voie_lieudit').append($('<hr>'));
@@ -696,7 +747,7 @@
                     within,
                     geom] = filairedata[s]
                 if (geom.type == 'LineString'||geom.type == 'MultiLineString'){
-                    res.features.push(get_geojson_poly(geom,{'nom':nom,'fantoir':fantoir,'within':within}))
+                    res.features.push(get_geojson_poly(geom,{'nom':nom,'fantoir':fantoir,'rapproche':fantoir != ''?true:false,'within':within}))
                 }
             }
             map.getSource('hover_filaire').setData(res)
@@ -751,7 +802,7 @@
                     rapproche = cat[1] == 'O'?true:false;
                     res_numero_BAN.features.push(get_geojson_point(lon,lat,{'nom':nom,'fantoir':fantoir,'numero':numero,'source':source,'rapproche':rapproche,'nom_com':nom_commune}))
                 }
-                res_hover_point.features.push(get_geojson_point(lon,lat,{'fantoir':fantoir,'nom':nom}))
+                res_hover_point.features.push(get_geojson_point(lon,lat,{'fantoir':fantoir,'nom':nom,'numero':numero}))
             }
             map.getSource('adresses_OSM').setData(res_numero_OSM)
             map.getSource('adresses_BAN').setData(res_numero_BAN)

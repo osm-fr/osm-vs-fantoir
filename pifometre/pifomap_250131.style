@@ -210,7 +210,7 @@
             "filter" : ["==",["get", "nom"], " "],
             "paint": {
                 "line-width": 4,
-                "line-color": ["case",["==",["get", "within"],1],"green","orange"]
+                "line-color": ["case",["==",["get", "within"],1],["case",["boolean",["get", "rapproche"]],"green","orange"],"blueviolet"]
             }
         },
         {
@@ -301,7 +301,7 @@
                                 ["==",["get","source"],"CADASTRE"],["case",["!=", ["to-string",["get","statut"]],""],"lieudit_gris","lieudit_rouge"],"lieudit_bleu"]
             },
             "paint": {
-                "text-color": ["case",["==",["get","source"],"CADASTRE"],["case",["!=", ["to-string",["get","statut"]],""],"grey","red"],"blue"],
+                "text-color": ["case",["==",["get","source"],"CADASTRE"],["case",["!=", ["to-string",["get","statut"]],""],"grey","red"],"#135495"],
                 "text-halo-color": "white",
                 "text-halo-width": 4
             }
