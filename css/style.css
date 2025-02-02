@@ -1190,7 +1190,7 @@ fieldset legend {
 #legende.pifomap p .osm_seulement {
 	background-color: #fff;
 	font-weight: bold;
-	color: #135495; /*bleu*/
+	color: royalblue; /*bleu*/
 }
 #legende.pifomap p .rapproche {
 	background-color: #fff;
@@ -1209,16 +1209,19 @@ fieldset legend {
 	font-size: 3em;
 	line-height: 0.1em;
 }
-#legende.pifomap p .voie_survolee.verte {
-	color: green; /*vert*/
+#legende.pifomap p .voie_survolee.vert {
+	color: green;
 }
-#legende.pifomap p .voie_survolee.orange {
-	color: orange; /*vert*/
+#legende.pifomap p .voie_survolee.bleu {
+	color: dodgerblue;
+}
+#legende.pifomap p .voie_survolee.violet {
+	color: blueviolet;
 }
 
 #legende.pifomap .point {
-	height: 7px;
-	width: 7px;
+	height: 8px;
+	width: 8px;
 	display: inline-block;
 	border-radius: 50%;
 	margin: 2px 10px 0 10px;
@@ -1235,7 +1238,7 @@ fieldset legend {
 	background-color: #EFA500;
 }
 #legende.pifomap p .point.osm_seulement {
-	background-color: blue;
+	background-color: dodgerblue;
 }
 #legende.pifomap p .point.non_rapproche {
 	background-color: red;
