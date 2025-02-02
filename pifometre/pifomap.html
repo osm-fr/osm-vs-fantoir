@@ -26,7 +26,7 @@
 <link rel="search" type="application/opensearchdescription+xml" title="Pifomètre BANO" href="opensearch.xml" />
 
 <script>
-    STYLEFILE = 'pifomap_250131'
+    STYLEFILE = 'pifomap_250202'
 
     FILTRES_TYPE = [["voie",true],
                ["lieudit",true]]
@@ -747,7 +747,7 @@
                     within,
                     geom] = filairedata[s]
                 if (geom.type == 'LineString'||geom.type == 'MultiLineString'){
-                    res.features.push(get_geojson_poly(geom,{'nom':nom,'fantoir':fantoir,'rapproche':fantoir != ''?true:false,'within':within}))
+                    res.features.push(get_geojson_poly(geom,{'nom':nom,'source':'OSM','fantoir':fantoir,'rapproche':fantoir != ''?true:false,'within':within}))
                 }
             }
             map.getSource('hover_filaire').setData(res)
