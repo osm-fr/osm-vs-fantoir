@@ -305,7 +305,6 @@
             $('#lien_map_noms_avec_adresses').attr('href','pifomap.html?ratio=NA#map=10/'+lat_commune+'/'+lon_commune)
             $('#lien_map_adresses').attr('href','pifomap.html?ratio=A#map=10/'+lat_commune+'/'+lon_commune)
 
-            
             if (insee_commune_parente){
                 $('#alerte_commune').empty();
                 $('#alerte_commune').css('visibility','visible');
@@ -343,11 +342,11 @@
 
                 tr_id = 1000
                 for (s=0;s<data.length;s++){
-                    let [fantoir,
+                       [fantoir,
                          date_creation,
                          annule,
                          nom_topo,
-                         nom_osm,
+                         noms_osm,
                          nom_ban,
                          source_nom_ban,
                          nom_ancienne_commune,
@@ -378,211 +377,222 @@
                     //--------------------   REMPLISSAGE CELLULES   ---------------------
                     //-------------------------------------------------------------------
                     //-------------------------------------------------------------------
-
-                    //--- Code Fantoir ---
-                    if (has_vrai_code_fantoir && !is_osm_hors_fantoir) {
-                        $('#'+table+' tbody').append($('<tr>').attr('id',tr_id)
-                                                .append($('<td>').attr('fantoir',fantoir).addClass('cell_fantoir')
-                                                    .append($('<span class="code_fantoir">').text(fantoir_affiche))
-                                                )
-                                              )
-                        $('#'+table+' tr:last td:last').append($('<button class="picto_tableau copier_fantoir" title="Copier le code Fantoir"></button>'))
+                    if (!noms_osm){
+                        noms_osm = [[null,null]]
                     }
-                    else {
-                        $('#'+table+' tbody').append($('<tr>').attr('id',tr_id).append($('<td>').attr('colspan','2').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir_affiche)))
-                    }
-
-                        //--Copier--
-                    $('#'+table+' tr:last td:last button.copier_fantoir').click(function(){
-                        if (eval(localStorage.PreferencesCopierCleValeur)){
-                            navigator.clipboard.writeText('ref:FR:FANTOIR='+$(this).parent().attr('fantoir'))
+                    ordre_nom_osm = 0
+                    nb_lignes_fusionnees = noms_osm.length
+                    for (no=0;no<noms_osm.length;no++){
+                        ordre_nom_osm+=1
+                        if (nb_lignes_fusionnees > 1){
+                            nom_osm = noms_osm[no][0]+' ('+noms_osm[no][1]+')'
+                        } else if (noms_osm[0][0] != null){
+                            nom_osm = noms_osm[0][0]
+                        } else{
+                            nom_osm = null
                         }
-                        else navigator.clipboard.writeText($(this).parent().attr('fantoir'))
-                        $(this).addClass('ok')
-                        $(this).append($('<span id="confirm_copie">').text('✔'));
 
-                        setTimeout(function(){
-                            $('#confirm_copie').css('opacity', '1');
-                            setTimeout(function(){
-                                $('#confirm_copie').css('opacity', '0');
-                            }, 400);
-                            setTimeout(function(){
-                                $('#confirm_copie').remove();
-                                $('.copier_fantoir').removeClass('ok');
-                            }, 750);
-                        }, 50);
-                    })
-                    if (annule == -1){
-                        $('#'+table+' tr:last td:last').addClass('cell_mauvais_fantoir').attr('title','Code Fantoir annulé, à remplacer dans OSM')
-                    } else if (fantoir_affiche != null && is_osm_hors_fantoir){
-                        $('#'+table+' tr:last td:last').addClass('cell_mauvais_fantoir').attr('title','Code Fantoir erroné, à corriger dans OSM')
-                    }
-
-                    //Ajout des classes pour les filtres à chaque ligne
-                    if (is_voie) {
-                        $('#'+table+' tr:last').addClass('voie')
-                    }
-                    if (is_place){
-                        $('#'+table+' tr:last').addClass('lieu_dit')
-                    } 
-                    if (is_osm_hors_fantoir) {
-                        $('#'+table+' tr:last').addClass('osm_hors_fantoir')
-                    }
-                    if (!is_osm_hors_fantoir){
-                        if (nom_osm == undefined) {
-                            $('#'+table+' tr:last').addClass('nom_a_integrer')
-                        } else {
-                            $('#'+table+' tr:last').addClass('nom_integre')
-                        }
-                        if (avec_adresses_ban) {
-                            $('#'+table+' tr:last').addClass('avec_adresses')
-                        } else {
-                            $('#'+table+' tr:last').addClass('sans_adresses')
-                        }
-                    }
-                    
-                    //--- Date de création Fantoir ---
-                    if (has_vrai_code_fantoir && !is_osm_hors_fantoir) {
-                        $('#'+table+' tr:last').append($('<td>').text(date_creation))
-                    }
-
-                    //--- Nom de l'ancienne commune ---
-                    if (commune_composee == 1){
-                        $('#'+table+' tr:last').append($('<td>').text(nom_ancienne_commune))
-                    }
-
-                    //--- Nom Fantoir ---
-                    if (is_place && has_vrai_code_fantoir){
-                        $('#'+table+' tr:last').append($('<td>')
-                                                    .append($('<img>').attr('src','../img/lieudit.png').attr('width','20px').attr('title','Lieu-dit'))
-                                                    .append($('<span>').text(' '+nom_topo)))
-                    }
-                    else if (is_voie && has_vrai_code_fantoir){
-                        $('#'+table+' tr:last').append($('<td>')
-                                                    .append($('<img>').attr('src','../img/voie.png').attr('title','Voie'))
-                                                    .append($('<span>').text(' '+nom_topo)))
-                    }
-                    else {
-                        $('#'+table+' tr:last').append($('<td>'))
-                    }
-
-                    //--- Nom OSM ---
-                    if ($('#'+table+' tr:last').hasClass('nom_integre')){
-                        $('#'+table+' tr:last').append($('<td>')
-                                                        .append($('<span class="pastille-verte" title="Déjà rapproché dans OSM">'))
-                                                        .append($('<span>').text(nom_osm)))
-                    }
-                    else if ($('#'+table+' tr:last').hasClass('nom_a_integrer')){
-                        $('#'+table+' tr:last').append($('<td>')
-                                                        .append($('<span class="pastille-orange" title="Pas encore rapproché dans OSM">'))
-                                                        .append($('<span>').text(nom_osm)))
-                    } else {
-                        $('#'+table+' tr:last').append($('<td>')
-                                                        .append($('<span class="pastille-bleue" title="Trouvé dans OSM mais inconnu de Fantoir">'))
-                                                        .append($('<span>').text(nom_osm)))
-                    }
-                    //--- Nom BAN ou Cadastre ---
-                    if (source_nom_ban == 'CADASTRE') {
-                        $('#'+table+' tr:last').append($('<td>').append($('<span class="picto_tableau cadastre" title="Nom provenant du cadastre">'))
-                                                                .append($('<span>').attr('texte_voie_a_copier',nom_ban).text(nom_ban)))
-                        if ($('#'+table+' tr:last').hasClass('nom_a_integrer')){
-                        $('#'+table+' tr:last td:last').append($('<button class="picto_tableau copier_voie_bancad" title="Copier le nom du lieu-dit"></button>'))
-                        }
-                    }
-                    else if (source_nom_ban == 'BAN') {
-                        $('#'+table+' tr:last').append($('<td>').append($('<span class="picto_tableau ban" title="Nom provenant de la BAN">'))
-                                                                .append($('<span class="nom_ban">').attr('texte_voie_a_copier',nom_ban).text(nom_ban))
+                        //--- Code Fantoir ---
+                        if (ordre_nom_osm == 1){
+                            if (has_vrai_code_fantoir && !is_osm_hors_fantoir) {
+                                $('#'+table+' tbody').append($('<tr>').attr('id',tr_id)
+                                                        .append($('<td>').attr('fantoir',fantoir).addClass('cell_fantoir')
+                                                            .append($('<span class="code_fantoir">').text(fantoir_affiche))
                                                         )
-                        if ($('#'+table+' tr:last').hasClass('nom_a_integrer')){
-                        $('#'+table+' tr:last td:last').append($('<button class="picto_tableau copier_voie_bancad" title="Copier le nom de la voie"></button>'))
-                        }                                
-                    }
-                    else $('#'+table+' tr:last').append($('<td>').text(nom_ban))
+                                                      )
+                                $('#'+table+' tr:last td:last').append($('<button class="picto_tableau copier_fantoir" title="Copier le code Fantoir"></button>'))
+                            }
+                            else {
+                                $('#'+table+' tbody').append($('<tr>').attr('id',tr_id).append($('<td>').attr('colspan','2').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir_affiche)))
+                            }
+                            // if (ordre_nom_osm == 1 && nb_lignes_fusionnees > 1){
+                            //     $('#'+table+' tr:last').addClass('tablesorter-childRow')
+                            // }
 
-                    $('#'+table+' tr:last td:last button.copier_voie_bancad').click(function(){
-                        //Copie le nom de la voie dans le presse-papier
-                        if (eval(localStorage.PreferencesCopierCleValeur)){
-                            navigator.clipboard.writeText('name='+$(this).prev().attr('texte_voie_a_copier'))
+                            //--Copier--
+                            $('#'+table+' tr:last td:last button.copier_fantoir').click(function(){
+                                if (eval(localStorage.PreferencesCopierCleValeur)){
+                                    navigator.clipboard.writeText('ref:FR:FANTOIR='+$(this).parent().attr('fantoir'))
+                                }
+                                else navigator.clipboard.writeText($(this).parent().attr('fantoir'))
+                                $(this).addClass('ok')
+                                $(this).append($('<span id="confirm_copie">').text('✔'));
+
+                                setTimeout(function(){
+                                    $('#confirm_copie').css('opacity', '1');
+                                    setTimeout(function(){
+                                        $('#confirm_copie').css('opacity', '0');
+                                    }, 400);
+                                    setTimeout(function(){
+                                        $('#confirm_copie').remove();
+                                        $('.copier_fantoir').removeClass('ok');
+                                    }, 750);
+                                }, 50);
+                            })
+                            if (annule == -1){
+                                $('#'+table+' tr:last td:last').addClass('cell_mauvais_fantoir').attr('title','Code Fantoir annulé, à remplacer dans OSM')
+                            } else if (fantoir_affiche != null && is_osm_hors_fantoir){
+                                $('#'+table+' tr:last td:last').addClass('cell_mauvais_fantoir').attr('title','Code Fantoir erroné, à corriger dans OSM')
+                            }
+
+                            ajout_classes_filtre()
+
+                            //--- Date de création Fantoir ---
+                            if (has_vrai_code_fantoir && !is_osm_hors_fantoir) {
+                                $('#'+table+' tr:last').append($('<td>').text(date_creation))
+                            }
+
+                            //--- Nom de l'ancienne commune ---
+                            if (commune_composee == 1){
+                                $('#'+table+' tr:last').append($('<td>').text(nom_ancienne_commune))
+                            }
+
+                            //--- Nom Fantoir ---
+                            if (is_place && has_vrai_code_fantoir){
+                                $('#'+table+' tr:last').append($('<td>')
+                                                            .append($('<img>').attr('src','../img/lieudit.png').attr('width','20px').attr('title','Lieu-dit'))
+                                                            .append($('<span>').text(' '+nom_topo)))
+                            }
+                            else if (is_voie && has_vrai_code_fantoir){
+                                $('#'+table+' tr:last').append($('<td>')
+                                                            .append($('<img>').attr('src','../img/voie.png').attr('title','Voie'))
+                                                            .append($('<span>').text(' '+nom_topo)))
+                            }
+                            else {
+                                $('#'+table+' tr:last').append($('<td>'))
+                            }
                         }
-                        else navigator.clipboard.writeText($(this).prev().attr('texte_voie_a_copier'))
-                        //Affiche le picto copie en vert
-                        $(this).addClass('ok')
-                        //Affiche le message de confirmation
-                        $(this).append($('<span id="confirm_copie">').text('✔'));
 
-                        setTimeout(function(){
-                            $('#confirm_copie').css('opacity', '1');
-                            setTimeout(function(){
-                                $('#confirm_copie').css('opacity', '0');
-                            }, 400);
-                            setTimeout(function(){
-                                $('#confirm_copie').remove();
-                                $('.copier_voie_bancad').removeClass('ok');
-                            }, 750);
-                        }, 50);
-                    })                    
+                        //--- Nom OSM ---
+                        if (ordre_nom_osm != 1){
+                            tr_id+=1
+                            $('#'+table+' tbody').append($('<tr>').addClass('tablesorter-childRow').addClass('statut'+statut_voie).attr('id',tr_id))
+                            ajout_classes_filtre()
+                        }
+                        if ($('#'+table+' tr:last').hasClass('nom_integre')){
+                            $('#'+table+' tr:last').append($('<td>')
+                                                            .append($('<span class="pastille-verte" title="Déjà rapproché dans OSM">'))
+                                                            .append($('<span>').text(nom_osm)))
+                        }
+                        else if ($('#'+table+' tr:last').hasClass('nom_a_integrer')){
+                            $('#'+table+' tr:last').append($('<td>')
+                                                            .append($('<span class="pastille-orange" title="Pas encore rapproché dans OSM">'))
+                                                            .append($('<span>').text(nom_osm)))
+                        } else {
+                            $('#'+table+' tr:last').append($('<td>')
+                                                            .append($('<span class="pastille-bleue" title="Trouvé dans OSM mais inconnu de Fantoir">'))
+                                                            .append($('<span>').text(nom_osm)))
+                        }
+                        $('#'+table+' tr:last td:last').addClass("cellule_nom_osm")
 
-                    //--- Visu ---
-                    xmin  = lon-DELTA
-                    xmax  = lon+DELTA
-                    ymin  = lat-DELTA
-                    ymax  = lat+DELTA
+                        if (ordre_nom_osm == 1){
+                            //--- Nom BAN ou Cadastre ---
+                            if (source_nom_ban == 'CADASTRE') {
+                                $('#'+table+' tr:last').append($('<td>').append($('<span class="picto_tableau cadastre" title="Nom provenant du cadastre">'))
+                                                                        .append($('<span>').attr('texte_voie_a_copier',nom_ban).text(nom_ban)))
+                                if ($('#'+table+' tr:last').hasClass('nom_a_integrer')){
+                                $('#'+table+' tr:last td:last').append($('<button class="picto_tableau copier_voie_bancad" title="Copier le nom du lieu-dit"></button>'))
+                                }
+                            }
+                            else if (source_nom_ban == 'BAN') {
+                                $('#'+table+' tr:last').append($('<td>').append($('<span class="picto_tableau ban" title="Nom provenant de la BAN">'))
+                                                                        .append($('<span class="nom_ban">').attr('texte_voie_a_copier',nom_ban).text(nom_ban))
+                                                                )
+                                if ($('#'+table+' tr:last').hasClass('nom_a_integrer')){
+                                $('#'+table+' tr:last td:last').append($('<button class="picto_tableau copier_voie_bancad" title="Copier le nom de la voie"></button>'))
+                                }
+                            }
+                            else $('#'+table+' tr:last').append($('<td>').text(nom_ban))
 
-                    if (lat != null || lon != null) {
-                        $('#'+table+' tr:last').append($('<td>')
-                                        .append($('<a>')
-                                        .attr('href',url_map_org_part1+'#map='+'18/'+lat+'/'+lon)
-                                        .attr('target','blank')
-                                        .text('ORG')))
-                        $('#'+table+' tr:last').append($('<td>')
-                                        .append($('<a>')
-                                        .attr('href',url_pifomap+'#map='+'18/'+lat+'/'+lon)
-                                        .attr('target','blank')
-                                        .text('Pifomap')))
-                    }
-                    else {
-                        $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('x'))
-                        $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('x'))
-                    }
+                            $('#'+table+' tr:last td:last button.copier_voie_bancad').click(function(){
+                                //Copie le nom de la voie dans le presse-papier
+                                if (eval(localStorage.PreferencesCopierCleValeur)){
+                                    navigator.clipboard.writeText('name='+$(this).prev().attr('texte_voie_a_copier'))
+                                }
+                                else navigator.clipboard.writeText($(this).prev().attr('texte_voie_a_copier'))
+                                //Affiche le picto copie en vert
+                                $(this).addClass('ok')
+                                //Affiche le message de confirmation
+                                $(this).append($('<span id="confirm_copie">').text('✔'));
 
-                    //--- JOSM ---
-                    if (lon != undefined) {
-                        add_josm_link(table,xmin,xmax,ymin,ymax,code_insee,nom_commune)
-                    } else {
-                        $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('x'))
-                    }
-                    //--- iD ---
-                    if (lon != undefined) {
-                        add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
-                    } else {
-                        $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('x'))
-                    }
+                                setTimeout(function(){
+                                    $('#confirm_copie').css('opacity', '1');
+                                    setTimeout(function(){
+                                        $('#confirm_copie').css('opacity', '0');
+                                    }, 400);
+                                    setTimeout(function(){
+                                        $('#confirm_copie').remove();
+                                        $('.copier_voie_bancad').removeClass('ok');
+                                    }, 750);
+                                }, 50);
+                            })
 
-                    //--- Statut Fantoir ---
-                    if (caractere_annul != 'B' && is_osm_hors_fantoir == false){
-                        add_statut_fantoir(table,tr_id,fantoir,statut_voie)
-                    } else {
-                        $('#'+table+' tr:last').addClass('statut0').append($('<td>'))
-                    }
-                    //--- Adresses à integrer ----
-                    if (numeros_a_proposer > 0){
-                        add_josm_addr_link(table,$('#input_insee')[0].value,nom_commune,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
-                    }
-                    else if (numeros_a_proposer == null && avec_adresses_ban){
-                        $('#'+table+' tr:last').append($('<td>').attr('colspan','2').addClass('zone-adresses')
-                                                        .append($('<span>').addClass('adresses-integrees').text('✔'))
-                                                        .append($('<span>').text(' Adresses intégrées'))
-                                                    )
-                    }
-                    else {
-                        $('#'+table+' tr:last').append($('<td>').attr('colspan','2'))
-                    }
+                            //--- Visu ---
+                            xmin  = lon-DELTA
+                            xmax  = lon+DELTA
+                            ymin  = lat-DELTA
+                            ymax  = lat+DELTA
 
-                    //--- Qualification des adresses ---
-                    if (avec_adresses_ban && has_vrai_code_fantoir){
-                        add_addr_inspector_link(table,$('#input_insee')[0].value,fantoir,'BAN')
-                    } else {
-                        $('#'+table+' tr:last').append($('<td>'))
+                            if (lat != null || lon != null) {
+                                $('#'+table+' tr:last').append($('<td>')
+                                                .append($('<a>')
+                                                .attr('href',url_map_org_part1+'#map='+'18/'+lat+'/'+lon)
+                                                .attr('target','blank')
+                                                .text('ORG')))
+                                $('#'+table+' tr:last').append($('<td>')
+                                                .append($('<a>')
+                                                .attr('href',url_pifomap+'#map='+'18/'+lat+'/'+lon)
+                                                .attr('target','blank')
+                                                .text('Pifomap')))
+                            }
+                            else {
+                                $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('x'))
+                                $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('x'))
+                            }
+
+                            //--- JOSM ---
+                            if (lon != undefined) {
+                                add_josm_link(table,xmin,xmax,ymin,ymax,code_insee,nom_commune)
+                            } else {
+                                $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('x'))
+                            }
+                            //--- iD ---
+                            if (lon != undefined) {
+                                add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
+                            } else {
+                                $('#'+table+' tr:last').append($('<td>').addClass('no-loca').attr('title', 'Objet inconnu d\'OSM, de la BAN et du cadastre\ndonc sans localisation connue.').text('x'))
+                            }
+
+                            //--- Statut Fantoir ---
+                            if (caractere_annul != 'B' && is_osm_hors_fantoir == false){
+                                add_statut_fantoir(table,tr_id,fantoir,statut_voie)
+                            } else {
+                                $('#'+table+' tr:last').addClass('statut0').append($('<td>'))
+                            }
+                            //--- Adresses à integrer ----
+                            if (numeros_a_proposer > 0){
+                                add_josm_addr_link(table,$('#input_insee')[0].value,nom_commune,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
+                            }
+                            else if (numeros_a_proposer == null && avec_adresses_ban){
+                                $('#'+table+' tr:last').append($('<td>').attr('colspan','2').addClass('zone-adresses')
+                                                                .append($('<span>').addClass('adresses-integrees').text('✔'))
+                                                                .append($('<span>').text(' Adresses intégrées'))
+                                                            )
+                            }
+                            else {
+                                $('#'+table+' tr:last').append($('<td>').attr('colspan','2'))
+                            }
+
+                            //--- Qualification des adresses ---
+                            if (avec_adresses_ban && has_vrai_code_fantoir){
+                                add_addr_inspector_link(table,$('#input_insee')[0].value,fantoir,'BAN')
+                            } else {
+                                $('#'+table+' tr:last').append($('<td>'))
+                            }
+                        }
+                        if (ordre_nom_osm == 1 && nb_lignes_fusionnees > 1){
+                            $('#'+table+' tr:last td').not('.cellule_nom_osm').attr("rowspan",nb_lignes_fusionnees)
+                        }
                     }
                 }
                 $('#wait_ajax').css('visibility','hidden');
@@ -590,7 +600,8 @@
                 //Sticky headers : le tableau scrolle dans son contenant
                 $('#'+table).tablesorter({
                     widthFixed : true,
-                    headerTemplate : '{content} {icon}', // Add icon for various themes
+                    cssChildRow: "tablesorter-childRow",
+                          headerTemplate : '{content} {icon}', // Add icon for various themes
                     widgets: [ 'stickyHeaders', 'filter' ],
                     widgetOptions: {
                       stickyHeaders_attachTo : '#reponse'
@@ -607,6 +618,30 @@
             $('body').css('cursor','default');
         })
     };
+    function ajout_classes_filtre(){
+        //Ajout des classes pour les filtres à chaque ligne
+        if (is_voie) {
+            $('#'+table+' tr:last').addClass('voie')
+        }
+        if (is_place){
+            $('#'+table+' tr:last').addClass('lieu_dit')
+        }
+        if (is_osm_hors_fantoir) {
+            $('#'+table+' tr:last').addClass('osm_hors_fantoir')
+        }
+        if (!is_osm_hors_fantoir){
+            if (nom_osm == undefined) {
+                $('#'+table+' tr:last').addClass('nom_a_integrer')
+            } else {
+                $('#'+table+' tr:last').addClass('nom_integre')
+            }
+            if (avec_adresses_ban) {
+                $('#'+table+' tr:last').addClass('avec_adresses')
+            } else {
+                $('#'+table+' tr:last').addClass('sans_adresses')
+            }
+        }
+    }
     function update_csv_url(){
         urlCSV = 'requete_pifometre_voies.py?insee='+$('#input_insee')[0].value+'&format=csv';
     }

@@ -52,7 +52,26 @@ AS
  FROM   bano_adresses
  WHERE  __condition_fantoir_unique__
         code_insee = '__code_insee__' AND
-        source = 'BAN')
+        source = 'BAN'),
+
+noms_osm
+as
+(SELECT fantoir,
+        ARRAY_AGG(nom_et_tag ORDER BY sortorder) AS noms_et_tags,
+        nom_ancienne_commune
+FROM    (SELECT DISTINCT fantoir,
+                         ARRAY[nom,nom_tag] AS nom_et_tag,
+                         CASE nom_tag
+                             WHEN 'name' THEN 1
+                             WHEN 'alt_name' THEN 2
+                             ELSE 3
+                         END AS sortorder,
+                         nom_ancienne_commune
+        FROM  nom_fantoir
+        WHERE  __condition_fantoir_unique__
+              code_insee = '__code_insee__' AND
+              source = 'OSM') s
+GROUP BY 1,3)
 
 SELECT t.fantoir,
        TO_CHAR(TO_TIMESTAMP(t.date_creation::text,'YYYYMMDD'),'YYYY-MM-DD'),
@@ -61,7 +80,7 @@ SELECT t.fantoir,
            ELSE -1
        END AS fantoir_annule,
        nom_topo,
-       pn.nom AS nom_osm,
+       COALESCE(noms_osm.noms_et_tags, pn.nom) AS nom_osm,
        nb.nom AS nom_ban,
        nb.source AS source_nom,
        nb.nom_ancienne_commune,
@@ -84,13 +103,16 @@ FROM   (SELECT fantoir,
 LEFT OUTER JOIN fantoir_numeros_manquants
 USING (fantoir)
 LEFT OUTER JOIN (SELECT DISTINCT fantoir,
-                        nom,
+                        ARRAY[ARRAY[nom,'name']] AS nom,
                         lon,
                         lat
                  FROM   bano_points_nommes
                  WHERE  __condition_fantoir_unique__
                         code_insee = '__code_insee__' AND
-                        source = 'OSM') pn
+                        source = 'OSM' AND
+                        nom_tag = 'name') pn
+USING (fantoir)
+LEFT OUTER JOIN noms_osm
 USING (fantoir)
 LEFT OUTER JOIN (SELECT fantoir,
                         lon,
@@ -140,7 +162,7 @@ SELECT fantoir,
        NULL,
        NULL,
        NULL,
-       nom,
+       ARRAY[ARRAY[nom,nom_tag]],
        NULL,
        NULL,
        NULL,
