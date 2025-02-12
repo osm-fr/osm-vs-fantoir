@@ -13,7 +13,7 @@ params = cgi.FieldStorage()
 insee_com = params['insee'].value
     
 try:
-    subprocess.run([f"{(Path(__file__).resolve().parent / 'refresh.sh')}", insee_com],stdout=subprocess.DEVNULL)
+    subprocess.run([f"{(Path(__file__).resolve().parent / 'refresh.sh')}", insee_com])
     statut = '1'
 except :
     statut = '0'
