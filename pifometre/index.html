@@ -385,11 +385,14 @@
                     for (no=0;no<noms_osm.length;no++){
                         ordre_nom_osm+=1
                         if (nb_lignes_fusionnees > 1){
-                            nom_osm = noms_osm[no][0]+' ('+noms_osm[no][1]+')'
+                            nom_osm = noms_osm[no][0]/*+' ('+noms_osm[no][1]+')'*/
+                            type_nom_osm = noms_osm[no][1]
                         } else if (noms_osm[0][0] != null){
                             nom_osm = noms_osm[0][0]
+                            type_nom_osm = noms_osm[0][1]
                         } else{
                             nom_osm = null
+                            type_nom_osm = null
                         }
 
                         //--- Code Fantoir ---
@@ -464,26 +467,37 @@
                         }
 
                         //--- Nom OSM ---
-                        if (ordre_nom_osm != 1){
+                        if (ordre_nom_osm == 1){
+                            numFamilleLignes=tr_id;
+                            $('#'+table+' tbody tr:last').attr("numFamilleLignes",numFamilleLignes);
+                        }
+                        else {
                             tr_id+=1
-                            $('#'+table+' tbody').append($('<tr>').addClass('tablesorter-childRow').addClass('statut'+statut_voie).attr('id',tr_id))
+                            $('#'+table+' tbody').append($('<tr>')  .attr("numFamilleLignes",numFamilleLignes)
+                                                                    .addClass('tablesorter-childRow')
+                                                                    .addClass('statut'+statut_voie).attr('id',tr_id))
                             ajout_classes_filtre()
                         }
+
+                            //Pastille
+                        $('#'+table+' tr:last').append($('<td>').addClass('cellule_nom_osm'))
+
                         if ($('#'+table+' tr:last').hasClass('nom_integre')){
-                            $('#'+table+' tr:last').append($('<td>')
-                                                            .append($('<span class="pastille-verte" title="Déjà rapproché dans OSM">'))
-                                                            .append($('<span>').text(nom_osm)))
+                            $('#'+table+' tr:last td:last').append($('<span class="pastille-verte" title="Déjà rapproché dans OSM">'))
                         }
                         else if ($('#'+table+' tr:last').hasClass('nom_a_integrer')){
-                            $('#'+table+' tr:last').append($('<td>')
-                                                            .append($('<span class="pastille-orange" title="Pas encore rapproché dans OSM">'))
-                                                            .append($('<span>').text(nom_osm)))
+                            $('#'+table+' tr:last td:last').append($('<span class="pastille-orange" title="Pas encore rapproché dans OSM">'))
                         } else {
-                            $('#'+table+' tr:last').append($('<td>')
-                                                            .append($('<span class="pastille-bleue" title="Trouvé dans OSM mais inconnu de Fantoir">'))
-                                                            .append($('<span>').text(nom_osm)))
+                            $('#'+table+' tr:last td:last').append($('<span class="pastille-bleue" title="Trouvé dans OSM mais inconnu de Fantoir">'))
                         }
-                        $('#'+table+' tr:last td:last').addClass("cellule_nom_osm")
+                            //Nom, et type si plusieurs noms
+                        $('#'+table+' tr:last td:last') .append($('<span>').text(nom_osm))
+
+                        if (nb_lignes_fusionnees>1){
+                            $('#'+table+' tr:last td:last') .append($('<span>').text(' ('))
+                                                            .append($('<span class="monospace">').text(type_nom_osm))
+                                                            .append($('<span>').text(')'))
+                        }
 
                         if (ordre_nom_osm == 1){
                             //--- Nom BAN ou Cadastre ---
@@ -606,10 +620,17 @@
                     widgetOptions: {
                       stickyHeaders_attachTo : '#reponse'
                     }
-                // }).bind("filterEnd",function(e, t) {
-                    // console.log("fin de tri ");
-                //     show_mask_lines();
                 });
+
+                //Classe pour les familles de lignes survolées
+                $('#'+table+' tbody tr').mouseover(function(event){
+                    ceNumFamille = $(this).attr('numFamilleLignes')
+                    $('tr[numFamilleLignes="'+ceNumFamille+'"]').removeClass('ligne_out').addClass('ligne_hover');
+                })
+                $('#'+table+' tbody tr').mouseout(function(event){
+                    ceNumFamille = $(this).attr('numFamilleLignes')
+                    $('tr[numFamilleLignes="'+ceNumFamille+'"]').removeClass('ligne_hover').addClass('ligne_out');
+                })
 
                 active_menu_filtres()
                 update_menu_filtres()
