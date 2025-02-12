@@ -427,9 +427,9 @@
                         //Mettre à jour le nom de la rue
                         if (nom_osm != null){
                             if (couche_carto == 'BAN_point_transparent' || couche_carto == 'OSM_point') {
-                                $('#panneau_map h2').attr('texte_voie_a_copier',nom_osm).text(numero+' '+nom_osm)
+                                $('#panneau_map h2').attr('texte_voie_a_copier',nom_osm[0][0]).text(numero+' '+nom_osm[0][0])
                             } else {
-                                $('#panneau_map h2').attr('texte_voie_a_copier',nom_osm).text(nom_osm)
+                                $('#panneau_map h2').attr('texte_voie_a_copier',nom_osm[0][0]).text(nom_osm[0][0])
                             }
                         }
 
@@ -593,29 +593,56 @@
                                 .append($('<span>').addClass(class_pastille).attr('title',title_text))
                                 .append($('<span>').text(title_text)));
 
+        // Toutes les adresses OSM (bleues, vertes) ou BAN (oranges) de lieux-dits et voies rapprochés 
         if ((couche_carto == 'BAN_point_transparent' || couche_carto == 'OSM_point') && rapproche) {
-            $('#infos_voie_lieudit ul').append($('<li>')
-                                            .append($('<span class="gras">').text('Nom OSM : '))
-                                            .append($('<span>').text(nom_osm))
-                                        )
-                                        .append($('<li>')
+            $('#infos_voie_lieudit').append($('<ul>'));
+            $('#infos_voie_lieudit ul:last').append($('<li>').append($('<span class="gras">').text('Nom(s) OSM : ')));
+            //Affichage de tous les noms OSM éventuels : name, old_name, alt_name                    
+            for (let i=0; i<(nom_osm.length); i++) {
+                $('#infos_voie_lieudit ul:last') .append($('<li>')
+                                            .append($('<span class="monospace">').text(nom_osm[i][1]+':'))
+                                            .append($('<span>').text(' '+nom_osm[i][0]))
+                );
+            }
+            $('#infos_voie_lieudit').append($('<ul>'));
+            $('#infos_voie_lieudit ul:last').append($('<li>')
                                             .append($('<span class="gras">').text('Nom BAN : '))
                                             .append($('<span>').text(nom_ban))
                                         );
-        } else if (couche_carto.indexOf('points_nommes_non_rapproches') == 0){
-                $('#infos_voie_lieudit ul').append($('<li>')
-                                            .append($('<span class="gras">').text('Source : '))
-                                            .append($('<span>').text(source))
-                                        );
         }
+        // Tous lieux-dits et voies non rapprochés (orange, rouge)
+        else if (couche_carto.indexOf('points_nommes_non_rapproches') == 0){
+            $('#infos_voie_lieudit ul').append($('<li>')
+                                        .append($('<span class="gras">').text('Source : '))
+                                        .append($('<span>').text(source))
+                                    );
+        }
+        // Voies et lieux-dits rapprochés (verts), patates rouges et leurs points d'adresse
+        else {
+            if (nom_osm) {
+                $('#infos_voie_lieudit').append($('<ul>'));
+                $('#infos_voie_lieudit ul:last').append($('<li>')
+                                            .append($('<span class="gras">').text('Nom(s) OSM : ')));
+                //Affichage de tous les noms OSM éventuels : name, old_name, alt_name                    
+                for (let i=0; i<(nom_osm.length); i++) {
+                    $('#infos_voie_lieudit ul:last') .append($('<li>')
+                                                .append($('<span class="monospace">').text(nom_osm[i][1]+':'))
+                                                .append($('<span>').text(' '+nom_osm[i][0]))
+                    );
+                }
+            }
+        }
+
+        //FANTOIR
+        $('#infos_voie_lieudit').append($('<ul>'));
         if (nom_topo){
-            $('#infos_voie_lieudit ul') .append($('<li>')
+            $('#infos_voie_lieudit ul:last') .append($('<li>')
                                             .append($('<span class="gras">').text('Libellé Fantoir : '))
                                             .append($('<span>').text(nom_topo))
                                         )
         }
         if (has_vrai_code_fantoir){
-            $('#infos_voie_lieudit ul') .append($('<li>')
+            $('#infos_voie_lieudit ul:last') .append($('<li>')
                                             .append($('<span class="gras">').text('Code Fantoir : '))
                                             .append($('<span id="code_fantoir">').attr('texte_fantoir_a_copier',fantoir_affiche).text(fantoir_affiche))
                                             .append('<button id="copier_fantoir" title="Copier le code Fantoir"></button>')
@@ -643,7 +670,7 @@
                                                 }, 50)
                                             })
         } else {
-            $('#infos_voie_lieudit ul') .append($('<li>')
+            $('#infos_voie_lieudit ul:last') .append($('<li>')
                                         .append($('<span class="gras">').text('Libellé et code Fantoir : '))
                                         .append($('<span>').text('/'))
                                         );
