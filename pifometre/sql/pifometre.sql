@@ -102,7 +102,7 @@ FROM   (SELECT fantoir,
                code_insee = '__code_insee__')t
 LEFT OUTER JOIN fantoir_numeros_manquants
 USING (fantoir)
-LEFT OUTER JOIN (SELECT DISTINCT fantoir,
+LEFT OUTER JOIN (SELECT fantoir,
                         ARRAY[ARRAY[nom,'name']] AS nom,
                         lon,
                         lat
@@ -110,7 +110,8 @@ LEFT OUTER JOIN (SELECT DISTINCT fantoir,
                  WHERE  __condition_fantoir_unique__
                         code_insee = '__code_insee__' AND
                         source = 'OSM' AND
-                        nom_tag = 'name') pn
+                        nom_tag = 'name'
+                 LIMIT 1) pn
 USING (fantoir)
 LEFT OUTER JOIN noms_osm
 USING (fantoir)
