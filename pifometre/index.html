@@ -146,8 +146,8 @@
     };
     function update_menu_filtres(){
         $('#boutons-filtres li span.control-label').each(function(){
-            total = $('#'+table+' tr.'+$(this).attr('critere')).length
-            visible = $('#'+table+' tr:visible.'+$(this).attr('critere')).length
+            total = $('#'+table+' tr[a_compter=true].'+$(this).attr('critere')).length
+            visible = $('#'+table+' tr[a_compter=true]:visible.'+$(this).attr('critere')).length
             $(this).children('span').text(' ('+visible+' / '+total+')')
         })
     };
@@ -398,7 +398,7 @@
                         //--- Code Fantoir ---
                         if (ordre_nom_osm == 1){
                             if (has_vrai_code_fantoir && !is_osm_hors_fantoir) {
-                                $('#'+table+' tbody').append($('<tr>').attr('id',tr_id)
+                                $('#'+table+' tbody').append($('<tr>').attr('id',tr_id).attr('a_compter',true)
                                                         .append($('<td>').attr('fantoir',fantoir).addClass('cell_fantoir')
                                                             .append($('<span class="code_fantoir">').text(fantoir_affiche))
                                                         )
@@ -406,11 +406,8 @@
                                 $('#'+table+' tr:last td:last').append($('<button class="picto_tableau copier_fantoir" title="Copier le code Fantoir"></button>'))
                             }
                             else {
-                                $('#'+table+' tbody').append($('<tr>').attr('id',tr_id).append($('<td>').attr('colspan','2').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir_affiche)))
+                                $('#'+table+' tbody').append($('<tr>').attr('id',tr_id).attr('a_compter',true).append($('<td>').attr('colspan','2').attr('fantoir',fantoir).addClass('cell_fantoir').text(fantoir_affiche)))
                             }
-                            // if (ordre_nom_osm == 1 && nb_lignes_fusionnees > 1){
-                            //     $('#'+table+' tr:last').addClass('tablesorter-childRow')
-                            // }
 
                             //--Copier--
                             $('#'+table+' tr:last td:last button.copier_fantoir').click(function(){
