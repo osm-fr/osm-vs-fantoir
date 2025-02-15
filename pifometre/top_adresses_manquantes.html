@@ -123,8 +123,19 @@
                     $('#'+table).append($('<tr>').attr('id',l).append($('<td>').text(nom_com+' ('+insee+')')))
                     //Code Fantoir
                     $('#'+table+' tr:last').append($('<td>').addClass('cell_fantoir').text(fantoir_affiche))
-                    //Voie
-                    $('#'+table+' tr:last').append($('<td>').text(voie))
+                    //Nom BAN
+                    if (is_place) {
+                        $('#'+table+' tr:last').append($('<td>')
+                                                    .append($('<img>').attr('src','../img/lieudit.png').attr('width','20px').attr('title','Lieu-dit'))
+                                                    .append($('<span>').text(' '+voie))
+                                                    )
+                    }
+                    else {
+                        $('#'+table+' tr:last').append($('<td>')
+                                                    .append($('<img>').attr('src','../img/voie.png').attr('title','Voie'))
+                                                    .append($('<span>').text(' '+voie))
+                                                    )
+                    }
                     //Certification
                     $('#'+table+' tr:last').append($('<td>').text(certification))
                     //Date de création
@@ -141,10 +152,11 @@
                     } else {
                         $('#'+table+' tr:last').addClass('statut_vide').append($('<td>'))
                     }
-                    //Fantoir
+                    //Voir la commune sur autres Pifo
                     add_map_link(table,'./index.html?insee='+insee,'Pifomètre')
                     add_map_link(table,'./pifomap.html?insee='+insee+'#map='+url_hash_coords,'Pifomap')
                     add_map_link(table,'./liste_brute_fantoir.html?insee='+insee,'Topo')
+                    //Intégrer les adresses
                     add_josm_addr_link(table,insee,nom_com,fantoir,voie,nbaddr,fantoir_dans_relation,is_place)
                 }
                 $('#wait_ajax').css('visibility','hidden');
