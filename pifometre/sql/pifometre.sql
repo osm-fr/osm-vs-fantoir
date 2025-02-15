@@ -102,7 +102,7 @@ FROM   (SELECT fantoir,
                code_insee = '__code_insee__')t
 LEFT OUTER JOIN fantoir_numeros_manquants
 USING (fantoir)
-LEFT OUTER JOIN (SELECT DISTINCT fantoir,
+LEFT OUTER JOIN (SELECT fantoir,
                         ARRAY[ARRAY[nom,'name']] AS nom,
                         lon,
                         lat
@@ -110,7 +110,8 @@ LEFT OUTER JOIN (SELECT DISTINCT fantoir,
                  WHERE  __condition_fantoir_unique__
                         code_insee = '__code_insee__' AND
                         source = 'OSM' AND
-                        nom_tag = 'name') pn
+                        nom_tag = 'name'
+                 LIMIT 1) pn
 USING (fantoir)
 LEFT OUTER JOIN noms_osm
 USING (fantoir)
@@ -118,14 +119,15 @@ LEFT OUTER JOIN (SELECT fantoir,
                         lon,
                         lat,
                         true AS is_place
-                 FROM   (SELECT  fantoir,
-                                 lon,
-                                 lat,
-                                 RANK() OVER (PARTITION BY fantoir ORDER BY CASE source WHEN 'OSM' THEN 1 ELSE 2 END) rang
-                        FROM     bano_points_nommes
-                        WHERE    __condition_fantoir_unique__
-                                 code_insee = '__code_insee__' AND
-                                 nature IN ('place','lieu-dit')) p
+                 FROM   (SELECT fantoir,
+                                lon,
+                                lat,
+                                RANK() OVER (PARTITION BY fantoir ORDER BY CASE source WHEN 'OSM' THEN 1 ELSE 2 END) rang
+                        FROM    bano_points_nommes
+                        WHERE   __condition_fantoir_unique__
+                                code_insee = '__code_insee__' AND
+                                nature IN ('place','lieu-dit') AND
+                                nom_tag in ('name','nom_cadastre')) p
                  WHERE rang = 1) place
 USING (fantoir)
 LEFT OUTER JOIN (SELECT fantoir,
