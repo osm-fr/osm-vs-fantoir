@@ -71,7 +71,20 @@ FROM    (SELECT DISTINCT fantoir,
         WHERE  __condition_fantoir_unique__
               code_insee = '__code_insee__' AND
               source = 'OSM') s
-GROUP BY 1,3)
+GROUP BY 1,3),
+
+pn
+AS
+(SELECT fantoir,
+        ARRAY[ARRAY[nom,'name']] AS nom,
+        lon,
+        lat,
+        ROW_NUMBER()OVER(PARTITION BY fantoir ORDER BY lon,lat) AS rn
+FROM    bano_points_nommes
+WHERE   code_insee = '__code_insee__' AND
+        source = 'OSM' AND
+        nom_tag = 'name')
+
 
 SELECT t.fantoir,
        TO_CHAR(TO_TIMESTAMP(t.date_creation::text,'YYYYMMDD'),'YYYY-MM-DD'),
@@ -102,16 +115,7 @@ FROM   (SELECT fantoir,
                code_insee = '__code_insee__')t
 LEFT OUTER JOIN fantoir_numeros_manquants
 USING (fantoir)
-LEFT OUTER JOIN (SELECT fantoir,
-                        ARRAY[ARRAY[nom,'name']] AS nom,
-                        lon,
-                        lat
-                 FROM   bano_points_nommes
-                 WHERE  __condition_fantoir_unique__
-                        code_insee = '__code_insee__' AND
-                        source = 'OSM' AND
-                        nom_tag = 'name'
-                 LIMIT 1) pn
+LEFT OUTER JOIN (SELECT * FROM pn WHERE rn = 1) pn
 USING (fantoir)
 LEFT OUTER JOIN noms_osm
 USING (fantoir)
