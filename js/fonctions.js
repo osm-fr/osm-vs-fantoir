@@ -165,6 +165,7 @@
             $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-adresses').append($('<span>'))
                                         .text('Relation')
                                         .click(function(){
+                                            localStorage.setItem('PreferencesAddrRelation','true')
                                             srcURL = 'http://127.0.0.1:8111/import?changeset_tags='+get_changeset_tags_addr(code_insee,nom_commune)+'&new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.split('?')[0].replace(stringToRemove,'')+'requete_numeros.py?insee='+code_insee+'&fantoir='+fantoir+'&modele=Relation&fantoir_dans_relation='+fantoir_dans_relation;
                                             $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
                                             $(this).addClass('clicked');
