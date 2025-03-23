@@ -34,6 +34,12 @@ JOIN   (SELECT fantoir,
                WHEN 'CADASTRE' THEN 3
                ELSE  4
            END,
+           CASE nom_tag
+               WHEN 'name' THEN 1
+               WHEN 'alt_name' THEN 2
+               WHEN 'old_name' THEN 4
+               ELSE  3
+           END,
            nature
        LIMIT 1) AS nom
 USING (fantoir)
