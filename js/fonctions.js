@@ -152,8 +152,8 @@
     }
     function add_josm_addr_link(table,code_insee,nom_commune,fantoir,nom_fantoir,nombre,fantoir_dans_relation,is_place){
         stringToRemove = window.location.href.split('?')[0].split('/').pop()
-        $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-adresses'))
-        $('#'+table+' tr:last td:last').append($('<span>').text(nombre > 1 ? nombre+' Points':'1 Point'))
+        $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-adresses').addClass('zone-points').attr('title','Point(s)'))
+        $('#'+table+' tr:last td:last').append($('<span>').text(nombre > 1 ? nombre/*+' Points'*/:/*'1 Point'*/'1'))
                                             .click(function(){
                                                 srcURL = 'http://127.0.0.1:8111/import?changeset_tags='+get_changeset_tags_addr(code_insee,nom_commune)+'&new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.split('?')[0].replace(stringToRemove,'')+'requete_numeros.py?insee='+code_insee+'&fantoir='+fantoir+'&modele='+((is_place) ? 'Place':'Points');
                                                 $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
@@ -162,8 +162,8 @@
         if (is_place){
             $('#'+table+' tr:last td:last').attr('colspan','2').append($('<span>').text(' (lieu-dit)'))
         } else {
-            $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-adresses').append($('<span>'))
-                                        .text('Relation')
+            $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-adresses').addClass('zone-relation').attr('title','Relation').append($('<span>'))
+                                        //.text('Relation')
                                         .click(function(){
                                             localStorage.setItem('PreferencesAddrRelation','true')
                                             srcURL = 'http://127.0.0.1:8111/import?changeset_tags='+get_changeset_tags_addr(code_insee,nom_commune)+'&new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.split('?')[0].replace(stringToRemove,'')+'requete_numeros.py?insee='+code_insee+'&fantoir='+fantoir+'&modele=Relation&fantoir_dans_relation='+fantoir_dans_relation;

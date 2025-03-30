@@ -1929,6 +1929,18 @@ table tr.static td {
 	font-weight: bold;
 }
 
+/*--- Poissons ---*/
+.zone-relation {
+	background: url("../img/poissons_aquarium.png") no-repeat left 50% top 50%;
+}
+.zone-points {
+	background: url("../img/poissons.png") no-repeat right 20% top 50%;
+	text-align: left;
+}
+.zone-points, .zone-relation {
+	min-width: 75px;
+	background-size: 55px;
+}
 /*--- Couleurs ---*/
 .zone-clic-josm {color:#863602; /*Marron logo JOSM*/}
 
