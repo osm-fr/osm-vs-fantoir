@@ -156,7 +156,7 @@
         if (moisjour == '31'){
             classeZonePoint = 'zone-points'
             classeZoneRelation = 'zone-relation'
-            titlePoint = 'Point(s)'
+            titlePoint = nombre+' Point(s)'
             titleRelation = 'Relation'
             textNbPoints = ''
             text1Point = '1'
