@@ -135,6 +135,28 @@
 }
 
 /*-----------------------------------------------------------------------*/
+/*------------------------------- HAUTEUR -------------------------------*/
+/*-----------------------------------------------------------------------*/
+
+@media only screen and (max-height: 900px) {
+    .navigation h1 {font-size: 1em;}
+    #menu_recent #liens h2 {font-size: 0.85em}
+}
+@media only screen and (max-height: 800px) {
+    .navigation h1 {font-size: 0.9em;}
+    #menu_recent #liens h2 {font-size: 0.8em;}
+    .navigation h1 a {padding: 4px 10px 4px 20px;}
+    #menu_recent #liens h2 a {padding: 7px 10px 7px 40px;}
+    .navigation #nav_boutons_haut {height: 30px;}
+}
+@media only screen and (max-height: 700px) {
+    .navigation h1 {font-size: 0.8em;}
+    .navigation h1 a {padding: 3px 10px 3px 20px;}
+    .navigation #nav_boutons_haut {height: 20px;}
+    .navigation #bouton_parametres {background-size: 30px;}
+}
+
+/*-----------------------------------------------------------------------*/
 /*-------------------------------- MOBILE -------------------------------*/
 /*-----------------------------------------------------------------------*/
 
