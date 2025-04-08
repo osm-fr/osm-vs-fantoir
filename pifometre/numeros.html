@@ -289,6 +289,8 @@
                                     parite = Number.parseInt(numero) % 2 == 0 ? 'pair':'impair';
                                     if (ban_id != undefined) {
                                         ban_id_voie = ban_id.slice(0, 10);
+                                    } else {
+                                        ban_id_voie = fantoir.slice(0,5)+'_'+fantoir.slice(5,9)
                                     }
 
                                     $('#'+table+' tbody:last').append($('<tr>').attr('id',l))
