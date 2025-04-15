@@ -536,9 +536,13 @@ fieldset legend {
 	position: fixed;
 	top: 40px;
 	right: 65px;
-	background: url("../img/export-csv.png") no-repeat top;
+	background: url("../img/export_csv.png") no-repeat top;
 	height: 40px;
 	width: 40px;
+	background-size: 40px;
+}
+#bouton_export_csv.inactif{
+	background: url("../img/export_csv_inactif.png") no-repeat top;
 	background-size: 40px;
 }
 #bouton_export_csv a{
@@ -565,6 +569,11 @@ fieldset legend {
 	height: 40px;
 	border-bottom: 2px #64A02E solid; /*vert plus foncé*/
 	border-radius: 6px;
+}
+#bouton_communes_voisines.inactif{
+	background-image: url("../img/communes_voisines_inactif.png");
+	background-size: 40px 40px;
+	border-bottom-color: grey;
 }
 #table_communes_voisines{
 	position: fixed;
@@ -623,6 +632,11 @@ fieldset legend {
 	height: 40px;
 	border-bottom: 2px #3FA4C5 solid;
 	border-radius: 6px;
+}
+#bouton_refresh.inactif{
+	background: url("../img/refresh-black.png") no-repeat #efefef center;
+	background-size: 33px;
+	border-bottom-color: grey;
 }
 #refresh_infobulle{
 	visibility: hidden;
@@ -1442,6 +1456,13 @@ fieldset legend {
 	top:30px;
 }
 
+#instructions {
+	margin-left: 1%;
+	font-size: 1.3em;
+}
+#instructions p {
+}
+
 #infos_commune{
 	float: left;
 	width: 65%;
@@ -1505,6 +1526,7 @@ fieldset legend {
 	border-bottom: 2px lightblue solid;
 	border-radius: 6px;
 	font-size: 0.8em;
+	visibility: hidden;
 }
 
 #boutons-filtres.pifo {
@@ -1614,6 +1636,9 @@ fieldset legend {
 	display: inline-block;
 	margin: 0 1% 20px 0;
 	font-size: 0.9em;
+}
+.pagination.pifo {
+	margin: 80px 1% 20px 0;
 }
 
 .pagination p {
