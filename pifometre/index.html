@@ -34,6 +34,7 @@
     DELTA = 0.0008
 
     var table = 'table_pifometre'
+    var nb_lignes_par_page = 1500
 
     function start(){
         $('#table_communes_voisines').css('visibility','hidden');
@@ -46,6 +47,7 @@
         if (!device_is_mobile()){
             check_josm_remote_control()
         }
+
         insee = check_url_for_insee()
         if (insee){
             $('#input_insee').empty()
@@ -56,24 +58,6 @@
         $('#bouton_aleatoire').click(function(){
             commune_aleatoire()
         })
-        $('#bouton_communes_voisines').click(function(){
-            $('#table_communes_voisines').css('visibility','visible');
-        })
-        $('#table_communes_voisines > .fermer').click(function(){
-            $('#table_communes_voisines').css('visibility','hidden');
-        })
-        $('#bouton_refresh').click(function(event){
-                                refresh();
-                                event.stopPropagation();
-                            })
-                            .mouseover(function(event){
-                                get_osm_state();
-                                refresh_infobulle();
-                                event.stopPropagation();
-                            })
-                            .mouseout(function(){
-                                $('#refresh_infobulle').css('visibility','hidden');
-                            })
         $('#bouton_localise_moi').click(function(){
             $('body').css('cursor','progress');
             $('#wait_ajax').empty()
@@ -172,6 +156,8 @@
         $('body').css('cursor','progress');
         $('#'+table).trigger("destroy");
         $('#'+table).empty()
+        $('.pagination').empty()
+        $('#instructions').trigger("destroy").empty()
         $('#input_insee')[0].value = $('#input_insee')[0].value.toUpperCase()
         $.ajax({
             url: "requete_pifometre_commune.py?insee="+$('#input_insee')[0].value
@@ -195,8 +181,43 @@
                  nb_noms_topo] = pifodata
 
             document.title = nom_commune+' - Pifomètre'
+            nb_lignes_total = pifodata.length;
+
             $('#descriptif').empty()
             $('#alerte_commune').css('visibility','hidden');
+
+            //----------------------------------------
+            //-------    ACTIVATION BOUTONS    ------
+            //----------------------------------------
+            $('#bouton_refresh').removeClass("inactif")
+            $('#bouton_communes_voisines').removeClass("inactif")
+            $('#bouton_export_csv').removeClass("inactif")
+
+            $('#bouton_communes_voisines').click(function(){
+                $('#table_communes_voisines').css('visibility','visible');
+            })            
+            $('#table_communes_voisines > .fermer').click(function(){
+                $('#table_communes_voisines').css('visibility','hidden');
+            })
+
+            $('#bouton_refresh').click(function(event){
+                                    refresh();
+                                    event.stopPropagation();
+                                })
+                                .mouseover(function(event){
+                                    get_osm_state();
+                                    refresh_infobulle();
+                                    event.stopPropagation();
+                                })
+                                .mouseout(function(){
+                                    $('#refresh_infobulle').css('visibility','hidden');
+                                })
+
+            $('#bouton_export_csv').click(function(){
+                window.open(urlCSV, '_blank');
+            }) 
+            //----------------------------------------
+            //----------------------------------------
 
             if (nom_commune.length == 0){
                 $('#descriptif').append($('<div id="titre_commune_inconnue">').append($('<h1>').append('Code Insee '+$('#input_insee')[0].value+' : commune inconnue')))
@@ -205,6 +226,7 @@
             }
             commune_valide = true;
             $('#pifostats').css('visibility','visible');
+            $('#boutons-filtres').css('visibility','visible');
 
             code_insee = $('#input_insee')[0].value
             update_storage_visits(nom_commune,code_insee,'Pifomètre',window.location.pathname,'insee',undefined,VERSION_MENU)
@@ -214,7 +236,6 @@
             $('#wait_ajax').empty()
                            .css('visibility','visible')
                            .append($('<span>').append('Chargement des données...'));
-
 
             url_map_org_part1 = 'http://www.openstreetmap.org/'
             url_pifomap = 'pifomap.html?insee='+code_insee
@@ -619,6 +640,29 @@
                     }
                 });
 
+                //---PAGINATION---
+                $('.pagination').append($('<p>').text('Pages :'))
+
+                //Première page
+                /*if (offset>0) {
+                    $('.pagination').append($('<a title="Première page" href="'+window.location.pathname+'?insee='+$('#input_insee')[0].value+'&offset=0"><div id="prem">&laquo;</div></a>'))
+                }*/
+                //Page précédente
+                /*if (offset>0) {
+                    $('.pagination').append($('<a title="Page précédente" href="'+window.location.pathname+'?insee='+$('#input_insee')[0].value+'&offset='+(parseFloat(offset)-nb_lignes_par_page)+'"><div>&lsaquo;</div></a>'))
+                }*/
+                //Page active
+                //$('.pagination').append($('<div>'+(offset/nb_lignes_par_page+1)+'</div>').addClass('active'))
+                //Page suivante
+                /*if (nb_lignes_total-offset>nb_lignes_par_page) {
+                    $('.pagination').append($('<a title="Page suivante" href="'+window.location.pathname+'?insee='+$('#input_insee')[0].value+'&offset='+(parseFloat(offset)+nb_lignes_par_page)+'"><div>&rsaquo;</div></a>'))
+                }*/
+                //Dernière page
+                /*if (nb_lignes_total-offset>nb_lignes_par_page) {
+                    $('.pagination').append($('<a title="Dernière page" href="'+window.location.pathname+'?insee='+$('#input_insee')[0].value+'&offset='+nb_lignes_par_page*Math.floor(nb_lignes_total/nb_lignes_par_page)+'"><div id="dern">&raquo;</div></a>'))
+                }
+*/
+
                 //Classe pour les familles de lignes survolées
                 $('#'+table+' tbody tr').mouseover(function(event){
                     ceNumFamille = $(this).attr('numFamilleLignes')
@@ -695,6 +739,10 @@
     </div>
 
     <div id="bandeau">
+        <div id="instructions">
+            <p>Entrez ci-dessus le code Insee de la commune et validez.</p>
+            <p>Vous pouvez trouver ce code sur <a href="https://www.insee.fr/fr/recherche/recherche-geographique?debut=0">le site de l'Insee</a>, ou sur la fiche Wikipédia de la commune par exemple.</p>
+        </div>
         <div id="descriptif" class ="pifo"></div>
         <div id="refresh_infobulle"></div>
         <div id="table_communes_voisines">
@@ -711,10 +759,10 @@
         <!--Boutons tout en haut à droite-->
         <div id="wait_ajax" class="pifo"></div>
         <button id="bouton_aleatoire" title="Une commune au pif"></button>
-        <button id="bouton_communes_voisines" title="Communes voisines"></button>
-        <button id="bouton_refresh"></button>
+        <button id="bouton_communes_voisines" class="inactif" title="Communes voisines"></button>
+        <button id="bouton_refresh" class="inactif"></button>
         <button id="bouton_localise_moi" title="Charger la commune où je me trouve"></button>
-        <button id="bouton_export_csv" title="Exporter le tableau en CSV" onclick="window.open(urlCSV, '_blank');"></button>
+        <button id="bouton_export_csv" class="inactif" title="Exporter le tableau en CSV"></button>
         <button id="bouton_aide" title="Ouvrir la page d'aide" onclick="window.open('aide.html', '_blank');"></button>
         <div id="infos_refresh"></div>
 
@@ -827,6 +875,7 @@
                 </div>
             </div>
         </div>
+        <div class="pagination pifo"></div>
     </div>
 
     <div id="reponse" class="pifo">
