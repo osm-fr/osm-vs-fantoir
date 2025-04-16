@@ -339,7 +339,7 @@
                                             json_resp['suffixe'] = numero.slice(numero_int.toString().length)
                                         }
                                         json_resp['numero'] = numero_int
-                                        json_resp['positions'] = [{'point':{type:'Point',coordinates:[lat_osm,lon_osm]}}]
+                                        json_resp['positions'] = [{'point':{type:'Point',coordinates:[lon_osm,lat_osm]}}]
                                         $('#'+table+' tr:last').append($('<td class="remontee_ban">')
                                                                     .append($('<a class="remontee_ajout_numero" target="_blank" title="Signaler un problème dans la BAN : Numéro à ajouter">')
                                                                     .attr('href', 'https://signalement.adresse.data.gouv.fr/#/'+ban_id_voie.toUpperCase()+'?sourceId=e32cd3e1-b19d-4a49-9aee-31a7929a8ead&type=LOCATION_TO_CREATE&changesRequested='+JSON.stringify(json_resp))
