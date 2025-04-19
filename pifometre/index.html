@@ -362,10 +362,6 @@
         })
     }
     function affiche_tableau(ligne_min){
-        // $('#wait_ajax').empty()
-        //                    .css('visibility','visible')
-        //                    .append($('<span>').append('Chargement des données...'));
-
         lignes_a_afficher = table_data
 
         if (affichage_pagine){
@@ -389,7 +385,6 @@
                     affiche_tableau(Math.max(0,ligne_min - NUM_LIGNES_PAGE));
                 }))
             }
-
             //Page active
             $('.pagination').append($('<div>'+(ligne_min/NUM_LIGNES_PAGE+1)+'</div>').addClass('active'))
 
@@ -713,6 +708,7 @@
 
         active_menu_filtres()
         update_menu_filtres()
+        $('#ligne-afficher').text('Filtrer (pour les '+$('#'+table+' tr[a_compter=true]').length+' résultats de la page actuellement affichée)')
         $('#wait_ajax').css('visibility','hidden');
     }
 

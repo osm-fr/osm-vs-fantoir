@@ -1649,14 +1649,15 @@ fieldset legend {
 }
 
 .pagination div {
-  float: left;
-  padding: 8px 16px;
-  border: 1px solid #ddd;
+	cursor: pointer;
+	float: left;
+	padding: 8px 16px;
+	border: 1px solid #ddd;
 }
 
 .pagination a {
-  color: black;
-  text-decoration: none;
+	color: black;
+	text-decoration: none;
 }
 
 .pagination div.active {
@@ -1680,6 +1681,12 @@ fieldset legend {
 .pagination div#dern {
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
+}
+
+.parametres .complement {
+	font-size: 0.9em;
+	font-style: italic;
+	margin-top:0;
 }
 
 /*------------------------------------------------------*/
