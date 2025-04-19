@@ -39,7 +39,7 @@
     var table = 'table_pifometre'
 
     function start(){
-
+        initPreferences()
         $('#bouton_legende').click(function(){
             $('#legende').css('visibility','visible');
         })
@@ -907,10 +907,6 @@
     }
     function affichage_par_defaut_lieux_dits(){
         maintenant = new Date().getTime()
-        if (localStorage.PreferencesPifomapMasquage_lieuxditsTerme == undefined){
-            localStorage.setItem('PreferencesPifomapMasquage_lieuxditsTerme',-1)
-            localStorage.setItem('PreferencesPifomapMasquage_lieuxditsRadioId','jamais')
-        }
         if (eval(localStorage.PreferencesPifomapMasquage_lieuxditsTerme) > maintenant){
             $('#pifofiltres.pifomap input#check_'+FILTRES_TYPE[1][0]+":checkbox").prop("checked", false).trigger("change")
             update_filtres()
