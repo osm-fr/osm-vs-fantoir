@@ -569,3 +569,26 @@
             }
         }
     }
+    function initPreferences(){
+        // General : Telecommande JOSM
+        if (localStorage.PreferencesJOSMRemoteControlWarning == undefined){
+            localStorage.setItem('PreferencesJOSMRemoteControlWarning','true')
+        }
+
+        // Général : bouton Copier
+        if (localStorage.PreferencesCopierCleValeur == undefined){
+            localStorage.setItem('PreferencesCopierCleValeur','false')
+        }
+
+        // Pifometre : pagination des résultats
+        if (localStorage.PreferencesPifometreAffichage_pagine == undefined){
+                localStorage.setItem('PreferencesPifometreAffichage_pagine',-1)
+                localStorage.setItem('PreferencesPifometreAffichage_pagineRadioId','non')
+            }
+        }
+
+        // Pifomap : Masquage des lieux-dits
+        if (localStorage.PreferencesPifomapMasquage_lieuxditsTerme == undefined){
+            localStorage.setItem('PreferencesPifomapMasquage_lieuxditsTerme',-1)
+            localStorage.setItem('PreferencesPifomapMasquage_lieuxditsRadioId','jamais')
+        }

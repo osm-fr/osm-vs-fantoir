@@ -51,6 +51,25 @@
             </fieldset>
         </div>
         <div class="bloc_fiche b2">
+            <h2>Paramètres Pifomètre</h2>
+            <fieldset id="field_pifometre_page">
+                <legend>Limiter la taille du tableau</legend>
+                <p class='complement'>(recommandé pour accélérer le chargement des grandes villes et des communes fusionnées)</p>
+                <p>
+                    <input type="radio" name="pref_pagination" id="non" value="-1" checked />
+                    <label for="non">Non, toujours tout afficher</label>
+                </p>
+                <p>
+                    <input type="radio" name="pref_pagination" id="oui500" value="500" />
+                    <label for="oui500">Oui, par pages de 500 lignes</label>
+                </p>
+                <p>
+                    <input type="radio" name="pref_pagination" id="oui1000" value="1000" />
+                    <label for="oui1000">Oui, par pages de 1000 lignes</label>
+                </p>
+            </fieldset>
+        </div>
+        <div class="bloc_fiche b1">
             <h2>Paramètres Pifomap</h2>
             <fieldset id="field_pifomap_ld">
                 <legend>Masquer les lieux-dits</legend>
@@ -77,12 +96,9 @@
 <script>
 function start(){
     update_menu_visits();
+    initPreferences()
 
 // General : Telecommande JOSM
-    if (localStorage.PreferencesJOSMRemoteControlWarning == undefined){
-        localStorage.setItem('PreferencesJOSMRemoteControlWarning','true')
-    }
-
     if (eval(localStorage.PreferencesJOSMRemoteControlWarning)){
         $('input#teleco_on').prop("checked", true).trigger("change")
         $('input#teleco_off').prop("checked", false).trigger("change")
@@ -100,10 +116,6 @@ function start(){
     })
 
 // Général : bouton Copier
-    if (localStorage.PreferencesCopierCleValeur == undefined){
-        localStorage.setItem('PreferencesCopierCleValeur','false')
-    }
-
     if (eval(localStorage.PreferencesCopierCleValeur)){
         $('input#copier_cle_valeur').prop("checked", true).trigger("change")
         $('input#copier_valeur').prop("checked", false).trigger("change")
@@ -119,19 +131,24 @@ function start(){
             localStorage.setItem('PreferencesCopierCleValeur','false')
         }
     })
+// Pifometre : pagination des résultats
+    $('input[name=pref_pagination]') .each(function(){
+        $(this).prop("checked", false)
+    })
+    $('input[name=pref_pagination]#'+localStorage.getItem('PreferencesPifometreAffichage_pagineRadioId')).prop("checked", true)
+
+    $('input[name=pref_pagination]').click(function(){
+        localStorage.setItem('PreferencesPifometreAffichage_pagineRadioId',$(this).attr('id'))
+        localStorage.setItem('PreferencesPifometreAffichage_pagine',$(this).val())
+    })
+
 
 // Pifomap : Masquage des lieux-dits
     maintenant = new Date().getTime()
-    if (localStorage.PreferencesPifomapMasquage_lieuxditsTerme == undefined){
-        localStorage.setItem('PreferencesPifomapMasquage_lieuxditsTerme',-1)
-        localStorage.setItem('PreferencesPifomapMasquage_lieuxditsRadioId','jamais')
-    }
     // RAZ au terme du setting
     if (eval(localStorage.PreferencesPifomapMasquage_lieuxditsTerme) < maintenant){
         localStorage.setItem('PreferencesPifomapMasquage_lieuxditsTerme',-1)
         localStorage.setItem('PreferencesPifomapMasquage_lieuxditsRadioId','jamais')
-    } else {
-
     }
     $('input[name=pref_lieuxdits]') .each(function(){
         $(this).prop("checked", false)
