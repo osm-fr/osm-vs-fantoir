@@ -145,12 +145,10 @@
         $('#'+table+' tr:last').append($('<td title="JOSM">').addClass('zone-clic-josm')
                                     .attr('xleft',xl).attr('xright',xr).attr('ybottom',yb).attr('ytop',yt)
                                     /*.text('JOSM')*/
-                                    .on('mouseup', function(){
-                                        if(event.which==1 || event.which==2) {
+                                    .click(function(){
                                             srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xl+'&right='+xr+'&top='+yt+'&bottom='+yb+'&select=way'+wayid+'&changeset_tags='+get_changeset_tags_croisement((xl+xr)/2,(yb+yt)/2,commune1,insee1,commune2,insee2);
                                             $('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
                                             $(this).addClass('clicked');
-                                        }
                                     })
                                 )
     }
