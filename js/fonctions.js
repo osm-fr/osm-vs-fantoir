@@ -123,8 +123,10 @@
                                         .append($('<a>').attr('href',href).attr('target',"blank")
                                             /*.text(text)*/
                                         )
-                                        .click(function(){
-                                            $(this).addClass('clicked');
+                                        .on('mouseup', function(){
+                                            if(event.which==1 || event.which==2) {
+                                                $(this).addClass('clicked');
+                                            }
                                         })
                                     )
     }
@@ -199,8 +201,10 @@
                                         .append($('<a>').attr('href',"numeros.html?insee="+code_insee+'&fantoir='+fantoir+'&source='+source+'&tab=0').attr('target',"blank")
                                         .text('Qualifier')
                                         )
-                                        .click(function(){
-                                            $(this).addClass('clicked');
+                                        .on('mouseup', function(){
+                                            if(event.which==1 || event.which==2) {
+                                                $(this).addClass('clicked');
+                                            }
                                         })
                                         )
     };
