@@ -152,7 +152,7 @@
                                     })
                                 )
     }
-    function add_josm_addr_link(table,code_insee,nom_commune,fantoir,nom_fantoir,nombre,fantoir_dans_relation,is_place){
+    function add_josm_addr_link(table,code_insee,nom_commune,fantoir,nom_fantoir,nombre,fantoir_dans_relation,is_place,schema_point_uniquement){
         d = new Date()
         moisjour = d.getMonth()+''+d.getDate()
         if (moisjour == '31'){
@@ -184,6 +184,8 @@
                                             })
         if (is_place){
             $('#'+table+' tr:last td:last').attr('colspan','2').append($('<span>').text(textLD))
+        } else if (schema_point_uniquement||!eval(localStorage.PreferencesAddrRelation)){
+            $('#'+table+' tr:last td:last').attr('colspan','2')
         } else {
             $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-adresses').addClass(classeZoneRelation).attr('title',titleRelation).append($('<span>'))
                                         .text(textRelation)
@@ -582,6 +584,11 @@
         // Général : bouton Copier
         if (localStorage.PreferencesCopierCleValeur == undefined){
             localStorage.setItem('PreferencesCopierCleValeur','false')
+        }
+
+        // Général : relations associatedStreet
+        if (localStorage.PreferencesAddrRelation == undefined){
+            localStorage.setItem('PreferencesAddrRelation','false')
         }
 
         // Pifometre : pagination des résultats

@@ -27,7 +27,7 @@
 
         <div class="bloc_fiche b1">
             <h2>Paramètres généraux</h2>
-            <fieldset id="field_telco_josm">
+            <fieldset id="field_teleco_josm">
                 <legend>Afficher un avertissement si JOSM n'est pas lancé</legend>
                 <p>
                     <input type="radio" name="pref_teleco" id="teleco_on" value="teleco_on" checked />
@@ -47,6 +47,18 @@
                 <p>
                     <input type="radio" name="pref_copier" id="copier_cle_valeur" value="copier_cle_valeur" />
                     <label for="copier_cle_valeur">Copier les couples clé-valeur (avec <span class="monospace">name</span> ou <span class="monospace">ref:FR:FANTOIR</span>) pour coller  dans JOSM</label>
+                </p>
+            </fieldset>
+            <fieldset id="field_addr_assoc_street">
+                <legend>Proposer l'intégration d'adresses en relation associatedStreet</legend>
+                <p class='complement'>(disponible dans les rues où aucune adresse n'est encore intégrée, ou si certaines adresses sont déjà intégrées en relation)</p>
+                <p>
+                    <input type="radio" name="pref_addr_assoc_street" id="addr_assoc_street_on" value="addr_assoc_street_on" checked />
+                    <label for="addr_assoc_street_on">Oui</label>
+                </p>
+                <p>
+                    <input type="radio" name="pref_addr_assoc_street" id="addr_assoc_street_off" value="addr_assoc_street_off" />
+                    <label for="addr_assoc_street_off">Non</label>
                 </p>
             </fieldset>
         </div>
@@ -107,7 +119,7 @@ function start(){
         $('input#teleco_off').prop("checked", true).trigger("change")
     }
 
-    $('#field_telco_josm').click(function(){
+    $('#field_teleco_josm').click(function(){
         if ($('input#teleco_on').prop("checked")){
             localStorage.setItem('PreferencesJOSMRemoteControlWarning','true')
         } else {
@@ -131,6 +143,24 @@ function start(){
             localStorage.setItem('PreferencesCopierCleValeur','false')
         }
     })
+
+// Général : adresses en relation associatedStreet
+    if (eval(localStorage.PreferencesAddrRelation)){
+        $('input#addr_assoc_street_on').prop("checked", true).trigger("change")
+        $('input#addr_assoc_street_off').prop("checked", false).trigger("change")
+    } else {
+        $('input#addr_assoc_street_on').prop("checked", false).trigger("change")
+        $('input#addr_assoc_street_off').prop("checked", true).trigger("change")
+    }
+
+    $('#field_addr_assoc_street').click(function(){
+        if ($('input#addr_assoc_street_on').prop("checked")){
+            localStorage.setItem('PreferencesAddrRelation','true')
+        } else {
+            localStorage.setItem('PreferencesAddrRelation','false')
+        }
+    })
+
 // Pifometre : pagination des résultats
     $('input[name=pref_pagination]') .each(function(){
         $(this).prop("checked", false)

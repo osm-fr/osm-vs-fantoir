@@ -79,8 +79,14 @@ AS
         ARRAY[ARRAY[nom,'name']] AS nom,
         lon,
         lat,
-        ROW_NUMBER()OVER(PARTITION BY fantoir ORDER BY lon,lat) AS rn
+        ROW_NUMBER()OVER(PARTITION BY fantoir ORDER BY lon,lat) AS rn,
+        schema_point
 FROM    bano_points_nommes
+LEFT OUTER JOIN (SELECT nom_voie AS nom,
+                        true AS schema_point
+                FROM    pifometre_schema_adresse_point
+                WHERE   code_insee = '__code_insee__') sp
+USING (nom)
 WHERE   code_insee = '__code_insee__' AND
         source = 'OSM' AND
         nom_tag = 'name')
@@ -103,7 +109,8 @@ SELECT t.fantoir,
        a_proposer,
        t.caractere_annul,
        COALESCE(place.is_place,false)::integer,         -- type : voie=0,place=1,OSM hors Fantoir=2
-       COALESCE(faab.fantoir_avec_adresses_ban,false)
+       COALESCE(faab.fantoir_avec_adresses_ban,false),
+       COALESCE(schema_point,false) AS schema_point
 FROM   (SELECT fantoir,
                date_creation,
                date_annul,
@@ -178,6 +185,7 @@ SELECT fantoir,
        NULL,
        NULL,
        2,
+       NULL,
        NULL
 FROM   (SELECT *
         FROM   (SELECT *

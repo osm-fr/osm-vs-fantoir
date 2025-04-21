@@ -434,7 +434,8 @@
                  numeros_a_proposer,
                  caractere_annul,
                  categorie,
-                 avec_adresses_ban] = lignes_a_afficher[s]
+                 avec_adresses_ban,
+                 schema_point_uniquement] = lignes_a_afficher[s]
 
             let [is_voie,
                 is_place,
@@ -660,7 +661,7 @@
                     }
                     //--- Adresses à integrer ----
                     if (numeros_a_proposer > 0){
-                        add_josm_addr_link(table,$('#input_insee')[0].value,nom_commune,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place)
+                        add_josm_addr_link(table,$('#input_insee')[0].value,nom_commune,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place,schema_point_uniquement)
                     }
                     else if (numeros_a_proposer == null && avec_adresses_ban){
                         $('#'+table+' tr:last').append($('<td>').attr('colspan','2').addClass('zone-adresses')
