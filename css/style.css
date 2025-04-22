@@ -1953,7 +1953,9 @@ table tr.static td {
 	text-align: center;
 	font-size: 0.9em;
 }
-
+.zone-adresses.pifomap {
+	font-size: 1em;
+}
 .adresses-integrees {
 	text-align: center;
 	color:#48c78e !important;

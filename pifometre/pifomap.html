@@ -731,7 +731,7 @@
             add_josm_addr_link(table,code_insee,nom_commune,fantoir,nom_topo,numeros_a_proposer,fantoir_dans_relation,is_place,schema_point_uniquement)
         } else if (numeros_a_proposer == null && avec_adresses_ban){
             $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Intégrer les adresses'))))
-            $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').addClass('zone-adresses')
+            $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').addClass('zone-adresses pifomap')
                                             .append($('<span>').addClass('adresses-integrees').text('✔'))
                                             .append($('<span>').text(' Adresses intégrées'))
                                         ))
