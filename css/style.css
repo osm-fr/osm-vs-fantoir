@@ -1483,11 +1483,17 @@ fieldset legend {
 
 #date-maj,
 #liens_commune,
-#liens_voie {
+#integrer_adresses {
 	clear: both;
 	margin: 0;
 	line-height: 1.6em;
 	font-size: 0.9em;
+}
+#integrer_adresses > * {
+	float: left;
+}
+#table_adresses {
+	font-size: 1em;
 }
 
 .cellule_intitule,
