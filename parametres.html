@@ -28,7 +28,7 @@
         <div class="bloc_fiche b1">
             <h2>Paramètres généraux</h2>
             <fieldset id="field_teleco_josm">
-                <legend>Afficher un avertissement si JOSM n'est pas lancé</legend>
+                <legend>Afficher un avertissement si JOSM n'est pas démarré</legend>
                 <p>
                     <input type="radio" name="pref_teleco" id="teleco_on" value="teleco_on" checked />
                     <label for="teleco_on">Oui</label>
@@ -50,26 +50,26 @@
                 </p>
             </fieldset>
             <fieldset id="field_addr_assoc_street">
-                <legend>Proposer l'intégration d'adresses en relation associatedStreet</legend>
-                <p class='complement'>(disponible dans les rues où aucune adresse n'est encore intégrée, ou si certaines adresses sont déjà intégrées en relation)</p>
+                <legend>Modes d'intégration d'adresses</legend>
+                <p class='complement'>(Le mode relation associatedStreet n'est disponible que dans les rues où aucune adresse n'est encore intégrée, ou si certaines adresses sont déjà intégrées en relation)</p>
                 <p>
                     <input type="radio" name="pref_addr_assoc_street" id="addr_assoc_street_on" value="addr_assoc_street_on" checked />
-                    <label for="addr_assoc_street_on">Oui</label>
+                    <label for="addr_assoc_street_on">Choix entre Points et Relation associatedStreet</label>
                 </p>
                 <p>
                     <input type="radio" name="pref_addr_assoc_street" id="addr_assoc_street_off" value="addr_assoc_street_off" />
-                    <label for="addr_assoc_street_off">Non</label>
+                    <label for="addr_assoc_street_off">Points uniquement</label>
                 </p>
             </fieldset>
             <fieldset id="field_voies_avec_addr_points">
-                <legend>Inclure le filaire de voie dans le calque des adresses en schéma Points</legend>
+                <legend>Contenu du calque JOSM pour l'intégration d'adresses en Points</legend>
                 <p>
                     <input type="radio" name="pref_voies_avec_addr_points" id="voies_avec_addr_points_on" value="voies_avec_addr_points_on" checked />
-                    <label for="voies_avec_addr_points_on">Oui</label>
+                    <label for="voies_avec_addr_points_on">Adresses & rue correspondante (quand elle existe)</label>
                 </p>
                 <p>
                     <input type="radio" name="pref_voies_avec_addr_points" id="voies_avec_addr_points_off" value="voies_avec_addr_points_off" />
-                    <label for="voies_avec_addr_points_off">Non</label>
+                    <label for="voies_avec_addr_points_off">Adresses seules</label>
                 </p>
             </fieldset>
         </div>
