@@ -61,7 +61,8 @@ SELECT  TRIM (BOTH FROM (COALESCE(nature_voie,'')||' '||libelle_voie)) AS nom,
         COALESCE(a_proposer,0),
         cog.libelle,
         n.nom,
-        rapproche
+        rapproche,
+        COALESCE(schema_point,false) AS schema_point
 FROM    (SELECT * FROM topo WHERE fantoir = '__fantoir__') f
 JOIN   (SELECT *
        FROM    cog_commune
@@ -89,4 +90,9 @@ USING (fantoir)
 LEFT OUTER JOIN    fantoir_numeros_manquants
 USING  (fantoir)
 LEFT OUTER JOIN   is_place
-USING  (fantoir);
+USING  (fantoir)
+LEFT OUTER JOIN (SELECT nom_voie AS nom,
+                        true AS schema_point
+                FROM    pifometre_schema_adresse_point
+                WHERE   code_insee = '__code_insee__') sp
+USING (nom);

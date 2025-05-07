@@ -61,6 +61,17 @@
                     <label for="addr_assoc_street_off">Non</label>
                 </p>
             </fieldset>
+            <fieldset id="field_voies_avec_addr_points">
+                <legend>Inclure le filaire de voie dans le calque des adresses en schéma Points</legend>
+                <p>
+                    <input type="radio" name="pref_voies_avec_addr_points" id="voies_avec_addr_points_on" value="voies_avec_addr_points_on" checked />
+                    <label for="voies_avec_addr_points_on">Oui</label>
+                </p>
+                <p>
+                    <input type="radio" name="pref_voies_avec_addr_points" id="voies_avec_addr_points_off" value="voies_avec_addr_points_off" />
+                    <label for="voies_avec_addr_points_off">Non</label>
+                </p>
+            </fieldset>
         </div>
         <div class="bloc_fiche b2">
             <h2>Paramètres Pifomètre</h2>
@@ -158,6 +169,23 @@ function start(){
             localStorage.setItem('PreferencesAddrRelation','true')
         } else {
             localStorage.setItem('PreferencesAddrRelation','false')
+        }
+    })
+
+// Général : filaire de voies dans le calque des adresses en Point
+    if (eval(localStorage.PreferencesAddrRueAvecPoints)){
+        $('input#voies_avec_addr_points_on').prop("checked", true).trigger("change")
+        $('input#voies_avec_addr_points_off').prop("checked", false).trigger("change")
+    } else {
+        $('input#voies_avec_addr_points_on').prop("checked", false).trigger("change")
+        $('input#voies_avec_addr_points_off').prop("checked", true).trigger("change")
+    }
+
+    $('#field_voies_avec_addr_points').click(function(){
+        if ($('input#voies_avec_addr_points_on').prop("checked")){
+            localStorage.setItem('PreferencesAddrRueAvecPoints','true')
+        } else {
+            localStorage.setItem('PreferencesAddrRueAvecPoints','false')
         }
     })
 

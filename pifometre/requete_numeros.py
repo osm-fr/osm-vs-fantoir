@@ -51,7 +51,7 @@ def get_empty_associatedStreet_XML(fantoir,name,fantoir_dans_relation):
 
     return x
 
-def append_street_role(xml,GeoJSON_positions,name,fantoir):
+def append_street_role(xml,GeoJSON_positions,name,fantoir,is_relation):
     way_ids = sql_get_data('way_id_OSM_from_GeoJSON',{'name':hp.escape_quotes(name),'fantoir':fantoir,'positions':' UNION ALL '.join([f"SELECT ST_GeomFromGeoJSON('{p}') AS geom_position" for p in GeoJSON_positions])})
     
     if not way_ids:
@@ -69,11 +69,12 @@ def append_street_role(xml,GeoJSON_positions,name,fantoir):
     xmlNodes = BeautifulSoup(resp.content,'xml')
     for w in xmlWAys.osm.find_all('way'):
         xml.osm.insert(0,w)
-        member = xml.new_tag('member')
-        member['role'] = 'street'
-        member['type'] = 'way'
-        member['ref'] = w['id']
-        xml.osm.find('relation').insert(0,member)
+        if is_relation:
+            member = xml.new_tag('member')
+            member['role'] = 'street'
+            member['type'] = 'way'
+            member['ref'] = w['id']
+            xml.osm.find('relation').insert(0,member)
     for c in xmlNodes.osm.find_all('node'):
         xml.osm.insert(0,c)
     return xml
@@ -156,11 +157,12 @@ def main():
     code_insee = params['insee'].value
     fantoir = params['fantoir'].value
     modele = params['modele'].value
+    ajout_filaire = params['filaire'].value.strip().lower() == 'true'
     if modele == 'Relation':
         fantoir_dans_relation = params['fantoir_dans_relation'].value == 'ok'
 
-    # code_insee = '01072'
-    # fantoir = '010720210'
+    # code_insee = '92002'
+    # fantoir = '920020011'
     # modele = 'Points'
     # modele = 'Relation'
     # modele = 'Place'
@@ -189,6 +191,10 @@ def main():
 
     if not xmlResponse:
         xmlResponse = get_empty_OSM_XML()
+
+    if modele == 'Points' and ajout_filaire:
+        name, geom_position = get_OSM_name_and_positions_as_GeoJSON(code_insee,fantoir)
+        xmlResponse = append_street_role(xmlResponse,geom_position,name,fantoir,False)
 
     dataset = sql_get_data('numeros_hors_osm_par_fantoir',{'code_insee':code_insee,'fantoir':fantoir})
 

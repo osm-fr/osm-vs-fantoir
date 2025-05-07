@@ -178,7 +178,7 @@
         $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-adresses').addClass(classeZonePoint).attr('title',titlePoint))
         $('#'+table+' tr:last td:last').append($('<span>').text(nombre > 1 ? nombre+textNbPoints:text1Point))
                                             .click(function(){
-                                                srcURL = 'http://127.0.0.1:8111/import?changeset_tags='+get_changeset_tags_addr(code_insee,nom_commune)+'&new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.split('?')[0].replace(stringToRemove,'')+'requete_numeros.py?insee='+code_insee+'&fantoir='+fantoir+'&modele='+((is_place) ? 'Place':'Points');
+                                                srcURL = 'http://127.0.0.1:8111/import?changeset_tags='+get_changeset_tags_addr(code_insee,nom_commune)+'&new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.split('?')[0].replace(stringToRemove,'')+'requete_numeros.py?insee='+code_insee+'&fantoir='+fantoir+'&modele='+((is_place) ? 'Place':'Points')+'&filaire='+localStorage.PreferencesAddrRueAvecPoints;
                                                 $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
                                                 $(this).addClass('clicked');
                                             })
@@ -589,6 +589,11 @@
         // Général : relations associatedStreet
         if (localStorage.PreferencesAddrRelation == undefined){
             localStorage.setItem('PreferencesAddrRelation','false')
+        }
+
+        // Général : voies en schema Point
+        if (localStorage.PreferencesAddrRueAvecPoints == undefined){
+            localStorage.setItem('PreferencesAddrRueAvecPoints','false')
         }
 
         // Pifometre : pagination des résultats

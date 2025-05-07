@@ -178,7 +178,8 @@
                                     numeros_a_proposer,
                                     nom_commune,
                                     nom_voie,
-                                    rapproche] = data[0]
+                                    rapproche,
+                                    schema_point_uniquement] = data[0]
                                 data = data[1]
                                 min_lon = data[0][1] == undefined ? data[0][4]:data[0][1];
                                 max_lon = min_lon;
@@ -239,7 +240,7 @@
                                 }
 
                                 if (numeros_a_proposer > 0){
-                                    add_josm_addr_link('table_adresses',insee,nom_commune,fantoir,nom_fantoir,numeros_a_proposer,true,is_place,false)
+                                    add_josm_addr_link('table_adresses',insee,nom_commune,fantoir,nom_fantoir,numeros_a_proposer,true,is_place,schema_point_uniquement)
                                 } else {
                                     $('#liens_voie').append($('<span>').addClass('adresses-integrees').text('✔'))
                                                         .append($('<span>').text(' Adresses intégrées'))
