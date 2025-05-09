@@ -157,7 +157,8 @@ def main():
     code_insee = params['insee'].value
     fantoir = params['fantoir'].value
     modele = params['modele'].value
-    ajout_filaire = params['filaire'].value.strip().lower() == 'true'
+    if modele == 'Points':
+        ajout_filaire = params['filaire'].value.strip().lower() == 'true'
     if modele == 'Relation':
         fantoir_dans_relation = params['fantoir_dans_relation'].value == 'ok'
 
@@ -187,7 +188,7 @@ def main():
 
         if not xmlResponse:
             xmlResponse = get_empty_associatedStreet_XML(fantoir,name,fantoir_dans_relation)
-            xmlResponse = append_street_role(xmlResponse,geom_position,name,fantoir)
+            xmlResponse = append_street_role(xmlResponse,geom_position,name,fantoir,True)
 
     if not xmlResponse:
         xmlResponse = get_empty_OSM_XML()
