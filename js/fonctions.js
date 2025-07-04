@@ -135,6 +135,7 @@
                                     .attr('xleft',xl).attr('xright',xr).attr('ybottom',yb).attr('ytop',yt)
                                     /*.text('JOSM')*/
                                     .click(function(){
+                                        if (!device_is_mobile()){check_josm_remote_control()}
                                         srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xl+'&right='+xr+'&top='+yt+'&bottom='+yb+'&changeset_tags='+get_changeset_tags_noms(code_insee,nom_commune);
                                         $('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
                                         $(this).addClass('clicked');
@@ -146,6 +147,7 @@
                                     .attr('xleft',xl).attr('xright',xr).attr('ybottom',yb).attr('ytop',yt)
                                     /*.text('JOSM')*/
                                     .click(function(){
+                                        if (!device_is_mobile()){check_josm_remote_control()}
                                         srcLoadAndZoom = 'http://127.0.0.1:8111/load_and_zoom?left='+xl+'&right='+xr+'&top='+yt+'&bottom='+yb+'&select=way'+wayid+'&changeset_tags='+get_changeset_tags_croisement((xl+xr)/2,(yb+yt)/2,commune1,insee1,commune2,insee2);
                                         $('<img>').appendTo($('#josm_target')).attr('src',srcLoadAndZoom);
                                         $(this).addClass('clicked');
@@ -178,6 +180,7 @@
         $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-adresses').addClass(classeZonePoint).attr('title',titlePoint))
         $('#'+table+' tr:last td:last').append($('<span>').text(nombre > 1 ? nombre+textNbPoints:text1Point))
                                             .click(function(){
+                                                if (!device_is_mobile()){check_josm_remote_control()}
                                                 srcURL = 'http://127.0.0.1:8111/import?changeset_tags='+get_changeset_tags_addr(code_insee,nom_commune)+'&new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.split('?')[0].replace(stringToRemove,'')+'requete_numeros.py?insee='+code_insee+'&fantoir='+fantoir+'&modele='+((is_place) ? 'Place':'Points')+'&filaire='+localStorage.PreferencesAddrRueAvecPoints;
                                                 $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
                                                 $(this).addClass('clicked');
@@ -190,6 +193,7 @@
             $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-adresses').addClass(classeZoneRelation).attr('title',titleRelation).append($('<span>'))
                                         .text(textRelation)
                                         .click(function(){
+                                            if (!device_is_mobile()){check_josm_remote_control()}
                                             localStorage.setItem('PreferencesAddrRelation','true')
                                             srcURL = 'http://127.0.0.1:8111/import?changeset_tags='+get_changeset_tags_addr(code_insee,nom_commune)+'&new_layer=true&layer_name='+nom_fantoir+'&url='+window.location.href.split('?')[0].replace(stringToRemove,'')+'requete_numeros.py?insee='+code_insee+'&fantoir='+fantoir+'&modele=Relation&fantoir_dans_relation='+fantoir_dans_relation;
                                             $('<img>').appendTo($('#josm_target')).attr('src',srcURL);
@@ -238,7 +242,16 @@
                 }
             })
             .fail(function(data){
-                alert("La télécommande JOSM ne répond pas.\nCertains liens sur la page nécessitent que JOSM soit démarré avec la télécommande activée\n\nPour de l'aide sur la télécommande : https://josm.openstreetmap.de/wiki/Help/Preferences/RemoteControl")
+                if($('#alerte_josm').css('visibility') == 'hidden') {
+                    $('#alerte_josm').css('visibility','visible');
+                    $('#dont_show_josm_alert').prop('checked', false);
+                }
+                else {
+                    $('#alerte_josm').addClass('clignote');
+                    setTimeout(function(){
+                        $('#alerte_josm').removeClass('clignote');
+                    },1000);                }
+                //alert("La télécommande JOSM ne répond pas.\nCertains liens sur la page nécessitent que JOSM soit démarré avec la télécommande activée\n\nPour de l'aide sur la télécommande : https://josm.openstreetmap.de/wiki/Help/Preferences/RemoteControl")
             })
         } else {
             console.log("Pas de controle du lancement de JOSM. Pour changer ce réglage : Menu > Préférences")

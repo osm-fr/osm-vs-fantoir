@@ -75,6 +75,14 @@
                                                  .removeAttr('insee_cible')
                                                  .unbind('click');
 
+        //Alerte JOSM
+        $('#alerte_josm .ok').click(function(){
+            if ($('#dont_show_josm_alert').prop("checked")) {
+                localStorage.setItem('PreferencesJOSMRemoteControlWarning','false');
+            }
+            $('#alerte_josm').css('visibility','hidden');
+        })
+
         //Bouton changement fond
         $('#bouton_fond_carte').click(function(){
             bascule_fond_raster();
@@ -1203,120 +1211,142 @@
         </form>
     </div>
 
-    <div id="bandeau">
-        <div id="descriptif" class ="pifo"></div>
-        <div id="refresh_infobulle"></div>
-        <div id="table_communes_voisines">
-            <div class="fermer">X</div>
-            <table>
-            <tbody>
-                <tr><td id="11"></td><td id="12"></td><td id="1"></td><td id="2"></td></tr>
-                <tr><td id="10"></td><td class="commune_centre" colspan="2" rowspan="2"></td><td id="3"></td></tr>
-                <tr><td id="9"></td><td id="4"></td></tr>
-                <tr><td id="8"></td><td id="7"></td><td id="6"></td><td id="5"></td></tr>
-            </tbody>
-            </table>
+    <div id="bandeau" class="pifomap">
+        <div id="espace_boutons">
+
+            <div id="refresh_infobulle"></div>
+            <div id="table_communes_voisines">
+                <div class="fermer">X</div>
+                <table>
+                <tbody>
+                    <tr><td id="11"></td><td id="12"></td><td id="1"></td><td id="2"></td></tr>
+                    <tr><td id="10"></td><td class="commune_centre" colspan="2" rowspan="2"></td><td id="3"></td></tr>
+                    <tr><td id="9"></td><td id="4"></td></tr>
+                    <tr><td id="8"></td><td id="7"></td><td id="6"></td><td id="5"></td></tr>
+                </tbody>
+                </table>
+            </div>
+
+            <!--Boutons tout en haut à droite-->
+            <div id="wait_ajax" class="pifomap"></div>
+            <div id="wait_ajax_mobile" class="pifomap"></div>
+
+            <div id="onglets">
+                <div id="bouton_pifostats"><p>Pifostats</p></div>
+                <div id="bouton_pifofiltres"><p>Filtres</p></div>
+                <div id="bouton_pifoprogression"><p>Progression</p></div>
+            </div>
+            <button id="bouton_aleatoire" title="Une commune au pif"></button>
+            <button id="bouton_communes_voisines" title="Communes voisines"></button>
+            <button id="bouton_refresh"></button>
+            <button id="bouton_localise_moi" title="Charger la commune où je me trouve"></button>
+            <div id="alerte_commune" class="pifomap"></div>
+            <div id="infos_refresh"></div>
+            <div id="bouton_legende"><p>Légende</p></div>
         </div>
 
-        <!--Boutons tout en haut à droite-->
-        <div id="wait_ajax" class="pifomap"></div>
-        <div id="wait_ajax_mobile" class="pifomap"></div>
-
-        <div id="onglets">
-            <div id="bouton_pifostats"><p>Pifostats</p></div>
-            <div id="bouton_pifofiltres"><p>Filtres</p></div>
-            <div id="bouton_pifoprogression"><p>Progression</p></div>
+        <!--------------------------- ------------------->
+        <!-------------------- GAUCHE ------------------->
+        <!----------------------------------------------->
+        <div id="espace_gauche">
+            <div id="descriptif" class ="pifo"></div>
+            <div id="alerte_josm">
+                <span>Le lien sur lequel vous avez cliqué nécessite que le logiciel JOSM soit démarré et que sa «télécommande» soit activée.<br/>Lancez JOSM et <a href="https://josm.openstreetmap.de/wiki/Fr%3AHelp/Preferences/RemoteControl">regardez ici</a> comment activer la télécommande.</span>
+                <div class="boutons">
+                    <span class='dismiss'><input type='checkbox' id='dont_show_josm_alert'><label for='dont_show_josm_alert'>Ne plus afficher</label></span>
+                    <span class='ok'>OK</div>
+                </div>
+            </div>
         </div>
-        <button id="bouton_aleatoire" title="Une commune au pif"></button>
-        <button id="bouton_communes_voisines" title="Communes voisines"></button>
-        <button id="bouton_refresh"></button>
-        <button id="bouton_localise_moi" title="Charger la commune où je me trouve"></button>
-        <div id="alerte_commune" class="pifomap"></div>
-        <div id="infos_refresh"></div>
-        <div id="bouton_legende"><p>Légende</p></div>
 
-        <!------------------------------------------------------------->
-        <!-----------------------   Pifostats   ----------------------->
-        <!------------------------------------------------------------->
+        <!--------------------------- ------------------->
+        <!-------------------- DROITE ------------------->
+        <!----------------------------------------------->
+        <div id="espace_droite">
 
-        <div id="pifostats" class="pifomap">
-            <div><h3>Intégration des voies et adresses de la commune</h3></div>
+            <!--------------------------------->
+            <!-----------   Stats   ----------->
+            <!--------------------------------->
 
-            <div class="barre_noms">
-                <div class="barre_noms_texte"></div>
-                <div class="barre_noms_tous" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100">
-                    <div class="barre_noms_osm"></div>
+            <div id="pifostats" class="pifomap">
+                <div><h3>Intégration des voies et adresses de la commune</h3></div>
+
+                <div class="barre_noms">
+                    <div class="barre_noms_texte"></div>
+                    <div class="barre_noms_tous" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100">
+                        <div class="barre_noms_osm"></div>
+                    </div>
+                </div>
+
+                <div class="barre_noms_avec_adresses">
+                    <div class="barre_noms_avec_adresses_texte"></div>
+                    <div class="barre_noms_avec_adresses_tous" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100">
+                        <div class="barre_noms_avec_adresses_osm"></div>
+                    </div>
+               </div>
+
+                <div class="barre_adresses">
+                    <div class="barre_adresses_texte"></div>
+                    <div class="barre_adresses_tous" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100">
+                        <div class="barre_adresses_osm"></div>
+                    </div>
+               </div>
+            </div>
+
+            <div id="pifofiltres" class="pifomap">
+                <h3>Afficher ou masquer...</h3>
+                <div class="ligne-boutons-filtres">
+                    <div>
+                        <ul>
+                            <li>
+                                <label class="switch is-rounded is-small">
+                                <input type="checkbox" id="check_voie"  critere="voie" checked/>
+                                <span class="check is-dark"></span>
+                                <span class="control-label">Voies<span></span></span>
+                            </li>
+                            <li>
+                                <label class="switch is-rounded is-small">
+                                <input type="checkbox" id="check_lieudit"  critere="lieudit" checked/>
+                                <span class="check is-dark"></span>
+                                <span class="control-label">Lieux-dits<span></span></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul>
+                            <li>
+                                <label class="switch is-rounded is-small">
+                                <input type="checkbox" id="check_rapproches" critere="rapproches" checked/>
+                                <span class="check is-green"></span>
+                                <span class="control-label">Déjà rapprochés dans OSM<span></span></span>
+                            </li>
+                            <li>
+                                <label class="switch is-rounded is-small">
+                                <input type="checkbox" id="check_non_rapproches"  critere="non_rapproches" checked/>
+                                <span class="check is-orange"></span>
+                                <span class="control-label">Pas encore rapprochés dans OSM<span></span></span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
-            <div class="barre_noms_avec_adresses">
-                <div class="barre_noms_avec_adresses_texte"></div>
-                <div class="barre_noms_avec_adresses_tous" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100">
-                    <div class="barre_noms_avec_adresses_osm"></div>
-                </div>
-           </div>
-
-            <div class="barre_adresses">
-                <div class="barre_adresses_texte"></div>
-                <div class="barre_adresses_tous" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100">
-                    <div class="barre_adresses_osm"></div>
-                </div>
-           </div>
-        </div>
-
-        <div id="pifofiltres" class="pifomap">
-            <h3>Afficher ou masquer...</h3>
-            <div class="ligne-boutons-filtres">
+            <div id="pifoprogression" class="pifomap">
+                <div><img id="france_points" src="../img/france-blanc-points.png"></div>
                 <div>
-                    <ul>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_voie"  critere="voie" checked/>
-                            <span class="check is-dark"></span>
-                            <span class="control-label">Voies<span></span></span>
-                        </li>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_lieudit"  critere="lieudit" checked/>
-                            <span class="check is-dark"></span>
-                            <span class="control-label">Lieux-dits<span></span></span>
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <ul>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_rapproches" critere="rapproches" checked/>
-                            <span class="check is-green"></span>
-                            <span class="control-label">Déjà rapprochés dans OSM<span></span></span>
-                        </li>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_non_rapproches"  critere="non_rapproches" checked/>
-                            <span class="check is-orange"></span>
-                            <span class="control-label">Pas encore rapprochés dans OSM<span></span></span>
-                        </li>
-                    </ul>
+                    <h3>Afficher la progression</h3>
+                    <p><input type="radio" id="radio_prog_noms"                 name="switch_noms_adresses"     value="affiche_noms" >
+                    <label for="radio_prog_noms">Intégration des noms de voies</label></p>
+                    <p><input type="radio" id="radio_prog_noms_avec_adresses"   name="switch_noms_adresses"     value="affiche_noms_avec_adresses" >
+                    <label for="radio_prog_noms_avec_adresses">Intégration des noms de voies avec adresses</label></p>
+                    <p><input type="radio" id="radio_prog_adresses"             name="switch_noms_adresses"     value="affiche_adresses" >
+                    <label for="radio_prog_adresses">Intégration des adresses</label></p>
                 </div>
             </div>
-        </div>
 
-        <div id="pifoprogression" class="pifomap">
-            <div><img id="france_points" src="../img/france-blanc-points.png"></div>
-            <div>
-                <h3>Afficher la progression</h3>
-                <p><input type="radio" id="radio_prog_noms"                 name="switch_noms_adresses"     value="affiche_noms" >
-                <label for="radio_prog_noms">Intégration des noms de voies</label></p>
-                <p><input type="radio" id="radio_prog_noms_avec_adresses"   name="switch_noms_adresses"     value="affiche_noms_avec_adresses" >
-                <label for="radio_prog_noms_avec_adresses">Intégration des noms de voies avec adresses</label></p>
-                <p><input type="radio" id="radio_prog_adresses"             name="switch_noms_adresses"     value="affiche_adresses" >
-                <label for="radio_prog_adresses">Intégration des adresses</label></p>
+            <div id="filtre_lieuxdits_mobile" title="Afficher les lieux-dits">
+                <input type="checkbox" id="check_lieudit"  critere="lieudit" checked/>
             </div>
-        </div>
-
-        <div id="filtre_lieuxdits_mobile" title="Afficher les lieux-dits">
-            <input type="checkbox" id="check_lieudit"  critere="lieudit" checked/>
         </div>
 
     </div>

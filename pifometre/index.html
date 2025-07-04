@@ -53,9 +53,9 @@
 
         let [a_menus_labels,STATUS_FANTOIR] = get_labels_statut_fantoir()
 
-        if (!device_is_mobile()){
+        /*if (!device_is_mobile()){
             check_josm_remote_control()
-        }
+        }*/
 
         insee = check_url_for_insee()
         if (insee){
@@ -92,6 +92,7 @@
             return 0;
         }
         $('body').css('cursor','progress');
+        $('#bouton_refresh').off('click').addClass('progress');
         $('#wait_ajax').empty()
                        .css('visibility','visible') 
                        .append($('<span>').append('Mise à jour BANO en cours...'));
@@ -197,7 +198,7 @@
             //----------------------------------------
             //-------    ACTIVATION BOUTONS    ------
             //----------------------------------------
-            $('#bouton_refresh').removeClass("inactif")
+            $('#bouton_refresh').removeClass("inactif progress")
             $('#bouton_communes_voisines').removeClass("inactif")
             $('#bouton_export_csv').removeClass("inactif")
 
@@ -223,7 +224,13 @@
 
             $('#bouton_export_csv').click(function(){
                 window.open(urlCSV, '_blank');
-            }) 
+            })
+            $('#alerte_josm .ok').click(function(){
+                if ($('#dont_show_josm_alert').prop("checked")) {
+                    localStorage.setItem('PreferencesJOSMRemoteControlWarning','false');
+                }
+                $('#alerte_josm').css('visibility','hidden');
+            })
             //----------------------------------------
             //----------------------------------------
 
@@ -771,144 +778,148 @@
         </form>
     </div>
 
-    <div id="bandeau">
+    <div id="bandeau" class ="pifometre">
         <div id="instructions">
             <p>Entrez ci-dessus le code Insee de la commune et validez.</p>
             <p>Vous pouvez trouver ce code sur <a href="https://www.insee.fr/fr/recherche/recherche-geographique?debut=0">le site de l'Insee</a>, ou sur la fiche Wikipédia de la commune par exemple.</p>
         </div>
-        <div id="descriptif" class ="pifo"></div>
-        <div id="refresh_infobulle"></div>
-        <div id="table_communes_voisines">
-            <div class="fermer">X</div>
-            <table>
-            <tbody>
-                <tr><td id="11"></td><td id="12"></td><td id="1"></td><td id="2"></td></tr>
-                <tr><td id="10"></td><td class="commune_centre" colspan="2" rowspan="2"></td><td id="3"></td></tr>
-                <tr><td id="9"></td><td id="4"></td></tr>
-                <tr><td id="8"></td><td id="7"></td><td id="6"></td><td id="5"></td></tr>
-            </tbody>
-            </table>
-        </div>
-        <!--Boutons tout en haut à droite-->
-        <div id="wait_ajax" class="pifo"></div>
-        <button id="bouton_aleatoire" title="Une commune au pif"></button>
-        <button id="bouton_communes_voisines" class="inactif" title="Communes voisines"></button>
-        <button id="bouton_refresh" class="inactif"></button>
-        <button id="bouton_localise_moi" title="Charger la commune où je me trouve"></button>
-        <button id="bouton_export_csv" class="inactif" title="Exporter le tableau en CSV"></button>
-        <button id="bouton_aide" title="Ouvrir la page d'aide" onclick="window.open('aide.html', '_blank');"></button>
-        <div id="infos_refresh"></div>
-
-        <!------------------------------------------------------------->
-        <!------------------ Espace en haut à droite ------------------>
-        <!------------------------------------------------------------->
-
-        <div id="alerte_commune"></div>
-
-
-        <!------------------------------------------------------------->
-        <!-----------------------   Pifostats   ----------------------->
-        <!------------------------------------------------------------->
-
-        <div id="pifostats" class="pifomap">
-            <div><h3>Intégration des voies et adresses de la commune</h3></div>
-
-            <div class="barre_noms"> 
-                <div class="barre_noms_texte"></div> 
-                <div class="barre_noms_tous" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100">
-                    <div class="barre_noms_osm"></div>
-                </div>
-            <a id="lien_map_noms" href="pifomap.html" title="voir la carte de la progression dans la région"><img class="picto_france" src="../img/france-blanc-points.png"/></a>
+        <div id="espace_boutons">
+            <!--Boutons tout en haut à droite-->
+            <div id="wait_ajax" class="pifometre"></div>
+            <button id="bouton_localise_moi" title="Charger la commune où je me trouve"></button>
+            <button id="bouton_aleatoire" title="Une commune au pif"></button>
+            <button id="bouton_communes_voisines" class="inactif" title="Communes voisines"></button>
+            <div id="table_communes_voisines">
+                <div class="fermer">X</div>
+                <table>
+                <tbody>
+                    <tr><td id="11"></td><td id="12"></td><td id="1"></td><td id="2"></td></tr>
+                    <tr><td id="10"></td><td class="commune_centre" colspan="2" rowspan="2"></td><td id="3"></td></tr>
+                    <tr><td id="9"></td><td id="4"></td></tr>
+                    <tr><td id="8"></td><td id="7"></td><td id="6"></td><td id="5"></td></tr>
+                </tbody>
+                </table>
             </div>
-
-            <div class="barre_noms_avec_adresses"> 
-                <div class="barre_noms_avec_adresses_texte"></div> 
-                <div class="barre_noms_avec_adresses_tous" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100">
-                    <div class="barre_noms_avec_adresses_osm"></div>
-                </div>
-            <a id="lien_map_noms_avec_adresses" href="pifomap.html" title="voir la carte de la progression dans la région"><img class="picto_france" src="../img/france-blanc-points.png"/></a>
-            </div>
-
-            <div class="barre_adresses"> 
-                <div class="barre_adresses_texte"></div> 
-                <div class="barre_adresses_tous" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100">
-                    <div class="barre_adresses_osm"></div>
-                </div>
-            <a id="lien_map_adresses" href="pifomap.html" title="voir la carte de la progression dans la région"><img class="picto_france" src="../img/france-blanc-points.png"/></a>
-            </div>
-
+            <button id="bouton_refresh" class="inactif"></button>
+            <div id="refresh_infobulle"></div>
+            <button id="bouton_export_csv" class="inactif" title="Exporter le tableau en CSV"></button>
+            <button id="bouton_aide" title="Ouvrir la page d'aide" onclick="window.open('aide.html', '_blank');"></button>
         </div>
 
-        <!------------------------------------------------------------->
-        <!----------------------- ESPACE FILTRES ---------------------->
-        <!------------------------------------------------------------->
-
-        <div id="boutons-filtres" class="pifo">
-            <p id="ligne-afficher">Afficher :</p>
-            <div class="ligne-boutons-filtres">
-                <div>
-                    <ul>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_voie" checked/>
-                            <span class="check is-dark"></span>
-                            <span class="control-label" critere="voie">Voies<span></span></span>
-                        </li>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_lieu_dit" checked/>
-                            <span class="check is-dark"></span>
-                            <span class="control-label" critere="lieu_dit">Lieux-dits<span></span></span>
-                        </li>
-                    </ul>
+        <!--------------------------- ------------------->
+        <!-------------------- GAUCHE ------------------->
+        <!----------------------------------------------->
+        <div id="espace_gauche">
+            <!-----------  INFOS COMMUNE  --------->
+            <div id="descriptif"></div>
+            <!-------------  FILTRES  ------------->
+            <div id="boutons-filtres" class="pifo">
+                <p id="ligne-afficher">Afficher :</p>
+                <div class="ligne-boutons-filtres">
+                    <div>
+                        <ul>
+                            <li>
+                                <label class="switch is-rounded is-small">
+                                <input type="checkbox" id="check_voie" checked/>
+                                <span class="check is-dark"></span>
+                                <span class="control-label" critere="voie">Voies<span></span></span>
+                            </li>
+                            <li>
+                                <label class="switch is-rounded is-small">
+                                <input type="checkbox" id="check_lieu_dit" checked/>
+                                <span class="check is-dark"></span>
+                                <span class="control-label" critere="lieu_dit">Lieux-dits<span></span></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul>
+                            <li>
+                                <label class="switch is-rounded is-small">
+                                <input type="checkbox" id="check_nom_integre" checked/>
+                                <span class="check is-green"></span>
+                                <span class="control-label" critere="nom_integre">Déjà rapprochés dans OSM<span></span></span>
+                            </li>
+                            <li>
+                                <label class="switch is-rounded is-small">
+                                <input type="checkbox" id="check_nom_a_integrer" checked/>
+                                <span class="check is-orange"></span>
+                                <span class="control-label" critere="nom_a_integrer">Pas encore rapprochés dans OSM<span></span></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul>
+                            <li>
+                                <label class="switch is-rounded is-small">
+                                <input type="checkbox" id="check_avec_adresses" checked/>
+                                <span class="check is-pink"></span>
+                                <span class="control-label" critere="avec_adresses">Ayant des adresses référencées dans la BAN<span></span></span>
+                            </li>
+                            <li>
+                                <label class="switch is-rounded is-small">
+                                <input type="checkbox" id="check_sans_adresses" checked/>
+                                <span class="check is-dark"></span>
+                                <span class="control-label" critere="sans_adresses">Sans adresses<span></span></span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div>
-                    <ul>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_nom_integre" checked/>
-                            <span class="check is-green"></span>
-                            <span class="control-label" critere="nom_integre">Déjà rapprochés dans OSM<span></span></span>
-                        </li>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_nom_a_integrer" checked/>
-                            <span class="check is-orange"></span>
-                            <span class="control-label" critere="nom_a_integrer">Pas encore rapprochés dans OSM<span></span></span>
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <ul>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_avec_adresses" checked/>
-                            <span class="check is-pink"></span>
-                            <span class="control-label" critere="avec_adresses">Ayant des adresses référencées dans la BAN<span></span></span>
-                        </li>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_sans_adresses" checked/>
-                            <span class="check is-dark"></span>
-                            <span class="control-label" critere="sans_adresses">Sans adresses<span></span></span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="ligne-boutons-filtres">
-                <div>
-                    <ul>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_osm_hors_fantoir" checked/>
-                            <span class="check is-blue"></span>
-                            <span class="control-label" critere="osm_hors_fantoir">Trouvé dans OSM et inconnu du fichier Topo<span></span></span>
-                        </li>
-                    </ul>
+                <div class="ligne-boutons-filtres">
+                    <div>
+                        <ul>
+                            <li>
+                                <label class="switch is-rounded is-small">
+                                <input type="checkbox" id="check_osm_hors_fantoir" checked/>
+                                <span class="check is-blue"></span>
+                                <span class="control-label" critere="osm_hors_fantoir">Trouvé dans OSM et inconnu du fichier Topo<span></span></span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="pagination pifo"></div>
+
+        <!--------------------------- ------------------->
+        <!-------------------- DROITE ------------------->
+        <!----------------------------------------------->
+        <div id="espace_droite">
+            <div id="alerte_commune"></div>
+            <!-------------  STATS  ------------->
+            <div id="pifostats" class="pifometre">
+                <div><h3>Intégration des voies et adresses de la commune</h3></div>
+                <div class="barre_noms"> 
+                    <div class="barre_noms_texte"></div> 
+                    <div class="barre_noms_tous" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100">
+                        <div class="barre_noms_osm"></div>
+                    </div>
+                <a id="lien_map_noms" href="pifomap.html" title="voir la carte de la progression dans la région"><img class="picto_france" src="../img/france-blanc-points.png"/></a>
+                </div>
+                <div class="barre_noms_avec_adresses"> 
+                    <div class="barre_noms_avec_adresses_texte"></div> 
+                    <div class="barre_noms_avec_adresses_tous" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100">
+                        <div class="barre_noms_avec_adresses_osm"></div>
+                    </div>
+                <a id="lien_map_noms_avec_adresses" href="pifomap.html" title="voir la carte de la progression dans la région"><img class="picto_france" src="../img/france-blanc-points.png"/></a>
+                </div>
+                <div class="barre_adresses"> 
+                    <div class="barre_adresses_texte"></div> 
+                    <div class="barre_adresses_tous" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuetext="" aria-valuemax="100">
+                        <div class="barre_adresses_osm"></div>
+                    </div>
+                <a id="lien_map_adresses" href="pifomap.html" title="voir la carte de la progression dans la région"><img class="picto_france" src="../img/france-blanc-points.png"/></a>
+                </div>
+            </div>
+            <div id="alerte_josm">
+                <span>Le lien sur lequel vous avez cliqué nécessite que le logiciel JOSM soit démarré et que sa «télécommande» soit activée.<br/>Lancez JOSM et <a href="https://josm.openstreetmap.de/wiki/Fr%3AHelp/Preferences/RemoteControl">regardez ici</a> comment activer la télécommande.</span>
+                <div class="boutons">
+                    <span class='dismiss'><input type='checkbox' id='dont_show_josm_alert'><label for='dont_show_josm_alert'>Ne plus afficher</label></span>
+                    <span class='ok'>OK</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pagination pifometre"></div>
     </div>
 
     <div id="reponse" class="pifo">
