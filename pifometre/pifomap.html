@@ -760,8 +760,14 @@
                 polydata,
                 point_numero_data,
                 point_nomme_data,
-                raw_emprises] = data
+                raw_emprises,
+                mesures] = data
+            // console.log(mesures)
+// for (const [key, value] of Object.entries(mesures)) {
+//   console.log(key);
+//   console.log(value);
 
+// }
             emprises = new Map(Object.entries(raw_emprises));
 
             res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
@@ -782,9 +788,22 @@
                     geom] = filairedata[s]
                 if (geom.type == 'LineString'||geom.type == 'MultiLineString'){
                     res.features.push(get_geojson_poly(geom,{'nom':nom,'source':'OSM','fantoir':fantoir,'rapproche':fantoir != ''?true:false,'within':within}))
+                    // console.log(geom)
                 }
             }
             map.getSource('hover_filaire').setData(res)
+
+            res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+            for (const [key, value] of Object.entries(mesures)) {
+                for (s=0;s<value.length;s++){
+                    let [abs,
+                        lon,
+                        lat] = value[s]
+                    res.features.push(get_geojson_point(lon,lat,{'abs':abs,'nom':key}))
+                }
+            }
+            map.getSource('abscisses').setData(res)
+            console.log(mesures)
 
             res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
             for (s=0;s<polydata.length;s++){
@@ -881,6 +900,12 @@
                 map.addImage('lieudit_gris', image);
             })
         }
+        
+        map.addControl(new maplibregl.ScaleControl({
+            // maxWidth: 80,
+            unit: 'metric'
+        }));
+
         interactions_souris('noms_de_communes')
         interactions_souris('simple-tiles')
         interactions_souris('BAN_point_transparent')

@@ -61,6 +61,12 @@
                           "features": []
                 }
         },
+        "abscisses": {
+        "type": "geojson",
+        "data": {"type": "FeatureCollection",
+                          "features": []
+                }
+        },
         "contour_communal": {
         "type": "geojson",
         "data": {"type": "FeatureCollection",
@@ -463,6 +469,24 @@
             },
             "paint": {
                 "text-color": "black",
+                "text-halo-color": "white",
+                "text-halo-width": 3
+            }
+        },
+        {
+            "id": "abscisse_texte",
+            "source": "abscisses",
+            "type": "symbol",
+            "minzoom" : 17,
+            "layout": {
+                "text-field": ["get", "abs"],
+                "text-variable-anchor": ["top", "left"],
+                "text-radial-offset": 0.5,
+                "text-overlap":"cooperative",
+                "text-justify": "auto"
+            },
+            "paint": {
+                "text-color": "red",
                 "text-halo-color": "white",
                 "text-halo-width": 3
             }
