@@ -290,14 +290,7 @@
                     }, {
                       hover: true
                     });
-
-                map.setFilter('filaire',["==",["get", "nom"], nom])
-                map.setFilter('filaire_texte',["==",["get", "nom"], nom])
-                if (fantoir != ''){
-                    map.setFilter('hover_points',["any",["==",["get", "fantoir"], fantoir],["==",["get", "nom"], nom]])
-                } else {
-                    map.setFilter('hover_points',["==",["get", "nom"], nom])
-                }
+                surbrillance_voie_numeros(nom,fantoir)
 
                 if (e.features.length > 1){
                     if (e.features[0].properties.nom != e.features[1].properties.nom){
@@ -323,9 +316,7 @@
                 }
 
                 map.getCanvas().style.cursor = '';
-                map.setFilter('filaire',["==",["get", "nom"], " "])
-                map.setFilter('filaire_texte',["==",["get", "nom"], " "])
-                map.setFilter('hover_points',["==",["get", "fantoir"], "xxxxxxxxx"])
+                fin_surbrillance_voie_numeros()
 
             // RAZ du texte multi-noms
                 map.setLayoutProperty('filaire_texte','text-field',["get", "nom"])
@@ -532,6 +523,37 @@
         })
     }
 
+    function centrage_sur_nom(nom){
+        let [xmin,ymin,xmax,ymax] = emprises.get(nom)
+        if ((xmin == xmax) && (ymin == ymax)){
+            map.flyTo({
+                center:[xmin,ymin],
+                zoom:17});
+        } else {
+            map.fitBounds([xmin,ymin,xmax,ymax])
+            console.log("zoom : "+map.getZoom())
+            if (map.getZoom() > 20){
+                map.zoomOut()
+            }
+        }
+    }
+
+    function surbrillance_voie_numeros(nom,fantoir){
+        map.setFilter('filaire',["==",["get", "nom"], nom])
+        if (fantoir != undefined){
+            map.setFilter('hover_points',["any",["==",["get", "fantoir"], fantoir],["==",["get", "nom"], nom]])
+        } else {
+            map.setFilter('hover_points',["==",["get", "nom"], nom])
+        }
+    }
+
+    function fin_surbrillance_voie_numeros(){
+        map.getCanvas().style.cursor = '';
+        map.setFilter('filaire',["==",["get", "nom"], " "])
+        map.setFilter('filaire_texte',["==",["get", "nom"], " "])
+        map.setFilter('hover_points',["==",["get", "fantoir"], "xxxxxxxxx"])
+    }
+
     function ajout_infos_numero(couche_carto){
         // Points OSM bleus - non rapprochés
         if (!fantoir && couche_carto == 'OSM_point') {
@@ -686,18 +708,14 @@
         }
         $('#infos_voie_lieudit').on("mouseenter", function() {
             nom = $('#panneau_map h2').attr('nom')
-            map.setFilter('filaire',["==",["get", "nom"], nom])
+            fantoir = undefined
             if ($('#panneau_map h2').attr('fantoir')){
                 fantoir = $('#panneau_map h2').attr('fantoir')
-                map.setFilter('hover_points',["any",["==",["get", "fantoir"], fantoir],["==",["get", "nom"], nom]])
-            } else {
-                map.setFilter('hover_points',["==",["get", "nom"], nom])
             }
+            surbrillance_voie_numeros(nom,fantoir)
         });
         $('#infos_voie_lieudit').on("mouseleave", function() {
-            map.getCanvas().style.cursor = '';
-            map.setFilter('filaire',["==",["get", "nom"], " "])
-            map.setFilter('hover_points',["==",["get", "fantoir"], "xxxxxxxxx"])
+            fin_surbrillance_voie_numeros()
         } );
     }
     function ajout_liens_de_visu(lon,lat){
@@ -771,6 +789,25 @@
                 raw_emprises] = data
 
             emprises = new Map(Object.entries(raw_emprises));
+            $('#liste_recherche').empty()
+            $('#liste_recherche').append($('<thead>').append($('<tr>').append($('<th>').append('Index')))).append($('<tbody>'))
+
+            for (const [key, value] of emprises) {
+                if (key.indexOf(insee) !=0){
+                    $('#liste_recherche').append($('<tr>').append($('<td>').text(key)))
+                    $('#liste_recherche td:last').click(function(){
+                        centrage_sur_nom(key)
+                    }).mouseover(function(event){
+                        surbrillance_voie_numeros(key,undefined)
+                    }).mouseout(function(event){
+                        fin_surbrillance_voie_numeros()
+                    })
+                }
+            }
+            $('#liste_recherche').tablesorter({
+                widthFixed : true,
+                widgets: [ 'stickyHeaders', 'filter' ],
+            });
 
             res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
             bbox = polycommunedata[0][0].coordinates
@@ -1358,6 +1395,7 @@
                 <div id="boutons"></div>
             </div>
             <div id="contenu">
+                <table id="liste_recherche"></table>
                 <div id="infos_numero"></div>
                 <div id="infos_voie_lieudit"></div>
                 <table id="pifomap_table_liens"></table>
