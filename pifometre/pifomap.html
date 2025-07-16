@@ -807,6 +807,9 @@
             $('#liste_recherche').tablesorter({
                 widthFixed : true,
                 widgets: [ 'stickyHeaders', 'filter' ],
+                widgetOptions: {
+                  stickyHeaders_attachTo : '#reponse #panneau_map #contenu'
+                }
             });
 
             res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
@@ -950,9 +953,6 @@
 
         update_radio_ratio()
         affiche_ratio_map()
-        if (!device_is_mobile()){
-            check_josm_remote_control()
-        }
 
         // Preferences d'affichage des LD
         affichage_par_defaut_lieux_dits()
@@ -1249,9 +1249,21 @@
     </div>
 
     <div id="bandeau" class="pifomap">
+        <!--Boutons tout en haut à droite-->
         <div id="espace_boutons">
 
-            <div id="refresh_infobulle"></div>
+            <div id="wait_ajax" class="pifomap"></div>
+            <div id="wait_ajax_mobile" class="pifomap"></div>
+
+            <div id="onglets">
+                <div id="bouton_pifostats"><p>Pifostats</p></div>
+                <div id="bouton_pifofiltres"><p>Filtres</p></div>
+                <div id="bouton_pifoprogression"><p>Progression</p></div>
+            </div>
+
+            <button id="bouton_localise_moi" title="Charger la commune où je me trouve"></button>
+            <button id="bouton_aleatoire" title="Une commune au pif"></button>
+            <button id="bouton_communes_voisines" title="Communes voisines"></button>
             <div id="table_communes_voisines">
                 <div class="fermer">X</div>
                 <table>
@@ -1263,23 +1275,11 @@
                 </tbody>
                 </table>
             </div>
-
-            <!--Boutons tout en haut à droite-->
-            <div id="wait_ajax" class="pifomap"></div>
-            <div id="wait_ajax_mobile" class="pifomap"></div>
-
-            <div id="onglets">
-                <div id="bouton_pifostats"><p>Pifostats</p></div>
-                <div id="bouton_pifofiltres"><p>Filtres</p></div>
-                <div id="bouton_pifoprogression"><p>Progression</p></div>
-            </div>
-            <button id="bouton_aleatoire" title="Une commune au pif"></button>
-            <button id="bouton_communes_voisines" title="Communes voisines"></button>
             <button id="bouton_refresh"></button>
-            <button id="bouton_localise_moi" title="Charger la commune où je me trouve"></button>
-            <div id="alerte_commune" class="pifomap"></div>
-            <div id="infos_refresh"></div>
+            <div id="refresh_infobulle"></div>
             <div id="bouton_legende"><p>Légende</p></div>
+
+            <div id="alerte_commune" class="pifomap"></div>
         </div>
 
         <!--------------------------- ------------------->
@@ -1288,10 +1288,10 @@
         <div id="espace_gauche">
             <div id="descriptif" class ="pifo"></div>
             <div id="alerte_josm">
-                <span>Le lien sur lequel vous avez cliqué nécessite que le logiciel JOSM soit démarré et que sa «télécommande» soit activée.<br/>Lancez JOSM et <a href="https://josm.openstreetmap.de/wiki/Fr%3AHelp/Preferences/RemoteControl">regardez ici</a> comment activer la télécommande.</span>
+                <span>Le lien sur lequel vous avez cliqué nécessite que le logiciel JOSM soit démarré et que sa «télécommande» soit activée (<a href="https://josm.openstreetmap.de/wiki/Fr%3AHelp/Preferences/RemoteControl">aide</a>).</span>
                 <div class="boutons">
                     <span class='dismiss'><input type='checkbox' id='dont_show_josm_alert'><label for='dont_show_josm_alert'>Ne plus afficher</label></span>
-                    <span class='ok'>OK</div>
+                    <span class='ok'>OK</span>
                 </div>
             </div>
         </div>
@@ -1385,7 +1385,6 @@
                 <input type="checkbox" id="check_lieudit"  critere="lieudit" checked/>
             </div>
         </div>
-
     </div>
 
     <div id="reponse" class="pifomap">
@@ -1395,7 +1394,7 @@
                 <div id="boutons"></div>
             </div>
             <div id="contenu">
-                <table id="liste_recherche"></table>
+                <!-- <table id="liste_recherche"></table> -->
                 <div id="infos_numero"></div>
                 <div id="infos_voie_lieudit"></div>
                 <table id="pifomap_table_liens"></table>

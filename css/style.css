@@ -656,7 +656,7 @@ fieldset legend {
 	border: 1px grey solid;
 	border-radius: 5px;
 	padding: 5px;
-	z-index: 5;
+	z-index: 2;
 	background-color: white;
 	font-size: 0.9em;
 	text-align: right;
@@ -732,11 +732,6 @@ fieldset legend {
 /*---------------                                                       ---------------*/
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
-
-#espace_droite {
-	/*float: right;
-	width: 35%;*/
-}
 
 /*------------------------------------------------------------------*/
 /*---------------       BLOCS PIFOSTATS COMMUNE      ---------------*/
@@ -1379,15 +1374,13 @@ fieldset legend {
 	margin:0;
 	width:15%;
 	height:calc(100% - 4px);
+	overflow-y: auto;
 	border-radius: 6px;
 	border:2px solid lightblue;
 	border-bottom: 2px solid lightblue;
 }
 #panneau_map li {
 	line-height: 1.6em;
-}
-#panneau_map #en_tete {
-
 }
 #panneau_map h2 {
 	float: left;

@@ -53,10 +53,6 @@
 
         let [a_menus_labels,STATUS_FANTOIR] = get_labels_statut_fantoir()
 
-        /*if (!device_is_mobile()){
-            check_josm_remote_control()
-        }*/
-
         insee = check_url_for_insee()
         if (insee){
             $('#input_insee').empty()
@@ -778,13 +774,13 @@
         </form>
     </div>
 
-    <div id="bandeau" class ="pifometre">
+    <div id="bandeau" class="pifometre">
         <div id="instructions">
             <p>Entrez ci-dessus le code Insee de la commune et validez.</p>
             <p>Vous pouvez trouver ce code sur <a href="https://www.insee.fr/fr/recherche/recherche-geographique?debut=0">le site de l'Insee</a>, ou sur la fiche Wikipédia de la commune par exemple.</p>
         </div>
+        <!--Boutons tout en haut à droite-->
         <div id="espace_boutons">
-            <!--Boutons tout en haut à droite-->
             <div id="wait_ajax" class="pifometre"></div>
             <button id="bouton_localise_moi" title="Charger la commune où je me trouve"></button>
             <button id="bouton_aleatoire" title="Une commune au pif"></button>
@@ -911,10 +907,10 @@
                 </div>
             </div>
             <div id="alerte_josm">
-                <span>Le lien sur lequel vous avez cliqué nécessite que le logiciel JOSM soit démarré et que sa «télécommande» soit activée (<a href="https://josm.openstreetmap.de/wiki/Fr%3AHelp/Preferences/RemoteControl">voir aide</a>).</span>
+                <span>Le lien sur lequel vous avez cliqué nécessite que le logiciel JOSM soit démarré et que sa «télécommande» soit activée (<a href="https://josm.openstreetmap.de/wiki/Fr%3AHelp/Preferences/RemoteControl">aide</a>).</span>
                 <div class="boutons">
                     <span class='dismiss'><input type='checkbox' id='dont_show_josm_alert'><label for='dont_show_josm_alert'>Ne plus afficher</label></span>
-                    <span class='ok'>OK</div>
+                    <span class='ok'>OK</span>
                 </div>
             </div>
         </div>
