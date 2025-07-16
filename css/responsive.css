@@ -170,7 +170,7 @@
     .navigation h1 a{font-size: 0.8em;}
     #bandeau {top:60px;}
     #instructions{margin: 5px 5%; font-size: 1.2em;}
-    #wait_ajax, #infos_refresh, #refresh_infobulle, #pifostats, #pifofiltres, #pifoprogression, #onglets, #bouton_legende, #bouton_aleatoire, #bouton_communes_voisines,
+    #wait_ajax, #refresh_infobulle, #pifostats, #pifofiltres, #pifoprogression, #onglets, #bouton_legende, #bouton_aleatoire, #bouton_communes_voisines,
     #panneau_map #espace_bouton_copier, #panneau_map #contenu, #bouton_export_csv, #bouton_aide {display: none;}
     #bouton_refresh, #bouton_refresh.inactif {width: 30px; height: 30px; right: 45px; top:15px; background-size: 25px;}
     #wait_ajax.pifomap {width: 30px; height: 30px; right: 45px; top:15px; background-size: 25px;}
