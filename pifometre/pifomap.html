@@ -101,7 +101,8 @@
                 style:'./'+STYLEFILE+'.style',
                 center: [4,46],
                 hash: 'map',
-                zoom: 5
+                zoom: 5,
+                maxZoom: 20
             });
             map.on('load', () => {
                 map_setup()
@@ -789,28 +790,6 @@
                 raw_emprises] = data
 
             emprises = new Map(Object.entries(raw_emprises));
-            $('#liste_recherche').empty()
-            $('#liste_recherche').append($('<thead>').append($('<tr>').append($('<th>').append('Index')))).append($('<tbody>'))
-
-            for (const [key, value] of emprises) {
-                if (key.indexOf(insee) !=0){
-                    $('#liste_recherche').append($('<tr>').append($('<td>').text(key)))
-                    $('#liste_recherche td:last').click(function(){
-                        centrage_sur_nom(key)
-                    }).mouseover(function(event){
-                        surbrillance_voie_numeros(key,undefined)
-                    }).mouseout(function(event){
-                        fin_surbrillance_voie_numeros()
-                    })
-                }
-            }
-            $('#liste_recherche').tablesorter({
-                widthFixed : true,
-                widgets: [ 'stickyHeaders', 'filter' ],
-                widgetOptions: {
-                  stickyHeaders_attachTo : '#reponse #panneau_map #contenu'
-                }
-            });
 
             res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
             bbox = polycommunedata[0][0].coordinates
@@ -829,7 +808,9 @@
                     within,
                     geom] = filairedata[s]
                 if (geom.type == 'LineString'||geom.type == 'MultiLineString'){
-                    res.features.push(get_geojson_poly(geom,{'nom':nom,'source':'OSM','fantoir':fantoir,'rapproche':fantoir != ''?true:false,'within':within}))
+                    rapproche = fantoir != ''?true:false
+                    res.features.push(get_geojson_poly(geom,{'nom':nom,'source':'OSM','fantoir':fantoir,'rapproche':rapproche,'within':within}))
+                    emprises.set(nom,emprises.get(nom).concat([true,rapproche]))
                 }
             }
             map.getSource('hover_filaire').setData(res)
@@ -860,6 +841,8 @@
                  avec_adresses = cat[2] == 'B'?true:false;
                  nature = cat[3] == 'P'?'lieudit':'voie';
 
+                 emprises.set(nom,emprises.get(nom).concat([source == 'OSM',rapproche]))
+
                  res_points_nommes.features.push(get_geojson_point(lon,lat,{'nom':nom,'source':source,'rapproche':rapproche,'fantoir':fantoir,'nature':nature,'nom_com':nom_commune,'statut':label_statut}))
             }
             map.getSource('points_nommes').setData(res_points_nommes)
@@ -889,6 +872,37 @@
             map.getSource('adresses_OSM').setData(res_numero_OSM)
             map.getSource('adresses_BAN').setData(res_numero_BAN)
             map.getSource('hover_points').setData(res_hover_point)
+
+            $('#liste_recherche').empty()
+            $('#liste_recherche').append($('<thead>').append($('<tr>').append($('<th>').append('Index')))).append($('<tbody>'))
+
+            for (const [key, value] of emprises) {
+                if (key.indexOf(insee) !=0){
+                    [xmin,ymin,xmax,ymax,source_osm,rapproche] = value
+                    if (source_osm && rapproche){
+                        pastille = 'pastille-verte'
+                    } else if (source_osm) {
+                        pastille = 'pastille-bleue'
+                    } else {
+                        pastille = 'pastille-orange'
+                    }
+                    $('#liste_recherche').append($('<tr>').append($('<td>').append($('<span>').addClass(pastille)).append($('<span>').text(key))))
+                    $('#liste_recherche td:last').click(function(){
+                        centrage_sur_nom(key)
+                    }).mouseover(function(event){
+                        surbrillance_voie_numeros(key,undefined)
+                    }).mouseout(function(event){
+                        fin_surbrillance_voie_numeros()
+                    })
+                }
+            }
+            $('#liste_recherche').tablesorter({
+                widthFixed : true,
+                widgets: [ 'stickyHeaders', 'filter' ],
+                widgetOptions: {
+                  stickyHeaders_attachTo : '#reponse #panneau_map #contenu'
+                }
+            });
 
             $('body').css('cursor','default');
             $('#wait_ajax').css('visibility','hidden');
@@ -1011,7 +1025,8 @@
                     style:'./'+STYLEFILE+'.style',
                     center: [mapx,mapy],
                     hash: 'map',
-                    zoom: mapz
+                    zoom: mapz,
+                    maxZoom: 20,
                 });
                 map.on('load', () => {
                     map_setup()
