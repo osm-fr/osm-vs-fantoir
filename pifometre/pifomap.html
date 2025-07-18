@@ -249,7 +249,7 @@
             map.on('click', (e) => {
                 if (typeof e.features == 'undefined'){
                     reset_panneau_map()
-                    affiche_index();
+                    $('#conteneur_index').css('display','block');
                 }
             })
         }

@@ -457,7 +457,7 @@
         history.replaceState("", "", window.location.pathname+"?"+window.location.search.replace(/\?/g,''))
     }
     function reset_panneau_map(){
-        $('#conteneur_index').empty().addClass('vide');
+        $('#conteneur_index').css('display','none');
         $('#panneau_map h2').empty()
         $('#panneau_map #boutons').empty()
         $('#infos_numero').empty();
