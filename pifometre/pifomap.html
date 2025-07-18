@@ -249,6 +249,7 @@
             map.on('click', (e) => {
                 if (typeof e.features == 'undefined'){
                     reset_panneau_map()
+                    $('#conteneur_index').css('display','block');
                 }
             })
         }
@@ -873,36 +874,7 @@
             map.getSource('adresses_BAN').setData(res_numero_BAN)
             map.getSource('hover_points').setData(res_hover_point)
 
-            $('#liste_recherche').empty()
-            $('#liste_recherche').append($('<thead>').append($('<tr>').append($('<th>').append('Index')))).append($('<tbody>'))
-
-            for (const [key, value] of emprises) {
-                if (key.indexOf(insee) !=0){
-                    [xmin,ymin,xmax,ymax,source_osm,rapproche] = value
-                    if (source_osm && rapproche){
-                        pastille = 'pastille-verte'
-                    } else if (source_osm) {
-                        pastille = 'pastille-bleue'
-                    } else {
-                        pastille = 'pastille-orange'
-                    }
-                    $('#liste_recherche').append($('<tr>').append($('<td>').append($('<span>').addClass(pastille)).append($('<span>').text(key))))
-                    $('#liste_recherche td:last').click(function(){
-                        centrage_sur_nom(key)
-                    }).mouseover(function(event){
-                        surbrillance_voie_numeros(key,undefined)
-                    }).mouseout(function(event){
-                        fin_surbrillance_voie_numeros()
-                    })
-                }
-            }
-            $('#liste_recherche').tablesorter({
-                widthFixed : true,
-                widgets: [ 'stickyHeaders', 'filter' ],
-                widgetOptions: {
-                  stickyHeaders_attachTo : '#reponse #panneau_map #contenu'
-                }
-            });
+            affiche_index();
 
             $('body').css('cursor','default');
             $('#wait_ajax').css('visibility','hidden');
@@ -1404,15 +1376,17 @@
 
     <div id="reponse" class="pifomap">
         <div id="panneau_map">
-            <div id="en_tete">
-                <h2></h2>
-                <div id="boutons"></div>
-            </div>
-            <div id="contenu">
-                <!-- <table id="liste_recherche"></table> -->
-                <div id="infos_numero"></div>
-                <div id="infos_voie_lieudit"></div>
-                <table id="pifomap_table_liens"></table>
+            <div id="conteneur_index"></div>
+            <div id="conteneur_infos_objet">
+                <div id="en_tete">
+                    <h2></h2>
+                    <div id="boutons"></div>
+                </div>
+                <div id="contenu">
+                    <div id="infos_numero"></div>
+                    <div id="infos_voie_lieudit"></div>
+                    <table id="pifomap_table_liens"></table>
+                </div>
             </div>
         </div>
         <div id="map_div">

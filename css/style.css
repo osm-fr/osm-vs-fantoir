@@ -616,7 +616,7 @@ fieldset legend {
 	text-align: center;
 	font-weight: bold;
 	background: #B2DF8A;
-  border-radius: 4px;
+	border-radius: 4px;
 	cursor:pointer;
 }
 
@@ -1374,15 +1374,54 @@ fieldset legend {
 	margin:0;
 	width:15%;
 	height:calc(100% - 4px);
-	overflow-y: auto;
+	/*overflow-y: auto;*/
 	border-radius: 6px;
 	border:2px solid lightblue;
 	border-bottom: 2px solid lightblue;
 }
+/*--------- Index voies et lieux-dits ---------*/
+#conteneur_index {
+	position: relative;
+	padding: 0 5px;
+	height: 95%;
+	overflow-y: auto;
+}
+#conteneur_index.vide{
+	height: unset;
+}
+/*#conteneur_index .en_tete {
+	margin:5px 0;
+	height: 30px;
+	background-color:#FEE9B4;
+	border-radius: 2px;
+}
+#conteneur_index h2 {
+	font-size: 1.1em;
+	line-height: 1.9em;
+	margin-left: 5px;
+}
+#conteneur_index .fermer {
+	color: black;
+	float: left;
+	height: 20px;
+	line-height: 20px;
+	width: 20px;
+	margin: 5px;
+	text-align: center;
+	font-weight: bold;
+	background: #B2DF8A;
+	border-radius: 3px;
+	cursor:pointer;
+}*/
+#conteneur_index tr:hover td {
+	cursor: pointer;
+	background-color: #FCFFB7;
+}
+/*--------- Infos objets de la carte ---------*/
 #panneau_map li {
 	line-height: 1.6em;
 }
-#panneau_map h2 {
+#panneau_map #conteneur_infos_objet h2 {
 	float: left;
 	margin: 15px 5px;
 	width: calc(100% - 70px);
@@ -1424,8 +1463,8 @@ fieldset legend {
 	font-size: 0.9em;
 }
 
-#panneau_map .pastille-verte, #panneau_map .pastille-orange {
-  margin: 2px 5px 0 0;
+#panneau_map .pastille-verte, #panneau_map .pastille-orange, #panneau_map .pastille-bleue {
+  margin: 2px 7px 0 0;
 }
 
 /*----------------------------------------------------------------------*/
