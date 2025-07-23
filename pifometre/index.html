@@ -33,6 +33,8 @@
 
     DELTA = 0.0008
 
+    RAZ_FILTRES = true
+
     affichage_pagine = false
 
     var table_data
@@ -97,6 +99,7 @@
         })
         .done(function( data ){
             if (data == '1'){
+                RAZ_FILTRES = false
                 requete_pifometre();
             } else {
                 alert('Problème lors de la mise à jour')
@@ -357,8 +360,8 @@
 
                 table_data = data
                 nb_lignes_total = table_data.length;
-
                 affiche_tableau(0)
+                RAZ_FILTRES = true
             })
             history.replaceState("", "", window.location.pathname+"?insee="+$('#input_insee')[0].value)
             $('body').css('cursor','default');
@@ -402,8 +405,6 @@
                 }))
             }
         }
-
-        reset_filtres()
         $('#'+table).trigger("destroy");
         $('#'+table).empty()
         $('#'+table).append($('<thead>').append($('<tr>').append($('<th>').append('Code Fantoir'))))
@@ -699,6 +700,13 @@
               stickyHeaders_attachTo : '#reponse'
             }
         });
+
+        if (RAZ_FILTRES){
+            reset_filtres()
+        } else {
+            show_mask_lines()
+            update_menu_filtres()
+        }
 
         //Classe pour les familles de lignes survolées
         $('#'+table+' tbody tr').mouseover(function(event){
