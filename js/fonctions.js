@@ -464,42 +464,6 @@
         $('#infos_voie_lieudit').empty();
         $('#pifomap_table_liens').empty();
     }
-    function affiche_index(){
-        $('#conteneur_index').empty().removeClass('vide');
-        /*$('#conteneur_index').append($('<div class="en_tete">')
-                                .append($('<span class="fermer">X</span><h2>Index</h2>'))
-                              )*/
-        $('#conteneur_index').append($('<table id="liste_recherche"></table>'))
-        $('#liste_recherche').append($('<thead>').append($('<tr>').append($('<th>').append('Index des voies et lieux-dits')))).append($('<tbody>'))
-
-        for (const [key, value] of emprises) {
-            if (key.indexOf(insee) !=0){
-                [xmin,ymin,xmax,ymax,source_osm,rapproche] = value
-                if (source_osm && rapproche){
-                    pastille = 'pastille-verte'
-                } else if (source_osm) {
-                    pastille = 'pastille-bleue'
-                } else {
-                    pastille = 'pastille-orange'
-                }
-                $('#liste_recherche').append($('<tr>').append($('<td>').append($('<span>').addClass(pastille)).append($('<span>').text(key))))
-                $('#liste_recherche td:last').click(function(){
-                    centrage_sur_nom(key)
-                }).mouseover(function(event){
-                    surbrillance_voie_numeros(key,undefined)
-                }).mouseout(function(event){
-                    fin_surbrillance_voie_numeros()
-                })
-            }
-        }
-        $('#liste_recherche').tablesorter({
-            widthFixed : true,
-            widgets: [ 'stickyHeaders', 'filter' ],
-            widgetOptions: {
-              stickyHeaders_attachTo : '#conteneur_index'
-            }
-        });
-    }
     function empty_layers(){
         map.getSource('points_nommes').setData(EMPTY_GEOJSON)
         map.getSource('contour_communal').setData(EMPTY_GEOJSON)

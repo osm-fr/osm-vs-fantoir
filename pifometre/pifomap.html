@@ -50,7 +50,7 @@
         //Sélection des onglets (stats / filtres / barres de progression)
 
         //Changement d'onglet
-        insee=check_url_for_insee()
+        // insee=check_url_for_insee()
 
         $('#bouton_pifoprogression').click(function(){
             if (!$(this).hasClass('onglet_actif')) {
@@ -90,10 +90,10 @@
 
         let [a_menus_labels,STATUS_FANTOIR] = get_labels_statut_fantoir()
 
-        insee = check_url_for_insee()
-        if (insee){
+        code_insee = check_url_for_insee()
+        if (code_insee){
             $('#input_insee').empty()
-            $('#input_insee')[0].value = insee
+            $('#input_insee')[0].value = code_insee
             requete_pifometre()
         } else {
             map = new maplibregl.Map({
@@ -351,6 +351,7 @@
             couche_carto == 'polygones' ||
             couche_carto == 'filaire_transparent' ||
             couche_carto.indexOf('points_nommes') == 0){
+
             map.on('click', couche_carto, (e) => {
                 if (e.originalEvent.defaultPrevented){
                     return 0
@@ -523,6 +524,43 @@
                 map.fitBounds([xmin,ymin,xmax,ymax])
             }
         })
+    }
+
+    function affiche_index(){
+        $('#conteneur_index').empty().removeClass('vide');
+        $('#conteneur_index').css('display','block');
+        /*$('#conteneur_index').append($('<div class="en_tete">')
+                                .append($('<span class="fermer">X</span><h2>Index</h2>'))
+                              )*/
+        $('#conteneur_index').append($('<table id="liste_recherche"></table>'))
+        $('#liste_recherche').append($('<thead>').append($('<tr>').append($('<th>').append('Index des voies et lieux-dits')))).append($('<tbody>'))
+
+        contenu_index_alpha = new Map([...contenu_index.entries()].sort());
+        for (const [key, value] of contenu_index_alpha) {
+            [source_osm,rapproche] = value
+            if (source_osm && rapproche){
+                pastille = 'pastille-verte'
+            } else if (source_osm) {
+                pastille = 'pastille-bleue'
+            } else {
+                pastille = 'pastille-orange'
+            }
+            $('#liste_recherche').append($('<tr>').append($('<td>').append($('<span>').addClass(pastille)).append($('<span>').text(key))))
+            $('#liste_recherche td:last').click(function(){
+                centrage_sur_nom(key)
+            }).mouseover(function(event){
+                surbrillance_voie_numeros(key,undefined)
+            }).mouseout(function(event){
+                fin_surbrillance_voie_numeros()
+            })
+        }
+        $('#liste_recherche').tablesorter({
+            widthFixed : true,
+            widgets: [ 'stickyHeaders', 'filter' ],
+            widgetOptions: {
+              stickyHeaders_attachTo : '#conteneur_index'
+            }
+        });
     }
 
     function centrage_sur_nom(nom){
@@ -791,6 +829,7 @@
                 raw_emprises] = data
 
             emprises = new Map(Object.entries(raw_emprises));
+            contenu_index = new Map()
 
             res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
             bbox = polycommunedata[0][0].coordinates
@@ -811,7 +850,7 @@
                 if (geom.type == 'LineString'||geom.type == 'MultiLineString'){
                     rapproche = fantoir != ''?true:false
                     res.features.push(get_geojson_poly(geom,{'nom':nom,'source':'OSM','fantoir':fantoir,'rapproche':rapproche,'within':within}))
-                    emprises.set(nom,emprises.get(nom).concat([true,rapproche]))
+                    contenu_index.set(nom,[true,rapproche])
                 }
             }
             map.getSource('hover_filaire').setData(res)
@@ -842,7 +881,7 @@
                  avec_adresses = cat[2] == 'B'?true:false;
                  nature = cat[3] == 'P'?'lieudit':'voie';
 
-                 emprises.set(nom,emprises.get(nom).concat([source == 'OSM',rapproche]))
+                 contenu_index.set(nom,[source == 'OSM',rapproche])
 
                  res_points_nommes.features.push(get_geojson_point(lon,lat,{'nom':nom,'source':source,'rapproche':rapproche,'fantoir':fantoir,'nature':nature,'nom_com':nom_commune,'statut':label_statut}))
             }
@@ -867,6 +906,9 @@
                 } else {
                     rapproche = cat[1] == 'O'?true:false;
                     res_numero_BAN.features.push(get_geojson_point(lon,lat,{'nom':nom,'fantoir':fantoir,'numero':numero,'source':source,'rapproche':rapproche,'nom_com':nom_commune}))
+                }
+                if (!contenu_index.has(nom)||rapproche){
+                    contenu_index.set(nom,[rapproche,rapproche])
                 }
                 res_hover_point.features.push(get_geojson_point(lon,lat,{'fantoir':fantoir,'nom':nom,'numero':numero}))
             }
