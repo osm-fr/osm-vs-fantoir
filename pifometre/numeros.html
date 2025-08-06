@@ -265,7 +265,10 @@
                                         ban_id] = data[l]
                                     parite = Number.parseInt(numero) % 2 == 0 ? 'pair':'impair';
                                     if (ban_id != undefined) {
-                                        ban_id_voie = ban_id.slice(0, 10);
+                                        ban_id_voie = ban_id.slice(0, ban_id.indexOf('_',6));
+                                        if (ban_id_voie.length == 10){
+                                            ban_id_voie = ban_id_voie.toUpperCase()
+                                        }
                                     } else {
                                         ban_id_voie = fantoir.slice(0,5)+'_'+fantoir.slice(5,9)
                                     }
@@ -319,7 +322,7 @@
                                         json_resp['positions'] = [{'point':{type:'Point',coordinates:[lon_osm,lat_osm]}}]
                                         $('#'+table+' tr:last').append($('<td class="remontee_ban">')
                                                                     .append($('<a class="remontee_ajout_numero" target="_blank" title="Signaler un problème dans la BAN : Numéro à ajouter">')
-                                                                    .attr('href', 'https://signalement.adresse.data.gouv.fr/#/'+ban_id_voie.toUpperCase()+'?sourceId=e32cd3e1-b19d-4a49-9aee-31a7929a8ead&type=LOCATION_TO_CREATE&changesRequested='+JSON.stringify(json_resp))
+                                                                    .attr('href', 'https://signalement.adresse.data.gouv.fr/#/'+ban_id_voie+'?sourceId=e32cd3e1-b19d-4a49-9aee-31a7929a8ead&type=LOCATION_TO_CREATE&changesRequested='+JSON.stringify(json_resp))
                                                                         .append($('<span class="remontee_ajout_numero">')
                                                                         )
                                                                     )
@@ -327,7 +330,7 @@
                                     }
 
                                     //LIENS SIGNALEMENTS AU-DESSUS DU TABLEAU
-                                    $('.remontee_edit_voie').attr('href', 'https://signalement.adresse.data.gouv.fr/#/'+ban_id_voie.toUpperCase()+'?sourceId=e32cd3e1-b19d-4a49-9aee-31a7929a8ead&type=LOCATION_TO_UPDATE')
+                                    $('.remontee_edit_voie').attr('href', 'https://signalement.adresse.data.gouv.fr/#/'+ban_id_voie+'?sourceId=e32cd3e1-b19d-4a49-9aee-31a7929a8ead&type=LOCATION_TO_UPDATE')
 
                                     //---COLONNE ZOOMER---
                                     $('#'+table+' tr:last').append($('<td class="zoom">')
