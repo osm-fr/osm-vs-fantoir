@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comment corriger les voies à cheval ?</title>
+    <script src="../js/jquery-3.6.4.min.js"></script>
+    <script src="../js/fonctions.js"></script>
+    <script defer src="../js/menu.js"></script>
+
+    <link rel="icon" type="image/png" href="../img/logo/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../img/logo/favicon.svg" />
+    <link rel="shortcut icon" href="../img/logo/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../img/logo/apple-touch-icon.png" />
+    <link rel="manifest" href="../img/logo/site.webmanifest" />
+
+    <link rel="preload" href="../css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="../css/style.css" type="text/css"/>
+    <link rel="stylesheet" href="../css/responsive.css" type="text/css"/>
+</head>
+<body>
+    <header>
+        <!--#include virtual="../includes/menu.html" -->
+    </header>
+
+    <div id="aide_contenu" class="fiche unecol">
+        <h1>Foire aux Questions</h1>
+        <p></p>
+        <!-------- Partie 1 -------->
+        <div class="bloc_fiche b1">
+            <h2>Pifomètre</h2>
+            <div class="question">
+                <h4>Quand verrai-je la prise en compte de mes contributions sur OSM dans Pifomètre / Pifomap ?</h4>
+                <div class="faq_reponse">D'abord, ensuite, enfin</div>
+            </div>
+            <div class="question">
+                <h4>Question 2</h4>
+                <div class="faq_reponse">D'abord, ensuite, enfin</div>
+            </div>
+            <div class="question">
+                <h4>Les voies apparaissent en doublon (voire triplons ou quadruplons...) dans le tableau.</h4>
+                <div class="faq_reponse">C'est un bug connu, qui se produit quand on met à jour les données Bano de la commune plusieurs fois d'affilée. Attendre quelques minutes, puis relancer une unique mise à jour avec le bouton bleu et les choses devraient rentrer dans l'ordre. Un correctif du bug est en cours de développement.</div>
+            </div>
+        </div>
+
+        <!-------- Partie 2 -------->
+        <div class="bloc_fiche b2">
+            <h2>Pifomap</h2>
+            <div class="question">
+                <h4>Question</h4>
+                <div class="faq_reponse">D'abord, ensuite, enfin</div>
+            </div>
+            <div class="question">
+                <h4>Question 2</h4>
+                <div class="faq_reponse">D'abord, ensuite, enfin</div>
+            </div>
+            <div class="question">
+                <h4>Question 3</h4>
+                <div class="faq_reponse">D'abord, ensuite, enfin</div>
+            </div>
+        </div>
+
+        <!-------- Partie 3 -------->
+        <div class="bloc_fiche b2">
+            <h2>Les sources de données</h2>
+            <div class="question">
+                <h4>Topo, Fantoir... Ca veut dire quoi tout ça ?</h4>
+                <div class="faq_reponse">D'abord, ensuite, enfin</div>
+            </div>
+            <div class="question">
+                <h4>Question 2</h4>
+                <div class="faq_reponse">D'abord, ensuite, enfin</div>
+            </div>
+            <div class="question">
+                <h4>Question 3</h4>
+                <div class="faq_reponse">D'abord, ensuite, enfin</div>
+            </div>
+        </div>
+
+        <!-------- Partie 4 -------->
+        <div class="bloc_fiche b1">
+            <h2>Intégration d'adresses</h2>
+            <div class="question">
+                <h4>Sur Pifomap, j'ai une voie avec des points d'adresse bleus et des points rouges, car la BAN connaît cette voie sous un mauvais nom (ex "RD 571") et qu'il n'y a pas de code Fantoir. Que faire pour rapprocher les adresses et les passer en vert ?</h4>
+                <div class="faq_reponse">Rien... </div>
+            </div>
+            <div class="question">
+                <h4>Question 2</h4>
+                <div class="faq_reponse">D'abord, ensuite, enfin</div>
+            </div>
+            <div class="question">
+                <h4>Question 3</h4>
+                <div class="faq_reponse">D'abord, ensuite, enfin</div>
+            </div>
+        </div>
+    </div>
+    <!--#include virtual="../includes/feedback.html" -->
+
+    <script>
+        update_menu_visits();
+
+        $(document).ready(function() {
+          $(".question h4").click(function() {
+              // Check to see if there is a toggled question and close it.
+              if ($('.faq_reponse').is(':visible')) {
+                  $(".faq_reponse").slideUp(300);
+                  $('.question').removeClass("open");
+                  $('h4').removeClass("open");
+              }
+              if ($(this).next(".faq_reponse").is(':visible')) {
+                  // If user clicks on an open question, closed it. Remove css classes.
+                  $(this).next(".faq_reponse").slideUp(300);
+                  $(this).parent().removeClass("open");
+                  $(this).removeClass("open");
+              } 
+              else { 
+                  // If user clicks on a question with an hidden answer, slideDown the answer and apply css classes.
+                  $(this).next(".faq_reponse").slideDown(300);
+                  $(this).parent().addClass('open');
+                  $(this).addClass('open');
+              }
+          });
+        });
+    </script>
+</body>
+</html>

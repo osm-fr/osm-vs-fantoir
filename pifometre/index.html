@@ -588,14 +588,18 @@
                         $('#'+table+' tr:last td:last').append($('<button class="picto_tableau copier_voie_bancad" title="Copier le nom du lieu-dit"></button>'))
                         }
                     }
+
                     else if (source_nom_ban == 'BAN') {
-                        $('#'+table+' tr:last').append($('<td>').append($('<span class="picto_tableau ban" title="Nom provenant de la BAN">'))
-                                                                .append($('<span class="nom_ban">').attr('texte_voie_a_copier',nom_ban).text(nom_ban))
-                                                        )
-                        if ($('#'+table+' tr:last').hasClass('nom_a_integrer')){
-                        $('#'+table+' tr:last td:last').append($('<button class="picto_tableau copier_voie_bancad" title="Copier le nom de la voie"></button>'))
+                        $('#'+table+' tr:last').append($('<td>').append($('<span class="picto_tableau ban" title="Nom provenant de la BAN">')))
+
+                        if ($('#'+table+' tr:last').hasClass('nom_a_integrer')){ 
+                            $('#'+table+' tr:last td:last').append($('<span class="nom_ban">').attr('texte_voie_a_copier',nom_ban).html(nom_ban+'&nbsp;<div class="picto_tableau copier_voie_bancad" title="Copier le nom de la voie"></div>'))
+                        }
+                        else {
+                            $('#'+table+' tr:last td:last').append($('<span class="nom_ban">').attr('texte_voie_a_copier',nom_ban).text(nom_ban))
                         }
                     }
+
                     else $('#'+table+' tr:last').append($('<td>').text(nom_ban))
 
                     $('#'+table+' tr:last td:last button.copier_voie_bancad').click(function(){
@@ -807,7 +811,7 @@
             <button id="bouton_refresh" class="inactif"></button>
             <div id="refresh_infobulle"></div>
             <button id="bouton_export_csv" class="inactif" title="Exporter le tableau en CSV"></button>
-            <button id="bouton_aide" title="Ouvrir la page d'aide" onclick="window.open('aide.html', '_blank');"></button>
+            <button id="bouton_aide" title="Ouvrir la page d'aide" onclick="window.open('../aide/pifometre.html', '_blank');"></button>
         </div>
 
         <!--------------------------- ------------------->
@@ -929,6 +933,7 @@
     <div id="reponse" class="pifo">
         <table id="table_pifometre" class="avec_statuts"></table>
     </div>
+    <!--#include virtual="../includes/feedback.html" -->
     <footer>
     <!--#include virtual="../includes/footer.html" -->
     </footer>

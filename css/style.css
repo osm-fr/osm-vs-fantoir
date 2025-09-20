@@ -54,9 +54,9 @@ hr {border: lightgrey solid 1px;}
 	font-weight: bold;
 }
 img.logo {
-  width:40px;
-  height:40px;
-  margin:-2px 5px 0 0;
+  width:45px;
+  height:45px;
+  margin:-2px 10px 0 0;
   vertical-align:middle
 }
 fieldset {
@@ -90,9 +90,13 @@ fieldset legend {
 }
 #aide_contenu {
 	float: left;
-	margin: 40px 1%;
+	margin: 50px 3%;
 	font-size: 0.9em;
 	columns: 2;
+}
+#aide_contenu.unecol {
+	columns: 1;
+	margin: 50px 20%;
 }
 #aide_contenu.parametres {
 	margin: 5% 20%;
@@ -413,6 +417,120 @@ fieldset legend {
 #barre-jaune input[type="text"] {
     border: 1px solid #777;
     border-radius: 3px;
+}
+
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+/*---------------                                                       ---------------*/
+/*---------------                   BOUTON FEEDBACK                     ---------------*/
+/*---------------                                                       ---------------*/
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+
+#bouton_feedback {
+	z-index: 2;
+    position: fixed;
+    width: /*45px*/30px;
+    height: 100px;
+    top: 75%;
+    right: 0;
+    background: #ADD8E6;
+    cursor: pointer;
+}
+#bouton_feedback:hover {
+	width: /*50px*/30px;
+}
+#bouton_feedback span {
+    transform: rotate(-90.1deg);
+    -webkit-transform: rotate(-90.1deg);
+    -ms-transform: rotate(-90.1deg);
+    position: absolute;
+    right: /*-16px*/-23px;
+    top: /*30px*/38px;
+    color: #000;
+    font-size: 0.9em;
+}
+#bouton_feedback.ouvert {
+    right:400px;
+}
+
+#fenetre_feedback {
+	z-index: 1;
+	position: fixed;
+	top: 70%;
+	right: -401px;
+	width: 380px;
+	height: 200px;
+	background: #ECF5F9;
+	padding: 10px;
+    font-size: 0.9em;
+}
+#fenetre_feedback.ouvert {
+	right: 0;
+}
+#fenetre_feedback p {
+	font-size: 0.9em;
+	margin: 5px 0;
+}
+#fenetre_feedback h3 {
+	margin: 7px 0;
+}
+
+#bouton_feedback, #fenetre_feedback {
+    transition: 0.3s ease-out;
+    border-left: 1px solid #3FA4C5;
+    border-top: 1px solid #3FA4C5;
+    border-bottom: 2px solid #3FA4C5;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+/*---------------                                                       ---------------*/
+/*---------------                         FAQ                           ---------------*/
+/*---------------                                                       ---------------*/
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+.question {
+	border-radius: 6px;
+	background: white;
+	transition: all 0.5s ease;
+	margin: 10px 0 15px 0;
+	border:1px solid #B1DE89;
+}
+.question.open {
+	-webkit-box-shadow: 0px 0px 17px -1px rgba(0,0,0,0.13);
+	-moz-box-shadow: 0px 0px 17px -1px rgba(0,0,0,0.13);
+	box-shadow: 0px 0px 17px -1px rgba(0,0,0,0.13);
+}
+.question h4 {
+	border-radius: 6px;
+	margin: 0;
+	padding: 10px 35px 10px 10px;
+	font-weight: 400;
+	font-size: 1.1em;
+	cursor: pointer;
+	background: url("../img/plus.png") no-repeat;
+}
+.question h4:hover {
+	background: url("../img/plus.png") no-repeat #B1DE89;
+}
+.question h4.open {
+	border-radius: 6px;
+	margin: 0px;
+	cursor: pointer;
+	background: url("../img/moins.png") no-repeat #B1DE89;
+}
+.question h4, .question h4:hover, .question h4.open {
+	background-position: right 2% top 50%;
+	background-size: 12px;
+}
+
+.question .faq_reponse { 
+  display: none; 
+  padding: 10px;
+  line-height: 28px;
 }
 
 /*-------------------------------------------------------------------------------------*/
@@ -1902,7 +2020,7 @@ span.remontee_ajout_numero {
 }
 #reponse.pifo{
 	margin-top:260px;
-	height: calc(100vh - 280px);
+	height: calc(100vh - 265px);
 	border-bottom: 1px solid lightgrey;
 }
 #reponse.pifomap, #reponse.voies_a_cheval{
@@ -2327,11 +2445,12 @@ td.cell_statut {
 footer {
 	position: fixed;
 	bottom:0;
-	width:100%;
-	height:20px;
-	padding:5;
+	right: 0;
+	height:18px;
+	padding:0 10px;
 	z-index: 4;
-	background:darkgrey;
-	text-align: left;
-	font-size: 0.8em;
+	background-color:rgba(173,216,230,.9);
+	border-radius: 3px;
+	text-align: right;
+	font-size: 0.7em;
 }

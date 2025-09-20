@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset='UTF-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aide</title>
+    <script src="js/jquery-3.6.4.min.js"></script>
+    <script src="js/fonctions.js"></script>
+    <script defer src="js/menu.js"></script>
+
+    <link rel="icon" type="image/png" href="img/logo/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="img/logo/favicon.svg" />
+    <link rel="shortcut icon" href="img/logo/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="img/logo/apple-touch-icon.png" />
+    <link rel="manifest" href="img/logo/site.webmanifest" />
+
+    <link rel="preload" href="css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel='stylesheet' href='css/style.css' type="text/css">
+    <link rel="stylesheet" href="css/responsive.css" type="text/css"/>
+</head>
+<body>
+    <header>
+        <!--#include virtual="includes/menu.html" -->
+    </header>
+    <div id="aide_contenu" class="unecol">
+        <h1><img class='logo' src='img/aide2.png' alt=''/>Aide</h1>
+
+        <div class="bloc_fiche b1">
+            <h2><img class='picto' src='img/glossaire.png' alt=''/><a href="aide/glossaire.html">Glossaire</a></h2>
+            <p>Bal, Ban, Bano, Fantoir, Topo, rapprocher, dégommer du rouge... Ca veut dire quoi, tout ça ?</p>
+        </div>
+
+        <div class="bloc_fiche b2">
+            <h2>FAQ</h2>
+            <p>Bientôt...</p>
+        </div>
+
+        <div class="bloc_fiche b1">
+            <h2><img class='picto' src='img/video.png' alt=''/><a href="/videos.html">Vidéos</a></h2>
+            <p>Tutos et présentations au State of the Map France : quelques vidéos explicatives sur les outils autour de Bano.</p>
+        </div>
+
+        <div class="bloc_fiche b2">
+            <h2><img class='picto' src='img/aide.png' alt=''/>Aide par outil</h2>
+            <p><a href="/aide/pifometre.html">Aide de Pifomètre</a></p>
+            <p><a href="/aide/pifodrome.html">Aide de Pifodrome</a></p>
+        </div>
+    </div>
+
+    <script>
+        update_menu_visits();
+    </script>
+<!--#include virtual="includes/feedback.html" -->
+</body>
+</html>
