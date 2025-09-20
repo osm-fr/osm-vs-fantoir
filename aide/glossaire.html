@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glossaire</title>
+    <script src="../js/jquery-3.6.4.min.js"></script>
+    <script src="../js/fonctions.js"></script>
+    <script defer src="../js/menu.js"></script>
+
+    <link rel="icon" type="image/png" href="../img/logo/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../img/logo/favicon.svg" />
+    <link rel="shortcut icon" href="../img/logo/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../img/logo/apple-touch-icon.png" />
+    <link rel="manifest" href="../img/logo/site.webmanifest" />
+
+    <link rel="preload" href="../css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="../css/style.css" type="text/css"/>
+    <link rel="stylesheet" href="../css/responsive.css" type="text/css"/>
+</head>
+<body>
+    <header>
+        <!--#include virtual="../includes/menu.html" -->
+    </header>
+
+    <div id="aide_contenu" class="fiche unecol">
+        <h1><img class='logo' src='../img/glossaire.png' alt=''/>Glossaire</h1>
+        
+        <h3 id="bal">Adresse</h3>
+        <p>Une adresse dans OSM est, la plupart du temps, la combinaison d'un nom et d'un numéro (parfois, une adresse dans un lieu-dit n'a pas de numéro). Le nom est celui d'une voie (rue, avenue, place, etc.), tagué avec <span class="monospace">addr:street</span>, ou celui d'un lieu-dit, avec <span class="monospace">addr:place</span>. Le numéro est tagué avec <span class="monospace">add:housenumber</span>.</p>
+        <p>Pifomètre et cie permettent de visualiser les adresses, à partir de la BAN et du Cadastre, et simplifier leur intégration dans OSM.</p>
+
+        <h3 id="bal">Adresse certifiée</h3>
+        <p>Une adresse certifiée est une adresse déclarée comme "certifiée" par la commune. Attention : ce n'est pas toujours gage de qualité (<a href="https://forum.openstreetmap.fr/t/quelles-adresses-de-la-ban-integrer-dans-osm/24158">explication et exemples</a>).</p>
+
+        <h3 id="bal">BAL</h3>
+        <p>Une Base Adresse Locale est une base de données référençant toutes les adresses d'une commune (numéro, nom de voie et position géographique). Elle est établie par la commune elle-même.</p>
+
+        <h3 id="ban">BAN</h3>
+        <p><p>La Base Adresse Nationale regroupe toutes les <a href="#bal">BAL</a> publiées par les communes. Quand il n'existe pas de BAL dans une commune, la BAN est remplie par d'autres base d'adresses fournies par l'IGN, l'Arcep, la <abbr title="Direction Générale des Finances Publiques">DGFiP</abbr>... La BAN est gérée par l'IGN, la direction interministérielle du numérique (Dinum) et l'Agence nationale de la cohésion des territoires (ANCT). Elle est consultable sur le site <a href="https://adresse.data.gouv.fr/">adresse.data.gouv.fr</a>.</p>
+        <p>Les adresses de la BAN apparaissent comme source dans <a href="#pifometre">Pifomètre</a> et Pifomap, d'où elles peuvent être intégrées facilement dans OpenStreetMap.</p>
+
+        <h3 id="bano">BANO</h3>
+        <p>BANO est l'acronyme de Base d'Adresses Nationale Ouverte. C'est le projet lancé en 2014 par OSM France pour constituer une base d'adresses en combinant plusieurs sources, dont OSM qui est toujours la source privilégiée. Au départ, c'était complété majoritairement par le <a href="#cadastre">cadastre</a>, le fichier <a href="#fantoir">Fantoir</a>, et quelques bases locales en open data publiées par certaines villes.</p>
+        <p>L'apparition de BANO a provoqué (littéralement) l'émergence de la BAN, qui est désormais une source majeure pour BANO (emoji recyclage) pour les noms de voies et les numéros. Fantoir (renommé Topo en 2023) reste aujourd'hui une source essentielle. Le cadastre ne fournit plus que des noms et positions de lieux-dits.</p>
+
+        <h3 id="cadastre">Cadastre</h3>
+        <p>Le plan cadastral consultable à <a href="https://www.cadastre.gouv.fr">cadastre.gouv.fr</a> est une source autorisée pour la contribution OSM depuis 2008. Elle a d'abord permis de tracer sur OSM des contours communaux, bâtiments, noms de voies et numéros d'adresses. En 2013 a commencé l'extraction automatisée des numéros depuis les versions imprimables (en PDF) du plan vectoriel, donnant naissance à un premier service d'intégration d'adresses pour OSM. L'usage massif de cette source a permis à <a href="#bano">Bano</a> de voir le jour, en combinant les adresses extraites du cadastre avec celles présentes dans OSM, complétées par quelques fichiers locaux d'open data. Depuis la publication de la <a href="#ban">BAN</a> vers 2019, les numéros issus du cadastre ne sont plus utilisés pour Bano. Le cadastre reste fournisseur d'informations (contours et noms) de lieux-dits utilisé pour les <a href="#rapprocher">rapprochements</a>, et visible dans Pifomètre et Pifomap.</p>
+
+        <h3 id="degommer">Dégommer du rouge</h3>
+        <p><a href="#bano">Bano</a> n'avait que quelques jours quand l'expression "dégommer du rouge" <a href="https://lists.openstreetmap.org/pipermail/talk-fr/2014-May/068224.html">est apparue</a>. Les données agrégées dans BANO pouvaient être visualisées sur un rendu carto concocté par Christian Quest : on voyait en vert les données d'OSM, en bleu les données du cadastre existant aussi dans OSM (dont les adresses, car il n'y avait pas encore la BAN), et en rouge les données du cadastre non retrouvées dans OSM. Très vite, l'activité principale pour améliorer BANO et OSM est devenue le "dégommage de rouge". C'est encore vrai aujourd'hui avec la visualisation carto de Pifomap : le but est de faire disparaître tout ce rouge !</p>
+
+        <h3 id="fantoir">Fantoir</h3>
+        <p>Fantoir est l'ancien nom du fichier produit par la <abbr title="Direction Générale des Finances Publiques">DGFiP</abbr>, qui liste tous les lieux-dits, voies, et ensemble immobiliers par commune. Le fichier Fantoir a été renommé Topo en 2023. Sur Pifomètre et cie, on continue de dire "code Fantoir" pour désigner le code unique à 9 chiffres qui identifie chaque voie ou lieu-dit. On retrouve ce code dans OSM via le tag <span class="monospace">ref:FR:FANTOIR</span>.</p>
+
+        <h3 id="integrer">Intégrer</h3>
+        <p>Intégrer un nom de voie, de lieu-dit, ou une adresse par exemple, c'est l'ajouter dans OSM en s'appuyant sur une ou plusieurs sources (Topo, Cadastre, BAN...).</p>
+
+        <h3 id="lieudit">Lieu-dit</h3>
+        <p>Un lieu-dit est un endroit, possédant un nom, tagué dans OSM avec la clé <span class="monospace">place</span> plutôt que <span class="monospace">highway</span>. Cela va du lieu inhabité au village de quelques centaines d'habitants, en passant par les fermes et hameaux, ou des quartiers urbains. Les adresses associées aux lieux-dits utilisent le schéma de tags <span class="monospace">addr:place</span> et <span class="monospace">addr:housenumber</span>.</p>
+
+        <h3 id="pifometre">Pifomètre</h3>
+        <p>Pifomètre est le nom depuis 2022 d'un outil de comparaison entre données OSM et données de sources externes (<a href="topo">Topo</a>, <a href="ban">BAN</a>, <a href="cadastre">cadastre</a>, <abbr title="Code Officiel Géographique">COG</abbr>). Pifomètre est l'acronyme de "Page d'Interconnexion Fantoir-OSM pour Minimiser l'Énorme Tas des Rues Égarées". <a href="https://lists.openstreetmap.org/pipermail/talk-fr/2014-October/071887.html">Au départ</a> simple page "listing" avec les noms issus de FANTOIR et ceux d'OSM, l'outil a évolué pour simplifier l'<a href="integrer">intégration</a> de données (voies et adresses). D'autres outils se sont greffés, toujours dans l'idée de faciliter la contribution OSM sur ces thématiques : une visualisation cartographique (Pifomap), des listes de voies manquantes par département, etc.</p>
+        <p>On parle parfois de "Pifomètre" pour désigner l'ensemble des outils. Mais au sens strict, Pifomètre est juste la version "listing" sous forme de tableau.</p>
+
+        <h3 id="rapprocher">Rapprocher</h3>
+        <p></p>
+        <p> Dans chaque commune, Pifomètre compare les noms de voies et lieux-dits qu'on trouve dans OSM et ceux proposés par des sources tierces : <a href="topo">Topo</a> ou <a href="ban">BAN</a>. La comparaison des noms autorise quelques variantes (accents, capitales, ponctuation) mais reste volontairement intolérante aux nuances d'orthographe : abréviations, ou lettres différentes.</p>
+        <p>On dit qu'un nom de voie ou lieu-dit est "rapproché" s'il figure dans OSM et qu'on a réussi à le retrouver dans une autre source : en priorité Topo, et sinon la Ban. Cela suggère qu'a priori, cet endroit est correctement intégré à OSM.</p>
+        <p>Quand un nom de voie ou de lieu-dit n'est "pas rapproché", on n'a pas réussi à établir de correspondance entre OSM et les sources tierces. C'est souvent le signe qu'il faut ajouter ou corriger ce nom dans OSM :</p>
+        <ul><li>soit l'objet (rue ou lieu-dit) n'existe pas, et il faut le tracer puis le nommer.</li>
+        <li>soit l'objet existe mais sans nom, et il faut l'ajouter.</li>
+        <li>soit l'objet existe avec un nom erroné ou ancien, et il faut le corriger.</li></ul>
+        <p>(Parfois, le nom dans OSM est correct et c'est le nom venu de la source tierce qui est faux. Il faut alors laisser intact le nom dans OSM, bien sûr. On peut éventuellement "forcer le rapprochement" sur Pifomètre pour faire apparaître la voie ou le lieu-dit en vert, en ajoutant dans OSM le tag <span class="monospace">ref:FR:FANTOIR</span> avec le code Fantoir correspondant au nom de la voie.)</p>
+
+        <h3 id="topo">Topo</h3>
+        <p>Le fichier Topo est le nouveau nom (depuis 2023) du fichier Fantoir. Produit par la <abbr title="Direction Générale des Finances Publiques">DGFiP</abbr>, il liste tous les lieux-dits, voies, et ensemble immobiliers par commune (sans positionnement géographique). Il est mis à jour mensuellement (environ). Le fichier Topo est l'une des sources affichées dans la page Pifomètre d'une commune.</p>
+
+        <h3 id="voie">Voie</h3>
+        <p>Dans le contexte Bano/Pifomètre, une voie est tout endroit :</p> 
+        <ul><li>nommé</li>
+        <li>susceptible d'être combiné à des numéros pour former des adresses</li>
+        <li>et qui n'est pas un lieu-dit.</li></ul>
+        "Voie" est donc une catégorie fourre-tout, qui regroupe rues, places, lotissements, etc. Pour décrire ces endroits sur OSM, on utilise principalement la clé <span class="monospace">highway</span> et bien sûr la clé <span class="monospace">name</span>. Les adresses associées utilisent de préférence les clés <span class="monospace">addr:street</span> et <span class="monospace">addr:housenumber</span>.</p>
+    </div>
+    <!--#include virtual="../includes/feedback.html" -->
+
+    <script>
+        update_menu_visits();
+    </script>
+</body>
+</html>
