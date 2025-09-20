@@ -590,13 +590,10 @@
                     }
 
                     else if (source_nom_ban == 'BAN') {
-                        $('#'+table+' tr:last').append($('<td>').append($('<span class="picto_tableau ban" title="Nom provenant de la BAN">')))
-
+                        $('#'+table+' tr:last').append($('<td>').append($('<span class="picto_tableau ban" title="Nom provenant de la BAN">'))
+                                                                .append($('<span>').attr('texte_voie_a_copier',nom_ban).text(nom_ban)))
                         if ($('#'+table+' tr:last').hasClass('nom_a_integrer')){ 
-                            $('#'+table+' tr:last td:last').append($('<span class="nom_ban">').attr('texte_voie_a_copier',nom_ban).html(nom_ban+'&nbsp;<div class="picto_tableau copier_voie_bancad" title="Copier le nom de la voie"></div>'))
-                        }
-                        else {
-                            $('#'+table+' tr:last td:last').append($('<span class="nom_ban">').attr('texte_voie_a_copier',nom_ban).text(nom_ban))
+                            $('#'+table+' tr:last td:last').append($('<button class="picto_tableau copier_voie_bancad" title="Copier le nom de la voie"></button>'))
                         }
                     }
 
