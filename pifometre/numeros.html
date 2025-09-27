@@ -316,7 +316,7 @@
                                         json_resp = {}
                                         numero_int = parseInt(numero)
                                         if (numero != numero_int){
-                                            json_resp['suffixe'] = numero.slice(numero_int.toString().length)
+                                            json_resp['suffixe'] = numero.slice(numero_int.toString().length).trim()
                                         }
                                         json_resp['numero'] = numero_int
                                         json_resp['positions'] = [{'point':{type:'Point',coordinates:[lon_osm,lat_osm]}}]
