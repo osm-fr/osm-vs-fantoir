@@ -168,10 +168,13 @@
         width: 100%;
     }
     .navigation h1 a{font-size: 0.8em;}
+    #bouton_feedback {top:60%;}
+    #bouton_feedback.ouvert {right:320px;}
+    #fenetre_feedback {top:55%; width:300px;}
     #bandeau {top:60px;}
     #instructions{margin: 5px 5%; font-size: 1.2em;}
     #wait_ajax, #refresh_infobulle, #pifostats, #pifofiltres, #pifoprogression, #onglets, #bouton_legende, #bouton_aleatoire, #bouton_communes_voisines,
-    #panneau_map #espace_bouton_copier, #panneau_map #contenu, #bouton_export_csv, #bouton_aide {display: none;}
+    #panneau_map #espace_bouton_copier, #panneau_map #contenu, #panneau_map #conteneur_index, #bouton_export_csv, #bouton_aide {display: none !important;}
     #bouton_refresh, #bouton_refresh.inactif {width: 30px; height: 30px; right: 45px; top:15px; background-size: 25px;}
     #wait_ajax.pifomap {width: 30px; height: 30px; right: 45px; top:15px; background-size: 25px;}
     #wait_ajax_mobile {
