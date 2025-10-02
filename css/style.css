@@ -428,7 +428,7 @@ fieldset legend {
 /*-------------------------------------------------------------------------------------*/
 
 #bouton_feedback {
-	z-index: 2;
+	z-index: 4;
     position: fixed;
     width: /*45px*/30px;
     height: 100px;
@@ -455,7 +455,7 @@ fieldset legend {
 }
 
 #fenetre_feedback {
-	z-index: 1;
+	z-index: 4;
 	position: fixed;
 	top: 70%;
 	right: -401px;
@@ -1110,6 +1110,11 @@ fieldset legend {
 	display: inline-block;
 }
 
+#infos_commune_col2 h1 img {
+	width: 22px;
+	margin-left: 15px;
+}
+
 #recentrer_commune {
 	cursor: pointer;
 	vertical-align: middle;
@@ -1507,39 +1512,12 @@ fieldset legend {
 #conteneur_index.vide{
 	height: unset;
 }
-/*#conteneur_index .en_tete {
-	margin:5px 0;
-	height: 30px;
-	background-color:#FEE9B4;
-	border-radius: 2px;
-}
-#conteneur_index h2 {
-	font-size: 1.1em;
-	line-height: 1.9em;
-	margin-left: 5px;
-}
-#conteneur_index .fermer {
-	color: black;
-	float: left;
-	height: 20px;
-	line-height: 20px;
-	width: 20px;
-	margin: 5px;
-	text-align: center;
-	font-weight: bold;
-	background: #B2DF8A;
-	border-radius: 3px;
-	cursor:pointer;
-}*/
-#conteneur_index tr:hover td {
-	cursor: pointer;
-	background-color: #FCFFB7;
-}
+
 /*--------- Infos objets de la carte ---------*/
 #panneau_map li {
 	line-height: 1.6em;
 }
-#panneau_map #conteneur_infos_objet h2 {
+#panneau_map #conteneur_infos_objet h2, #panneau_map h2 {
 	float: left;
 	margin: 15px 5px;
 	width: calc(100% - 70px);
