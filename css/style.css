@@ -2101,6 +2101,9 @@ table tr.static td {
   display: inline-block;
   margin: 2px 5px 0 5px;
 }
+.picto_tableau.bdtopo {
+  background: url("../img/bdtopo.png") no-repeat;
+}
 .picto_tableau.cadastre {
   background: url("../img/cadastre.png") no-repeat;
 }

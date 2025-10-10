@@ -10,7 +10,6 @@ FROM    (SELECT *,
             WHERE   __condition_fantoir_unique__
                     code_insee = '__code_insee__')r
 WHERE   rang = 1),
-
 diff_numero_fantoir
 AS
 (SELECT uppernumero,
@@ -31,13 +30,11 @@ FROM    bano_adresses
 WHERE   __condition_fantoir_unique__
         code_insee = '__code_insee__' AND
         source = 'OSM'),
-
 fantoir_numeros_manquants
 AS
 (SELECT DISTINCT fantoir,count(*) AS a_proposer
 FROM    diff_numero_fantoir
 GROUP BY 1),
-
 geom_adresses
 AS
 (SELECT DISTINCT fantoir,
@@ -45,7 +42,6 @@ AS
  FROM    bano_adresses
  WHERE   __condition_fantoir_unique__
          code_insee = '__code_insee__'),
-
 fantoir_avec_adresses_ban
 AS
 (SELECT DISTINCT fantoir,true AS fantoir_avec_adresses_ban
@@ -53,7 +49,6 @@ AS
  WHERE  __condition_fantoir_unique__
         code_insee = '__code_insee__' AND
         source = 'BAN'),
-
 noms_osm
 as
 (SELECT fantoir,
@@ -72,7 +67,6 @@ FROM    (SELECT DISTINCT fantoir,
               code_insee = '__code_insee__' AND
               source = 'OSM') s
 GROUP BY 1,3),
-
 pn
 AS
 (SELECT fantoir,
@@ -90,8 +84,6 @@ USING (nom)
 WHERE   code_insee = '__code_insee__' AND
         source = 'OSM' AND
         nom_tag = 'name')
-
-
 SELECT t.fantoir,
        TO_CHAR(TO_TIMESTAMP(t.date_creation::text,'YYYYMMDD'),'YYYY-MM-DD'),
        CASE t.date_annul
@@ -103,8 +95,8 @@ SELECT t.fantoir,
        nb.nom AS nom_ban,
        nb.source AS source_nom,
        nb.nom_ancienne_commune,
-       COALESCE(ST_X(g.geometrie),pn.lon,place.lon,NULL),
-       COALESCE(ST_Y(g.geometrie),pn.lat,place.lat,NULL),
+       COALESCE(ST_X(g.geometrie),pn.lon,place.lon,bdt.lon,NULL),
+       COALESCE(ST_Y(g.geometrie),pn.lat,place.lat,bdt.lat,NULL),
        COALESCE(s.id_statut,0),
        a_proposer,
        t.caractere_annul,
@@ -140,6 +132,15 @@ LEFT OUTER JOIN (SELECT fantoir,
                                 nature IN ('place','lieu-dit') AND
                                 nom_tag in ('name','nom_cadastre')) p
                  WHERE rang = 1) place
+USING (fantoir)
+LEFT OUTER JOIN (SELECT fantoir,
+                        lon,
+                        lat
+                FROM    bano_points_nommes
+                WHERE   __condition_fantoir_unique__
+                        code_insee = '__code_insee__' AND
+                        nature = 'voie-nommee'
+                ) bdt
 USING (fantoir)
 LEFT OUTER JOIN (SELECT fantoir,
                         nom,

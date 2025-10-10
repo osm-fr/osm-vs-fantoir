@@ -338,14 +338,14 @@
         fantoir_dans_relation = 'ok'
         if (caractere_annul == 'B'||caractere_annul == 'C'){
             has_vrai_code_fantoir = false
-            fantoir_affiche = 'Voie sans Fantoir'
+            fantoir_affiche = 'Sans Fantoir'
             fantoir_dans_relation = 'ko'
         }
         return [is_voie,is_place,is_osm_hors_fantoir,has_vrai_code_fantoir,fantoir_affiche,fantoir_dans_relation]
     }
     function get_fantoir_affiche(fantoir){
         if (fantoir.includes('b')){
-            return 'Voie sans Fantoir'
+            return 'Sans Fantoir'
         }
         return fantoir
     }

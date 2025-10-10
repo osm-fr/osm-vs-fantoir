@@ -26,7 +26,7 @@
 <link rel="search" type="application/opensearchdescription+xml" title="Pifomètre BANO" href="opensearch.xml" />
 
 <script>
-    STYLEFILE = 'pifomap_250202'
+    STYLEFILE = 'pifomap_251010'
 
     FILTRES_TYPE = [["voie",true],
                ["lieudit",true]]
@@ -392,7 +392,7 @@
                     $('#infos_voie_lieudit').append($('<hr>'));
 
                     //LIENS D'EDITION
-                    ajout_liens_d_edition(lon,lat,couche_carto)
+                    ajout_liens_d_edition(lon,lat,couche_carto,0,false)
 
                     return 0
                 }
@@ -449,7 +449,7 @@
                         $('#infos_voie_lieudit').append($('<hr>'));
 
                         //LIENS D'EDITION
-                        ajout_liens_d_edition(lon,lat,couche_carto)
+                        ajout_liens_d_edition(lon,lat,couche_carto,numeros_a_proposer,avec_adresses_ban)
 
                 })
             });
@@ -768,7 +768,7 @@
                                     )
                                 );
     }
-    function ajout_liens_d_edition(lon,lat,couche_carto){
+    function ajout_liens_d_edition(lon,lat,couche_carto,numeros_a_proposer,avec_adresses_ban){
         $('#infos_voie_lieudit').append($('<h3>').text('Édition'));
 
         xmin  = lon-DELTA
@@ -799,7 +799,7 @@
                                             .append($('<span>').text(' Adresses intégrées'))
                                         ))
         }
-        if (has_vrai_code_fantoir){
+        if (has_vrai_code_fantoir && avec_adresses_ban){
             $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Qualifier les adresses sur Pifomètre'))))
             $('#'+table).append($('<tr>'))
             add_addr_inspector_link(table,code_insee,fantoir,'BAN')
@@ -873,7 +873,12 @@
                   lat,
                   label_statut,
                   cat] = point_nomme_data[s]
-                 source = cat[0] == 'C'?'CADASTRE':'OSM';
+                  source = 'OSM'
+                  if (cat[0] == 'C'){
+                    source = 'CADASTRE'
+                  } else if (cat[0] == 'T'){
+                    source = 'BDTOPO'
+                  }
                  rapproche = cat[1] == 'F'?true:false;
                  avec_adresses = cat[2] == 'B'?true:false;
                  nature = cat[3] == 'P'?'lieudit':'voie';
@@ -954,6 +959,11 @@
                 map.addImage('lieudit_gris', image);
             })
         }
+        if (!map.hasImage('voie_bd_topo')){
+            map.loadImage('./img/voie_bd_topo.png', (error, image) => {
+                map.addImage('voie_bd_topo', image);
+            })
+        }
         interactions_souris('noms_de_communes')
         interactions_souris('simple-tiles')
         interactions_souris('BAN_point_transparent')
@@ -962,7 +972,8 @@
         interactions_souris('points_nommes_rapproches_lieudit')
         interactions_souris('points_nommes_non_rapproches_lieudit')
         interactions_souris('points_nommes_rapproches_voie')
-        interactions_souris('points_nommes_non_rapproches_voie')
+        interactions_souris('points_nommes_non_rapproches_OSM')
+        interactions_souris('points_nommes_non_rapproches_voie_BDTOPO')
         interactions_souris('polygones')
 
         $('#pifoprogression').click(function(){

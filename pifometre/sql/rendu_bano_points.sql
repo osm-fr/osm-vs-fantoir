@@ -22,16 +22,22 @@ SELECT nom,
        lon,
        lat,
        label_statut,
-       'Co'|| -- C = source Cadastre - o = inconnu d'OSM
+       CASE source
+           WHEN 'CADASTRE' THEN 'Co' -- C = source Cadastre - o = inconnu d'OSM
+           WHEN 'BDTOPO' THEN 'To' -- T = source BT Topo - o = inconnu d'OSM
+       END||
        CASE
            WHEN ban.fantoir IS NULL THEN 'b'
            ELSE 'B'
        END ||
-       'P' -- lieu-dit
+       CASE source
+           WHEN 'CADASTRE' THEN 'P' -- lieu-dit
+           WHEN 'BDTOPO' THEN 'V' -- voie nommée
+       END
 FROM   (SELECT *
         FROM  bano_points_nommes
         WHERE code_insee = '__code_insee__' AND
-              source = 'CADASTRE')c
+              source in ('CADASTRE','BDTOPO'))c
 LEFT OUTER JOIN (SELECT DISTINCT fantoir
                 FROM    nom_fantoir
                 WHERE   code_insee = '__code_insee__' AND

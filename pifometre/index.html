@@ -411,9 +411,9 @@
         if (commune_composee == 1){
             $('#'+table+' tr').append($('<th>').append('Ancienne commune'))
         }
-        $('#'+table+' tr').append($('<th>').append('Libellé Topo (ex Fantoir)'))
-        $('#'+table+' tr').append($('<th>').append('Libellé OSM'))
-        $('#'+table+' tr').append($('<th>').append('Libellé BAN ou Cadastre'))
+        $('#'+table+' tr').append($('<th>').append('Nom Topo'))
+        $('#'+table+' tr').append($('<th>').append('Noms OSM'))
+        $('#'+table+' tr').append($('<th>').append('Nom BAN, Cadastre ou BD Topo'))
         $('#'+table+' tr').append($('<th>').attr('colspan','2').append('Carte'))
         $('#'+table+' tr').append($('<th>').attr('colspan','2').append('Edition'))
         $('#'+table+' tr').append($('<th title="ex statut Fantoir">').append('Statut du nom ').append($('<a>').attr('href','http://wiki.openstreetmap.org/wiki/Contribuer_%C3%A0_la_BANO#Typologie_des_anomalies_FANTOIR').append('(wiki)')))
@@ -587,9 +587,15 @@
                         $('#'+table+' tr:last td:last').append($('<button class="picto_tableau copier_voie_bancad" title="Copier le nom du lieu-dit"></button>'))
                         }
                     }
-
                     else if (source_nom_ban == 'BAN') {
                         $('#'+table+' tr:last').append($('<td>').append($('<span class="picto_tableau ban" title="Nom provenant de la BAN">'))
+                                                                .append($('<span>').attr('texte_voie_a_copier',nom_ban).text(nom_ban)))
+                        if ($('#'+table+' tr:last').hasClass('nom_a_integrer')){ 
+                            $('#'+table+' tr:last td:last').append($('<button class="picto_tableau copier_voie_bancad" title="Copier le nom de la voie"></button>'))
+                        }
+                    }
+                    else if (source_nom_ban == 'BDTOPO') {
+                        $('#'+table+' tr:last').append($('<td>').append($('<span class="picto_tableau bdtopo" title="Nom provenant de la BD Topo">'))
                                                                 .append($('<span>').attr('texte_voie_a_copier',nom_ban).text(nom_ban)))
                         if ($('#'+table+' tr:last').hasClass('nom_a_integrer')){ 
                             $('#'+table+' tr:last td:last').append($('<button class="picto_tableau copier_voie_bancad" title="Copier le nom de la voie"></button>'))
