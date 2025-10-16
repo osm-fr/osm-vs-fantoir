@@ -664,7 +664,7 @@
                     }
 
                     //--- Statut Fantoir ---
-                    if (caractere_annul != 'B' && is_osm_hors_fantoir == false){
+                    if (has_vrai_code_fantoir){
                         add_statut_fantoir(table,tr_id,fantoir,statut_voie)
                     } else {
                         $('#'+table+' tr:last').addClass('statut0').append($('<td>'))
