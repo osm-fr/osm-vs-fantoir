@@ -20,5 +20,5 @@ USING (fantoir)
 LEFT OUTER JOIN a
 USING (fantoir)
 WHERE	code_insee = '__code_insee__' AND
-        COALESCE(caractere_annul,'x') != 'B' -- Filtre sur les pseudo-Fantoir BAN
-ORDER BY 4; 
+        COALESCE(caractere_annul,'x') NOT IN ('B','C','T') -- Filtre sur les pseudo-Fantoir BAN / Cadastre / BDTopo
+ORDER BY 4;
