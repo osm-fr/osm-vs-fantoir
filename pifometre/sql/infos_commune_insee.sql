@@ -10,7 +10,8 @@ SELECT  nom,
         nb_nom_osm,
         nb_nom_ban,
         nb_nom_cadastre,
-        nb_nom_topo
+        nb_nom_topo,
+        (type_composition = 'bal')::integer
 FROM    (SELECT nom,
                 ST_AsGeoJSON(ST_BoundingDiagonal(geometrie)) json_bounds,
                 ST_Centroid(geometrie) p,
@@ -23,6 +24,8 @@ FROM    (SELECT nom,
         ORDER BY admin_level
         LIMIT 1)a
 LEFT OUTER JOIN bano_stats_communales
+USING           (code_insee)
+LEFT OUTER JOIN communes_summary
 USING           (code_insee)
 LEFT OUTER JOIN (SELECT code_zone,
                         date_debut

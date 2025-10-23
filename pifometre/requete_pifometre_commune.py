@@ -36,6 +36,7 @@ if infos_commune:
         nom_ban,
         nom_cadastre,
         nom_topo,
+        bal
     ) = infos_commune[0]
 
 insee_commune_parente = None
@@ -66,6 +67,7 @@ data = [
     nb_nom_adr_osm,
     nom_cadastre,
     nom_topo,
+    bal,
 ]
 
 print("Content-Type: application/json\n")
