@@ -878,6 +878,8 @@
                     source = 'CADASTRE'
                   } else if (cat[0] == 'T'){
                     source = 'BDTOPO'
+                  } else if (cat[0] == 'F'){
+                    source = 'COMMUNE'
                   }
                  rapproche = cat[1] == 'F'?true:false;
                  avec_adresses = cat[2] == 'B'?true:false;
@@ -974,6 +976,7 @@
         interactions_souris('points_nommes_rapproches_voie')
         interactions_souris('points_nommes_non_rapproches_OSM')
         interactions_souris('points_nommes_non_rapproches_voie_BDTOPO')
+        interactions_souris('points_nommes_non_rapproches_filaire_COMMUNE')
         interactions_souris('polygones')
 
         $('#pifoprogression').click(function(){
@@ -1027,7 +1030,8 @@
                  nb_noms_ban,
                  nb_nom_adr_osm,
                  nb_noms_cadastre,
-                 nb_noms_topo] = pifodata
+                 nb_noms_topo,
+                 has_bal] = pifodata
 
             let [mapz,mapx,mapy] = check_url_for_xyz()
 
