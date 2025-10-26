@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset='UTF-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Projet BANO - La Base Adresses Nationale Ouverte, par OpenStreetMap France</title>
+    <script src="js/jquery-3.6.4.min.js"></script>
+	<script src="js/fonctions.js"></script>
+    <script defer src="js/menu.js"></script>
+	
+	<link rel="icon" type="image/png" href="img/logo/favicon-96x96.png" sizes="96x96" />
+	<link rel="icon" type="image/svg+xml" href="img/logo/favicon.svg" />
+	<link rel="shortcut icon" href="img/logo/favicon.ico" />
+	<link rel="apple-touch-icon" sizes="180x180" href="img/logo/apple-touch-icon.png" />
+	<link rel="manifest" href="img/logo/site.webmanifest" />
+
+    <link rel="preload" href="css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel='stylesheet' href='css/style.css' type="text/css">
+    <link rel="stylesheet" href="css/responsive.css" type="text/css"/>
+</head>
+
+<body>
+	<header>
+        <!--#include virtual="includes/menu.html" -->
+	</header>
+    <div id="aide_contenu" class="bano">
+		<h1><img class='logo' src='img/OSM-FR.svg' alt='Logo OpenStreetMap'/>Débuter avec Bano et Pifomètre</h1>
+
+		<div class="bloc_fiche bano">
+			<h2>C'est quoi, Bano ?</h2>
+			<p><img class='droite' src='img/400px-Plaque-adresse-42.jpg' width="400" alt="Adresse numéro 42, si vous lisez ceci vous avez tout compris">La Base Adresses Nationale Ouverte (Bano) est une initiative d’<a href='https://www.openstreetmap.fr'>OpenStreetMap France</a>. Elle a pour objet la constitution d’une base libre la plus complète possible de points d’adresse à l’échelle de la France.</p>
+			<p><span class="lien_aide">> Plus d'informations sur <a href='https://wiki.openstreetmap.org/wiki/FR:France/WikiProject_Base_Adresses_Nationale_Ouverte_(BANO)'>le Wiki d'OpenStreetMap</a></span>
+			</p>
+			<!-- <h2>Quelles données contient Bano ?</h2> -->
+			<p>Les données de Bano sont régénérées et publiées chaque nuit avec les améliorations faites dans OpenStreetMap au cours de la journée précédente.</p>
+			<p>Elles intègrent aussi à J+1 les données publiées par <a href='https://adresse.data.gouv.fr/'>adresse.data.gouv.fr</a>, venant du cadastre et des Bases Adresse Locales (BAL).</p>
+			<a class="lien_aide" href="/data">> Accès aux données</a>
+			<h2>Comment améliorer Bano ?</h2>
+			<p>Chacun·e peut améliorer Bano en contribuant à OpenStreetMap sur la thématique des adresses.</p>
+		</div>
+
+		<div class="bloc_fiche b1">
+			<h2>Infos</h2>
+			<p>Le</p>
+		</div>
+
+		<div class="bloc_fiche b2">
+			<h2>Ressources</h2>
+			<p><img src="img/video.png" class="picto"/><strong><a href='/videos.html'>Vidéos</a></strong> : Tutos en visio et présentations au <abbr title="State of the Map">SOTM</abbr> pour découvrir et apprendre à maîtriser les outils autour de Bano.</a></p>
+			<p><img src="img/outils.png" class="picto"/><strong><a href='/outils.html'>Outils divers</a></strong> : Liens de redirection vers des sites externes et fonds de carte à configurer dans JOSM.</a></p>
+		</div>
+
+		<div class="bloc_fiche b2">
+			<h2>Les outils autour de Bano</h2>
+			<p>Ils permettent de faciliter l'intégration des voies, des lieux-dits et des adresses dans OpenStreetMap.</p>
+			<p><strong>Les cartes :</strong></p>
+			<ul>
+				<li>
+					<img src="img/logo/favicon-96x96-vert.png" class="picto"/><strong><a href='/pifometre/pifomap'>Pifomap</a></strong> permet de visualiser les communes sous forme de carte. On y retrouve les voies et lieux-dits, ainsi que tous les points d'adresse, affichés de différentes couleurs selon qu'ils sont rapprochés ou non. 
+				</li>
+				<li>
+					<img src="img/logo/favicon-96x96-ocre.png" class="picto"/><strong><a href='/pifometre/pifodrome'>Pifodrome</a></strong> affiche la carte de France de toutes les «voies à cheval», c'est-à-dire les routes et rues nommées croisant au moins une limite administrative, donc débordant sur au moins 2 communes. C'est un vivier de voies potentiellement problématiques, à redécouper proprement et dont il faut vérifier le nom.  <a href='pifometre/aide/pifodrome.html'>Voir l'aide.</a>
+				</li>
+			</ul>
+			<p><strong>Les tableaux :</strong></p>
+			<ul>
+				<li>
+					<img src="img/logo/favicon-96x96.png" class="picto"/><strong><a href='/pifometre'>Pifomètre</a></strong> affiche sous forme de tableau, pour chaque commune française, la liste de ses voies et lieux-dits. La liste est alimentée par les données OpenStreetMap d'une part, et par le fichier Topo (ex-Fantoir), le cadastre et la <abbr title="Base Adresses Nationale">BAN</abbr> d'autre part. Le tableau indique si les voies et lieux-dits sont «rapprochés» entre ces deux sources. <a href='pifometre/aide.html'>Voir l'aide.</a>
+				</li>
+				<li>
+					La liste des <a href='/pifometre/fantoir_errone.html'>codes Fantoir erronés</a> à corriger
+				</li>
+				<li>
+					La liste des <a href='/pifometre/fantoir_annule.html'>codes Fantoir annulés</a > à remplacer
+				</li>
+				<li>
+					Les <a href='/pifometre/top_adresses_manquantes.html'>voies non rapprochées avec un maximum d'adresses</a>
+				</li>
+				<li>
+					Les <a href='/pifometre/voies_recentes_manquantes.html'>voies les plus récentes</a> qui manquent dans OpenStreetMap
+				</li>
+			</ul>
+		</div>
+
+		<div class="bloc_fiche b1">
+			<img class="picto_grand" src="img/stats.png"/>
+			<h2>Statistiques</h2>
+			<ul>
+				<li>
+					<a href='/stats/france_par_dept.html'>Statistiques nationales : chiffres par département</a>
+				</li>
+				<li>
+					<a href='/stats/dept_par_commune.html'>Statistiques départementales : chiffres par commune</a>
+				</li>
+			</ul>
+		</div>
+		<!-- <div class="bloc_fiche b2">
+			<h2>A vous de jouer !</h2>
+			<p>> Je veux intégrer des voies et des lieux-dits.</p>
+			<p>> Je veux corriger des voies.</p>
+			<p>> Je veux intégrer des adresses.</p>
+		</div> -->
+	</div>
+	<script>
+		update_menu_visits();
+	</script>
+
+</body>
+</html>

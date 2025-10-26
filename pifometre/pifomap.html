@@ -1149,11 +1149,23 @@
                                    .text('Pifomètre')
                                )
 
-            $('#descriptif').append($('<div id="infos_commune_col2">').append($('<h1>')
-                                                                        .append((nom_commune))
-                                                                        .append($('<button id="recentrer_commune" title="Recentrer la carte"></button>'))
-                                                                      )
-                                    )
+            if (has_bal) {
+                $('#descriptif').append($('<div id="infos_commune_col2">')  .append($('<h1>')
+                                                                                .append((nom_commune))
+                                                                                .append($('<span id="logo_bal" title="Commune ayant publié sa Base Adresse Locale"/>'))
+                                                                                .append($('<button id="recentrer_commune" title="Recentrer la carte"></button>'))
+                                                                            )
+                                )
+            }
+            else {
+                $('#descriptif').append($('<div id="infos_commune_col2">')  .append($('<h1>')
+                                                                                .append((nom_commune))
+                                                                                .append($('<span id="logo_pas_bal" title="Commune sans Base Adresse Locale"/>'))
+                                                                                .append($('<button id="recentrer_commune" title="Recentrer la carte"></button>'))
+                                                                            )
+                                )
+            }
+
             $('#recentrer_commune').click(function(){
                 map.fitBounds(bbox_diagonale.coordinates)
             });
@@ -1452,9 +1464,15 @@
         <div class="fermer">X</div>
 
         <h3>Voies et lieux-dits affichés :</h3>
-        <p><span class="rapproche">Verts</span> : issus d'OSM, rapprochés avec le fichier Topo (ex-Fantoir)</p>
-        <p><span class="non_rapproche">Rouges</span> : issus du cadastre (pour les lieux-dits) ou de la BAN (pour les voies) avec un nom inconnu d'OSM</p>
-        <p><span class="osm_seulement">Bleus</span> : connus seulement d'OSM</p>
+        <p><span class="rapproche">Verts</span> : issus d'OSM, rapprochés avec le fichier Topo</p>
+        <p><span class="osm_seulement">Bleus</span> : issus d'OSM et connus seulement d'OSM</p>
+        <p><span class="non_rapproche">Rouges</span> : inconnus d'OSM et issus au choix :</p>
+        <ul>
+            <li><span class="patate_ban">Nom de voie</span> de la BAN</li>
+            <li><img class="picto" src="../pifometre/img/voie_bd_topo.png"/>de la BD Topo</li>
+            <li><img class="picto" src="../pifometre/img/voie_bd_commune.png"/>directement des communes</li>
+            <li><img class="picto" src="../pifometre/img/lieudit_map_rouge.png"/>du cadastre (pour les lieux-dits)</li>
+        </ul>
         <h3>Voies au survol de la souris :</h3>
         <p><span class="voie_survolee vert">–</span> : nom issu d'OSM, rapproché avec un nom Topo</p>
         <p><span class="voie_survolee bleu">–</span> : nom issu d'OSM, non retrouvé ailleurs</p>

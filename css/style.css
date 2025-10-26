@@ -508,7 +508,7 @@ fieldset legend {
 	border-radius: 6px;
 	margin: 0;
 	padding: 10px 35px 10px 10px;
-	font-weight: 400;
+	font-weight: normal;
 	font-size: 1.1em;
 	cursor: pointer;
 	background: url("../img/plus.png") no-repeat;
@@ -519,6 +519,7 @@ fieldset legend {
 .question h4.open {
 	border-radius: 6px;
 	margin: 0px;
+	font-weight: bold;
 	cursor: pointer;
 	background: url("../img/moins.png") no-repeat #B1DE89;
 }
@@ -529,8 +530,18 @@ fieldset legend {
 
 .question .faq_reponse { 
   display: none; 
-  padding: 10px;
-  line-height: 28px;
+  padding: 5px 20px;
+  line-height: 1.5em;
+}
+
+#aide_contenu .bloc_fiche .question .faq_reponse p { 
+  margin: 1.1em 0;
+}
+
+.question .faq_reponse .picto { 
+  width: 12px;
+  margin: 0;
+  padding: 0;
 }
 
 /*-------------------------------------------------------------------------------------*/
@@ -1402,20 +1413,41 @@ fieldset legend {
 	margin-left: 3px;
 }
 
-#legende.pifomap p .osm_seulement {
-	background-color: #fff;
+#legende.pifomap .osm_seulement {
+	/*background-color: #fff;*/
 	font-weight: bold;
 	color: royalblue; /*bleu*/
+	text-shadow: -3px -3px 0 #fff,
+                  3px -3px 0 #fff,
+                 -3px 3px 0 #fff,
+                  3px 3px 0 #fff;
 }
-#legende.pifomap p .rapproche {
-	background-color: #fff;
+#legende.pifomap .rapproche {
+	/*background-color: #fff;*/
 	font-weight: bold;
 	color: green; /*vert*/
+	text-shadow: -3px -3px 0 #fff,
+                  3px -3px 0 #fff,
+                 -3px 3px 0 #fff,
+                  3px 3px 0 #fff;
 }
-#legende.pifomap p .non_rapproche {
-	background-color: #fff;
+#legende.pifomap .non_rapproche {
+	/*background-color: #fff;*/
 	font-weight: bold;
 	color: red; /*rouge*/
+	text-shadow: -3px -3px 0 #fff,
+                  3px -3px 0 #fff,
+                 -3px 3px 0 #fff,
+                  3px 3px 0 #fff;
+}
+#legende.pifomap .patate_ban {
+	background-color: pink;
+	font-weight: bold;
+	color: red;
+	text-shadow: -1px -1px 0 #fff,
+                  1px -1px 0 #fff,
+                 -1px 1px 0 #fff,
+                  1px 1px 0 #fff;
 }
 
 #legende.pifomap p .voie_survolee {
@@ -1678,6 +1710,24 @@ fieldset legend {
 	float: left;
 	width: 65%;
 	margin: 15px 0;
+}
+#logo_bal {
+	display: inline-block;
+	margin-left: 10px;
+	width: 30px;
+	height: 37px;
+	line-height: 37px;
+	background: url("../img/bal_logo.png") no-repeat left 0px top 10px;
+	background-size: 22px;
+}
+#logo_pas_bal {
+	display: inline-block;
+	margin-left: 10px;
+	width: 30px;
+	height: 32px;
+	line-height: 32px;
+	background: url("../img/puzzle.png") no-repeat left 0px top 10px;
+	background-size: 22px;
 }
 
 #titre_commune_inconnue {
