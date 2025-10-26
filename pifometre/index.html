@@ -188,7 +188,7 @@
                  nb_nom_adr_osm,
                  nb_noms_cadastre,
                  nb_noms_topo,
-                 bal] = pifodata
+                 has_bal] = pifodata
 
             document.title = nom_commune+' - Pifomètre'
 
@@ -291,8 +291,21 @@
                                    .attr('href','pifomap.html?insee='+code_insee)
                                    .text('Pifomap')
                                )
+            if (has_bal) {
+                $('#descriptif').append($('<div id="infos_commune_col2">')  .append($('<h1>')
+                                                                                .append((nom_commune))
+                                                                                .append($('<span id="logo_bal" title="Commune ayant publié sa Base Adresse Locale"/>'))
+                                                                            )
+                                )
+            }
+            else {
+                $('#descriptif').append($('<div id="infos_commune_col2">')  .append($('<h1>')
+                                                                                .append((nom_commune))
+                                                                                .append($('<span id="logo_pas_bal" title="Commune sans Base Adresse Locale"/>'))
+                                                                            )
+                                )
+            }
 
-            $('#descriptif').append($('<div id="infos_commune_col2">').append($('<h1>').append((nom_commune))))
             //------------------------------------
             //-------   COMMUNES VOISINES   ------
             //------------------------------------

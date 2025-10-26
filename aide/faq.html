@@ -28,23 +28,26 @@
         <p></p>
         <!-------- Partie 1 -------->
         <div class="bloc_fiche b1">
-            <h2>Pifomètre</h2>
             <div class="question">
                 <h4>Quand verrai-je la prise en compte de mes contributions sur OSM dans Pifomètre / Pifomap ?</h4>
-                <div class="faq_reponse">D'abord, ensuite, enfin</div>
+                <div class="faq_reponse">
+                    <p>Quand on envoie une modification sur OpenStreetMap (par ex intégration d'adresses, changement de nom de voie...), Bano et Pifomètre ne sont pas immédiatement "au courant", car ils ne se basent pas sur les données d'OSM en temps réel.</p>
+                    <p>Version courte : Bano se met à jour chaque chaque nuit à partir des données les plus fraîches d'OSM. Donc par défaut, toutes les contributions faites un jour J dans OSM sont visibles dans Pifomètre et Pifomap le lendemain. Pour forcer une mise à jour plus rapide, on peut cliquer sur le bouton bleu Refresh <img class="picto" src="../img/aide/capture-refresh.png"/>, en haut à droite de la page. On récupère alors des données OSM datant d'il y a 2 minutes (sauf problème passager de latence sur le serveur. Vérifier la date de fraîcheur des données en survolant le bouton bleu).</p>
+                    <p>Explication plus complète : Une copie des données OSM est réalisée automatiquement toutes les 2 minutes pour nourrir Bano (et donc Pifomètre). Par défaut, Bano reconstruit sa base d'adresses pour la France entière, toutes les nuits entre minuit et 3h, en s'appuyant sur cette copie d'OSM. Un clic sur le bouton Refresh permet de recalculer Bano pour une commune en particulier avec la copie d'OSM la plus récente – donc 2 minutes au mieux, et plus s'il y a du retard. Si la date de fraîcheur des données OSM au survol du bouton bleu paraît trop longue, on peut aller voir l'évolution de la latence sur le site <a href="http://munin.openstreetmap.fr/osm14.openstreetmap.fr/download.vm.openstreetmap.fr/osm_replication_lag_osmbin.html" target="_blank">munin.openstreetmap.fr</a>.</p>
+                </div>
             </div>
             <div class="question">
-                <h4>Question 2</h4>
-                <div class="faq_reponse">D'abord, ensuite, enfin</div>
-            </div>
-            <div class="question">
-                <h4>Les voies apparaissent en doublon (voire triplons ou quadruplons...) dans le tableau.</h4>
-                <div class="faq_reponse">C'est un bug connu, qui se produit quand on met à jour les données Bano de la commune plusieurs fois d'affilée. Attendre quelques minutes, puis relancer une unique mise à jour avec le bouton bleu et les choses devraient rentrer dans l'ordre. Un correctif du bug est en cours de développement.</div>
+                <h4>Un logo indique si une commune a "publié sa BAL" ou non. Qu'est-ce que ça signifie ?</h4>
+                <div class="faq_reponse">
+                    <p>Sur Pifomètre et Pifomap, on voit que le nom de certaines communes est suivi du picto BAL <img class="picto" src="../img/bal_logo.png"/>. Cela signifie qu'elles ont publié leur Base Adresse Locale (BAL). Concrètement, elles ont produit un fichier qui liste tous les numéros d'adresses dans leurs rues et lieux-dits avec leurs coordonnées géographiques. Ces communes sont devenues gestionnaires de leurs adresses.</p>
+                    <p>Avoir publié sa BAL n'est pas forcément un gage de qualité des adresses. Mais au moins, comme la commune a la main sur ses propre adresses, elle sera à même de traiter les signalements d'erreur envoyés depuis <a href="https://signalement.adresse.data.gouv.fr">signalement.adresse.data.gouv.fr</a>.</p>
+                    <p>A l'inverse, quand un nom de commune est suivi du picto puzzle <img class="picto" src="../img/puzzle.png"/>, cela indique l'absence de BAL. Dans ce cas, la liste des adresses de la commune est une compilation d'adresses issues de plusieurs sources (DGFiP, IGN, ARCEP, Guichet Adresse) et pré-traitées par l'IGN avant incorporation dans la BAN. Cette situation est amenée à devenir de plus en plus rare, car la loi «3DS» impose désormais (depuis juin 2024) aux communes de publier leurs BAL.</p>
+                </div>
             </div>
         </div>
 
         <!-------- Partie 2 -------->
-        <div class="bloc_fiche b2">
+        <!-- <div class="bloc_fiche b2">
             <h2>Pifomap</h2>
             <div class="question">
                 <h4>Question</h4>
@@ -58,10 +61,10 @@
                 <h4>Question 3</h4>
                 <div class="faq_reponse">D'abord, ensuite, enfin</div>
             </div>
-        </div>
+        </div> -->
 
         <!-------- Partie 3 -------->
-        <div class="bloc_fiche b2">
+        <!-- <div class="bloc_fiche b2">
             <h2>Les sources de données</h2>
             <div class="question">
                 <h4>Topo, Fantoir... Ca veut dire quoi tout ça ?</h4>
@@ -75,10 +78,10 @@
                 <h4>Question 3</h4>
                 <div class="faq_reponse">D'abord, ensuite, enfin</div>
             </div>
-        </div>
+        </div> -->
 
         <!-------- Partie 4 -------->
-        <div class="bloc_fiche b1">
+        <!-- <div class="bloc_fiche b1">
             <h2>Intégration d'adresses</h2>
             <div class="question">
                 <h4>Sur Pifomap, j'ai une voie avec des points d'adresse bleus et des points rouges, car la BAN connaît cette voie sous un mauvais nom (ex "RD 571") et qu'il n'y a pas de code Fantoir. Que faire pour rapprocher les adresses et les passer en vert ?</h4>
@@ -92,7 +95,8 @@
                 <h4>Question 3</h4>
                 <div class="faq_reponse">D'abord, ensuite, enfin</div>
             </div>
-        </div>
+        </div> -->
+
     </div>
     <!--#include virtual="../includes/feedback.html" -->
 
