@@ -672,11 +672,11 @@
                                             .append($('<span>').text(' '+nom_osm[i][0]))
                 );
             }
-            $('#infos_voie_lieudit').append($('<ul>'));
+/*            $('#infos_voie_lieudit').append($('<ul>'));
             $('#infos_voie_lieudit ul:last').append($('<li>')
                                             .append($('<span class="gras">').text('Nom BAN : '))
                                             .append($('<span>').text(nom_ban))
-                                        );
+                                        );*/
         }
         // Tous lieux-dits et voies non rapprochés (orange, rouge)
         else if (couche_carto.indexOf('points_nommes_non_rapproches') == 0||couche_carto.indexOf('filaire') == 0){
@@ -703,24 +703,22 @@
 
         //FANTOIR
         $('#infos_voie_lieudit').append($('<ul>'));
-        if (nom_topo){
-            $('#infos_voie_lieudit ul:last') .append($('<li>')
-                                            .append($('<span class="gras">').text('Libellé Fantoir : '))
-                                            .append($('<span>').text(nom_topo))
-                                        )
-        }
-/*        texte_nom_topo = '/'
-        if (has_vrai_code_fantoir && nom_topo){
-            texte_nom_topo = nom_topo
-        }
-*/
+
+        $('#infos_voie_lieudit ul:last') .append($('<li>')
+                                        .append($('<span class="gras">').text('Libellé '+source+' : '))
+                                        .append($('<span>').text(nom_ban))
+                                    )
 
         if (has_vrai_code_fantoir){
             $('#infos_voie_lieudit ul:last') .append($('<li>')
-                                            .append($('<span class="gras">').text('Code Fantoir : '))
-                                            .append($('<span id="code_fantoir">').attr('texte_fantoir_a_copier',fantoir_affiche).text(fantoir_affiche))
-                                            .append('<button id="copier_fantoir" title="Copier le code Fantoir"></button>')
-                                        )
+                                                .append($('<span class="gras">').text('Libellé Fantoir : '))
+                                                .append($('<span>').text(nom_topo))
+                                            )
+                                            .append($('<li>')
+                                                .append($('<span class="gras">').text('Code Fantoir : '))
+                                                .append($('<span id="code_fantoir">').attr('texte_fantoir_a_copier',fantoir_affiche).text(fantoir_affiche))
+                                                .append('<button id="copier_fantoir" title="Copier le code Fantoir"></button>')
+                                            )
                                         $('#copier_fantoir').click(function(){
                                                 //Copie le nom de la voie dans le presse-papier
                                                 if (eval(localStorage.PreferencesCopierCleValeur)){
@@ -749,6 +747,7 @@
                                         .append($('<span>').text('/'))
                                         );
         }
+
         $('#infos_voie_lieudit').on("mouseenter", function() {
             nom = $('#panneau_map h2').attr('nom')
             fantoir = undefined
@@ -867,7 +866,7 @@
                     poly] = polydata[s]
                 if (poly.type == 'Polygon'){
                     fantoir_affiche = get_fantoir_affiche(fantoir) == fantoir ?null:get_fantoir_affiche(fantoir)
-                    res.features.push(get_geojson_poly(poly,{'fantoir':fantoir,'fantoir_affiche':fantoir_affiche,'nom':nom_ban,'statut':label_statut}))
+                    res.features.push(get_geojson_poly(poly,{'fantoir':fantoir,'fantoir_affiche':fantoir_affiche,'nom':nom_ban,'statut':label_statut,'source':'BAN'}))
                 }
             }
             map.getSource('polygones_convexhull').setData(res)
