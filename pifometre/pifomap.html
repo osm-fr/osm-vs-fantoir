@@ -679,7 +679,7 @@
                                         );
         }
         // Tous lieux-dits et voies non rapprochés (orange, rouge)
-        else if (couche_carto.indexOf('points_nommes_non_rapproches') == 0){
+        else if (couche_carto.indexOf('points_nommes_non_rapproches') == 0||couche_carto.indexOf('filaire') == 0){
             $('#infos_voie_lieudit ul').append($('<li>')
                                         .append($('<span class="gras">').text('Source : '))
                                         .append($('<span>').text(source))
@@ -709,6 +709,12 @@
                                             .append($('<span>').text(nom_topo))
                                         )
         }
+/*        texte_nom_topo = '/'
+        if (has_vrai_code_fantoir && nom_topo){
+            texte_nom_topo = nom_topo
+        }
+*/
+
         if (has_vrai_code_fantoir){
             $('#infos_voie_lieudit ul:last') .append($('<li>')
                                             .append($('<span class="gras">').text('Code Fantoir : '))
@@ -843,10 +849,11 @@
                 let [nom,
                     fantoir,
                     within,
+                    source,
                     geom] = filairedata[s]
                 if (geom.type == 'LineString'||geom.type == 'MultiLineString'){
                     rapproche = fantoir != ''?true:false
-                    res.features.push(get_geojson_poly(geom,{'nom':nom,'source':'OSM','fantoir':fantoir,'rapproche':rapproche,'within':within}))
+                    res.features.push(get_geojson_poly(geom,{'nom':nom,'source':source,'fantoir':fantoir,'rapproche':rapproche,'within':within}))
                     contenu_index.set(nom,[true,rapproche])
                 }
             }
@@ -964,6 +971,11 @@
         if (!map.hasImage('voie_bd_topo')){
             map.loadImage('./img/voie_bd_topo.png', (error, image) => {
                 map.addImage('voie_bd_topo', image);
+            })
+        }
+        if (!map.hasImage('voie_bd_commune')){
+            map.loadImage('./img/voie_bd_commune.png', (error, image) => {
+                map.addImage('voie_bd_commune', image);
             })
         }
         interactions_souris('noms_de_communes')
