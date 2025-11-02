@@ -2151,6 +2151,9 @@ table tr.static td {
   display: inline-block;
   margin: 2px 5px 0 5px;
 }
+.picto_tableau.commune {
+  background: url("../img/commune.png") no-repeat;
+}
 .picto_tableau.bdtopo {
   background: url("../img/bdtopo.png") no-repeat;
 }

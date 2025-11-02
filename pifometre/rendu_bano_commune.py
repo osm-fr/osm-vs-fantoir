@@ -18,7 +18,7 @@ def combine_emprises(emprise,x,y,xmax = False, ymax = False):
 
 params = cgi.FieldStorage()
 insee = params['insee'].value
-# insee = '95219'
+# insee = '50411'
 
 emprises = {}
 
@@ -31,7 +31,7 @@ jpolycommune_data = [[json.loads(d[0])] for d in polycommune_data]
 point_adresses_data = sql_get_data('rendu_bano_adresses',{'code_insee':insee})
 point_nommes_data = sql_get_data('rendu_bano_points',{'code_insee':insee})
 filaire_data = sql_get_data('rendu_bano_filaire',{'code_insee':insee})
-jfilaire_data = [[d[0],d[1],d[2],json.loads(d[3])] for d in filaire_data]
+jfilaire_data = [[d[0],d[1],d[2],d[3],json.loads(d[4])] for d in filaire_data]
 
 for nom,fantoir,num,x,y,statut,cat in point_adresses_data:
     if nom :
@@ -55,7 +55,7 @@ for nom,fantoir,x,y,statut,cat in point_nommes_data:
             emprises[fantoir] = [x,y,x,y]
         else:
             emprises[fantoir] = combine_emprises(emprises[nom],x,y)
-for nom,fantoir,within,jsongeom,xmin,ymin,xmax,ymax in filaire_data:
+for nom,fantoir,within,source,jsongeom,xmin,ymin,xmax,ymax in filaire_data:
     if nom :
         if not nom in emprises:
             emprises[nom] = [xmin,ymin,xmax,ymax]

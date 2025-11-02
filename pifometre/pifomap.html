@@ -26,7 +26,7 @@
 <link rel="search" type="application/opensearchdescription+xml" title="Pifomètre BANO" href="opensearch.xml" />
 
 <script>
-    STYLEFILE = 'pifomap_251010'
+    STYLEFILE = 'pifomap_251101'
 
     FILTRES_TYPE = [["voie",true],
                ["lieudit",true]]
@@ -577,6 +577,7 @@
 
     function surbrillance_voie_numeros(nom,fantoir){
         map.setFilter('filaire',["==",["get", "nom"], nom])
+        map.setFilter('filaire_texte',["==",["get", "nom"], nom])
         if (fantoir != undefined){
             map.setFilter('hover_points',["any",["==",["get", "fantoir"], fantoir],["==",["get", "nom"], nom]])
         } else {

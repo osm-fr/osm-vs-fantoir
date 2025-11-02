@@ -336,7 +336,7 @@
         }
         fantoir_affiche = fantoir
         fantoir_dans_relation = 'ok'
-        if (caractere_annul == 'B'||caractere_annul == 'C'||caractere_annul == 'T'){
+        if ('BCTF'.indexOf(caractere_annul) > -1){
             has_vrai_code_fantoir = false
             fantoir_affiche = 'Sans Fantoir'
             fantoir_dans_relation = 'ko'

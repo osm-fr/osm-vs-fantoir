@@ -1,4 +1,7 @@
 WITH
+prio_source (prio,source)
+AS
+(VALUES (1,'CADASTRE'),(2,'BAN'),(3,'COMMUNE'),(4,'BDTOPO')),
 qualif_adresse
 AS
 (SELECT TRANSLATE(UPPER(numero),' ','') AS uppernumero,
@@ -95,8 +98,8 @@ SELECT t.fantoir,
        nb.nom AS nom_ban,
        nb.source AS source_nom,
        nb.nom_ancienne_commune,
-       COALESCE(ST_X(g.geometrie),pn.lon,place.lon,bdt.lon,NULL),
-       COALESCE(ST_Y(g.geometrie),pn.lat,place.lat,bdt.lat,NULL),
+       COALESCE(ST_X(g.geometrie),pn.lon,place.lon,com.lon,bdt.lon,NULL),
+       COALESCE(ST_Y(g.geometrie),pn.lat,place.lat,com.lat,bdt.lat,NULL),
        COALESCE(s.id_statut,0),
        a_proposer,
        t.caractere_annul,
@@ -143,6 +146,15 @@ LEFT OUTER JOIN (SELECT fantoir,
                 ) bdt
 USING (fantoir)
 LEFT OUTER JOIN (SELECT fantoir,
+                        lon,
+                        lat
+                FROM    bano_points_nommes
+                WHERE   __condition_fantoir_unique__
+                        code_insee = '__code_insee__' AND
+                        nature = 'filaire'
+                ) com
+USING (fantoir)
+LEFT OUTER JOIN (SELECT fantoir,
                         nom,
                         nom_ancienne_commune,
                         source
@@ -150,8 +162,10 @@ LEFT OUTER JOIN (SELECT fantoir,
                                 nom,
                                 nom_ancienne_commune,
                                 source,
-                                rank() OVER (PARTITION by fantoir order by case when source = 'CADASTRE' then 1 else 2 end) AS rang
+                                rank() OVER (PARTITION BY fantoir ORDER BY prio) AS rang
                         FROM    nom_fantoir
+                        LEFT OUTER JOIN prio_source
+                        USING   (source)
                         WHERE   __condition_fantoir_unique__
                                 code_insee = '__code_insee__' AND
                                 source != 'OSM') nb

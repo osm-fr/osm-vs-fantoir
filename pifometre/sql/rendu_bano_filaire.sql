@@ -2,6 +2,23 @@ WITH
 p
 AS
 (SELECT way FROM osm2pgsql_polygon WHERE "ref:INSEE" = '__code_insee__'),
+fantoir_filaire_rapproches
+AS
+(SELECT fantoir FROM nom_fantoir WHERE code_insee = '__code_insee__' AND source = 'COMMUNE'
+INTERSECT
+SELECT fantoir FROM nom_fantoir WHERE code_insee = '__code_insee__' AND source = 'OSM'),
+fantoir_voies_bdtopo_rapproches
+AS
+(SELECT fantoir FROM nom_fantoir WHERE code_insee = '__code_insee__' AND source = 'BDTOPO'
+INTERSECT
+SELECT fantoir FROM nom_fantoir WHERE code_insee = '__code_insee__' AND source = 'OSM'),
+noms_filaire_rapproches
+AS
+(SELECT nom
+FROM    nom_fantoir
+JOIN    fantoir_filaire_rapproches
+USING   (fantoir)
+WHERE   source = 'COMMUNE'),
 lignes_brutes
 AS
 (SELECT row_number() over() AS uniqid,
@@ -12,7 +29,8 @@ AS
         a9.code_insee insee_ac,
         unnest(array["ref:FR:FANTOIR","ref:FR:FANTOIR:left","ref:FR:FANTOIR:right"]) AS fantoir,
         ST_Within(l.way,p.way)::integer as within,
-        a9.nom AS nom_ac
+        a9.nom AS nom_ac,
+        'OSM' AS source
 FROM    p
 JOIN    planet_osm_line l
 ON      ST_Intersects(l.way, p.way)
@@ -31,7 +49,8 @@ SELECT  (row_number() over()) + 100000,
         a9.code_insee insee_ac,
         "ref:FR:FANTOIR" AS fantoir,
         ST_Within(l.way,p.way)::integer as within,
-        a9.nom AS nom_ac
+        a9.nom AS nom_ac,
+        'OSM'
 FROM    p
 JOIN    planet_osm_polygon l
 ON      ST_Intersects(l.way, p.way)
@@ -41,6 +60,38 @@ WHERE   (l.highway||"ref:FR:FANTOIR" != '' OR l.landuse = 'residential' OR l.ame
         l.highway NOT IN ('bus_stop','platform') AND
         l.name != ''
 UNION ALL
+SELECT  (row_number() over()) -1000,
+        1,
+        geometrie,
+        nom,
+        'xxxxx',
+        null,
+        '',
+        1,
+        null,
+        'BDTOPO'
+FROM    (SELECT geometrie, nom_collaboratif FROM bdtopo_voie_nommee WHERE code_insee = '__code_insee__' AND COALESCE(nom_voie_ban,'') = '') b
+JOIN    (SELECT fantoir,nom,nom_brut AS nom_collaboratif FROM nom_fantoir WHERE code_insee = '__code_insee__' AND source = 'BDTOPO') n
+USING   (nom_collaboratif)
+LEFT OUTER JOIN fantoir_voies_bdtopo_rapproches fbd
+USING   (fantoir)
+WHERE   fbd.fantoir IS NULL
+UNION ALL
+SELECT  (row_number() over()) * -10000,
+        1,
+        geometrie,
+        nom,
+        'xxxxx',
+        null,
+        '',
+        1,
+        null,
+        'COMMUNE'
+FROM    (SELECT * FROM commune_filaire WHERE code_insee = '__code_insee__') cf
+LEFT OUTER JOIN noms_filaire_rapproches ffr
+USING   (nom)
+WHERE   ffr.nom IS NULL
+UNION ALL
 SELECT  row_number() over() * -1,
         osm_id,
         l.way,
@@ -49,7 +100,8 @@ SELECT  row_number() over() * -1,
         a9.code_insee insee_ac,
         "ref:FR:FANTOIR" AS fantoir,
         ST_Within(l.way,p.way)::integer as within,
-        a9.nom AS nom_ac
+        a9.nom AS nom_ac,
+        'OSM'
 FROM    p
 JOIN    planet_osm_rels l
 ON      ST_Intersects(l.way, p.way)
@@ -91,36 +143,49 @@ AS
 (SELECT  name,
         COALESCE(nfp.fantoir,l.fantoir,'') AS nf,
         within,
+        source,
+        ST_Collect(ST_LineMerge(way_line)) AS geom_collection,
         ST_LineMerge(ST_Collect(way_line)) AS geom
 FROM    lignes_noms l
 LEFT OUTER JOIN nom_fantoir_prioritaire nfp
 USING   (name)
 WHERE   geomtype != 'POINT'
-GROUP BY 1,2,3
+GROUP BY 1,2,3,4
 UNION ALL
 SELECT  name,
         COALESCE(nfp.fantoir,l.fantoir,''),
         within,
+        source,
+        NULL,
         ST_Collect(way_line)
 FROM    lignes_noms l
 LEFT OUTER JOIN nom_fantoir_prioritaire nfp
 USING   (name)
 WHERE   geomtype = 'POINT'
-GROUP BY 1,2,3),
+GROUP BY 1,2,3,4),
 diag
 AS
 (SELECT name,
        nf,
        within,
-       geom,
-       ST_BoundingDiagonal(geom) AS diag
+       CASE
+           WHEN ST_IsEmpty(geom) THEN geom_collection
+           ELSE geom
+       END AS geom,
+       CASE
+           WHEN ST_IsEmpty(geom) THEN ST_BoundingDiagonal(geom_collection)
+           ELSE ST_BoundingDiagonal(geom)
+       END AS diag,
+       source
 FROM   unionset)
 SELECT name,
        nf,
        within,
+       source,
        ST_AsGeoJSON(geom),
        ST_X(ST_StartPoint(diag)),
        ST_Y(ST_StartPoint(diag)),
        ST_X(ST_EndPoint(diag)),
        ST_Y(ST_EndPoint(diag))
-FROM   diag;
+FROM   diag
+WHERE NOT ST_Isempty(geom);
