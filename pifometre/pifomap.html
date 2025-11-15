@@ -26,7 +26,7 @@
 <link rel="search" type="application/opensearchdescription+xml" title="Pifomètre BANO" href="opensearch.xml" />
 
 <script>
-    STYLEFILE = 'pifomap_251101'
+    STYLEFILE = 'pifomap_251115'
 
     FILTRES_TYPE = [["voie",true],
                ["lieudit",true]]
@@ -36,33 +36,33 @@
     EMPTY_GEOJSON = {'type': 'FeatureCollection',
                           'features': []}
 
-    TOC = [
-        // "simple-tiles",
-        "OSM-standard-tiles",
-        "point_de_communes",
-        "contour_communal",
-        "noms_de_communes_1",
-        "noms_de_communes_2",
-        "noms_de_communes_3",
-        "filaire",
-        "filaire_transparent",
-        "points_nommes_rapproches_lieudit",
-        "points_nommes_rapproches_voie",
-        "points_nommes_non_rapproches_lieudit",
-        "points_nommes_non_rapproches_OSM",
-        "points_nommes_non_rapproches_voie_BDTOPO",
-        "points_nommes_non_rapproches_filaire_COMMUNE",
-        "hover_points",
-        "BAN_point",
-        "BAN_point_transparent",
-        "BAN_texte",
-        "OSM_point",
-        "OSM_texte",
-        "filaire_texte",
-        "polygones",
-        "polygones_texte",
-        "polygones_texte_point",
-      ]
+    // TOC = [
+    //     // "simple-tiles",
+    //     "OSM-standard-tiles",
+    //     "point_de_communes",
+    //     "contour_communal",
+    //     "noms_de_communes_1",
+    //     "noms_de_communes_2",
+    //     "noms_de_communes_3",
+    //     "filaire",
+    //     "filaire_transparent",
+    //     "points_nommes_rapproches_lieudit",
+    //     "points_nommes_rapproches_voie",
+    //     "points_nommes_non_rapproches_lieudit",
+    //     "points_nommes_non_rapproches_OSM",
+    //     "points_nommes_non_rapproches_voie_BDTOPO",
+    //     "points_nommes_non_rapproches_filaire_COMMUNE",
+    //     "hover_points",
+    //     "BAN_point",
+    //     "BAN_point_transparent",
+    //     "BAN_texte",
+    //     "OSM_point",
+    //     "OSM_texte",
+    //     "filaire_texte",
+    //     "polygones",
+    //     "polygones_texte",
+    //     "polygones_texte_point",
+    //   ]
 
       TOC_HIERARCHIE = new Map([
                                ["Adresses BAN",
@@ -71,7 +71,9 @@
                                                  "BAN_point_integre"]],
                                ["Adresses OSM",
                                                 ["OSM_point_rapproche",
-                                                 "OSM_point_non_rapproche"]]])
+                                                 "OSM_point_non_rapproche"]]
+                               // ["Voies sans adresses,"]
+                           ])
       TOC_GROUPES = new Map([
         ["BAN_point_a_integrer_voie_non_rapprochee",["Voies non intégrées",
                                 ["BAN_point_a_integrer_voie_non_rapprochee",
@@ -604,29 +606,37 @@
     }
     
     function prepare_TOC(){
-        $('#conteneur_index').empty().removeClass('vide');
-        $('#conteneur_index').css('display','block');
+        $('#conteneur_filtres .filtres').empty();
+        // $('#conteneur_index').css('display','block');
 
         for (const t of TOC_HIERARCHIE.keys()) {
-            $('#conteneur_index').append($('<h3>').text(t))
+            $('#conteneur_filtres .filtres').append($('<h3>').text(t))
             layers = TOC_HIERARCHIE.get(t)
-            console.log(layers)
+            // console.log(layers)
             for (l=0;l<layers.length;l++){
                 layer = TOC_GROUPES.get(layers[l])
                 console.log(layer)
-                $('#conteneur_index').append($('<input>').attr('id',layers[l])
-                                                         .attr('type','checkbox')
-                                                         .prop('checked',true)
-                                                         .click(function(){
-                                                            update_TOC_group($(this).attr("id"))
-                                                          }))
-                $('#conteneur_index').append($('<label>').attr('for',layers[l])
-                                                         .append(layer[0])
-                                                         .append($('<br>')))
+                $('#conteneur_filtres .filtres').append($('<div class="groupe_boutons_filtre">')
+                                                         .append($('<label>').addClass('switch vert').attr('for',layers[l])
+                                                             .append($('<input>').attr('id',layers[l])
+                                                             .attr('type','checkbox')
+                                                             .prop('checked',true)
+                                                             .click(function(){
+                                                                 update_TOC_group($(this).attr("id"))
+                                                             }))
+                                                             .append($('<div>')).append(layer[0])
+                                                             ))
             }
 
         }
     }
+                // <div class="contenu filtres">
+                //     <div class="groupe_bouton_filtre">
+                //         <label class="switch vert">
+                //             <input type="checkbox" />
+                //             <div></div>
+                //         </label>
+                //     </div>
     function update_TOC_group(layerid){
         if ($('input#'+layerid).prop("checked")){
             visibility = 'visible'
@@ -1602,7 +1612,7 @@
                 <div class="en_tete">
                     <h2>Filtres</h2>
                 </div>
-                <div class="contenu">
+                <div class="contenu filtres">
                     <div class="groupe_bouton_filtre">
                         <label class="switch vert">
                             <input type="checkbox" />
@@ -1615,6 +1625,7 @@
                             <div></div>
                         </label>
                     </div>
+                </div>
                 <div class="en_tete">
                     <h2>Fonds de carte</h2>
                 </div>
@@ -1645,7 +1656,6 @@
                             <span class="control-label">Lieux-dits<span></span></span>
                         </li>
                     </ul> -->
-                </div>
             </div>
             <div id="conteneur_index"></div>
             <div id="conteneur_infos">
