@@ -88,10 +88,11 @@
             $('#nom_dept').append((nom_dept+" ("+$('#input_dept')[0].value+")"))
             stats = data[1]
             for (c=0;c<a_champs_stats.length;c++){
-                $('#stats_dept > thead > tr:last')  .append($('<th class="popover_conteneur">')
-                                                        .append(a_champs_stats[c])
-                                                        .append($('<span class="popover">').text(a_descriptif[c]))
-                                                    )
+                $('#stats_dept > thead > tr:last').append($('<th>').append(a_champs_stats[c]))
+            //    $('#stats_dept > thead > tr:last')  .append($('<th class="popover_conteneur">')
+            //                                            .append(a_champs_stats[c])
+            //                                            .append($('<span class="popover">').text(a_descriptif[c]))
+            //                                        )
             }
             $('#stats_dept').append($('<tbody>'))
             for (c=0;c<stats.length;c++){
