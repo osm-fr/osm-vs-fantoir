@@ -33,7 +33,7 @@ point_nommes_data = sql_get_data('rendu_bano_points',{'code_insee':insee})
 filaire_data = sql_get_data('rendu_bano_filaire',{'code_insee':insee})
 jfilaire_data = [[d[0],d[1],d[2],d[3],json.loads(d[4])] for d in filaire_data]
 
-for nom,fantoir,num,x,y,statut,cat in point_adresses_data:
+for nom,fantoir,num,x,y,statut,*args in point_adresses_data:
     if nom :
         if not nom in emprises:
             emprises[nom] = [x,y,x,y]

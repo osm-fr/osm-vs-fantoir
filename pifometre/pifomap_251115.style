@@ -35,14 +35,49 @@
                           "features": []
                 }
         },
-        "adresses_BAN": {
+        "points_nommes_rapproches_lieudit": {
         "type": "geojson",
         "promoteId": "fantoir",
         "data": {"type": "FeatureCollection",
                           "features": []
                 }
         },
-        "adresses_OSM": {
+        "adresses_OSM" : {
+        "type": "geojson",
+        "promoteId": "fantoir",
+        "data": {"type": "FeatureCollection",
+                          "features": []
+                }
+        },
+        "numeros_OSM_rapproches" : {
+        "type": "geojson",
+        "promoteId": "fantoir",
+        "data": {"type": "FeatureCollection",
+                          "features": []
+                }
+        },
+        "numeros_OSM_non_rapproches" : {
+        "type": "geojson",
+        "promoteId": "fantoir",
+        "data": {"type": "FeatureCollection",
+                          "features": []
+                }
+        },
+        "numeros_BAN_a_integrer_voie_non_rapprochee" : {
+        "type": "geojson",
+        "promoteId": "fantoir",
+        "data": {"type": "FeatureCollection",
+                          "features": []
+                }
+        },
+        "numeros_BAN_a_integrer_voie_rapprochee" : {
+        "type": "geojson",
+        "promoteId": "fantoir",
+        "data": {"type": "FeatureCollection",
+                          "features": []
+                }
+        },
+        "numeros_BAN_integres" : {
         "type": "geojson",
         "promoteId": "fantoir",
         "data": {"type": "FeatureCollection",
@@ -226,8 +261,7 @@
         },
         {
             "id": "points_nommes_rapproches_lieudit",
-            "source": "points_nommes",
-            "filter":["all",["==",["get", "rapproche"],true],["==",["get","nature"],"lieudit"]],
+            "source": "points_nommes_rapproches_lieudit",
             "minzoom" : 10,
             "type": "symbol",
             "layout": {
@@ -414,30 +448,92 @@
             }
         },
         {
-            "id": "BAN_point",
-            "source": "adresses_BAN",
-            "type": "symbol",
+            "id": "BAN_point_integre",
+            "source": "numeros_BAN_integres",
+            "type": "circle",
             "minzoom" : 12,
-            "layout": {
-                "icon-allow-overlap":true,
-                "icon-image":"rond_50",
-                "icon-size": ["interpolate",
-                        ["linear"],
-                        ["zoom"],
-                        12,
-                        0.01,
-                        19,
-                        0.2]
-                },
             "paint": {
-                "icon-color": ["case",
-                                ["boolean",["get","rapproche"]],"#EFA500",
-                                "red"]
+                "circle-radius":["interpolate",["linear"],["zoom"],12,1,19,5],
+                "circle-color": "brown"
             }
         },
         {
-            "id": "BAN_point_transparent",
-            "source": "adresses_BAN",
+            "id": "BAN_point_a_integrer_voie_non_rapprochee",
+            "source": "numeros_BAN_a_integrer_voie_non_rapprochee",
+            "type": "circle",
+            "minzoom" : 12,
+            "paint": {
+                "circle-radius":["interpolate",["linear"],["zoom"],12,1,19,5],
+                "circle-color": "red"
+            }
+        },
+        {
+            "id": "BAN_point_a_integrer_voie_rapprochee",
+            "source": "numeros_BAN_a_integrer_voie_rapprochee",
+            "type": "circle",
+            "minzoom" : 12,
+            "paint": {
+                "circle-radius":["interpolate",["linear"],["zoom"],12,1,19,5],
+                "circle-color": "#EFA500"
+            }
+        },
+        {
+            "id": "BAN_texte_integre",
+            "source": "numeros_BAN_integres",
+            "type": "symbol",
+            "minzoom" : 17,
+            "layout": {
+                "text-field": ["get", "numero"],
+                "text-variable-anchor": ["top", "left"],
+                "text-radial-offset": 0.5,
+                "text-overlap":"cooperative",
+                "text-justify": "auto"
+            },
+            "paint": {
+                "text-color": "brown",
+                "text-halo-color": "white",
+                "text-halo-width": 2
+            }
+        },
+        {
+            "id": "BAN_texte_a_integrer_voie_non_rapprochee",
+            "source": "numeros_BAN_a_integrer_voie_non_rapprochee",
+            "type": "symbol",
+            "minzoom" : 17,
+            "layout": {
+                "text-field": ["get", "numero"],
+                "text-variable-anchor": ["top", "left"],
+                "text-radial-offset": 0.5,
+                "text-overlap":"cooperative",
+                "text-justify": "auto"
+            },
+            "paint": {
+                "text-color": "red",
+                "text-halo-color": "white",
+                "text-halo-width": 2
+            }
+        },
+        {
+            "id": "BAN_texte_a_integrer_voie_rapprochee",
+            "source": "numeros_BAN_a_integrer_voie_rapprochee",
+            "type": "symbol",
+            "minzoom" : 17,
+            "layout": {
+                "text-field": ["get", "numero"],
+                "text-variable-anchor": ["top", "left"],
+                "text-radial-offset": 0.5,
+                "text-overlap":"cooperative",
+                "text-justify": "auto"
+            },
+            "paint": {
+                "text-color": "#EFA500",
+                "text-halo-color": "white",
+                "text-halo-width": 2
+            }
+        },
+        {
+            "id": "BAN_point_transparent_a_integrer_voie_non_rapprochee",
+            "source": "numeros_BAN_a_integrer_voie_non_rapprochee",
             "type": "circle",
             "minzoom" : 12,
             "paint": {
@@ -447,55 +543,41 @@
             }
         },
         {
-            "id": "BAN_texte",
-            "source": "adresses_BAN",
-            "type": "symbol",
-            "minzoom" : 17,
-            "filter":["==",["get", "source"], "BAN"],
-            "layout": {
-                "text-field": ["get", "numero"],
-                "text-variable-anchor": ["top", "left"],
-                "text-radial-offset": 0.5,
-                "text-overlap":"cooperative",
-                "text-justify": "auto"
-            },
-            "paint": {
-                "text-color": ["case",
-                                ["boolean",["get","rapproche"]],"#EFA500",
-                                "red"],
-                "text-halo-color": "white",
-                "text-halo-width": 2
-            }
-        },
-        {
-            "id": "OSM_point",
-            "source": "adresses_OSM",
-            "type": "symbol",
+            "id": "BAN_point_transparent_a_integrer_voie_rapprochee",
+            "source": "numeros_BAN_a_integrer_voie_rapprochee",
+            "type": "circle",
             "minzoom" : 12,
-            "filter":["==",["get", "source"], "OSM"],
-            "layout": {
-                "icon-allow-overlap":true,
-                "icon-image":"rond_50",
-                "icon-size": ["interpolate",
-                        ["linear"],
-                        ["zoom"],
-                        12,
-                        0.01,
-                        19,
-                        0.2]
-                },
             "paint": {
-                "icon-color": ["case",
-                                ["boolean",["get","osm_seul"]],"dodgerblue",
-                                "green"]
+                "circle-radius":10,
+                "circle-color": "white",
+                "circle-opacity": 0
             }
         },
         {
-            "id": "OSM_texte",
-            "source": "adresses_OSM",
+            "id": "OSM_point_rapproche",
+            "source": "numeros_OSM_rapproches",
+            "type": "circle",
+            "minzoom" : 12,
+            "paint": {
+                "circle-radius":["interpolate",["linear"],["zoom"],12,1,19,5],
+                "circle-color": "green"
+            }
+        },
+        {
+            "id": "OSM_point_non_rapproche",
+            "source": "numeros_OSM_non_rapproches",
+            "type": "circle",
+            "minzoom" : 12,
+            "paint": {
+                "circle-radius":["interpolate",["linear"],["zoom"],12,1,19,5],
+                "circle-color": "dodgerblue"
+            }
+        },
+        {
+            "id": "OSM_texte_rapproche",
+            "source": "numeros_OSM_rapproches",
             "type": "symbol",
             "minzoom" : 17,
-            "filter":["==",["get", "source"], "OSM"],
             "layout": {
                 "text-field": ["get", "numero"],
                 "text-variable-anchor": ["bottom", "right"],
@@ -504,9 +586,25 @@
                 "text-justify": "auto"
                 },
             "paint": {
-                "text-color": ["case",
-                                ["boolean",["get","osm_seul"]],"royalblue",
-                                "green"],
+                "text-color": "green",
+                "text-halo-color": "white",
+                "text-halo-width": 2
+            }
+        },
+        {
+            "id": "OSM_texte_non_rapproche",
+            "source": "numeros_OSM_non_rapproches",
+            "type": "symbol",
+            "minzoom" : 17,
+            "layout": {
+                "text-field": ["get", "numero"],
+                "text-variable-anchor": ["bottom", "right"],
+                "text-radial-offset": 0.5,
+                "text-overlap":"cooperative",
+                "text-justify": "auto"
+                },
+            "paint": {
+                "text-color": "royalblue",
                 "text-halo-color": "white",
                 "text-halo-width": 2
             }
