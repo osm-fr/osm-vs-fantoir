@@ -66,6 +66,33 @@ fieldset legend {
 	font-weight: bold;
 }
 
+/*-------------------TOOLTIPS----------------------*/
+
+/* Tooltip container */
+.popover_conteneur {
+  cursor: pointer;
+}
+
+/* Tooltip text */
+.popover {
+  visibility: hidden; /* Hidden by default */
+  width: 130px;
+  background-color: lightyellow;
+  color: #222;
+  text-align: center;
+  padding: 5px;
+  border: 1px solid lightblue;
+  position: relative;
+  top:-50px;
+  left: 0;
+  z-index: 1; /* Ensure tooltip is displayed above content */
+}
+
+/* Show the tooltip text on hover */
+.popover_conteneur:hover .popover {
+  visibility: visible;
+}
+
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
 /*---------------                                                       ---------------*/
@@ -1154,14 +1181,13 @@ fieldset legend {
 	position: fixed;
 	top: 10px;
 	right: 315px;
-	width: 400px;
+	width: 260px;
 	height: 38px;
 }
 .onglet_actif {
 	cursor: default !important;
 	background-color: burlywood !important;
 }
-
 .onglet_non_cliquable {
 	cursor: default !important;
 	background-color: whitesmoke !important;
@@ -1175,7 +1201,7 @@ fieldset legend {
 	cursor: pointer;
 	float: left;
 	background-color: wheat;
-	width: 33%;
+	width: 49%;
 	height: 100%;
 	border-bottom: 2px sienna solid;
 }
@@ -1186,13 +1212,6 @@ fieldset legend {
 	background: url("../img/stats2.png") no-repeat wheat right 12px bottom 5px;
 	background-size: 28px;
 }
-
-#bouton_pifofiltres {
-	border-right: 1px solid darkgrey;
-	background: url("../img/lieudit-fil.png") no-repeat wheat right 12px bottom 5px;
-	background-size: 28px;
-}
-
 #bouton_pifoprogression {
 	background: lightsalmon;
 	border-bottom-right-radius: 6px;
@@ -1223,6 +1242,7 @@ fieldset legend {
 	width: 49%;
 }
 .pifodrome #bouton_pifofiltres {
+	border-right: 1px solid darkgrey;
 	border-bottom-right-radius: 6px;
 	border-top-right-radius: 6px;
 	background: url("../img/cheval_jouet.png") no-repeat wheat right 12px bottom 5px;
@@ -1524,7 +1544,7 @@ fieldset legend {
 /*------------------ PANNEAU LATÉRAL -------------------*/
 /*------------------------------------------------------*/
 
-#reponse #panneau_map {
+#panneau_map {
 	float: left;
 	margin:0;
 	width:15%;
@@ -1534,22 +1554,130 @@ fieldset legend {
 	border:2px solid lightblue;
 	border-bottom: 2px solid lightblue;
 }
-/*--------- Index voies et lieux-dits ---------*/
-#conteneur_index {
+/*--------- Onglets ---------*/
+#panneau_map .onglets {
+	height: 50px;
+}
+#panneau_map #onglet_index, #panneau_map #onglet_filtres, #panneau_map #onglet_infos {
+	cursor: pointer;
+	float: left;
+	width: 33%;
+	height: calc(100% - 2px);
+	background-color: wheat;
+	border-bottom: 2px sienna solid;
+}
+#panneau_map #onglet_index.actif, #panneau_map #onglet_filtres.actif, #panneau_map #onglet_infos.actif {
+	cursor: default;
+	background-color: burlywood;
+}
+#panneau_map #onglet_filtres {
+	background: url("../img/switch.png") no-repeat wheat right 6px bottom 11px;
+	background-size: 21px;
+	border-right: 1px solid;
+	border-bottom-left-radius: 5px;
+}
+#panneau_map #onglet_infos {
+	border-right: 1px solid;
+	background: url("../img/info.png") no-repeat wheat right 10px bottom 12px;
+	background-size: 23px;
+}
+#panneau_map #onglet_index {
+	border-bottom-right-radius: 5px;
+	background: url("../img/index_simple.png") no-repeat wheat right 10px bottom 7px;
+	background-size: 23px;
+}
+#panneau_map  p {
+	text-align: center;
+	vertical-align:middle;
+	padding-right: 28px;
+	font-weight: bold;
+}
+/*------------ 3 contenus du panneau -----------*/
+#conteneur_filtres, #conteneur_index {
 	position: relative;
 	padding: 0 5px;
 	height: 95%;
 	overflow-y: auto;
 }
+
+/*---------- Filtres de la carte --------*/
+.groupe_bouton_filtre, #groupe_boutons_fond {
+	float: left;
+	width: 90%;
+}
+
+/*-------- Switch buttons filtres -------*/
+.switch input {
+  position: absolute;
+  opacity: 0;
+}
+.switch {
+	display: inline-block;
+	background:grey;
+	font-size: 16px; /*régler taille ici*/
+	height: 1em;
+	width: 2.2em;
+	border-radius: 1em;
+}
+.switch.vert {background-color: #00A779;}
+.switch.orange {background-color: #EFA500;}
+
+.switch div {
+	margin: 2px 0 0 3px;
+	height: 0.78em;
+	width: 0.78em;
+	background: white;
+	border-radius: 1em;
+	box-shadow: 0 0.1em 0.3em rgba(0,0,0,0.3);
+	-webkit-transition: all 200ms;
+	-moz-transition: all 200ms;
+	transition: all 200ms;
+}
+
+.switch input:checked + div {
+	background: url("../img/coche_gris.png") no-repeat white left 2px top 3px;
+	background-size: 9px;
+	-webkit-transform: translate3d(140%, 0, 0);
+	-moz-transform: translate3d(140%, 0, 0);
+	transform: translate3d(140%, 0, 0);
+}
+
+/*----- Boutons radio fond de carte -----*/
+#groupe_boutons_fond div {
+	float: left;
+	clear:both;
+	font-size: 1.1em;
+}
+#groupe_boutons_fond div input[type="radio"] {
+	appearance: none;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	background: white;
+	border: 2px solid #ADD19E;
+	border-radius: 100%;
+	width: 1.5em;
+	height: 1.5em;
+	margin: 0 3px 3px 0;
+	vertical-align: middle;
+}
+#groupe_boutons_fond div input[type="radio"]:checked {
+	background: url("../img/coche_gris.png") no-repeat white left 2px top 4px;
+	background-size: 11px;
+}
+
+/*------ Index voies et lieux-dits ------*/
+#conteneur_index {
+
+}
 #conteneur_index.vide{
 	height: unset;
 }
 
-/*--------- Infos objets de la carte ---------*/
+/*------ Infos objets de la carte ------*/
 #panneau_map li {
 	line-height: 1.6em;
 }
-#panneau_map #conteneur_infos_objet h2, #panneau_map h2 {
+#panneau_map #conteneur_infos h2, #panneau_map h2 {
 	float: left;
 	margin: 15px 5px;
 	width: calc(100% - 70px);
@@ -1586,7 +1714,7 @@ fieldset legend {
 	padding-left: 1em;
 }
 
-#panneau_map #contenu {
+#panneau_map .contenu {
 	margin: 5px;
 	font-size: 0.9em;
 }
@@ -1605,20 +1733,6 @@ fieldset legend {
 	width:calc(85% - 5px);
 	height:calc(100% - 4px);
 	border:2px solid lightblue;
-}
-
-#bouton_fond_carte {
-	z-index: 2;
-	cursor: pointer;
-	position: absolute;
-	top: 110px;
-	right: 10px;
-	background: url("../img/layers.png") no-repeat center white;
-	background-size: 20px;
-	height: 29px;
-	width: 29px;
-	border-radius: 4px;
-	box-shadow: 0 0 0 2px rgba(0,0,0,.1);
 }
 
 /*-------------------------------------------------------------*/
@@ -2279,6 +2393,10 @@ table tr.static td {
 /*--------------------------*/
 
 /*Survol des lignes*/
+#panneau_map #liste_recherche tr:hover td {
+	cursor: pointer;
+	background-color: #FCFFB7;
+}
 #pifomap_table_liens tr:hover td {
 	background-color: #fff;
 }

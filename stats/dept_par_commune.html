@@ -25,6 +25,7 @@
     PYDIR = '../pifometre/'
     var menu_labels
     var a_champs_stats = ['Code Insee','Commune','% adresses certifiées BAN','Voies avec adresses<br/>rapprochées (a)','Toutes voies<br/>rapprochées (b)...','...dont voies rapprochées sur<br/>lieux-dits Topo','Voies Topo (c)','Voies et lieux-dits<br/>Topo (d)','Voies avec adresses /<br/>voies Topo (a/c)<br/>en %','Voies rapprochées /<br/>voies Topo (b/c)<br/>en %','Voies rapprochées /<br/>voies et lieux-dits Topo (b/d)<br/>en %','Adresses OSM','Adresses BAN','Adresses BAN sans voie rapprochées','Adresse BAN avec voie rapprochée<br/>en %','Indice 2020']
+    var a_descriptif = ["% adresses certifiées BAN. Pourcentage d'adresses certifiées. Statistique communiquée via la BAN. Information mise à jour chaque jour à minuit.","2","3","4","5","2","3","4","5","2","3","4","5","2","3","4","5"]
     function is_valid_dept(d){
         pattern_dept = new RegExp('^([01]|[3-8])([0-9])$|^2([aAbB]|[1-9])$|^9([0-5]|7[1-4]|76)$')
         var res
@@ -87,7 +88,10 @@
             $('#nom_dept').append((nom_dept+" ("+$('#input_dept')[0].value+")"))
             stats = data[1]
             for (c=0;c<a_champs_stats.length;c++){
-                $('#stats_dept > thead > tr:last').append($('<th>').append(a_champs_stats[c]))
+                $('#stats_dept > thead > tr:last')  .append($('<th class="popover_conteneur">')
+                                                        .append(a_champs_stats[c])
+                                                        .append($('<span class="popover">').text(a_descriptif[c]))
+                                                    )
             }
             $('#stats_dept').append($('<tbody>'))
             for (c=0;c<stats.length;c++){
