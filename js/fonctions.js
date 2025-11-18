@@ -470,15 +470,6 @@
         $('#infos_voie_lieudit').empty();
         $('#pifomap_table_liens').empty();
     }
-    function empty_layers(){
-        map.getSource('points_nommes').setData(EMPTY_GEOJSON)
-        map.getSource('contour_communal').setData(EMPTY_GEOJSON)
-        map.getSource('hover_filaire').setData(EMPTY_GEOJSON)
-        map.getSource('polygones_convexhull').setData(EMPTY_GEOJSON)
-        map.getSource('adresses_OSM').setData(EMPTY_GEOJSON)
-        map.getSource('adresses_BAN').setData(EMPTY_GEOJSON)
-        map.getSource('hover_points').setData(EMPTY_GEOJSON)
-    }
     function affiche_ratio_map() {
         hash_value = ''
         if ($('#radio_prog_noms').is(':checked')) {

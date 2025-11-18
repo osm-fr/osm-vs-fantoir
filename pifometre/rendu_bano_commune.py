@@ -44,7 +44,7 @@ for nom,fantoir,num,x,y,statut,*args in point_adresses_data:
             emprises[fantoir] = [x,y,x,y]
         else:
             emprises[fantoir] = combine_emprises(emprises[nom],x,y)
-for nom,fantoir,x,y,statut,cat in point_nommes_data:
+for nom,fantoir,x,y,statut,*args in point_nommes_data:
     if nom :
         if not nom in emprises:
             emprises[nom] = [x,y,x,y]

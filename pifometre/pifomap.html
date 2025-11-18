@@ -8,7 +8,7 @@
 <script src="../js/jquery.tablesorter.combined.min.js"></script>
 <script src="../js/fonctions.js"></script>
 <script defer src="../js/menu.js"></script>
-<script src='https://unpkg.com/maplibre-gl@3.2.1/dist/maplibre-gl.js'></script>
+<script src='https://unpkg.com/maplibre-gl@5.13.0/dist/maplibre-gl.js'></script>
 
 <link rel="icon" type="image/png" href="../img/logo/favicon-96x96-vert.png" sizes="96x96" />
 <link rel="icon" type="image/svg+xml" href="../img/logo/favicon-vert.svg" />
@@ -17,7 +17,7 @@
 <link rel="manifest" href="../img/logo/site.webmanifest" />
 
 <link rel="preload" href="../css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel='stylesheet' href='https://unpkg.com/maplibre-gl@3.2.1/dist/maplibre-gl.css' />
+<link rel='stylesheet' href='https://unpkg.com/maplibre-gl@5.13.0/dist/maplibre-gl.css' />
 <link rel="stylesheet" href="../css/bulma/bulma.min.css" type="text/css"/>
 <link rel="stylesheet" href="../css/bulma/main.min.css" type="text/css"/>
 <link rel="stylesheet" href="../css/tablesorter/theme.default.min.css" type="text/css"/>
@@ -35,44 +35,26 @@
 
     EMPTY_GEOJSON = {'type': 'FeatureCollection',
                           'features': []}
-
-    // TOC = [
-    //     // "simple-tiles",
-    //     "OSM-standard-tiles",
-    //     "point_de_communes",
-    //     "contour_communal",
-    //     "noms_de_communes_1",
-    //     "noms_de_communes_2",
-    //     "noms_de_communes_3",
-    //     "filaire",
-    //     "filaire_transparent",
-    //     "points_nommes_rapproches_lieudit",
-    //     "points_nommes_rapproches_voie",
-    //     "points_nommes_non_rapproches_lieudit",
-    //     "points_nommes_non_rapproches_OSM",
-    //     "points_nommes_non_rapproches_voie_BDTOPO",
-    //     "points_nommes_non_rapproches_filaire_COMMUNE",
-    //     "hover_points",
-    //     "BAN_point",
-    //     "BAN_point_transparent",
-    //     "BAN_texte",
-    //     "OSM_point",
-    //     "OSM_texte",
-    //     "filaire_texte",
-    //     "polygones",
-    //     "polygones_texte",
-    //     "polygones_texte_point",
-    //   ]
-
-      TOC_HIERARCHIE = new Map([
+  
+    TOC_HIERARCHIE = new Map([
                                ["Adresses BAN",
                                                 ["BAN_point_a_integrer_voie_non_rapprochee",
-                                                 "BAN_point_a_integrer_voie_rapprochee",
-                                                 "BAN_point_integre"]],
+                                                 "BAN_point_a_integrer_voie_rapprochee"]],
+                                                 //"BAN_point_integre"
                                ["Adresses OSM",
                                                 ["OSM_point_rapproche",
-                                                 "OSM_point_non_rapproche"]]
-                               // ["Voies sans adresses,"]
+                                                 "OSM_point_non_rapproche"]],
+                               ["Nom trouvés dans OSM et rapprochés",
+                                                ["points_nommes_rapproches_OSM_voie",
+                                                 "points_nommes_rapproches_OSM_lieu_dit"]],
+                               ["Voies sans adresses inconnues d'OSM",
+                                                ["points_nommes_non_rapproches_voie_BDTOPO",
+                                                 "points_nommes_non_rapproches_filaire_COMMUNE"]],
+                               ["Lieux-dits inconnus d'OSM",
+                                                ["points_nommes_non_rapproches_CADASTRE"]],
+                               ["Connus seulement d'OSM",
+                                                ["points_nommes_non_rapproches_OSM_voie",
+                                                 "points_nommes_non_rapproches_OSM_lieu_dit"]]
                            ])
       TOC_GROUPES = new Map([
         ["BAN_point_a_integrer_voie_non_rapprochee",["Voies non intégrées",
@@ -91,7 +73,22 @@
         ["OSM_point_rapproche",["Adresses connues de la BAN",
                                 ["OSM_point_rapproche","OSM_texte_rapproche"]]],
         ["OSM_point_non_rapproche",["Adresses inconnues de la BAN",
-                                ["OSM_point_non_rapproche","OSM_texte_non_rapproche"]]]])
+                                ["OSM_point_non_rapproche","OSM_texte_non_rapproche"]]],
+        ["points_nommes_rapproches_OSM_voie",["Voies",
+                                ["points_nommes_rapproches_OSM_voie"]]],
+        ["points_nommes_rapproches_OSM_lieu_dit",["Lieux-dits",
+                                ["points_nommes_rapproches_OSM_lieu_dit"]]],
+        ["points_nommes_non_rapproches_voie_BDTOPO",["Source BD TOPO",
+                                ["points_nommes_non_rapproches_voie_BDTOPO"]]],
+        ["points_nommes_non_rapproches_filaire_COMMUNE",["Source communale",
+                                ["points_nommes_non_rapproches_filaire_COMMUNE"]]],
+        ["points_nommes_non_rapproches_CADASTRE",["Source Cadastre",
+                                ["points_nommes_non_rapproches_CADASTRE"]]],
+        ["points_nommes_non_rapproches_OSM_voie",["Voies",
+                                ["points_nommes_non_rapproches_OSM_voie"]]],
+        ["points_nommes_non_rapproches_OSM_lieu_dit",["Lieux-dits",
+                                ["points_nommes_non_rapproches_OSM_lieu_dit"]]]
+                            ])
                              // ["points_nommes_rapproches_lieudit",[["points_nommes_rapproches_lieudit"],"Lieux-dits rapprochés - OSM"]],
                              // ["points_nommes_rapproches_voie",[["points_nommes_rapproches_voie"],"Voies rapprochées - OSM"]],
                              // ["points_nommes_non_rapproches_lieudit",[["points_nommes_non_rapproches_lieudit"],"Lieux-dits non rapprochés - Cadastre"]],
@@ -178,7 +175,25 @@
                 maxZoom: 20
             });
 
-            map.on('load', () => {
+        map.on('styleimagemissing', (e) => {
+            const id = e.id; // id of the missing imag
+            console.log('manque : '+id)
+       });
+
+            map.on('load', async () => {
+                im = await map.loadImage('./img/lieudit_map_vert.png')
+                map.addImage('lieudit_vert', im.data);
+                im = await map.loadImage('./img/lieudit_map_rouge.png')
+                map.addImage('lieudit_rouge', im.data);
+                im = await map.loadImage('./img/lieudit_map_gris.png')
+                map.addImage('lieudit_gris', im.data);
+                im = await map.loadImage('./img/lieudit_map_bleu.png')
+                map.addImage('lieudit_bleu', im.data);
+                im = await map.loadImage('./img/voie_bd_topo.png')
+                map.addImage('voie_bd_topo', im.data);
+                im = await map.loadImage('./img/voie_bd_commune.png')
+                map.addImage('voie_bd_commune', im.data);
+
                 map_setup()
             });
             $('#bouton_pifostats').addClass('onglet_non_cliquable');
@@ -361,7 +376,8 @@
                 fantoir = e.features[0].properties.fantoir;
                 hoveredStateId = fantoir
                 map.setFeatureState({
-                      source: 'points_nommes',
+                      // source: 'points_nommes',
+                      source: couche_carto,
                       id: fantoir,
                     }, {
                       hover: true
@@ -384,7 +400,8 @@
             map.on('mouseleave', couche_carto, (e) => {
                 if (hoveredStateId){
                     map.setFeatureState({
-                          source: 'points_nommes',
+                          // source: 'points_nommes',
+                          source: couche_carto,
                           id: hoveredStateId,
                         }, {
                           hover: false
@@ -612,31 +629,28 @@
         for (const t of TOC_HIERARCHIE.keys()) {
             $('#conteneur_filtres .filtres').append($('<h3>').text(t))
             layers = TOC_HIERARCHIE.get(t)
-            // console.log(layers)
             for (l=0;l<layers.length;l++){
                 layer = TOC_GROUPES.get(layers[l])
-                console.log(layer)
                 $('#conteneur_filtres .filtres').append($('<div class="groupe_boutons_filtre">')
-                                                         .append($('<label>').addClass('switch vert').attr('for',layers[l])
+                                                         .append($('<label>').addClass('switch vert')
                                                              .append($('<input>').attr('id',layers[l])
                                                              .attr('type','checkbox')
                                                              .prop('checked',true)
                                                              .click(function(){
                                                                  update_TOC_group($(this).attr("id"))
-                                                             }))
-                                                             .append($('<div>')).append(layer[0])
-                                                             ))
+                                                             })
+                                                             )
+                                                             .append($('<div>'))
+                                                        )
+                                                        .append($('<label>').attr('for',layers[l])
+                                                            .append(layer[0])
+                                                        )
+                                                    )
             }
 
         }
     }
-                // <div class="contenu filtres">
-                //     <div class="groupe_bouton_filtre">
-                //         <label class="switch vert">
-                //             <input type="checkbox" />
-                //             <div></div>
-                //         </label>
-                //     </div>
+
     function update_TOC_group(layerid){
         if ($('input#'+layerid).prop("checked")){
             visibility = 'visible'
@@ -648,9 +662,9 @@
         }
     }
 
-    function affiche_index(){
+    function prepare_index(){
         $('#conteneur_index').empty().removeClass('vide');
-        $('#conteneur_index').css('display','block');
+        // $('#conteneur_index').css('display','block');
         $('#conteneur_index').append($('<table id="liste_recherche"></table>'))
         $('#liste_recherche').append($('<thead>').append($('<tr>').append($('<th>').append('Index des voies et lieux-dits')))).append($('<tbody>'))
 
@@ -994,37 +1008,59 @@
             }
             map.getSource('polygones_convexhull').setData(res)
 
-            res_points_nommes = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
-            res_points_nommes_rapproches_lieudit = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+            res_points_nommes_non_rapproches_CADASTRE = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+            res_points_nommes_non_rapproches_voie_BDTOPO = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+            res_points_nommes_non_rapproches_COMMUNE = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+            res_points_nommes_rapproches_OSM_lieu_dit = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+            res_points_nommes_rapproches_OSM_voie = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+            res_points_nommes_non_rapproches_OSM_lieu_dit = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+            res_points_nommes_non_rapproches_OSM_voie = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
             for (s=0;s<point_nomme_data.length;s++){
                  [nom,
                   fantoir,
                   lon,
                   lat,
                   label_statut,
-                  cat] = point_nomme_data[s]
-                  source = 'OSM'
-                  if (cat[0] == 'C'){
-                    source = 'CADASTRE'
-                  } else if (cat[0] == 'T'){
-                    source = 'BDTOPO'
-                  } else if (cat[0] == 'F'){
-                    source = 'COMMUNE'
-                  }
-                 rapproche = cat[1] == 'F'?true:false;
-                 avec_adresses = cat[2] == 'B'?true:false;
-                 nature = cat[3] == 'P'?'lieudit':'voie';
+                  source,
+                  rapproche,
+                  avec_adresses,
+                  lieu_dit] = point_nomme_data[s]
+                 nature = lieu_dit ?'lieudit':'voie';
 
                  contenu_index.set(nom,[source == 'OSM',rapproche])
 
-                if (rapproche && nature == 'lieudit'){
-                 res_points_nommes_rapproches_lieudit.features.push(get_geojson_point(lon,lat,{'nom':nom,'source':source,'rapproche':rapproche,'fantoir':fantoir,'nature':nature,'nom_com':nom_commune,'statut':label_statut}))
+                if (source =='OSM'){
+                    if (rapproche){
+                        if (lieu_dit){
+                            res_points_nommes_rapproches_OSM_lieu_dit.features.push(get_geojson_point(lon,lat,{'nom':nom,'source':source,'rapproche':rapproche,'fantoir':fantoir,'nature':nature,'nom_com':nom_commune,'statut':label_statut}))
+                        } else {
+                            res_points_nommes_rapproches_OSM_voie.features.push(get_geojson_point(lon,lat,{'nom':nom,'source':source,'rapproche':rapproche,'fantoir':fantoir,'nature':nature,'nom_com':nom_commune,'statut':label_statut}))
+                        }
+                    } else {
+                        if (lieu_dit){
+                            res_points_nommes_non_rapproches_OSM_lieu_dit.features.push(get_geojson_point(lon,lat,{'nom':nom,'source':source,'rapproche':rapproche,'fantoir':fantoir,'nature':nature,'nom_com':nom_commune,'statut':label_statut}))
+                            console.log(nom)
+                        } else {
+                            res_points_nommes_non_rapproches_OSM_voie.features.push(get_geojson_point(lon,lat,{'nom':nom,'source':source,'rapproche':rapproche,'fantoir':fantoir,'nature':nature,'nom_com':nom_commune,'statut':label_statut}))
+                        }
+                    }
                 } else {
-                 res_points_nommes.features.push(get_geojson_point(lon,lat,{'nom':nom,'source':source,'rapproche':rapproche,'fantoir':fantoir,'nature':nature,'nom_com':nom_commune,'statut':label_statut}))
+                    if (source == 'CADASTRE'){
+                        res_points_nommes_non_rapproches_CADASTRE.features.push(get_geojson_point(lon,lat,{'nom':nom,'source':source,'rapproche':rapproche,'fantoir':fantoir,'nature':nature,'nom_com':nom_commune,'statut':label_statut}))
+                    } else if (source == 'BDTOPO'){
+                        res_points_nommes_non_rapproches_voie_BDTOPO.features.push(get_geojson_point(lon,lat,{'nom':nom,'source':source,'rapproche':rapproche,'fantoir':fantoir,'nature':nature,'nom_com':nom_commune,'statut':label_statut}))
+                    } else if (source == 'COMMUNE'){
+                        res_points_nommes_non_rapproches_COMMUNE.features.push(get_geojson_point(lon,lat,{'nom':nom,'source':source,'rapproche':rapproche,'fantoir':fantoir,'nature':nature,'nom_com':nom_commune,'statut':label_statut}))
+                    }
                 }
             }
-            map.getSource('points_nommes_rapproches_lieudit').setData(res_points_nommes_rapproches_lieudit)
-            map.getSource('points_nommes').setData(res_points_nommes)
+            map.getSource('points_nommes_rapproches_OSM_lieu_dit').setData(res_points_nommes_rapproches_OSM_lieu_dit)
+            map.getSource('points_nommes_rapproches_OSM_voie').setData(res_points_nommes_rapproches_OSM_voie)
+            map.getSource('points_nommes_non_rapproches_OSM_lieu_dit').setData(res_points_nommes_non_rapproches_OSM_lieu_dit)
+            map.getSource('points_nommes_non_rapproches_OSM_voie').setData(res_points_nommes_non_rapproches_OSM_voie)
+            map.getSource('points_nommes_non_rapproches_CADASTRE').setData(res_points_nommes_non_rapproches_CADASTRE)
+            map.getSource('points_nommes_non_rapproches_voie_BDTOPO').setData(res_points_nommes_non_rapproches_voie_BDTOPO)
+            map.getSource('points_nommes_non_rapproches_COMMUNE').setData(res_points_nommes_non_rapproches_COMMUNE)
 
             res_numero_BAN_integres                           = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
             res_numero_BAN_a_integrer_voie_rapprochee         = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
@@ -1055,7 +1091,8 @@
                     } else if (numero_rapproche == 0){
                         res_numero_BAN_a_integrer_voie_rapprochee.features.push(get_geojson_point(lon,lat,{'nom':nom,'fantoir':fantoir,'numero':numero,'nom_com':nom_commune}))                        
                     } else {
-                        res_numero_BAN_integres.features.push(get_geojson_point(lon,lat,{'nom':nom,'fantoir':fantoir,'numero':numero,'nom_com':nom_commune}))
+                        // numeros BAN connus d'OSM - à intégrer + tard
+                        // res_numero_BAN_integres.features.push(get_geojson_point(lon,lat,{'nom':nom,'fantoir':fantoir,'numero':numero,'nom_com':nom_commune}))
                     }
                 }
                 if (!contenu_index.has(nom)||rapproche){
@@ -1072,7 +1109,7 @@
 
             affiche_filtres();
             prepare_TOC();
-            affiche_index();
+            prepare_index();
 
             $('body').css('cursor','default');
             $('#wait_ajax').css('visibility','hidden');
@@ -1090,50 +1127,51 @@
         else if (localStorage.raster == 'OSM-standard-tiles') {$( "#fond_standard" ).prop( "checked", true );}      
 
         map.addControl(new maplibregl.NavigationControl());
-        if (!map.hasImage('rond_50')){
-            map.loadImage('./img/rond_50.png', (error, image) => {
-                map.addImage('rond_50', image, { sdf: true });
-            })
-        }
-        if (!map.hasImage('lieudit_vert')){
-            map.loadImage('./img/lieudit_map_vert.png', (error, image) => {
-                map.addImage('lieudit_vert', image);
-            })
-        }
-        if (!map.hasImage('lieudit_rouge')){
-            map.loadImage('./img/lieudit_map_rouge.png', (error, image) => {
-                map.addImage('lieudit_rouge', image);
-            })
-        }
-        if (!map.hasImage('lieudit_bleu')){
-            map.loadImage('./img/lieudit_map_bleu.png', (error, image) => {
-                map.addImage('lieudit_bleu', image);
-            })
-        }
-        if (!map.hasImage('lieudit_gris')){
-            map.loadImage('./img/lieudit_map_gris.png', (error, image) => {
-                map.addImage('lieudit_gris', image);
-            })
-        }
-        if (!map.hasImage('voie_bd_topo')){
-            map.loadImage('./img/voie_bd_topo.png', (error, image) => {
-                map.addImage('voie_bd_topo', image);
-            })
-        }
-        if (!map.hasImage('voie_bd_commune')){
-            map.loadImage('./img/voie_bd_commune.png', (error, image) => {
-                map.addImage('voie_bd_commune', image);
-            })
-        }
+        // if (!map.hasImage('rond_50')){
+        //     map.loadImage('./img/rond_50.png', (error, image) => {
+        //         map.addImage('rond_50', image, { sdf: true });
+        //     })
+        // }
+        // if (!map.hasImage('lieudit_vert')){
+        //     map.loadImage('./img/lieudit_map_vert.png', (error, image) => {
+        //         map.addImage('lieudit_vert', image);
+        //     })
+        // }
+        // if (!map.hasImage('lieudit_rouge')){
+        //     map.loadImage('./img/lieudit_map_rouge.png', (error, image) => {
+        //         map.addImage('lieudit_rouge', image);
+        //     })
+        // }
+        // if (!map.hasImage('lieudit_bleu')){
+        //     map.loadImage('./img/lieudit_map_bleu.png', (error, image) => {
+        //         map.addImage('lieudit_bleu', image);
+        //     })
+        // }
+        // if (!map.hasImage('lieudit_gris')){
+        //     map.loadImage('./img/lieudit_map_gris.png', (error, image) => {
+        //         map.addImage('lieudit_gris', image);
+        //     })
+        // }
+        // if (!map.hasImage('voie_bd_topo')){
+        //     map.loadImage('./img/voie_bd_topo.png', (error, image) => {
+        //         map.addImage('voie_bd_topo', image);
+        //     })
+        // }
+        // if (!map.hasImage('voie_bd_commune')){
+        //     map.loadImage('./img/voie_bd_commune.png', (error, image) => {
+        //         map.addImage('voie_bd_commune', image);
+        //     })
+        // }
         interactions_souris('noms_de_communes')
         interactions_souris('simple-tiles')
         interactions_souris('BAN_point_transparent')
         interactions_souris('OSM_point')
         interactions_souris('filaire_transparent')
-        interactions_souris('points_nommes_rapproches_lieudit')
-        interactions_souris('points_nommes_non_rapproches_lieudit')
-        interactions_souris('points_nommes_rapproches_voie')
-        interactions_souris('points_nommes_non_rapproches_OSM')
+        interactions_souris('points_nommes_rapproches_OSM_voie')
+        interactions_souris('points_nommes_rapproches_OSM_lieu_dit')
+        interactions_souris('points_nommes_non_rapproches_OSM_voie')
+        interactions_souris('points_nommes_non_rapproches_OSM_lieu_dit')
+        interactions_souris('points_nommes_non_rapproches_CADASTRE')
         interactions_souris('points_nommes_non_rapproches_voie_BDTOPO')
         interactions_souris('points_nommes_non_rapproches_filaire_COMMUNE')
         interactions_souris('polygones')
@@ -1141,13 +1179,13 @@
         $('#pifoprogression').click(function(){
             affiche_ratio_map()
         })
-        $('#panneau_map #conteneur_filtres input').click(function(){
-            update_filtres()
-            filtre_pifomap()
-        })
-        $('#filtre_lieuxdits_mobile input').click(function(){
-            filtre_pifomap_mobile()
-        })
+        // $('#panneau_map #conteneur_filtres input').click(function(){
+        //     update_filtres()
+        //     filtre_pifomap()
+        // })
+        // $('#filtre_lieuxdits_mobile input').click(function(){
+        //     filtre_pifomap_mobile()
+        // })
 
         update_radio_ratio()
         affiche_ratio_map()
@@ -1217,8 +1255,33 @@
                     zoom: mapz,
                     maxZoom: 20,
                 });
+       // map.on('styleimagemissing', async (e) => {
+       //      const id = e.id; // id of the missing imag
+       //      console.log('manque 2 : '+id)
+       //      if (id == 'lieudit_vert'){
+       //      console.log(map.hasImage('lieudit_vert'))
+       //          // im = await map.loadImage('https://bano.openstreetmap.fr/_v/pifometre/img/lieudit_map_vert.png')
+       //          im = await map.loadImage('./img/lieudit_map_vert.png')
+       //                             console.log('ifififi 2 : '+id)
+       //              map.addImage('lieudit_vert', im.data);
+       //      }
 
-                map.on('load', () => {
+       // });
+
+                map.on('load', async () => {
+                    im = await map.loadImage('./img/lieudit_map_vert.png')
+                    map.addImage('lieudit_vert', im.data);
+                    im = await map.loadImage('./img/lieudit_map_rouge.png')
+                    map.addImage('lieudit_rouge', im.data);
+                    im = await map.loadImage('./img/lieudit_map_gris.png')
+                    map.addImage('lieudit_gris', im.data);
+                    im = await map.loadImage('./img/lieudit_map_bleu.png')
+                    map.addImage('lieudit_bleu', im.data);
+                    im = await map.loadImage('./img/voie_bd_topo.png')
+                    map.addImage('voie_bd_topo', im.data);
+                    im = await map.loadImage('./img/voie_bd_commune.png')
+                    map.addImage('voie_bd_commune', im.data);
+
                     map_setup()
                 });
 
@@ -1282,7 +1345,8 @@
                     $('#conteneur_filtres').css('display','none');
                     $('#onglet_infos').removeClass('onglet_actif');
                     $('#conteneur_infos').css('display','none');
-                    affiche_index();
+                    $('#conteneur_index').css('display','block');
+                    // prepare_index();
                 }
             })
 
@@ -1484,6 +1548,19 @@
         $('#conteneur_filtres').css('display','none');
         $('#onglet_index').removeClass('onglet_actif');
         $('#conteneur_index').css('display','none');
+    }
+    function empty_layers(){
+        geojson_sources = new Set()
+        layers = map.getLayersOrder()
+        for (l=0;l<layers.length;l++){
+            s = map.getSource(map.getLayer(layers[l]).source)
+            if (s.type == 'geojson'){
+                geojson_sources.add(s.id)
+            }
+        }
+        for (const s of geojson_sources){
+            map.getSource(s).setData(EMPTY_GEOJSON)
+        }
     }
 </script>
 </head>

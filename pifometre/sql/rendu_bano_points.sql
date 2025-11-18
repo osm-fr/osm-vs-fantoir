@@ -16,26 +16,16 @@ AS
 FROM    nom_fantoir
 WHERE   code_insee = '__code_insee__' AND
         source = 'BAN')
--- Lieux-dits non rapprochés
+-- Lieux-dits et voies non rapprochés
 SELECT nom,
        fantoir,
        lon,
        lat,
        label_statut,
-       CASE source
-           WHEN 'CADASTRE' THEN 'Co' -- C = source Cadastre - o = inconnu d'OSM
-           WHEN 'BDTOPO' THEN 'To' -- T = source BT Topo - o = inconnu d'OSM
-           WHEN 'COMMUNE' THEN 'Fo' -- F = source Filaire Communal - o = inconnu d'OSM
-       END||
-       CASE
-           WHEN ban.fantoir IS NULL THEN 'b'
-           ELSE 'B'
-       END ||
-       CASE source
-           WHEN 'CADASTRE' THEN 'P' -- lieu-dit
-           WHEN 'BDTOPO' THEN 'V' -- voie nommée
-           WHEN 'COMMUNE' THEN 'C' -- voie nommée
-       END
+       source,
+       false AS rapproche,
+       (ban.fantoir IS NOT NULL) AS avec_adresses,
+       (source = 'CADASTRE') AS lieu_dit
 FROM   (SELECT *
         FROM  bano_points_nommes
         WHERE code_insee = '__code_insee__' AND
@@ -57,19 +47,10 @@ SELECT nom,
        lon,
        lat,
        label_statut,
-       CASE
-           WHEN fantoir IS NULL THEN 'Of' -- O = source OSM - f = sans code Fantoir
-           ELSE 'OF'                      -- O = source OSM - F = avec code Fantoir
-       END ||
-       CASE
-           WHEN ban.fantoir IS NULL THEN 'b'
-           -- WHEN ban.fantoir IS NOT NULL AND nature = 'place' THEN 'B'
-          ELSE 'B'
-       END ||
-       CASE nature
-           WHEN 'place' THEN 'P'
-           ELSE 'V'
-       END
+       'OSM',
+       (fantoir IS NOT NULL),
+       (ban.fantoir IS NOT NULL) AS avec_adresses,
+       (nature = 'place') AS lieu_dit
 FROM   (SELECT *
         FROM  bano_points_nommes
         WHERE code_insee = '__code_insee__'   AND

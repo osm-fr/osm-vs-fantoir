@@ -28,21 +28,49 @@
             "minzoom":5,
             "maxzoom":5
         },
-        "points_nommes": {
+        "points_nommes_rapproches_OSM_lieu_dit": {
         "type": "geojson",
         "promoteId": "fantoir",
         "data": {"type": "FeatureCollection",
                           "features": []
                 }
         },
-        "points_nommes_rapproches_lieudit": {
+        "points_nommes_rapproches_OSM_voie": {
         "type": "geojson",
         "promoteId": "fantoir",
         "data": {"type": "FeatureCollection",
                           "features": []
                 }
         },
-        "adresses_OSM" : {
+        "points_nommes_non_rapproches_OSM_lieu_dit": {
+        "type": "geojson",
+        "promoteId": "fantoir",
+        "data": {"type": "FeatureCollection",
+                          "features": []
+                }
+        },
+        "points_nommes_non_rapproches_OSM_voie": {
+        "type": "geojson",
+        "promoteId": "fantoir",
+        "data": {"type": "FeatureCollection",
+                          "features": []
+                }
+        },
+        "points_nommes_non_rapproches_CADASTRE": {
+        "type": "geojson",
+        "promoteId": "fantoir",
+        "data": {"type": "FeatureCollection",
+                          "features": []
+                }
+        },
+        "points_nommes_non_rapproches_voie_BDTOPO": {
+        "type": "geojson",
+        "promoteId": "fantoir",
+        "data": {"type": "FeatureCollection",
+                          "features": []
+                }
+        },
+        "points_nommes_non_rapproches_COMMUNE": {
         "type": "geojson",
         "promoteId": "fantoir",
         "data": {"type": "FeatureCollection",
@@ -104,6 +132,7 @@
         },
         "hover_filaire": {
         "type": "geojson",
+        "promoteId": "fantoir",
         "data": {"type": "FeatureCollection",
                           "features": []
                 }
@@ -260,8 +289,8 @@
             }
         },
         {
-            "id": "points_nommes_rapproches_lieudit",
-            "source": "points_nommes_rapproches_lieudit",
+            "id": "points_nommes_rapproches_OSM_lieu_dit",
+            "source": "points_nommes_rapproches_OSM_lieu_dit",
             "minzoom" : 10,
             "type": "symbol",
             "layout": {
@@ -275,7 +304,7 @@
                         ["zoom"],
                         12.99,0,
                         13,16],
-                "icon-size":["case",["==",["get","nature"],"lieudit"],1,0],
+                "icon-size":1,
                 "icon-allow-overlap":true,
                 "icon-image":"lieudit_vert"
                 },
@@ -286,9 +315,8 @@
             }
         },
         {
-            "id": "points_nommes_rapproches_voie",
-            "source": "points_nommes",
-            "filter":["all",["==",["get", "rapproche"],true],["==",["get","nature"],"voie"]],
+            "id": "points_nommes_rapproches_OSM_voie",
+            "source": "points_nommes_rapproches_OSM_voie",
             "minzoom" : 10,
             "type": "symbol",
             "layout": {
@@ -301,10 +329,7 @@
                         ["linear"],
                         ["zoom"],
                         12.99,0,
-                        13,16],
-                "icon-size":["case",["==",["get","nature"],"lieudit"],1,0],
-                "icon-allow-overlap":true,
-                "icon-image":"lieudit_vert"
+                        13,16]
                 },
             "paint": {
                 "text-color": ["case",["boolean",["to-boolean",["feature-state","hover"]],"true"],"darkgreen","green"],
@@ -313,9 +338,8 @@
             }
         },
         {
-            "id": "points_nommes_non_rapproches_lieudit",
-            "source": "points_nommes",
-            "filter":["all",["==",["get", "rapproche"],false],["==",["get","nature"],"lieudit"]],
+            "id": "points_nommes_non_rapproches_OSM_lieu_dit",
+            "source": "points_nommes_non_rapproches_OSM_lieu_dit",
             "minzoom" : 10,
             "type": "symbol",
             "layout": {
@@ -331,19 +355,43 @@
                         13,16],
                 "icon-allow-overlap":true,
                 "icon-size":1,
-                "icon-image":["case",
-                                ["==",["get","source"],"CADASTRE"],["case",["!=", ["to-string",["get","statut"]],""],"lieudit_gris","lieudit_rouge"],"lieudit_bleu"]
+                "icon-image":"lieudit_bleu"
             },
             "paint": {
-                "text-color": ["case",["==",["get","source"],"CADASTRE"],["case",["!=", ["to-string",["get","statut"]],""],"grey","red"],"royalblue"],
+                "text-color": "royalblue",
                 "text-halo-color": "white",
                 "text-halo-width": 4
             }
         },
         {
-            "id": "points_nommes_non_rapproches_OSM",
-            "source": "points_nommes",
-            "filter":["all",["==",["get", "rapproche"],false],["==",["get","nature"],"voie"],["==",["get","source"],"OSM"]],
+            "id": "points_nommes_non_rapproches_CADASTRE",
+            "source": "points_nommes_non_rapproches_CADASTRE",
+            "minzoom" : 10,
+            "type": "symbol",
+            "layout": {
+                "text-field": ["case",["!=", ["to-string",["get","statut"]],""],["format",["get", "nom"],{},"\n",{},["get", "statut"],{"font-scale": 0.8}],["get","nom"]],
+                "text-variable-anchor": ["left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"],
+                "text-radial-offset": 0.7,
+                "text-justify": "auto",
+                "text-overlap":"cooperative",
+                "text-size": ["interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        12.99,0,
+                        13,16],
+                "icon-allow-overlap":true,
+                "icon-size":1,
+                "icon-image":"lieudit_rouge"
+            },
+            "paint": {
+                "text-color": ["case",["!=", ["to-string",["get","statut"]],""],"grey","red"],
+                "text-halo-color": "white",
+                "text-halo-width": 4
+            }
+        },
+        {
+            "id": "points_nommes_non_rapproches_OSM_voie",
+            "source": "points_nommes_non_rapproches_OSM_voie",
             "minzoom" : 10,
             "type": "symbol",
             "layout": {
@@ -366,8 +414,7 @@
         },
         {
             "id": "points_nommes_non_rapproches_voie_BDTOPO",
-            "source": "points_nommes",
-            "filter":["all",["==",["get", "rapproche"],false],["==",["get","nature"],"voie"],["==",["get","source"],"BDTOPO"]],
+            "source": "points_nommes_non_rapproches_voie_BDTOPO",
             "minzoom" : 10,
             "type": "symbol",
             "layout": {
@@ -397,8 +444,7 @@
         },
         {
             "id": "points_nommes_non_rapproches_filaire_COMMUNE",
-            "source": "points_nommes",
-            "filter":["all",["==",["get", "rapproche"],false],["==",["get","nature"],"voie"],["==",["get","source"],"COMMUNE"]],
+            "source": "points_nommes_non_rapproches_COMMUNE",
             "minzoom" : 10,
             "type": "symbol",
             "layout": {
