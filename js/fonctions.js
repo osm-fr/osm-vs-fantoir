@@ -460,8 +460,7 @@
         history.replaceState("", "", window.location.pathname+"?"+window.location.search.replace(/\?/g,''))
     }
     function reset_panneau_map(){
-        console.log('reset');
-        $('#conteneur_index').empty().css('display','none');
+        $('#conteneur_index').css('display','none');
         $('#conteneur_infos').css('display','none');
         $('#conteneur_filtres').css('display','none');
         $('#panneau_map h2').empty()

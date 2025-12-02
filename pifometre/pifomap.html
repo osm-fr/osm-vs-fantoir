@@ -33,11 +33,15 @@
     FILTRES_STATUT = [["rapproches",true],
                ["non_rapproches",true]]
 
+    HOVER_LAYERS = new Set()
+    RASTER_LAYERS = new Set()
+    GEOJSON_SOURCES = new Set()
+
     EMPTY_GEOJSON = {'type': 'FeatureCollection',
                           'features': []}
   
     TOC_HIERARCHIE = new Map([
-                               ["Adresses BAN",
+                               ["Adresses BAN non intégrées",
                                                 ["BAN_point_a_integrer_voie_non_rapprochee",
                                                  "BAN_point_a_integrer_voie_rapprochee"]],
                                                  //"BAN_point_integre"
@@ -57,45 +61,38 @@
                                                  "points_nommes_non_rapproches_OSM_lieu_dit"]]
                            ])
       TOC_GROUPES = new Map([
-        ["BAN_point_a_integrer_voie_non_rapprochee",["Voies non intégrées",
+        ["BAN_point_a_integrer_voie_non_rapprochee",["Dans des voies non intégrées",
                                 ["BAN_point_a_integrer_voie_non_rapprochee",
                                  "BAN_texte_a_integrer_voie_non_rapprochee",
                                  "BAN_point_transparent_a_integrer_voie_non_rapprochee",
                                  "polygones",
                                  "polygones_texte",
-                                 "polygones_texte_point"]]],
-        ["BAN_point_a_integrer_voie_rapprochee",["Adresses non intégrées",
+                                 "polygones_texte_point"],"rouge"]],
+        ["BAN_point_a_integrer_voie_rapprochee",["Dans des voies intégrées",
                                 ["BAN_point_a_integrer_voie_rapprochee",
                                  "BAN_texte_a_integrer_voie_rapprochee",
-                                 "BAN_point_transparent_a_integrer_voie_rapprochee"]]],
+                                 "BAN_point_transparent_a_integrer_voie_rapprochee"],"orange"]],
         ["BAN_point_integre",["Adresses intégrées",
-                                ["BAN_point_integre","BAN_texte_integre"]]],
+                                ["BAN_point_integre","BAN_texte_integre"],"noir"]],
         ["OSM_point_rapproche",["Adresses connues de la BAN",
-                                ["OSM_point_rapproche","OSM_texte_rapproche"]]],
+                                ["OSM_point_rapproche","OSM_texte_rapproche"],"vert"]],
         ["OSM_point_non_rapproche",["Adresses inconnues de la BAN",
-                                ["OSM_point_non_rapproche","OSM_texte_non_rapproche"]]],
+                                ["OSM_point_non_rapproche","OSM_texte_non_rapproche"],"bleu"]],
         ["points_nommes_rapproches_OSM_voie",["Voies",
-                                ["points_nommes_rapproches_OSM_voie"]]],
+                                ["points_nommes_rapproches_OSM_voie"],"vert"]],
         ["points_nommes_rapproches_OSM_lieu_dit",["Lieux-dits",
-                                ["points_nommes_rapproches_OSM_lieu_dit"]]],
+                                ["points_nommes_rapproches_OSM_lieu_dit"],"vert"]],
         ["points_nommes_non_rapproches_voie_BDTOPO",["Source BD TOPO",
-                                ["points_nommes_non_rapproches_voie_BDTOPO"]]],
+                                ["points_nommes_non_rapproches_voie_BDTOPO"],"rouge"]],
         ["points_nommes_non_rapproches_filaire_COMMUNE",["Source communale",
-                                ["points_nommes_non_rapproches_filaire_COMMUNE"]]],
+                                ["points_nommes_non_rapproches_filaire_COMMUNE"],"rouge"]],
         ["points_nommes_non_rapproches_CADASTRE",["Source Cadastre",
-                                ["points_nommes_non_rapproches_CADASTRE"]]],
+                                ["points_nommes_non_rapproches_CADASTRE"],"rouge"]],
         ["points_nommes_non_rapproches_OSM_voie",["Voies",
-                                ["points_nommes_non_rapproches_OSM_voie"]]],
+                                ["points_nommes_non_rapproches_OSM_voie"],"bleu"]],
         ["points_nommes_non_rapproches_OSM_lieu_dit",["Lieux-dits",
-                                ["points_nommes_non_rapproches_OSM_lieu_dit"]]]
+                                ["points_nommes_non_rapproches_OSM_lieu_dit"],"bleu"]]
                             ])
-                             // ["points_nommes_rapproches_lieudit",[["points_nommes_rapproches_lieudit"],"Lieux-dits rapprochés - OSM"]],
-                             // ["points_nommes_rapproches_voie",[["points_nommes_rapproches_voie"],"Voies rapprochées - OSM"]],
-                             // ["points_nommes_non_rapproches_lieudit",[["points_nommes_non_rapproches_lieudit"],"Lieux-dits non rapprochés - Cadastre"]],
-                             // ["points_nommes_non_rapproches_OSM",[["points_nommes_non_rapproches_OSM"],"Noms seulement connus d'OSM"]],
-                             // ["points_nommes_non_rapproches_voie_BDTOPO",[["points_nommes_non_rapproches_voie_BDTOPO"],"Voies non rapprochées - BDTOPO"]],
-                             // ["points_nommes_non_rapproches_filaire_COMMUNE",[["points_nommes_non_rapproches_filaire_COMMUNE"],"Voies non rapprochées - Commune"]]
-                         // ])
 
     var table = 'table_pifometre'
 
@@ -363,8 +360,8 @@
                 });
             }
         }
-        if (couche_carto == 'BAN_point_transparent'||
-            couche_carto == 'OSM_point'||
+        if (couche_carto.indexOf('BAN_point_transparent') == 0 ||
+            couche_carto.indexOf('OSM_point') == 0||
             couche_carto == 'filaire_transparent'||
             couche_carto == 'polygones'||
             couche_carto.indexOf('points_nommes_') == 0){
@@ -377,7 +374,7 @@
                 hoveredStateId = fantoir
                 map.setFeatureState({
                       // source: 'points_nommes',
-                      source: couche_carto,
+                      source: map.getLayer(couche_carto).source,
                       id: fantoir,
                     }, {
                       hover: true
@@ -401,7 +398,7 @@
                 if (hoveredStateId){
                     map.setFeatureState({
                           // source: 'points_nommes',
-                          source: couche_carto,
+                          source: map.getLayer(couche_carto).source,
                           id: hoveredStateId,
                         }, {
                           hover: false
@@ -437,8 +434,8 @@
         //------- POINTS D'ADRESSE et NOMS DE VOIES OU LIEUX-DITS -------
         //---------------------------------------------------------------
 
-        if (couche_carto == 'BAN_point_transparent' ||
-            couche_carto == 'OSM_point' ||
+        if (couche_carto.indexOf('BAN_point_transparent') == 0 ||
+            couche_carto.indexOf('OSM_point') == 0 ||
             couche_carto == 'polygones' ||
             couche_carto == 'filaire_transparent' ||
             couche_carto.indexOf('points_nommes') == 0){
@@ -474,6 +471,7 @@
                     //Infos sur la voie ou le lieu-dit
                     is_place = nature == 'lieudit'
                     nom_topo = null
+                    nom_ban = nom
                     has_vrai_code_fantoir = false
                     ajout_infos_voie_lieudit(couche_carto)
 
@@ -503,8 +501,8 @@
                          nom_ban,
                          source_nom_ban,
                          nom_ancienne_commune,
-                         lon,
-                         lat,
+                         lon_voie,
+                         lat_voie,
                          statut_voie,
                          numeros_a_proposer,
                          caractere_annul,
@@ -521,7 +519,7 @@
 
                         //Mettre à jour le nom de la rue
                         if (nom_osm != null){
-                            if (couche_carto == 'BAN_point_transparent' || couche_carto == 'OSM_point') {
+                            if (couche_carto.indexOf('BAN_point_transparent') == 0 || couche_carto.indexOf('OSM_point_') == 0) {
                                 $('#panneau_map #conteneur_infos h2').attr('texte_voie_a_copier',nom_osm[0][0]).text(numero+' '+nom_osm[0][0])
                             } else {
                                 $('#panneau_map #conteneur_infos h2').attr('texte_voie_a_copier',nom_osm[0][0]).text(nom_osm[0][0])
@@ -566,6 +564,8 @@
             $('#panneau_map #conteneur_infos h2').removeAttr('numero')
         }
         titre = numero != undefined ? numero+' '+nom:nom;
+        console.log('numero '+numero)
+        console.log('titre '+titre)
         $('#panneau_map #conteneur_infos h2').attr('texte_voie_a_copier',nom)
                             .attr('xmin',xmin)
                             .attr('xmax',xmax)
@@ -575,7 +575,7 @@
                             .text(titre)
 
         //Bouton Copier le nom de la voie ou du lieu-dit
-        $('#panneau_map #en_tete #boutons').append('<button id="copier_voie" class="pifomap" title="Copier le nom de la voie"></button>')
+        $('#panneau_map #conteneur_infos .en_tete #boutons').append('<button id="copier_voie" class="pifomap" title="Copier le nom de la voie"></button>')
         $('#copier_voie').click(function(){
             //Copie le nom de la voie dans le presse-papier
             if (eval(localStorage.PreferencesCopierCleValeur)){
@@ -600,7 +600,7 @@
         })
 
         //Bouton Centrer sur la voie ou le lieu-dit
-        $('#panneau_map #en_tete #boutons').append($('<button id="centrer_voie_lieudit" title="Centrer la carte sur ce lieu"></button>'))
+        $('#panneau_map #conteneur_infos .en_tete #boutons').append($('<button id="centrer_voie_lieudit" title="Centrer la carte sur ce lieu"></button>'))
 
         $('#centrer_voie_lieudit').click(function(){
             xmin = $('#panneau_map #conteneur_infos h2').attr('xmin')
@@ -632,7 +632,7 @@
             for (l=0;l<layers.length;l++){
                 layer = TOC_GROUPES.get(layers[l])
                 $('#conteneur_filtres .filtres').append($('<div class="groupe_boutons_filtre">')
-                                                         .append($('<label>').addClass('switch vert')
+                                                         .append($('<label>').addClass('switch '+layer[2])
                                                              .append($('<input>').attr('id',layers[l])
                                                              .attr('type','checkbox')
                                                              .prop('checked',true)
@@ -711,13 +711,27 @@
         }
     }
 
-    function surbrillance_voie_numeros(nom,fantoir){
-        map.setFilter('filaire',["==",["get", "nom"], nom])
-        map.setFilter('filaire_texte',["==",["get", "nom"], nom])
-        if (fantoir != undefined){
-            map.setFilter('hover_points',["any",["==",["get", "fantoir"], fantoir],["==",["get", "nom"], nom]])
+    function surbrillance_voie_numeros(nom,fantoir,numero){
+        if (!numero){
+            map.setFilter('filaire',["==",["get", "nom"], nom])
+            map.setFilter('filaire_texte',["==",["get", "nom"], nom])
+            HOVER_LAYERS.forEach(function(hover_layer){
+                layer = hover_layer.replace('hover_','')
+                if (map.getLayoutProperty(layer,'visibility') == undefined||map.getLayoutProperty(layer,'visibility') == 'visible'){
+                    if (fantoir != undefined){
+                        map.setFilter(hover_layer,["any",["==",["get", "fantoir"], fantoir],["==",["get", "nom"], nom]])
+                    } else {
+                        map.setFilter(hover_layer,["==",["get", "nom"], nom])
+                    }
+                }
+            })
         } else {
-            map.setFilter('hover_points',["==",["get", "nom"], nom])
+            HOVER_LAYERS.forEach(function(hover_layer){
+                layer = hover_layer.replace('hover_','')
+                if (map.getLayoutProperty(layer,'visibility') == undefined||map.getLayoutProperty(layer,'visibility') == 'visible'){
+                    map.setFilter(hover_layer,["all",["==",["get", "numero"], numero],["==",["get", "nom"], nom]])
+                }
+            })
         }
     }
 
@@ -725,14 +739,16 @@
         map.getCanvas().style.cursor = '';
         map.setFilter('filaire',["==",["get", "nom"], " "])
         map.setFilter('filaire_texte',["==",["get", "nom"], " "])
-        map.setFilter('hover_points',["==",["get", "fantoir"], "xxxxxxxxx"])
+        HOVER_LAYERS.forEach(function(hover_layer){
+            map.setFilter(hover_layer,["==",["get", "fantoir"], "xxxxxxxxx"])
+        })
     }
 
     function ajout_infos_numero(couche_carto){
         // Points OSM bleus - non rapprochés
-        if (!fantoir && couche_carto == 'OSM_point') {
+        if (!fantoir && couche_carto.indexOf('OSM_point_non_rapproche') == 0) {
             $('#infos_numero').append($('<p>').text("Cette adresse (numéro + nom de voie ou lieu-dit) est issue d'OSM et elle est inconnue de la BAN. Son nom est aussi inconnu de TOPO."));
-        } else if (couche_carto == 'BAN_point_transparent' || couche_carto == 'OSM_point') {
+        } else if (couche_carto.indexOf('OSM_point') == 0 || couche_carto.indexOf('BAN_point_transparent') == 0) {
 
             $('#infos_numero').append($('<h3>').text('Le point d\'adresse :'));
 
@@ -764,13 +780,11 @@
         $('#infos_numero').on("mouseenter", function() {
             nom = $('#panneau_map #conteneur_infos h2').attr('nom')
             numero = $('#panneau_map #conteneur_infos h2').attr('numero')
-            map.setFilter('hover_points',["all",["==",["get", "numero"], numero],["==",["get", "nom"], nom]])
-            // map.setFilter('hover_points',["==",["get", "numero"], numero])
+            surbrillance_voie_numeros(nom,undefined,numero)
         });
         $('#infos_numero').on("mouseleave", function() {
-            map.getCanvas().style.cursor = '';
-            map.setFilter('hover_points',["==",["get", "fantoir"], "xxxxxxxxx"])
-        } );
+            fin_surbrillance_voie_numeros()
+        });
     }
 
     function ajout_infos_voie_lieudit(couche_carto){
@@ -799,7 +813,7 @@
                                 .append($('<span>').text(title_text)));
 
         // Toutes les adresses OSM (bleues, vertes) ou BAN (oranges) de lieux-dits et voies rapprochés 
-        if ((couche_carto == 'BAN_point_transparent' || couche_carto == 'OSM_point') && rapproche) {
+        if ((couche_carto.indexOf('BAN_point_transparent') == 0 || couche_carto.indexOf('OSM_point_') == 0) && rapproche) {
             $('#infos_voie_lieudit').append($('<ul>'));
             $('#infos_voie_lieudit ul:last').append($('<li>').append($('<span class="gras">').text('Nom(s) OSM : ')));
             //Affichage de tous les noms OSM éventuels : name, old_name, alt_name                    
@@ -886,7 +900,7 @@
         }
 
         $('#infos_voie_lieudit').on("mouseenter", function() {
-            nom = $('#panneau_map #conteneur_infosh2').attr('nom')
+            nom = $('#panneau_map #conteneur_infos h2').attr('nom')
             fantoir = undefined
             if ($('#panneau_map #conteneur_infos h2').attr('fantoir')){
                 fantoir = $('#panneau_map #conteneur_infos h2').attr('fantoir')
@@ -924,7 +938,6 @@
         add_josm_link(table,xmin,xmax,ymin,ymax,code_insee,nom_commune)
         add_id_link(table,'http://www.openstreetmap.org/edit?editor=id#map=18/'+lat+'/'+lon,'ID')
 
-        // if (numeros_a_proposer && (couche_carto == 'BAN_point_transparent' || couche_carto == 'OSM_point')) {
         if (numeros_a_proposer){
             if (is_place) {
                 $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Intégrer les adresses dans JOSM'))))
@@ -1039,7 +1052,6 @@
                     } else {
                         if (lieu_dit){
                             res_points_nommes_non_rapproches_OSM_lieu_dit.features.push(get_geojson_point(lon,lat,{'nom':nom,'source':source,'rapproche':rapproche,'fantoir':fantoir,'nature':nature,'nom_com':nom_commune,'statut':label_statut}))
-                            console.log(nom)
                         } else {
                             res_points_nommes_non_rapproches_OSM_voie.features.push(get_geojson_point(lon,lat,{'nom':nom,'source':source,'rapproche':rapproche,'fantoir':fantoir,'nature':nature,'nom_com':nom_commune,'statut':label_statut}))
                         }
@@ -1078,18 +1090,17 @@
                   source,
                   voie_rapprochee,
                   numero_rapproche] = point_numero_data[s]
-                source = source == 'O'?'OSM':'BAN'
                 if (source == 'OSM'){
-                    if (voie_rapprochee == 1 && numero_rapproche == 1){
-                        res_numero_OSM_rapproches.features.push(get_geojson_point(lon,lat,{'nom':nom,'fantoir':fantoir,'numero':numero,'nom_com':nom_commune}))   
+                    if (numero_rapproche == 1){
+                        res_numero_OSM_rapproches.features.push(get_geojson_point(lon,lat,{'nom':nom,'fantoir':fantoir,'numero':numero,'nom_com':nom_commune,'source':source,'rapproche':voie_rapprochee}))
                     } else {
-                        res_numero_OSM_non_rapproches.features.push(get_geojson_point(lon,lat,{'nom':nom,'fantoir':fantoir,'numero':numero,'nom_com':nom_commune}))
+                        res_numero_OSM_non_rapproches.features.push(get_geojson_point(lon,lat,{'nom':nom,'fantoir':fantoir,'numero':numero,'nom_com':nom_commune,'source':source,'rapproche':voie_rapprochee}))
                     }
                 } else {
                     if (voie_rapprochee == 0){
-                        res_numero_BAN_a_integrer_voie_non_rapprochee.features.push(get_geojson_point(lon,lat,{'nom':nom,'fantoir':fantoir,'numero':numero,'nom_com':nom_commune}))                        
+                        res_numero_BAN_a_integrer_voie_non_rapprochee.features.push(get_geojson_point(lon,lat,{'nom':nom,'fantoir':fantoir,'numero':numero,'nom_com':nom_commune,'source':source,'rapproche':false}))
                     } else if (numero_rapproche == 0){
-                        res_numero_BAN_a_integrer_voie_rapprochee.features.push(get_geojson_point(lon,lat,{'nom':nom,'fantoir':fantoir,'numero':numero,'nom_com':nom_commune}))                        
+                        res_numero_BAN_a_integrer_voie_rapprochee.features.push(get_geojson_point(lon,lat,{'nom':nom,'fantoir':fantoir,'numero':numero,'nom_com':nom_commune,'source':source,'rapproche':true}))
                     } else {
                         // numeros BAN connus d'OSM - à intégrer + tard
                         // res_numero_BAN_integres.features.push(get_geojson_point(lon,lat,{'nom':nom,'fantoir':fantoir,'numero':numero,'nom_com':nom_commune}))
@@ -1127,45 +1138,30 @@
         else if (localStorage.raster == 'OSM-standard-tiles') {$( "#fond_standard" ).prop( "checked", true );}      
 
         map.addControl(new maplibregl.NavigationControl());
-        // if (!map.hasImage('rond_50')){
-        //     map.loadImage('./img/rond_50.png', (error, image) => {
-        //         map.addImage('rond_50', image, { sdf: true });
-        //     })
-        // }
-        // if (!map.hasImage('lieudit_vert')){
-        //     map.loadImage('./img/lieudit_map_vert.png', (error, image) => {
-        //         map.addImage('lieudit_vert', image);
-        //     })
-        // }
-        // if (!map.hasImage('lieudit_rouge')){
-        //     map.loadImage('./img/lieudit_map_rouge.png', (error, image) => {
-        //         map.addImage('lieudit_rouge', image);
-        //     })
-        // }
-        // if (!map.hasImage('lieudit_bleu')){
-        //     map.loadImage('./img/lieudit_map_bleu.png', (error, image) => {
-        //         map.addImage('lieudit_bleu', image);
-        //     })
-        // }
-        // if (!map.hasImage('lieudit_gris')){
-        //     map.loadImage('./img/lieudit_map_gris.png', (error, image) => {
-        //         map.addImage('lieudit_gris', image);
-        //     })
-        // }
-        // if (!map.hasImage('voie_bd_topo')){
-        //     map.loadImage('./img/voie_bd_topo.png', (error, image) => {
-        //         map.addImage('voie_bd_topo', image);
-        //     })
-        // }
-        // if (!map.hasImage('voie_bd_commune')){
-        //     map.loadImage('./img/voie_bd_commune.png', (error, image) => {
-        //         map.addImage('voie_bd_commune', image);
-        //     })
-        // }
+
+        // hover layers
+        // raster layers
+        // eojson sources
+        for (l=0;l<map.getLayersOrder().length;l++){
+            layer = map.getLayersOrder()[l]
+            if (layer.indexOf('hover') == 0){
+                HOVER_LAYERS.add(layer)
+            }
+            src = map.getSource(map.getLayer(layer).source)
+            if (src.type == 'geojson'){
+                GEOJSON_SOURCES.add(src.id)
+            } else if (src.type == 'raster'){
+                RASTER_LAYERS.add(layer)
+            }
+        }
+
+
         interactions_souris('noms_de_communes')
         interactions_souris('simple-tiles')
-        interactions_souris('BAN_point_transparent')
-        interactions_souris('OSM_point')
+        interactions_souris('BAN_point_transparent_a_integrer_voie_rapprochee')
+        interactions_souris('BAN_point_transparent_a_integrer_voie_non_rapprochee')
+        interactions_souris('OSM_point_rapproche')
+        interactions_souris('OSM_point_non_rapproche')
         interactions_souris('filaire_transparent')
         interactions_souris('points_nommes_rapproches_OSM_voie')
         interactions_souris('points_nommes_rapproches_OSM_lieu_dit')
@@ -1179,23 +1175,12 @@
         $('#pifoprogression').click(function(){
             affiche_ratio_map()
         })
-        // $('#panneau_map #conteneur_filtres input').click(function(){
-        //     update_filtres()
-        //     filtre_pifomap()
-        // })
-        // $('#filtre_lieuxdits_mobile input').click(function(){
-        //     filtre_pifomap_mobile()
-        // })
 
         update_radio_ratio()
         affiche_ratio_map()
 
         // Preferences d'affichage des LD
         affichage_par_defaut_lieux_dits()
-
-        // for (l=0;l<TOC_MASQUES.length;l++){
-        //     $('.maplibregl-ctrl.layers-control >> .layer-group > input#'+TOC_MASQUES[l]).parent().remove()
-        // }
     }
     function affichage_par_defaut_lieux_dits(){
         maintenant = new Date().getTime()
@@ -1255,18 +1240,6 @@
                     zoom: mapz,
                     maxZoom: 20,
                 });
-       // map.on('styleimagemissing', async (e) => {
-       //      const id = e.id; // id of the missing imag
-       //      console.log('manque 2 : '+id)
-       //      if (id == 'lieudit_vert'){
-       //      console.log(map.hasImage('lieudit_vert'))
-       //          // im = await map.loadImage('https://bano.openstreetmap.fr/_v/pifometre/img/lieudit_map_vert.png')
-       //          im = await map.loadImage('./img/lieudit_map_vert.png')
-       //                             console.log('ifififi 2 : '+id)
-       //              map.addImage('lieudit_vert', im.data);
-       //      }
-
-       // });
 
                 map.on('load', async () => {
                     im = await map.loadImage('./img/lieudit_map_vert.png')
@@ -1550,15 +1523,7 @@
         $('#conteneur_index').css('display','none');
     }
     function empty_layers(){
-        geojson_sources = new Set()
-        layers = map.getLayersOrder()
-        for (l=0;l<layers.length;l++){
-            s = map.getSource(map.getLayer(layers[l]).source)
-            if (s.type == 'geojson'){
-                geojson_sources.add(s.id)
-            }
-        }
-        for (const s of geojson_sources){
+        for (const s of GEOJSON_SOURCES){
             map.getSource(s).setData(EMPTY_GEOJSON)
         }
     }
@@ -1690,18 +1655,6 @@
                     <h2>Filtres</h2>
                 </div>
                 <div class="contenu filtres">
-                    <div class="groupe_bouton_filtre">
-                        <label class="switch vert">
-                            <input type="checkbox" />
-                            <div></div>
-                        </label>
-                    </div>
-                    <div class="groupe_bouton_filtre">
-                        <label class="switch orange">
-                            <input type="checkbox" />
-                            <div></div>
-                        </label>
-                    </div>
                 </div>
                 <div class="en_tete">
                     <h2>Fonds de carte</h2>
@@ -1718,21 +1671,6 @@
                         </div>
                     </div>
                 </div>
-
-                    <!-- <ul>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_voie"  critere="voie" checked/>
-                            <span class="check is-dark"></span>
-                            <span class="control-label">Voies<span></span></span>
-                        </li>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_lieudit"  critere="lieudit" checked/>
-                            <span class="check is-dark"></span>
-                            <span class="control-label">Lieux-dits<span></span></span>
-                        </li>
-                    </ul> -->
             </div>
             <div id="conteneur_index"></div>
             <div id="conteneur_infos">
@@ -1748,7 +1686,6 @@
             </div>
         </div>
         <div id="map_div">
-            <!-- <button id="bouton_fond_carte" title="Changer le fond de carte"></button> -->
         </div>
     </div>
 
