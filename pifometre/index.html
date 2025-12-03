@@ -16,8 +16,6 @@
     <link rel="manifest" href="../img/logo/site.webmanifest" />
     
     <link rel="preload" href="../css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="../css/bulma/bulma.min.css" type="text/css"/>
-    <link rel="stylesheet" href="../css/bulma/main.min.css" type="text/css"/>
     <link rel="stylesheet" href="../css/tablesorter/theme.default.min.css" type="text/css"/>
     <link rel="stylesheet" href="../css/style.css" type="text/css"/>
     <link rel="stylesheet" href="../css/responsive.css" type="text/css"/>
@@ -138,10 +136,10 @@
         })
     };
     function update_menu_filtres(){
-        $('#boutons-filtres li span.control-label').each(function(){
+        $('#boutons-filtres label.switch').each(function(){
             total = $('#'+table+' tr[a_compter=true].'+$(this).attr('critere')).length
             visible = $('#'+table+' tr[a_compter=true]:visible.'+$(this).attr('critere')).length
-            $(this).children('span').text(' ('+visible+' / '+total+')')
+            $(this).next('label').children('span').text(' ('+visible+' / '+total+')')
         })
     };
     function show_mask_lines(){
@@ -846,68 +844,65 @@
             <!-------------  FILTRES  ------------->
             <div id="boutons-filtres" class="pifo">
                 <p id="ligne-afficher">Afficher :</p>
-                <div class="ligne-boutons-filtres">
-                    <div>
-                        <ul>
-                            <li>
-                                <label class="switch is-rounded is-small">
-                                <input type="checkbox" id="check_voie" checked/>
-                                <span class="check is-dark"></span>
-                                <span class="control-label" critere="voie">Voies<span></span></span>
-                            </li>
-                            <li>
-                                <label class="switch is-rounded is-small">
-                                <input type="checkbox" id="check_lieu_dit" checked/>
-                                <span class="check is-dark"></span>
-                                <span class="control-label" critere="lieu_dit">Lieux-dits<span></span></span>
-                            </li>
-                        </ul>
+
+                <div class="bloc-boutons-filtres">                  
+                    <div class="groupe_boutons_filtre">
+                        <label class="switch noir" critere="voie">
+                            <input type="checkbox" id="check_voie" checked/>
+                            <div></div>
+                        </label>
+                        <label for="check_voie">Voies<span></span></label>
                     </div>
-                    <div>
-                        <ul>
-                            <li>
-                                <label class="switch is-rounded is-small">
-                                <input type="checkbox" id="check_nom_integre" checked/>
-                                <span class="check is-green"></span>
-                                <span class="control-label" critere="nom_integre">Déjà rapprochés dans OSM<span></span></span>
-                            </li>
-                            <li>
-                                <label class="switch is-rounded is-small">
-                                <input type="checkbox" id="check_nom_a_integrer" checked/>
-                                <span class="check is-orange"></span>
-                                <span class="control-label" critere="nom_a_integrer">Pas encore rapprochés dans OSM<span></span></span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div>
-                        <ul>
-                            <li>
-                                <label class="switch is-rounded is-small">
-                                <input type="checkbox" id="check_avec_adresses" checked/>
-                                <span class="check is-pink"></span>
-                                <span class="control-label" critere="avec_adresses">Ayant des adresses référencées dans la BAN<span></span></span>
-                            </li>
-                            <li>
-                                <label class="switch is-rounded is-small">
-                                <input type="checkbox" id="check_sans_adresses" checked/>
-                                <span class="check is-dark"></span>
-                                <span class="control-label" critere="sans_adresses">Sans adresses<span></span></span>
-                            </li>
-                        </ul>
+                    <div class="groupe_boutons_filtre">
+                        <label class="switch noir" critere="lieu_dit">
+                            <input type="checkbox" id="check_lieu_dit" checked/>
+                            <div></div>
+                        </label>
+                        <label for="check_lieu_dit">Lieux-dits<span></span></label>
                     </div>
                 </div>
-                <div class="ligne-boutons-filtres">
-                    <div>
-                        <ul>
-                            <li>
-                                <label class="switch is-rounded is-small">
-                                <input type="checkbox" id="check_osm_hors_fantoir" checked/>
-                                <span class="check is-blue"></span>
-                                <span class="control-label" critere="osm_hors_fantoir">Trouvé dans OSM et inconnu du fichier Topo<span></span></span>
-                            </li>
-                        </ul>
+                
+                <div class="bloc-boutons-filtres">
+                    <div class="groupe_boutons_filtre">
+                        <label class="switch vert" critere="nom_integre">
+                            <input type="checkbox" id="check_nom_integre" checked/>
+                            <div></div>
+                        </label>
+                        <label for="check_nom_integre">Déjà rapprochés dans OSM<span></span></label>
+                    </div>
+                    <div class="groupe_boutons_filtre">
+                        <label class="switch orange" critere="nom_a_integrer">
+                            <input type="checkbox" id="check_nom_a_integrer" checked/>
+                            <div></div>
+                        </label>
+                        <label for="check_nom_a_integrer">Pas encore rapprochés dans OSM<span></span></label>
+                    </div>
+                    <div class="groupe_boutons_filtre">
+                        <label class="switch bleu" critere="osm_hors_fantoir">
+                            <input type="checkbox" id="check_osm_hors_fantoir" checked/>
+                            <div></div>
+                        </label>
+                        <label for="check_osm_hors_fantoir">Trouvé dans OSM et inconnu du fichier Topo<span></span></label>
                     </div>
                 </div>
+
+                <div class="bloc-boutons-filtres">                  
+                    <div class="groupe_boutons_filtre">
+                        <label class="switch rose" critere="avec_adresses">
+                            <input type="checkbox" id="check_avec_adresses" checked/>
+                            <div></div>
+                        </label>
+                        <label for="check_avec_adresses">Avec adresses référencées dans la BAN<span></span></label>
+                    </div>
+                    <div class="groupe_boutons_filtre">
+                        <label class="switch gris" critere="sans_adresses">
+                            <input type="checkbox" id="check_sans_adresses" checked/>
+                            <div></div>
+                        </label>
+                        <label for="check_sans_adresses">Sans adresses<span></span></label>
+                    </div>
+                </div>
+
             </div>
         </div>
 

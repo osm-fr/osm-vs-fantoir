@@ -17,8 +17,6 @@
     
     <link rel="preload" href="../css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css' />
-    <link rel="stylesheet" href="../css/bulma/bulma.min.css" type="text/css"/>
-    <link rel="stylesheet" href="../css/bulma/main.min.css" type="text/css"/>
     <link rel="stylesheet" href="../css/style.css" type="text/css"/>
     <link rel="stylesheet" href="../css/responsive.css" type="text/css"/>
 </head>
@@ -55,20 +53,20 @@
             <div class="zone-boutons-filtres">
                 <h3>Afficher ou masquer...</h3>
                 <div>
-                    <ul>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_petits_dep"  critere="petits_dep" checked/>
-                            <span class="check is-pink"></span>
-                            <span class="control-label">Petits dépassements (&lt; 1m)</span>
-                        </li>
-                        <li>
-                            <label class="switch is-rounded is-small">
-                            <input type="checkbox" id="check_grands_dep"  critere="grands_dep" checked/>
-                            <span class="check is-indigo"></span>
-                            <span class="control-label">Grands dépassements</span>
-                        </li>
-                    </ul>
+                        <div class="groupe_boutons_filtre">
+                            <label class="switch rose" critere="petits_dep">
+                                <input type="checkbox" id="check_petits_dep" checked/>
+                                <div></div>
+                            </label>
+                            <label for="check_petits_dep">Petits dépassements (&lt; 1m)<span></span></label>
+                        </div>
+                        <div class="groupe_boutons_filtre">
+                            <label class="switch indigo" critere="grands_dep">
+                                <input type="checkbox" id="check_grands_dep" checked/>
+                                <div></div>
+                            </label>
+                            <label for="check_grands_dep">Grands dépassements<span></span></label>
+                        </div>
                 </div>
             </div>
             <div class="zone-boutons-themes">
