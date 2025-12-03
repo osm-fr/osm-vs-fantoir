@@ -980,7 +980,7 @@ fieldset legend {
 	font-size: unset;
 }
 #pifofiltres.pifodrome h3 {
-	font-size: 0.8em;
+	font-size: 1em;
 	margin: 0.5em 0 5px 7px;
 }
 #pifostats p {
@@ -1270,23 +1270,7 @@ fieldset legend {
 
 #pifofiltres h3, #pifoprogression h3 {
 	text-align: left;
-	font-size: 0.8em;
 	margin: 0 0 5px 7px;
-	line-height: 0.9em;
-}
-
-#pifofiltres div {
-	/*width: auto;*/
-	display: inline-block;
-}
-
-#pifofiltres ul {
-	list-style-type: none;
-	margin:0;
-	padding: 0 10px;
-}
-#pifofiltres ul li {
-	margin: 0.2em 0;
 }
 
 #pifofiltres span {
@@ -1332,6 +1316,7 @@ fieldset legend {
 #pifofiltres.pifodrome {
 	width:30%;
 	min-width: 300px;
+	font-size: 0.8em;
 }
 
 #bouton_theme_route_de {
@@ -1547,7 +1532,7 @@ fieldset legend {
 #panneau_map {
 	float: left;
 	margin:0;
-	width:15%;
+	width:16%;
 	height:calc(100% - 4px);
 	/*overflow-y: auto;*/
 	border-radius: 6px;
@@ -1556,7 +1541,7 @@ fieldset legend {
 }
 /*--------- Onglets ---------*/
 #panneau_map .onglets {
-	height: 50px;
+	height: 40px;
 }
 #panneau_map #onglet_index, #panneau_map #onglet_filtres, #panneau_map #onglet_infos {
 	cursor: pointer;
@@ -1571,19 +1556,19 @@ fieldset legend {
 	background-color: burlywood;
 }
 #panneau_map #onglet_filtres {
-	background: url("../img/switch.png") no-repeat wheat right 6px bottom 11px;
+	background: url("../img/switch.png") no-repeat wheat right 6px bottom 6px;
 	background-size: 21px;
 	border-right: 1px solid;
 	border-bottom-left-radius: 5px;
 }
 #panneau_map #onglet_infos {
 	border-right: 1px solid;
-	background: url("../img/info.png") no-repeat wheat right 10px bottom 12px;
+	background: url("../img/info.png") no-repeat wheat right 10px bottom 7px;
 	background-size: 23px;
 }
 #panneau_map #onglet_index {
 	border-bottom-right-radius: 5px;
-	background: url("../img/index_simple.png") no-repeat wheat right 10px bottom 7px;
+	background: url("../img/index_simple.png") no-repeat wheat right 10px bottom 4px;
 	background-size: 23px;
 }
 #panneau_map  p {
@@ -1591,6 +1576,7 @@ fieldset legend {
 	vertical-align:middle;
 	padding-right: 28px;
 	font-weight: bold;
+	margin: 0.6em 0;
 }
 /*------------ 3 contenus du panneau -----------*/
 #conteneur_filtres, #conteneur_index {
@@ -1601,26 +1587,59 @@ fieldset legend {
 }
 
 /*---------- Filtres de la carte --------*/
-.groupe_bouton_filtre, #groupe_boutons_fond {
-	float: left;
-	width: 90%;
+#conteneur_filtres .famille_filtres {
+	padding: 3px 10px 5px 10px;
+	background-color: #ECF5F9;
+	border-bottom: lightblue 2px solid;
+	border-radius: 6px;
+}
+#conteneur_filtres h3 {
+	margin: 1em 0 0.1em 0;
+}
+#conteneur_filtres h3, #conteneur_filtres span {
+	color: #3381A2;
+}
+.groupe_boutons_filtre, #groupe_boutons_fond {
+	clear: both;
+	margin-right: 5px;
+}
+#panneau_map .groupe_boutons_filtre, #panneau_map #groupe_boutons_fond { /*version Pifomap*/
 }
 
 /*-------- Switch buttons filtres -------*/
+.ligne-boutons-filtres > div {
+	width: auto;
+	display: inline-block;
+}
+
 .switch input {
   position: absolute;
   opacity: 0;
 }
 .switch {
 	display: inline-block;
+	margin-right: 0.3em;
 	background:grey;
 	font-size: 16px; /*régler taille ici*/
 	height: 1em;
 	width: 2.2em;
 	border-radius: 1em;
 }
+.pifomap .switch { /* version + petite */
+	font-size: 15px; /*régler taille ici*/
+	width: 1.5em;
+}
+
 .switch.vert {background-color: #00A779;}
 .switch.orange {background-color: #EFA500;}
+.switch.rouge {background-color:#FF4A4A;}
+.switch.rougePatate {background-color: #F5B3AF}
+.switch.rose {background-color: #EC0080;}
+.switch.bleu {background-color: #56B4E9;}
+.switch.indigo {background-color: indigo;}
+.switch.noir {background-color: #000;}
+.switch.gris {background-color: #555;}
+.switch.bleugris {background-color: #78B4C7;}
 
 .switch div {
 	margin: 2px 0 0 3px;
@@ -1628,10 +1647,13 @@ fieldset legend {
 	width: 0.78em;
 	background: white;
 	border-radius: 1em;
-	box-shadow: 0 0.1em 0.3em rgba(0,0,0,0.3);
 	-webkit-transition: all 200ms;
 	-moz-transition: all 200ms;
 	transition: all 200ms;
+}
+.pifomap .switch div {/* version + petite */
+	height: 0.76em;
+	width: 0.76em;
 }
 
 .switch input:checked + div {
@@ -1641,12 +1663,83 @@ fieldset legend {
 	-moz-transform: translate3d(140%, 0, 0);
 	transform: translate3d(140%, 0, 0);
 }
+.pifomap .switch input:checked + div {/* version + petite */
+	background-size: 8px;
+	-webkit-transform: translate3d(62%, 0, 0);
+	-moz-transform: translate3d(62%, 0, 0);
+	transform: translate3d(62%, 0, 0);
+}
+
+/*Picto des filtres de Pifomap*/
+.picto.BAN_point_a_integrer_voie_non_rapprochee, .picto.BAN_point_a_integrer_voie_rapprochee, .picto.OSM_point_rapproche, .picto.OSM_point_non_rapproche {
+	/*Pour dessiner les points d'adresse*/
+	height: 8px !important;
+	width: 8px !important;
+	display: inline-block;
+	border-radius: 50%;
+	margin: 2px 10px 0 10px;
+	-ms-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	margin: 2px 5px 2px 2px !important;
+}
+
+.picto.BAN_point_a_integrer_voie_non_rapprochee {
+	background-color: red;
+}
+.picto.BAN_point_a_integrer_voie_rapprochee {
+	background-color: orange;
+}
+.picto.points_nommes_non_rapproches_CADASTRE {
+	background: url("../pifometre/img/lieudit_map_rouge.png") no-repeat left 0px top 4px;
+	background-size: 22px !important;
+}
+.picto.points_nommes_non_rapproches_voie_BDTOPO {
+	background: url("../pifometre/img/voie_bd_topo.png") no-repeat left 0px top 2px;
+}
+.picto.points_nommes_non_rapproches_filaire_COMMUNE {
+	background: url("../pifometre/img/voie_bd_commune.png") no-repeat left 0px top 2px;
+}
+.picto.OSM_point_rapproche {
+	background-color: green;
+}
+.picto.OSM_point_non_rapproche {
+	background-color: dodgerblue;
+}
+.picto.points_nommes_rapproches_OSM_voie {
+	border-right: 3px solid green;
+	width: 4px !important;
+	height: 13px !important;
+	margin-right: 7px !important;
+}
+.picto.points_nommes_non_rapproches_OSM_voie {
+	border-right: 3px solid dodgerblue;
+	width: 4px !important;
+	height: 13px !important;
+	margin-right: 7px !important;
+}
+.picto.points_nommes_rapproches_OSM_lieu_dit {
+	background: url("../pifometre/img/lieudit_map_vert.png") no-repeat left 0px top 4px;
+	background-size: 22px !important;
+}
+.picto.points_nommes_non_rapproches_OSM_lieu_dit {
+	background: url("../pifometre/img/lieudit_map_bleu.png") no-repeat left 0px top 4px;
+	background-size: 22px !important;
+}
+
+.groupe_boutons_filtre .picto {
+	width: 20px;
+	height: 20px;
+	background-size: 19px;
+	margin: 0 2px;
+}
 
 /*----- Boutons radio fond de carte -----*/
 #groupe_boutons_fond div {
 	float: left;
 	clear:both;
-	font-size: 1.1em;
+	font-size: 1em;
 }
 #groupe_boutons_fond div input[type="radio"] {
 	appearance: none;
@@ -1655,13 +1748,13 @@ fieldset legend {
 	background: white;
 	border: 2px solid #ADD19E;
 	border-radius: 100%;
-	width: 1.5em;
-	height: 1.5em;
+	width: 1.3em;
+	height: 1.3em;
 	margin: 0 3px 3px 0;
 	vertical-align: middle;
 }
 #groupe_boutons_fond div input[type="radio"]:checked {
-	background: url("../img/coche_gris.png") no-repeat white left 2px top 4px;
+	background: url("../img/coche_gris.png") no-repeat white left 2px top 2px;
 	background-size: 11px;
 }
 
@@ -1674,12 +1767,15 @@ fieldset legend {
 }
 
 /*------ Infos objets de la carte ------*/
+#panneau_map ul {
+	list-style-type: none;
+}
 #panneau_map li {
 	line-height: 1.6em;
 }
 #panneau_map #conteneur_infos h2, #panneau_map h2 {
 	float: left;
-	margin: 15px 5px;
+	margin: 10px 5px;
 	width: calc(100% - 70px);
 	font-size: 1.2em;
 	line-height: 1.2em;
@@ -1709,6 +1805,13 @@ fieldset legend {
 	font-size: 1.1em;
 	line-height: 1.2em;
 }
+#panneau_map h4 {
+	clear: both;
+	text-align: left;
+	font-size: 1em;
+	line-height: 1em;
+	margin: 0.8em 0 0.6em 0;
+}
 
 #panneau_map ul {
 	padding-left: 1em;
@@ -1730,7 +1833,7 @@ fieldset legend {
 #reponse #map_div {
 	float: left;
 	margin:0 0 0 -3px;
-	width:calc(85% - 5px);
+	width:calc(84% - 5px);
 	height:calc(100% - 4px);
 	border:2px solid lightblue;
 }
@@ -1912,47 +2015,28 @@ fieldset legend {
 
 #boutons-filtres.pifo {
 	margin-left: 1%;
-	width: 55%;
+	width: 50%;
 }
 #boutons-filtres.page_numeros {
 	float: left;
+	width: 70%;
+	visibility: visible;
 	margin:1% 0 0 2%;
 	padding: 10px 0 10px 10px;
 }
-
-#boutons-filtres div {
-	width: auto;
-	display: inline-block;
-}
-
-#boutons-filtres ul {
-  list-style-type: none;
-  margin:0;
-  padding: 0 10px;
-}
-#boutons-filtres.page_numeros ul {
-  padding: 0 20px 0 0;
-}
-
-#boutons-filtres ul li {
-  margin: 0.2em 0;
-}
-
-#ligne-afficher, p#ligne-afficher {
+#ligne-afficher {
 	float: left;
-	margin:0;
+	margin:0 0 5px 0;
 	font-weight: bold;
+	width: 90%;
 }
 
-.ligne-boutons-filtres {
+.bloc-boutons-filtres {
 	float: left;
-	clear: both;
 }
-.ligne-boutons-filtres p {
+.bloc-boutons-filtres p { /*Page numéros*/
 	font-weight: bold;
-}
-.page_numeros .ligne-boutons-filtres p {
-	margin:0;
+	margin: 0 0 3px 0;
 }
 
 #descriptif {

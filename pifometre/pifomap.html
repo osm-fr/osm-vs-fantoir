@@ -18,8 +18,6 @@
 
 <link rel="preload" href="../css/fonts/opensans-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@5.13.0/dist/maplibre-gl.css' />
-<link rel="stylesheet" href="../css/bulma/bulma.min.css" type="text/css"/>
-<link rel="stylesheet" href="../css/bulma/main.min.css" type="text/css"/>
 <link rel="stylesheet" href="../css/tablesorter/theme.default.min.css" type="text/css"/>
 <link rel="stylesheet" href="../css/style.css" type="text/css"/>
 <link rel="stylesheet" href="../css/responsive.css" type="text/css"/>
@@ -39,26 +37,26 @@
 
     EMPTY_GEOJSON = {'type': 'FeatureCollection',
                           'features': []}
-  
+
     TOC_HIERARCHIE = new Map([
-                               ["Adresses BAN non intégrées",
-                                                ["BAN_point_a_integrer_voie_non_rapprochee",
-                                                 "BAN_point_a_integrer_voie_rapprochee"]],
-                                                 //"BAN_point_integre"
-                               ["Adresses OSM",
-                                                ["OSM_point_rapproche",
-                                                 "OSM_point_non_rapproche"]],
-                               ["Nom trouvés dans OSM et rapprochés",
-                                                ["points_nommes_rapproches_OSM_voie",
-                                                 "points_nommes_rapproches_OSM_lieu_dit"]],
-                               ["Voies sans adresses inconnues d'OSM",
-                                                ["points_nommes_non_rapproches_voie_BDTOPO",
-                                                 "points_nommes_non_rapproches_filaire_COMMUNE"]],
-                               ["Lieux-dits inconnus d'OSM",
-                                                ["points_nommes_non_rapproches_CADASTRE"]],
-                               ["Connus seulement d'OSM",
-                                                ["points_nommes_non_rapproches_OSM_voie",
-                                                 "points_nommes_non_rapproches_OSM_lieu_dit"]]
+                               ["Adresses",
+                                            [["OSM_point_rapproche",
+                                            "OSM_point_non_rapproche"],"OSM"]],
+                               ["Voies",
+                                            [["points_nommes_rapproches_OSM_voie",
+                                            "points_nommes_non_rapproches_OSM_voie"],"OSM"]],
+                               ["Lieux-dits",
+                                            [["points_nommes_rapproches_OSM_lieu_dit",
+                                            "points_nommes_non_rapproches_OSM_lieu_dit"],"OSM"]],
+                               ["Adresses BAN",
+                                            [["BAN_point_a_integrer_voie_non_rapprochee",
+                                            "BAN_point_a_integrer_voie_rapprochee"],"aliens"]],
+                               ["Voies ",
+                                            [["points_nommes_non_rapproches_voie_BDTOPO",
+                                            "points_nommes_non_rapproches_filaire_COMMUNE"],"aliens"]],
+                               ["Lieux-dits ",
+                                            [["points_nommes_non_rapproches_CADASTRE"],"aliens"]]
+
                            ])
       TOC_GROUPES = new Map([
         ["BAN_point_a_integrer_voie_non_rapprochee",["Dans des voies non intégrées",
@@ -67,31 +65,31 @@
                                  "BAN_point_transparent_a_integrer_voie_non_rapprochee",
                                  "polygones",
                                  "polygones_texte",
-                                 "polygones_texte_point"],"rouge"]],
+                                 "polygones_texte_point"],"bleugris"]],
         ["BAN_point_a_integrer_voie_rapprochee",["Dans des voies intégrées",
                                 ["BAN_point_a_integrer_voie_rapprochee",
                                  "BAN_texte_a_integrer_voie_rapprochee",
-                                 "BAN_point_transparent_a_integrer_voie_rapprochee"],"orange"]],
+                                 "BAN_point_transparent_a_integrer_voie_rapprochee"],"bleugris"]],
         ["BAN_point_integre",["Adresses intégrées",
                                 ["BAN_point_integre","BAN_texte_integre"],"noir"]],
-        ["OSM_point_rapproche",["Adresses connues de la BAN",
-                                ["OSM_point_rapproche","OSM_texte_rapproche"],"vert"]],
-        ["OSM_point_non_rapproche",["Adresses inconnues de la BAN",
-                                ["OSM_point_non_rapproche","OSM_texte_non_rapproche"],"bleu"]],
-        ["points_nommes_rapproches_OSM_voie",["Voies",
-                                ["points_nommes_rapproches_OSM_voie"],"vert"]],
-        ["points_nommes_rapproches_OSM_lieu_dit",["Lieux-dits",
-                                ["points_nommes_rapproches_OSM_lieu_dit"],"vert"]],
+        ["OSM_point_rapproche",["Présentes aussi dans la BAN",
+                                ["OSM_point_rapproche","OSM_texte_rapproche"],"bleugris"]],
+        ["OSM_point_non_rapproche",["Introuvables dans la BAN",
+                                ["OSM_point_non_rapproche","OSM_texte_non_rapproche"],"bleugris"]],
+        ["points_nommes_rapproches_OSM_voie",["Aussi dans d'autres sources",
+                                ["points_nommes_rapproches_OSM_voie"],"bleugris"]],
+        ["points_nommes_rapproches_OSM_lieu_dit",["Aussi dans d'autres sources",
+                                ["points_nommes_rapproches_OSM_lieu_dit"],"bleugris"]],
         ["points_nommes_non_rapproches_voie_BDTOPO",["Source BD TOPO",
-                                ["points_nommes_non_rapproches_voie_BDTOPO"],"rouge"]],
+                                ["points_nommes_non_rapproches_voie_BDTOPO"],"bleugris"]],
         ["points_nommes_non_rapproches_filaire_COMMUNE",["Source communale",
-                                ["points_nommes_non_rapproches_filaire_COMMUNE"],"rouge"]],
+                                ["points_nommes_non_rapproches_filaire_COMMUNE"],"bleugris"]],
         ["points_nommes_non_rapproches_CADASTRE",["Source Cadastre",
-                                ["points_nommes_non_rapproches_CADASTRE"],"rouge"]],
-        ["points_nommes_non_rapproches_OSM_voie",["Voies",
-                                ["points_nommes_non_rapproches_OSM_voie"],"bleu"]],
-        ["points_nommes_non_rapproches_OSM_lieu_dit",["Lieux-dits",
-                                ["points_nommes_non_rapproches_OSM_lieu_dit"],"bleu"]]
+                                ["points_nommes_non_rapproches_CADASTRE"],"bleugris"]],
+        ["points_nommes_non_rapproches_OSM_voie",["Introuvables ailleurs",
+                                ["points_nommes_non_rapproches_OSM_voie"],"bleugris"]],
+        ["points_nommes_non_rapproches_OSM_lieu_dit",["Introuvables ailleurs",
+                                ["points_nommes_non_rapproches_OSM_lieu_dit"],"bleugris"]]
                             ])
 
     var table = 'table_pifometre'
@@ -623,15 +621,15 @@
     }
     
     function prepare_TOC(){
-        $('#conteneur_filtres .filtres').empty();
-        // $('#conteneur_index').css('display','block');
+        $('#conteneur_filtres .filtres .famille_filtres').empty();
 
         for (const t of TOC_HIERARCHIE.keys()) {
-            $('#conteneur_filtres .filtres').append($('<h3>').text(t))
-            layers = TOC_HIERARCHIE.get(t)
+            layers = TOC_HIERARCHIE.get(t)[0]
+            famille_filtres = TOC_HIERARCHIE.get(t)[1]
+            $('#conteneur_filtres .filtres .'+famille_filtres).append($('<h4>').text(t))
             for (l=0;l<layers.length;l++){
                 layer = TOC_GROUPES.get(layers[l])
-                $('#conteneur_filtres .filtres').append($('<div class="groupe_boutons_filtre">')
+                $('#conteneur_filtres .filtres .'+famille_filtres).append($('<div class="groupe_boutons_filtre">')
                                                          .append($('<label>').addClass('switch '+layer[2])
                                                              .append($('<input>').attr('id',layers[l])
                                                              .attr('type','checkbox')
@@ -642,6 +640,7 @@
                                                              )
                                                              .append($('<div>'))
                                                         )
+                                                        .append($('<span class="picto" />').addClass(layers[l]))
                                                         .append($('<label>').attr('for',layers[l])
                                                             .append(layer[0])
                                                         )
@@ -1655,6 +1654,11 @@
                     <h2>Filtres</h2>
                 </div>
                 <div class="contenu filtres">
+                    <h3 title="Autres LIeux Et Numéros">Aliens</h3>
+                    <span>Données venues d'ailleurs</span>
+                    <div class="famille_filtres aliens"></div>
+                    <h3>Données OSM</h3>
+                    <div class="famille_filtres OSM"></div>
                 </div>
                 <div class="en_tete">
                     <h2>Fonds de carte</h2>
