@@ -11,6 +11,15 @@
             "note":
                 "https://a.piano.tiles.quaidorsay.fr/fr/{z}/{x}/{y}.png"
         },
+        "IGN_BDHORTO": {
+            "type": "raster",
+            "tiles": [
+                "https://data.geopf.fr/wmts?&REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&STYLE=normal&TILEMATRIXSET=PM&FORMAT=image/jpeg&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}"
+            ],
+            "tileSize": 256,
+            "attribution":
+                "IGN-F/Geoportail"
+        },
         "OSM-standard-tiles": {
             "type": "raster",
             "tiles": [
@@ -142,6 +151,16 @@
     "sprite": "https://demotiles.maplibre.org/styles/osm-bright-gl-style/sprite",
     "layers": [
         {
+            "id": "BD-Horto",
+            "type": "raster",
+            "source": "IGN_BDHORTO",
+            "minzoom": 0,
+            "maxzoom": 18,
+            "layout": {
+                "visibility" : "none"
+            }
+        },
+        {
             "id": "simple-tiles",
             "type": "raster",
             "source": "OSM-HOT-tiles",
@@ -168,25 +187,23 @@
             "id": "point_de_communes",
             "source": "communes",
             "source-layer": "centroides_communes",
-            "type": "symbol",
+            "type": "circle",
             "minzoom" : 5,
             "maxzoom" : 17,
             "layout": {
-                "visibility" : "none",
-                "icon-allow-overlap":true,
-                "icon-image":"rond_50",
-                "icon-size": ["interpolate",
+                "visibility" : "none"
+                },
+            "paint": {
+                "circle-radius": ["interpolate",
                         ["linear"],
                         ["zoom"],
                         5,
-                        0.05,
+                        1.3,
                         11,
-                        0.2,
+                        4,
                         17,
-                        0.25]
-                },
-            "paint": {
-                "icon-color": ["interpolate",
+                        6],
+                "circle-color": ["interpolate",
                         ["linear"],
                         ["*", ["/",["get", "nb_noms_osm"],100],["get", "nb_noms_topo"]],
                         0,
