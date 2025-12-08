@@ -38,13 +38,6 @@ AS
 (SELECT DISTINCT fantoir,count(*) AS a_proposer
 FROM    diff_numero_fantoir
 GROUP BY 1),
-geom_adresses
-AS
-(SELECT DISTINCT fantoir,
-                FIRST_VALUE(geometrie) OVER(PARTITION BY fantoir) geometrie
- FROM    bano_adresses
- WHERE   __condition_fantoir_unique__
-         code_insee = '__code_insee__'),
 fantoir_avec_adresses_ban
 AS
 (SELECT DISTINCT fantoir,true AS fantoir_avec_adresses_ban
@@ -98,8 +91,8 @@ SELECT t.fantoir,
        nb.nom AS nom_ban,
        nb.source AS source_nom,
        nb.nom_ancienne_commune,
-       COALESCE(ST_X(g.geometrie),pn.lon,place.lon,com.lon,bdt.lon,NULL),
-       COALESCE(ST_Y(g.geometrie),pn.lat,place.lat,com.lat,bdt.lat,NULL),
+       COALESCE(pn.lon,place.lon,com.lon,bdt.lon,NULL),
+       COALESCE(pn.lat,place.lat,com.lat,bdt.lat,NULL),
        COALESCE(s.id_statut,0),
        a_proposer,
        t.caractere_annul,
@@ -170,8 +163,6 @@ LEFT OUTER JOIN (SELECT fantoir,
                                 code_insee = '__code_insee__' AND
                                 source != 'OSM') nb
                 WHERE rang = 1)nb
-USING (fantoir)
-LEFT OUTER JOIN geom_adresses AS g
 USING (fantoir)
 LEFT OUTER JOIN fantoir_avec_adresses_ban AS faab
 USING (fantoir)
