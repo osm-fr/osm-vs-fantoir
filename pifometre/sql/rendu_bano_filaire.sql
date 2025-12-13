@@ -77,6 +77,21 @@ LEFT OUTER JOIN fantoir_voies_bdtopo_rapproches fbd
 USING   (fantoir)
 WHERE   fbd.fantoir IS NULL
 UNION ALL
+SELECT  (row_number() over()) -3000,
+        1,
+        ST_ExteriorRing(geometrie),
+        nf.nom,
+        'xxxxx',
+        null,
+        '',
+        1,
+        null,
+        'CADASTRE'
+FROM    (SELECT * FROM lieux_dits WHERE   code_insee = '__code_insee__') l
+JOIN    (SELECT * FROM nom_fantoir WHERE   code_insee = '__code_insee__') nf
+ON      l.nom = nf.nom_brut
+WHERE   GeometryType(geometrie) = 'POLYGON'
+UNION ALL
 SELECT  (row_number() over()) * -10000,
         1,
         geometrie,

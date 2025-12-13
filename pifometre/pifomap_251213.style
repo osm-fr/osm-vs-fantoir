@@ -127,7 +127,7 @@
                           "features": []
                 }
         },
-        "hover_points": {
+        "hover_points_nommes_non_rapproches_CADASTRE": {
         "type": "geojson",
         "data": {"type": "FeatureCollection",
                           "features": []
@@ -295,6 +295,18 @@
             "paint": {
                 "line-width": 4,
                 "line-color": ["case",["==",["get", "within"],1],["case",["boolean",["get", "rapproche"]],"green","dodgerblue"],"blueviolet"]
+            }
+        },
+        {
+            "id": "hover_points_nommes_non_rapproches_CADASTRE",
+            "source": "hover_points_nommes_non_rapproches_CADASTRE",
+            "type": "line",
+            "minzoom" : 10,
+            "filter" : ["==",["get", "nom"], " "],
+            "paint": {
+                "line-width": 2,
+                "line-dasharray":[3,1],
+                "line-color": ["case",["boolean",["get", "rapproche"]],"#00B300","red"]
             }
         },
         {

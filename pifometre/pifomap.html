@@ -24,7 +24,7 @@
 <link rel="search" type="application/opensearchdescription+xml" title="Pifomètre BANO" href="opensearch.xml" />
 
 <script>
-    STYLEFILE = 'pifomap_251206'
+    STYLEFILE = 'pifomap_251213'
 
     FILTRES_TYPE = [["voie",true],
                ["lieudit",true]]
@@ -562,8 +562,6 @@
             $('#panneau_map #conteneur_infos h2').removeAttr('numero')
         }
         titre = numero != undefined ? numero+' '+nom:nom;
-        console.log('numero '+numero)
-        console.log('titre '+titre)
         $('#panneau_map #conteneur_infos h2').attr('texte_voie_a_copier',nom)
                             .attr('xmin',xmin)
                             .attr('xmax',xmax)
@@ -703,7 +701,6 @@
                 zoom:17});
         } else {
             map.fitBounds([xmin,ymin,xmax,ymax])
-            console.log("zoom : "+map.getZoom())
             if (map.getZoom() > 20){
                 map.zoomOut()
             }
@@ -717,7 +714,7 @@
             HOVER_LAYERS.forEach(function(hover_layer){
                 layer = hover_layer.replace('hover_','')
                 if (map.getLayoutProperty(layer,'visibility') == undefined||map.getLayoutProperty(layer,'visibility') == 'visible'){
-                    if (fantoir != undefined){
+                    if (fantoir != undefined && fantoir != ''){
                         map.setFilter(hover_layer,["any",["==",["get", "fantoir"], fantoir],["==",["get", "nom"], nom]])
                     } else {
                         map.setFilter(hover_layer,["==",["get", "nom"], nom])
@@ -992,7 +989,8 @@
             }
             map.getSource('contour_communal').setData(res)
 
-            res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+            res_fil = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+            res_cad = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
             for (s=0;s<filairedata.length;s++){
                 let [nom,
                     fantoir,
@@ -1001,11 +999,16 @@
                     geom] = filairedata[s]
                 if (geom.type == 'LineString'||geom.type == 'MultiLineString'){
                     rapproche = fantoir != ''?true:false
-                    res.features.push(get_geojson_poly(geom,{'nom':nom,'source':source,'fantoir':fantoir,'rapproche':rapproche,'within':within}))
                     contenu_index.set(nom,[true,rapproche])
+                    if (source != 'CADASTRE'){
+                        res_fil.features.push(get_geojson_poly(geom,{'nom':nom,'source':source,'fantoir':fantoir,'rapproche':rapproche,'within':within}))
+                    } else {
+                        res_cad.features.push(get_geojson_poly(geom,{'nom':nom,'source':source,'fantoir':fantoir,'rapproche':rapproche,'within':within}))
+                    }
                 }
             }
-            map.getSource('hover_filaire').setData(res)
+            map.getSource('hover_filaire').setData(res_fil)
+            map.getSource('hover_points_nommes_non_rapproches_CADASTRE').setData(res_cad)
 
             res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
             for (s=0;s<polydata.length;s++){
@@ -1115,7 +1118,6 @@
             map.getSource('numeros_BAN_a_integrer_voie_non_rapprochee').setData(res_numero_BAN_a_integrer_voie_non_rapprochee)
             map.getSource('numeros_BAN_a_integrer_voie_rapprochee').setData(res_numero_BAN_a_integrer_voie_rapprochee)
             map.getSource('numeros_BAN_integres').setData(res_numero_BAN_integres)
-            map.getSource('hover_points').setData(res_hover_point)
 
             affiche_filtres();
             prepare_TOC();
