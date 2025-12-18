@@ -9,6 +9,14 @@
             "attribution":
                 "Données © Communauté <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a>"
         },
+        "cadastre": {
+             "type": "vector",
+             "tiles": [
+                  "https://bano.openstreetmap.fr/tuiles/cadastre_communes/{z}/{x}/{y}.pbf"
+                  ],
+            "minzoom":11,
+            "maxzoom":14
+        },
         "points": {
              "type": "vector",
              "tiles": [
@@ -98,6 +106,31 @@
                         ["zoom"],
                         10,0,
                         13,4]
+            }
+        },
+        {
+            "id": "limite_communale_detourage",
+            "source": "cadastre",
+            "source-layer": "cadastre_communes",
+            "type": "line",
+            "minzoom" : 11,
+            "maxzoom" : 24,
+            "paint": {
+                "line-color":"white",
+                "line-width": 5
+            }
+        },
+        {
+            "id": "limite_communale",
+            "source": "cadastre",
+            "source-layer": "cadastre_communes",
+            "type": "line",
+            "minzoom" : 11,
+            "maxzoom" : 24,
+            "paint": {
+                "line-color":"purple",
+                "line-width": 1,
+                "line-dasharray": [3,1]
             }
         },
         {

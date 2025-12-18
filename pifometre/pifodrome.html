@@ -174,7 +174,7 @@
         const map = new maplibregl.Map({
             container: 'map_div',
             style:
-                'pifodrome_250131.style',
+                'pifodrome_251215.style',
             center: [4, 46],
             zoom: 5,
             maxZoom: 19,
@@ -184,10 +184,6 @@
             map_setup()
         });
 
-        //Bouton changement fond
-        // $('#bouton_fond_carte').click(function(){
-        //     bascule_fond_raster();
-        // })
         $('#bouton_localise_moi').click(function(){
                                 $('body').css('cursor','progress');
                                 $('#wait_ajax').empty()
