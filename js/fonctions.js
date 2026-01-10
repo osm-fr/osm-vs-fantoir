@@ -459,16 +459,6 @@
     function reset_url_hash(){
         history.replaceState("", "", window.location.pathname+"?"+window.location.search.replace(/\?/g,''))
     }
-    function reset_panneau_map(){
-        $('#conteneur_index').css('display','none');
-        $('#conteneur_infos').css('display','none');
-        $('#conteneur_filtres').css('display','none');
-        $('#panneau_map h2').empty()
-        $('#panneau_map #boutons').empty()
-        $('#infos_numero').empty();
-        $('#infos_voie_lieudit').empty();
-        $('#pifomap_table_liens').empty();
-    }
     function affiche_ratio_map() {
         hash_value = ''
         if ($('#radio_prog_noms').is(':checked')) {

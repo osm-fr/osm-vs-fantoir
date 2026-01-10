@@ -24,16 +24,12 @@
 <link rel="search" type="application/opensearchdescription+xml" title="Pifomètre BANO" href="opensearch.xml" />
 
 <script>
-    STYLEFILE = 'pifomap_251213'
+    STYLEFILE = 'pifomap_260107'
 
     FILTRES_TYPE = [["voie",true],
                ["lieudit",true]]
     FILTRES_STATUT = [["rapproches",true],
                ["non_rapproches",true]]
-
-    HOVER_LAYERS = new Set()
-    RASTER_LAYERS = new Set()
-    GEOJSON_SOURCES = new Set()
 
     EMPTY_GEOJSON = {'type': 'FeatureCollection',
                           'features': []}
@@ -58,7 +54,7 @@
                                             [["points_nommes_non_rapproches_CADASTRE"],"aliens"]]
 
                            ])
-      TOC_GROUPES = new Map([
+    TOC_GROUPES = new Map([
         ["BAN_point_a_integrer_voie_non_rapprochee",["Dans des voies non intégrées",
                                 ["BAN_point_a_integrer_voie_non_rapprochee",
                                  "BAN_texte_a_integrer_voie_non_rapprochee",
@@ -92,7 +88,32 @@
                                 ["points_nommes_non_rapproches_OSM_lieu_dit"],"bleugris"]]
                             ])
 
+    RASTER_LABELS = new Map([["BD-Horto","IGN BD Ortho"],
+                            ["simple-tiles","HOT"],
+                            ["OSM-standard-tiles","OSM Standard"]])
+    HOVER_LAYERS = new Set()
+    RASTER_LAYERS = new Set()
+    GEOJSON_SOURCES = new Set()
+
     var table = 'table_pifometre'
+
+    function dispatch_layers(){
+        // hover layers
+        // raster layers
+        // eojson sources
+        for (l=0;l<map.getLayersOrder().length;l++){
+            layer = map.getLayersOrder()[l]
+            if (layer.indexOf('hover') == 0){
+                HOVER_LAYERS.add(layer)
+            }
+            src = map.getSource(map.getLayer(layer).source)
+            if (src.type == 'geojson'){
+                GEOJSON_SOURCES.add(src.id)
+            } else if (src.type == 'raster'){
+                RASTER_LAYERS.add(layer)
+            }
+        }
+    }
 
     function start(){
         initPreferences()
@@ -137,22 +158,6 @@
             $('#alerte_josm').css('visibility','hidden');
         })
 
-        //Bouton changement fond
-        /*$('#bouton_fond_carte').click(function(){
-            bascule_fond_raster();
-        })*/
-        $('#groupe_boutons_fond input').on('change', function() {
-            if ($('input[name=fond]:checked', '#groupe_boutons_fond').val()=='fond_hot') {
-                map.setLayoutProperty('simple-tiles','visibility','visible')
-                map.setLayoutProperty('OSM-standard-tiles','visibility','none')
-            }
-            else if ($('input[name=fond]:checked', '#groupe_boutons_fond').val()=='fond_standard') {
-                map.setLayoutProperty('simple-tiles','visibility','none')
-                map.setLayoutProperty('OSM-standard-tiles','visibility','visible')
-            }            
-            update_storage_raster()
-        });
-
         let [a_menus_labels,STATUS_FANTOIR] = get_labels_statut_fantoir()
 
         code_insee = check_url_for_insee()
@@ -170,10 +175,10 @@
                 maxZoom: 20
             });
 
-        map.on('styleimagemissing', (e) => {
-            const id = e.id; // id of the missing imag
-            console.log('manque : '+id)
-       });
+            map.on('styleimagemissing', (e) => {
+                const id = e.id; // id of the missing imag
+                console.log('manque : '+id)
+            });
 
             map.on('load', async () => {
                 im = await map.loadImage('./img/lieudit_map_vert.png')
@@ -189,6 +194,8 @@
                 im = await map.loadImage('./img/voie_bd_commune.png')
                 map.addImage('voie_bd_commune', im.data);
 
+                dispatch_layers()
+                affiche_filtres_stats()
                 map_setup()
             });
             $('#bouton_pifostats').addClass('onglet_non_cliquable');
@@ -279,25 +286,12 @@
                 $('#wait_ajax').css('visibility','hidden');
             })
     }
-    /*function bascule_fond_raster(){
-        visibility_HOT = map.getLayoutProperty('simple-tiles','visibility')
-        console.log('visibility_HOT : '+visibility_HOT);
-        visibility_Standard = map.getLayoutProperty('OSM-standard-tiles','visibility')
-        console.log('visibility_Standard : '+visibility_Standard);
-        map.setLayoutProperty('simple-tiles','visibility',visibility_Standard)
-        map.setLayoutProperty('OSM-standard-tiles','visibility',visibility_HOT)
-        update_storage_raster()
-    }*/
     function update_storage_raster(){
-        layers = Object.values(map.style._layers)
-        for (l = 0; l < layers.length; l++){
-            layername = layers[l].id
-            if (map.getLayer(layername).type == 'raster'){
-                if (map.getLayoutProperty(layername,'visibility') == 'visible'){
-                    localStorage.setItem('raster',layername)
-                }
+        RASTER_LAYERS.forEach(function(rasterlayer){
+            if (map.getLayoutProperty(rasterlayer,'visibility') == 'visible'){
+                localStorage.setItem('raster',rasterlayer)
             }
-        }
+        })
     }
     function set_visible_raster(rasterlayer){
         layers = Object.values(map.style._layers)
@@ -617,23 +611,41 @@
     function affiche_filtres(){
         $('#conteneur_filtres').css('display','block');
     }
-    
+function affiche_filtres_stats(){
+        $('#conteneur_filtres .contenu.stats').css('display','block')
+        $('#conteneur_filtres .contenu.filtres').css('display','none')
+
+        // TBC
+}
+
+
     function prepare_TOC(){
+        dispatch_layers()
+
+        // Filtres - cases à cocher
+        initialise_affichage()
+
+        $('#conteneur_filtres .contenu.stats').css('display','none')
+        $('#conteneur_filtres .contenu.filtres').css('display','block')
+
         $('#conteneur_filtres .filtres .famille_filtres').empty();
+        pifomap_filtres = JSON.parse(localStorage.PifomapFiltres)
 
         for (const t of TOC_HIERARCHIE.keys()) {
             layers = TOC_HIERARCHIE.get(t)[0]
             famille_filtres = TOC_HIERARCHIE.get(t)[1]
             $('#conteneur_filtres .filtres .'+famille_filtres).append($('<h4>').text(t))
+
             for (l=0;l<layers.length;l++){
                 layer = TOC_GROUPES.get(layers[l])
                 $('#conteneur_filtres .filtres .'+famille_filtres).append($('<div class="groupe_boutons_filtre">')
                                                          .append($('<label>').addClass('switch '+layer[2])
                                                              .append($('<input>').attr('id',layers[l])
                                                              .attr('type','checkbox')
-                                                             .prop('checked',true)
+                                                             .prop('checked',pifomap_filtres[layers[l]])
                                                              .click(function(){
                                                                  update_TOC_group($(this).attr("id"))
+                                                                 memorise_affichage()
                                                              })
                                                              )
                                                              .append($('<div>'))
@@ -644,8 +656,39 @@
                                                         )
                                                     )
             }
-
+            // application des filtres
+            for (l=0;l<layers.length;l++){
+                update_TOC_group(layers[l])
+            }
         }
+    }
+
+    function prepare_TOC_fond(){
+        $('#groupe_boutons_fond').empty()
+
+        RASTER_LAYERS.forEach(function(rasterlayer){
+            $('#groupe_boutons_fond').append($('<div>').append($('<input>').attr('type','radio')
+                                                       .attr('name','fond')
+                                                       .attr('id','check_'+rasterlayer)
+                                                       .attr('value','check_'+rasterlayer))
+                                     .append($('<label>').attr('for','check_'+rasterlayer)
+                                                         // .text(rasterlayer)))
+                                                         .text(RASTER_LABELS.get(rasterlayer))))
+
+        })
+        // Activation du fond mémorisé pour l'affichage initial
+        $('#groupe_boutons_fond input#check_'+localStorage.raster).prop( "checked", true )
+
+        $('#groupe_boutons_fond input').on('change', function() {
+            RASTER_LAYERS.forEach(function(rasterlayer){
+                if ($('input#check_'+rasterlayer)[0].checked){
+                    map.setLayoutProperty(rasterlayer,'visibility','visible')
+                } else {
+                    map.setLayoutProperty(rasterlayer,'visibility','none')
+                }
+            })
+            update_storage_raster()
+        })
     }
 
     function update_TOC_group(layerid){
@@ -819,11 +862,6 @@
                                             .append($('<span>').text(' '+nom_osm[i][0]))
                 );
             }
-/*            $('#infos_voie_lieudit').append($('<ul>'));
-            $('#infos_voie_lieudit ul:last').append($('<li>')
-                                            .append($('<span class="gras">').text('Nom BAN : '))
-                                            .append($('<span>').text(nom_ban))
-                                        );*/
         }
         // Tous lieux-dits et voies non rapprochés (orange, rouge)
         else if (couche_carto.indexOf('points_nommes_non_rapproches') == 0||couche_carto.indexOf('filaire') == 0){
@@ -1121,6 +1159,7 @@
 
             affiche_filtres();
             prepare_TOC();
+            prepare_TOC_fond()
             prepare_index();
 
             $('body').css('cursor','default');
@@ -1135,27 +1174,8 @@
         }
         // Fond raster de la dernière session
         set_visible_raster(localStorage.raster)
-        if(localStorage.raster == 'simple-tiles') {$( "#fond_hot" ).prop( "checked", true );}
-        else if (localStorage.raster == 'OSM-standard-tiles') {$( "#fond_standard" ).prop( "checked", true );}      
 
         map.addControl(new maplibregl.NavigationControl());
-
-        // hover layers
-        // raster layers
-        // eojson sources
-        for (l=0;l<map.getLayersOrder().length;l++){
-            layer = map.getLayersOrder()[l]
-            if (layer.indexOf('hover') == 0){
-                HOVER_LAYERS.add(layer)
-            }
-            src = map.getSource(map.getLayer(layer).source)
-            if (src.type == 'geojson'){
-                GEOJSON_SOURCES.add(src.id)
-            } else if (src.type == 'raster'){
-                RASTER_LAYERS.add(layer)
-            }
-        }
-
 
         interactions_souris('noms_de_communes')
         interactions_souris('simple-tiles')
@@ -1180,18 +1200,34 @@
         update_radio_ratio()
         affiche_ratio_map()
 
-        // Preferences d'affichage des LD
-        affichage_par_defaut_lieux_dits()
+        // initialisation de l'affichage lors de la 1ere visite
+        initialise_affichage()
+        applique_affichage()
+        prepare_TOC_fond()
     }
-    function affichage_par_defaut_lieux_dits(){
-        maintenant = new Date().getTime()
-        if (eval(localStorage.PreferencesPifomapMasquage_lieuxditsTerme) > maintenant){
-            $('#pifofiltres.pifomap input#check_'+FILTRES_TYPE[1][0]+":checkbox").prop("checked", false).trigger("change")
-            update_filtres()
-            filtre_pifomap()
-        } else {
-            localStorage.setItem('PreferencesPifomapMasquage_lieuxditsTerme',-1)
-            localStorage.setItem('PreferencesPifomapMasquage_lieuxditsRadioId','jamais')
+    function initialise_affichage(){
+        if (localStorage.PifomapFiltres == undefined){
+            pifomap_filtres = new Object()
+            for (const t of TOC_HIERARCHIE.keys()) {
+                layers = TOC_HIERARCHIE.get(t)[0]
+                for (const l of layers){
+                    pifomap_filtres[l] = true
+                }
+             }
+             localStorage.PifomapFiltres = JSON.stringify(pifomap_filtres)
+        }
+    }
+    function memorise_affichage(){
+         pifomap_filtres = new Object()
+         $("#conteneur_filtres .groupe_boutons_filtre input[type=checkbox]").each(function(){
+             pifomap_filtres[$(this)[0].id] = $(this)[0].checked
+         })
+         localStorage.PifomapFiltres = JSON.stringify(pifomap_filtres)
+    }
+    function applique_affichage(){
+        pifomap_filtres = JSON.parse(localStorage.PifomapFiltres)
+        for (const x in pifomap_filtres) {
+            map.setLayoutProperty(x,'visibility',pifomap_filtres[x]?'visible':'none')
         }
     }
     function requete_pifometre(){
@@ -1201,7 +1237,7 @@
         $.ajax({
             url: "requete_pifometre_commune.py?insee="+$('#input_insee')[0].value
         })
-        .done(function( pifodata ) {
+        .done(function(pifodata){
             let [nom_commune,
                  lon_commune,
                  lat_commune,
@@ -1242,6 +1278,8 @@
                     maxZoom: 20,
                 });
 
+                // dispatch_layers()
+
                 map.on('load', async () => {
                     im = await map.loadImage('./img/lieudit_map_vert.png')
                     map.addImage('lieudit_vert', im.data);
@@ -1258,7 +1296,6 @@
 
                     map_setup()
                 });
-
             }
             if (premier_affichage){
                 map.fitBounds(bbox_diagonale.coordinates)
@@ -1528,6 +1565,16 @@
             map.getSource(s).setData(EMPTY_GEOJSON)
         }
     }
+    function reset_panneau_map(){
+        $('#conteneur_index').css('display','none');
+        $('#conteneur_infos').css('display','none');
+        $('#conteneur_filtres').css('display','none');
+        $('#panneau_map #conteneur_infos h2').empty()
+        $('#panneau_map #boutons').empty()
+        $('#infos_numero').empty();
+        $('#infos_voie_lieudit').empty();
+        $('#pifomap_table_liens').empty();
+    }
 </script>
 </head>
 
@@ -1655,6 +1702,10 @@
                 <div class="en_tete">
                     <h2>Filtres</h2>
                 </div>
+                <div class="contenu stats">
+                    <!-- <h3>Progressions</h3> -->
+                    <!-- <div class="famille_filtres progression"></div> -->
+                </div>
                 <div class="contenu filtres">
                     <h3 title="Autres LIeux Et Numéros">Aliens</h3>
                     <span>Données venues d'ailleurs</span>
@@ -1667,15 +1718,7 @@
                 </div>
                 <div class="contenu">
                     <div id="groupe_boutons_fond">
-                        <div>
-                            <input name="fond" type="radio" id="fond_hot" value="fond_hot">
-                            <label for="fond_hot">Fond HOT</label>
-                        </div>
-                        <div>
-                            <input name="fond" type="radio" id="fond_standard" value="fond_standard">
-                            <label for="fond_standard">Fond standard</label>
-                        </div>
-                    </div>
+                 </div>
                 </div>
             </div>
             <div id="conteneur_index"></div>

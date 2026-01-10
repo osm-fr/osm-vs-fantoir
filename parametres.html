@@ -92,7 +92,7 @@
                 </p>
             </fieldset>
         </div>
-        <div class="bloc_fiche b1">
+       <!--  <div class="bloc_fiche b1">
             <h2>Paramètres Pifomap</h2>
             <fieldset id="field_pifomap_ld">
                 <legend>Masquer les lieux-dits</legend>
@@ -113,7 +113,7 @@
                     <label for="toujours">Toujours</label>
                 </p>
             </fieldset>
-        </div>
+        </div> -->
     </div>
 
 <script>
@@ -200,36 +200,6 @@ function start(){
         localStorage.setItem('PreferencesPifometreAffichage_pagine',$(this).val())
     })
 
-
-// Pifomap : Masquage des lieux-dits
-    maintenant = new Date().getTime()
-    // RAZ au terme du setting
-    if (eval(localStorage.PreferencesPifomapMasquage_lieuxditsTerme) < maintenant){
-        localStorage.setItem('PreferencesPifomapMasquage_lieuxditsTerme',-1)
-        localStorage.setItem('PreferencesPifomapMasquage_lieuxditsRadioId','jamais')
-    }
-    $('input[name=pref_lieuxdits]') .each(function(){
-        $(this).prop("checked", false)
-    })
-    $('input[name=pref_lieuxdits]#'+localStorage.getItem('PreferencesPifomapMasquage_lieuxditsRadioId')).prop("checked", true)
-    format_date_de_fin(localStorage.getItem('PreferencesPifomapMasquage_lieuxditsRadioId'))
-
-    $('input[name=pref_lieuxdits]').click(function(){
-        maintenant = new Date().getTime() // heure du clic, possiblement différente de l'heure de chargement de la page
-        localStorage.setItem('PreferencesPifomapMasquage_lieuxditsRadioId',$(this).attr('id'))
-        localStorage.setItem('PreferencesPifomapMasquage_lieuxditsTerme',maintenant+$(this).val()*1000)
-
-        $('fieldset#field_pifomap_ld span').each(function(){
-            $(this).empty()
-        })
-        if ($(this).attr('id') == '1jour'||$(this).attr('id') == '1semaine'){
-            format_date_de_fin($(this).attr('id'))
-        }
-    })
-}
-
-function format_date_de_fin(id_span){
-    $('span#date_fin_'+id_span).text('(jusqu\'au '+new Date(eval(localStorage.getItem('PreferencesPifomapMasquage_lieuxditsTerme'))).toLocaleString()+')')
 }
 </script>
 <!--#include virtual="includes/feedback.html" -->

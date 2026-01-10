@@ -14,7 +14,7 @@
         "IGN_BDHORTO": {
             "type": "raster",
             "tiles": [
-                "https://data.geopf.fr/wmts?&REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&STYLE=normal&TILEMATRIXSET=PM&FORMAT=image/jpeg&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}"
+                "https://data.geopf.fr/tms/1.0.0/ORTHOIMAGERY.ORTHOPHOTOS/{z}/{x}/{y}.jpeg"
             ],
             "tileSize": 256,
             "attribution":
@@ -214,6 +214,20 @@
                         "yellow",
                         75,
                         "green"]
+            }
+        },
+        {
+            "id": "contour_communal_halo",
+            "source": "contour_communal",
+            "type": "line",
+            "minzoom" : 8,
+            "layout": {
+                "line-join":"round",
+                "line-cap":"round"
+            },
+            "paint": {
+                "line-color":"white",
+                "line-width":4
             }
         },
         {
