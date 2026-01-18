@@ -70,7 +70,7 @@ SELECT  (row_number() over()) -1000,
         1,
         null,
         'BDTOPO'
-FROM    (SELECT geometrie, nom_collaboratif FROM bdtopo_voie_nommee WHERE code_insee = '__code_insee__' AND COALESCE(nom_voie_ban,'') = '') b
+FROM    (SELECT geometrie, nom_collaboratif FROM bdtopo_voie_nommee_utile WHERE code_insee = '__code_insee__' AND utile) b
 JOIN    (SELECT fantoir,nom,nom_brut AS nom_collaboratif FROM nom_fantoir WHERE code_insee = '__code_insee__' AND source = 'BDTOPO') n
 USING   (nom_collaboratif)
 LEFT OUTER JOIN fantoir_voies_bdtopo_rapproches fbd
