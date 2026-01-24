@@ -5,6 +5,7 @@
     let context_menu = null;
     DELTA = 0.0008
     VERSION_MENU = 2
+    NB_SUGGESTIONS_MAX = 30
 
     function is_valid_dept(d){
         pattern_dept = new RegExp('^([01]|[3-8])([0-9])$|^2([aAbB]|[1-9])$|^9([0-5]|7[1-4]|76)$')
@@ -348,6 +349,43 @@
             return 'Sans Fantoir'
         }
         return fantoir
+    }
+    function autocomplete_commune(v) {
+        if (v.length < 3 && v != 'y') {
+            $('#instructions').empty(); // Vider la liste existante
+            return;
+        }
+        let url_to_call = ''
+        if (/^[0-9]*[ab]?[0-9]*$/.test(v)) {
+            // Si la valeur est compatible avec un code INSEE, on ne fait pas de requête AJAX
+            return
+        } else {
+            //on suppose que c'est un début de nom de commune
+            url_to_call = 'https://geo.api.gouv.fr/communes?fields=code&boost=population&fields=nom&nom=' + encodeURIComponent(v)
+        }
+        $.ajax({
+            url: url_to_call
+        })
+        .done(function(data) {
+                $('#instructions').empty(); // Vider la liste existante
+                if (data.length == 0) {
+                    $('#instructions').append('<option value="">Aucune commune trouvée</option>');
+                } else {
+                    for (i=0;i<Math.min(NB_SUGGESTIONS_MAX,data.length);i++){
+                        $('#instructions').append($('<div>').attr("value",data[i].code)
+                                                            .append((data[i].code+' '+data[i].nom))
+                                                            .click(function(){
+                                                                $('#input_insee').empty()
+                                                                $('#input_insee')[0].value = $(this).attr('value')
+                                                                requete_pifometre()
+                                                            }));
+                    }
+                }
+        })
+        .fail(function() {
+                alert('Erreur lors du chargement des options.');
+            }
+        );
     }
     function add_context_menu(){
         map.on('contextmenu', (e) => {
