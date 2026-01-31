@@ -206,7 +206,7 @@
     #bouton_aleatoire_vert_rouge {right:80px;}
     #bouton_aleatoire_vert_vert {right:115px;}
     #recentrer_commune {margin-left:10px; width: 30px; height: 30px;}
-    #barre-jaune input[type="text"] {width: 50px;}
+    #barre-jaune input[type="text"] {width: 11em;}
     #bandeau {height: 110px;}
     #bandeau #descriptif {width: 100%;}
     #bandeau #descriptif #infos_commune_col1, #bandeau #descriptif #infos_commune_col2 {margin:4px 0;}
