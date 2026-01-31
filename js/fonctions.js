@@ -1,11 +1,10 @@
 /*--------------- FEEDBACK ---------------*/
     
-    
     let hoveredStateId = null;
     let context_menu = null;
-    DELTA = 0.0008
-    VERSION_MENU = 2
-    NB_SUGGESTIONS_MAX = 30
+    DELTA = 0.0008;
+    VERSION_MENU = 2;
+    NB_SUGGESTIONS_MAX = 20;
 
     function is_valid_dept(d){
         pattern_dept = new RegExp('^([01]|[3-8])([0-9])$|^2([aAbB]|[1-9])$|^9([0-5]|7[1-4]|76)$')
@@ -350,9 +349,12 @@
         }
         return fantoir
     }
+
     function autocomplete_commune(v) {
+        let selectedIndex = -1; // Track the selected index for keyboard navigation
+
         if (v.length < 3 && v != 'y') {
-            $('#instructions').empty(); // Vider la liste existante
+            $('#listeSuggestions').empty().css("display","none"); // Vider la liste existante
             return;
         }
         let url_to_call = ''
@@ -367,26 +369,63 @@
             url: url_to_call
         })
         .done(function(data) {
-                $('#instructions').empty(); // Vider la liste existante
+                $('#listeSuggestions').empty().css("display","block"); // Vider la liste existante
+                selectedIndex = -1;
+
                 if (data.length == 0) {
-                    $('#instructions').append('<option value="">Aucune commune trouvée</option>');
+                    $('#listeSuggestions').append('<div value="">Aucune commune trouvée</div>');
                 } else {
                     for (i=0;i<Math.min(NB_SUGGESTIONS_MAX,data.length);i++){
-                        $('#instructions').append($('<div>').attr("value",data[i].code)
+                        $('#listeSuggestions').append($('<div class="item">').attr("value",data[i].code)
                                                             .append((data[i].code+' '+data[i].nom))
                                                             .click(function(){
                                                                 $('#input_insee').empty()
                                                                 $('#input_insee')[0].value = $(this).attr('value')
                                                                 requete_pifometre()
+                                                                $("#listeSuggestions").css('display','none');
                                                             }));
                     }
                 }
+                // Fermer si on clique dehors
+                $(document).on("click", function (e) {
+                    if (!$(e.target).closest("#listeSuggestions").length) {
+                        $("#listeSuggestions").css('display','none');
+                    }
+                });
+                //Navigation au clavier
+                $("#input_insee").off().on("keydown", function (e) {
+                    let items = $("#listeSuggestions .item");
+                    if (items.length === 0) return;
+
+                    if (e.key === "ArrowDown") {
+                        e.preventDefault();
+                        selectedIndex = (selectedIndex + 1) % items.length;
+                        items.removeClass("active").eq(selectedIndex).addClass("active");
+                    } else if (e.key === "ArrowUp") {
+                        e.preventDefault();
+                        selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+                        items.removeClass("active").eq(selectedIndex).addClass("active");
+                    } else if (e.key === "Enter") {
+                        console.log('enter');
+                        e.preventDefault();
+                        if (selectedIndex >= 0 && !items.eq(selectedIndex).hasClass("rien")) {
+                            $('#input_insee').empty()
+                            $('#input_insee')[0].value = items.eq(selectedIndex).attr('value')
+                            requete_pifometre()
+                            $('#listeSuggestions').empty().css("display","none"); // Vider la liste existante
+                        }
+                    }
+                    if (e.key === "Escape") {
+                        $("#listeSuggestions").css('display','none');
+                    }
+                });
         })
         .fail(function() {
                 alert('Erreur lors du chargement des options.');
             }
         );
     }
+
     function add_context_menu(){
         map.on('contextmenu', (e) => {
             if (typeof e.features == 'undefined'){
