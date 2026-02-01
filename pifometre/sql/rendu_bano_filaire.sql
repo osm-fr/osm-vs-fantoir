@@ -89,7 +89,7 @@ SELECT  (row_number() over()) -3000,
         'CADASTRE'
 FROM    (SELECT * FROM lieux_dits WHERE   code_insee = '__code_insee__') l
 JOIN    (SELECT * FROM nom_fantoir WHERE   code_insee = '__code_insee__') nf
-ON      l.nom = nf.nom_brut
+ON      l.nom_nettoye = nf.nom_brut
 WHERE   GeometryType(geometrie) = 'POLYGON'
 UNION ALL
 SELECT  (row_number() over()) * -10000,
