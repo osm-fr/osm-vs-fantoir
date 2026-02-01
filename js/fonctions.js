@@ -350,10 +350,11 @@
         return fantoir
     }
 
-    function autocomplete_commune(v) {
+    function autocomplete_commune(v,from) {
         let selectedIndex = -1; // Track the selected index for keyboard navigation
 
-        if (v.length < 3 && v != 'y') {
+        v_norm = v.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        if (v.length < 3 && v_norm.match("y|ay|by|bu|eu|fa|gy|oz|oo|py|ri|ry|sy|ur|us|uz") == null) {
             $('#listeSuggestions').empty().css("display","none"); // Vider la liste existante
             return;
         }
@@ -363,7 +364,7 @@
             return
         } else {
             //on suppose que c'est un début de nom de commune
-            url_to_call = 'https://geo.api.gouv.fr/communes?fields=code&boost=population&fields=nom&nom=' + encodeURIComponent(v)
+            url_to_call = 'https://geo.api.gouv.fr/communes?fields=code&boost=population&fields=nom&nom=' + encodeURIComponent(v_norm)
         }
         $.ajax({
             url: url_to_call
@@ -375,13 +376,18 @@
                 if (data.length == 0) {
                     $('#listeSuggestions').append('<div value="">Aucune commune trouvée</div>');
                 } else {
+                    data = autocomplete_PLM(data)
+                    data = autocomplete_sort(data,v_norm)
                     for (i=0;i<Math.min(NB_SUGGESTIONS_MAX,data.length);i++){
+                        nom_affiche = autocomplete_format(data[i].nom,v_norm)
                         $('#listeSuggestions').append($('<div class="item">').attr("value",data[i].code)
-                                                            .append((data[i].code+' '+data[i].nom))
+                                                            .append(data[i].code+' '+nom_affiche)
                                                             .click(function(){
                                                                 $('#input_insee').empty()
                                                                 $('#input_insee')[0].value = $(this).attr('value')
-                                                                requete_pifometre()
+                                                                if (from == 'pifometre'){
+                                                                    requete_pifometre()
+                                                                }
                                                                 $("#listeSuggestions").css('display','none');
                                                             }));
                     }
@@ -406,12 +412,13 @@
                         selectedIndex = (selectedIndex - 1 + items.length) % items.length;
                         items.removeClass("active").eq(selectedIndex).addClass("active");
                     } else if (e.key === "Enter") {
-                        console.log('enter');
                         e.preventDefault();
                         if (selectedIndex >= 0 && !items.eq(selectedIndex).hasClass("rien")) {
                             $('#input_insee').empty()
                             $('#input_insee')[0].value = items.eq(selectedIndex).attr('value')
-                            requete_pifometre()
+                            if (from == 'pifometre'){
+                                requete_pifometre()
+                            }
                             $('#listeSuggestions').empty().css("display","none"); // Vider la liste existante
                         }
                     }
@@ -425,7 +432,49 @@
             }
         );
     }
+    function autocomplete_normalize(s){
+        return s.toLowerCase().replaceAll("-"," ").normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    }
+    function autocomplete_sort(ajax_resp, saisie_norm){
+        res = []
+        for (i=0;i<ajax_resp.length;i++){
+            if (autocomplete_normalize(ajax_resp[i].nom) == saisie_norm){
+                res.unshift(ajax_resp[i])
+            } else {
+                res.push(ajax_resp[i])
+            }
+        }
+        return res
+    }
+    function autocomplete_format(nom,saisie_norm){
+        nom_norm = autocomplete_normalize(nom)
+        r = new RegExp(saisie_norm)
+        position = nom_norm.search(r)
+        if (position < 0) {
+            return nom
+        }
+        avant = nom.slice(0,position)
+        saisie = nom.slice(position,position+saisie_norm.length)
+        apres = nom.slice(position+saisie_norm.length)
+        return(avant+'<mark>'+saisie+'</mark>'+apres)
+    }
+    function autocomplete_PLM(ajax_resp){
+        res = []
+        for (i=0;i<ajax_resp.length;i++){
+            if (autocomplete_normalize(ajax_resp[i].code).match("13055|69123|75056") != null){
+                plm = new Map([['75056',[20,75000]],
+                               ['69123',[9,69380]],
+                               ['13055',[16,13200]]])
 
+                for (a=1;a<plm.get(ajax_resp[i].code)[0]+1;a++){
+                    res.push({nom:ajax_resp[i].nom+' '+a+'e arrdt',code:plm.get(ajax_resp[i].code)[1]+a})
+                }
+            } else {
+                res.push(ajax_resp[i])                
+            }
+        }
+        return res
+    }
     function add_context_menu(){
         map.on('contextmenu', (e) => {
             if (typeof e.features == 'undefined'){
