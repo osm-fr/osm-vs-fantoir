@@ -427,26 +427,59 @@ fieldset legend {
     text-transform: uppercase;
 }
 
-#barre-jaune span {
-    vertical-align: middle;
+#barre-jaune span { /* "Commune : " */
+	float: left;
+    margin-top: 2px;
 }
-
-#barre-jaune form {
+#champ_recherche {
+	float: left;
+	margin: 0 10px;
+	height:23px;
+	background: white;
+	border:1px solid #777;
+	border-radius: 5px;
+}
+#champ_recherche:focus-within {
+    outline: 1px solid dodgerblue;
+    border-color: dodgerblue;
+}
+#champ_recherche form {
     display: inline;
 }
-
-#barre-jaune form input {
-    height:22px;
+#champ_recherche form input {
     vertical-align: middle;
     line-height: 1em;
 }
-
-#barre-jaune input[type="text"] {
-    width: 15em;
-    margin: 0 5px;
-    border: 1px solid #777;
-    border-radius: 3px;
+#champ_recherche input:focus {
+    outline: none;
 }
+#champ_recherche input[type="text"] {
+    width: 15em;
+    height: 100%;
+    padding: 0 5px;
+    background:none;
+    border:none;
+}
+#champ_recherche input[type="submit"], #champ_recherche #bouton_localise_moi {
+	cursor: pointer;
+	float: right;
+	width: 20px;
+    height: 100%;
+    border:none;
+}
+#champ_recherche input[type="submit"] {
+    padding: 0 15px;
+    background: url("../img/search.png") no-repeat center;
+    background-size: 16px;
+    border-left: 1px solid #ccc;
+}
+#champ_recherche #bouton_localise_moi {
+	position: initial !important;
+    padding: 0 5px;
+    background: url("../img/cible.png") no-repeat center;
+    background-size: 16px;
+}
+
 
 /* --- Autocomplete --- */
 
@@ -454,7 +487,7 @@ fieldset legend {
 	display: none;
     position: fixed;
     top: 65px;
-    left: 101px;
+    left: 104px;
     width: 400px;
     border: red solid 2px;
     background: white;
@@ -471,6 +504,10 @@ fieldset legend {
 }
 #listeSuggestions .item {
 	cursor: pointer;
+}
+#listeSuggestions .item .saisie {
+	font-weight: bold;
+    color: #000;
 }
 
 #listeSuggestions .item:hover {/*Navigation au curseur*/

@@ -456,7 +456,7 @@
         avant = nom.slice(0,position)
         saisie = nom.slice(position,position+saisie_norm.length)
         apres = nom.slice(position+saisie_norm.length)
-        return(avant+'<mark>'+saisie+'</mark>'+apres)
+        return(avant+'<span class="saisie">'+saisie+'</span>'+apres)
     }
     function autocomplete_PLM(ajax_resp){
         res = []
