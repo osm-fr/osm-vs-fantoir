@@ -419,6 +419,11 @@
                             if (from == 'pifometre'){
                                 requete_pifometre()
                             }
+                            else if (from == 'pifomap') {
+                                reset_url_hash();
+                                reset_panneau_map();
+                                requete_pifometre();
+                            }
                             $('#listeSuggestions').empty().css("display","none"); // Vider la liste existante
                         }
                     }
