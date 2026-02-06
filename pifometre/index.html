@@ -802,10 +802,13 @@
 
     <div id="barre-jaune">
         <span>Commune :</span>
-        <form action="javascript:requete_pifometre()" autocomplete="off">
-            <input type="text" size=25 id="input_insee" placeholder="Nom de commune ou code Insee" oninput="autocomplete_commune(this.value,'pifometre')"/>
-            <input type="submit" value="Lister"/>
-        </form>
+        <div id="champ_recherche">
+            <form action="javascript:requete_pifometre()" autocomplete="off">
+                <input type="text" size=25 id="input_insee" placeholder="Nom de commune ou code Insee" oninput="autocomplete_commune(this.value,'pifometre')"/>
+                <input type="submit" value=""/>
+            </form>
+            <div class="bouton" id="bouton_localise_moi" role="button" title="Charger la commune où je me trouve"></div>
+        </div>
     </div>
     <div id="listeSuggestions"></div>
 
@@ -818,7 +821,6 @@
         <!--Boutons tout en haut à droite-->
         <div id="espace_boutons">
             <div id="wait_ajax" class="pifometre"></div>
-            <button id="bouton_localise_moi" title="Charger la commune où je me trouve"></button>
             <button id="bouton_aleatoire" title="Une commune au pif"></button>
             <button id="bouton_communes_voisines" class="inactif" title="Communes voisines"></button>
             <div id="table_communes_voisines">
