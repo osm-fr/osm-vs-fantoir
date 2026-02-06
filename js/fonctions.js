@@ -436,15 +436,33 @@
         return s.toLowerCase().replaceAll("-"," ").normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     }
     function autocomplete_sort(ajax_resp, saisie_norm){
-        res = []
+        res_exact = []
+        res_partiel = []
+        res_desordre = []
         for (i=0;i<ajax_resp.length;i++){
+            ajax_resp[i].index = autocomplete_normalize(ajax_resp[i].nom).indexOf(saisie_norm)
             if (autocomplete_normalize(ajax_resp[i].nom) == saisie_norm){
-                res.unshift(ajax_resp[i])
+                res_exact.push(ajax_resp[i])
+            } else if (ajax_resp[i].index > -1){
+                res_partiel.push(ajax_resp[i])
             } else {
-                res.push(ajax_resp[i])
+                res_desordre.push(ajax_resp[i])
             }
         }
-        return res
+        res_exact.sort(function(a, b){return Number((a.nom+a.code)>(b.nom+b.code))})
+        res_partiel.sort(function(a, b){
+            if (a.index > b.index){
+                return 1
+            }
+            if (a.index < b.index){
+                return -1
+            }
+            if (a.code > b.code){
+                return 1
+            }
+            return -1
+        })
+        return (res_exact.concat(res_partiel)).concat(res_desordre)
     }
     function autocomplete_format(nom,saisie_norm){
         nom_norm = autocomplete_normalize(nom)
