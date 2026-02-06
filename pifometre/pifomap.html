@@ -1585,11 +1585,15 @@ function affiche_filtres_stats(){
 
     <div id="barre-jaune">
         <span>Commune :</span>
-        <form action="javascript:reset_url_hash();reset_panneau_map();requete_pifometre()" autocomplete="on">
-            <input type="text" id="input_insee" placeholder="Code INSEE"/>
-            <input type="submit" value="Afficher la carte"/>
-        </form>
+        <div id="champ_recherche">
+            <form action="javascript:reset_url_hash();reset_panneau_map();requete_pifometre()" autocomplete="off">
+                <input type="text" id="input_insee" placeholder="Nom de commune ou code Insee" oninput="autocomplete_commune(this.value,'pifomap')"/>
+                <input type="submit" value="" title="Afficher la carte"/>
+            </form>
+            <div class="bouton" id="bouton_localise_moi" role="button" title="Charger la commune où je me trouve"></div>
+        </div>
     </div>
+    <div id="listeSuggestions"></div>
 
     <div id="bandeau" class="pifomap">
         <!--Boutons tout en haut à droite-->
@@ -1603,7 +1607,6 @@ function affiche_filtres_stats(){
                 <div id="bouton_pifoprogression"><p>Progression</p></div>
             </div>
 
-            <button id="bouton_localise_moi" title="Charger la commune où je me trouve"></button>
             <button id="bouton_aleatoire" title="Une commune au pif"></button>
             <button id="bouton_communes_voisines" title="Communes voisines"></button>
             <div id="table_communes_voisines">
