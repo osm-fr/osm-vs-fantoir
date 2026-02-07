@@ -388,6 +388,11 @@
                                                                 if (from == 'pifometre'){
                                                                     requete_pifometre()
                                                                 }
+                                                                else if (from == 'pifomap') {
+                                                                    reset_url_hash();
+                                                                    reset_panneau_map();
+                                                                    requete_pifometre();
+                                                                }
                                                                 $("#listeSuggestions").css('display','none');
                                                             }));
                     }
@@ -473,13 +478,19 @@
         nom_norm = autocomplete_normalize(nom)
         r = new RegExp(saisie_norm)
         position = nom_norm.search(r)
-        if (position < 0) {
-            return nom
+        if (position > -1) {
+            avant = nom.slice(0,position)
+            saisie = nom.slice(position,position+saisie_norm.length)
+            apres = nom.slice(position+saisie_norm.length)
+            return(avant+'<span class="saisie">'+saisie+'</span>'+apres)
         }
-        avant = nom.slice(0,position)
-        saisie = nom.slice(position,position+saisie_norm.length)
-        apres = nom.slice(position+saisie_norm.length)
-        return(avant+'<span class="saisie">'+saisie+'</span>'+apres)
+        // a_saisie_norm = saisie_norm.split(' ')
+        // for (i=0;i<a_saisie_norm.length;i++){
+        //     g = a_saisie_norm[i]
+        //     index = 0
+        //     while(nom_norm.indexOf(g,index) > -i)
+        // }
+        return nom
     }
     function autocomplete_PLM(ajax_resp){
         res = []
@@ -606,7 +617,7 @@
         })
     }
     function reset_url_hash(){
-        history.replaceState("", "", window.location.pathname+"?"+window.location.search.replace(/\?/g,''))
+        history.replaceState("", "", window.location.pathname+"?"+window.location.search.replace(/\?/g,'')+'#reset')
     }
     function affiche_ratio_map() {
         hash_value = ''

@@ -1258,12 +1258,10 @@ function affiche_filtres_stats(){
 
             let [mapz,mapx,mapy] = check_url_for_xyz()
 
-            premier_affichage = false
             if (mapz < 0){
                 mapz = 15
                 mapx = lon_commune
                 mapy = lat_commune
-                premier_affichage = true
             }
 
             if (typeof map != 'undefined'){
@@ -1297,8 +1295,10 @@ function affiche_filtres_stats(){
                     map_setup()
                 });
             }
-            if (premier_affichage){
+
+            if (window.location.hash.indexOf('reset') > -1){
                 map.fitBounds(bbox_diagonale.coordinates)
+                window.location.hash = window.location.hash.replace('reset','')
             }
 
             document.title = nom_commune+' - Pifomap'
