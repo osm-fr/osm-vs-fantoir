@@ -496,7 +496,7 @@
         res = []
         for (i=0;i<ajax_resp.length;i++){
             if (autocomplete_normalize(ajax_resp[i].code).match("13055|69123|75056") != null){
-                plm = new Map([['75056',[20,75000]],
+                plm = new Map([['75056',[20,75100]],
                                ['69123',[9,69380]],
                                ['13055',[16,13200]]])
 
