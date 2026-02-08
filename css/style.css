@@ -507,7 +507,6 @@ fieldset legend {
 }
 #listeSuggestions .item .saisie {
 	font-weight: bold;
-    color: #000;
 }
 
 #listeSuggestions .item:hover {/*Navigation au curseur*/
