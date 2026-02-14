@@ -164,11 +164,14 @@
 
 	<div id="barre-jaune">
 		<span>Commune :</span>
-		<form action="javascript:listing_fantoir()" autocomplete="on">
-			<input type="text" id="input_insee" placeholder="Code INSEE"/>
-			<input type="submit" value="Lister"/>
-		</form>
+		<div id="champ_recherche">
+			<form action="javascript:listing_fantoir()" autocomplete="off">
+				<input type="text" id="input_insee" placeholder="Nom de commune ou code Insee" oninput="autocomplete_commune(this.value,'sources')"/>
+				<input type="submit" value="" title="Afficher"/>
+			</form>
+		</div>
 	</div>
+	<div id="listeSuggestions"></div>
 
 	<div id="bandeau">
 		<div id="descriptif">
