@@ -804,14 +804,26 @@
         <span>Commune :</span>
         <div id="champ_recherche">
             <form action="javascript:requete_pifometre()" autocomplete="off">
-                <input type="text" size=25 id="input_insee" placeholder="Nom de commune ou code Insee" oninput="autocomplete_commune(this.value,'pifometre')"/>
+                <input type="text" id="input_insee" placeholder="Nom de commune ou code Insee" oninput="autocomplete_commune(this.value,'pifometre')"/>
+                <div class="bouton" id="bouton_aleatoire" role="button" title="Une commune au pif"></div>
+                <div class="bouton" id="bouton_localise_moi" role="button" title="Charger la commune où je me trouve"></div>
                 <input type="submit" value="" title="Afficher"/>
-            </form>
-            <div class="bouton" id="bouton_localise_moi" role="button" title="Charger la commune où je me trouve"></div>
+            </form>            
         </div>
+        <div class="bouton inactif" id="bouton_communes_voisines" role="button" title="Communes voisines"></div>
+    </div>
+    <div id="table_communes_voisines" class="pifometre">
+        <div class="fermer">X</div>
+        <table>
+        <tbody>
+            <tr><td id="11"></td><td id="12"></td><td id="1"></td><td id="2"></td></tr>
+            <tr><td id="10"></td><td class="commune_centre" colspan="2" rowspan="2"></td><td id="3"></td></tr>
+            <tr><td id="9"></td><td id="4"></td></tr>
+            <tr><td id="8"></td><td id="7"></td><td id="6"></td><td id="5"></td></tr>
+        </tbody>
+        </table>
     </div>
     <div id="listeSuggestions"></div>
-
 
     <div id="bandeau" class="pifometre">
         <div id="instructions">
@@ -821,19 +833,6 @@
         <!--Boutons tout en haut à droite-->
         <div id="espace_boutons">
             <div id="wait_ajax" class="pifometre"></div>
-            <button id="bouton_aleatoire" title="Une commune au pif"></button>
-            <button id="bouton_communes_voisines" class="inactif" title="Communes voisines"></button>
-            <div id="table_communes_voisines">
-                <div class="fermer">X</div>
-                <table>
-                <tbody>
-                    <tr><td id="11"></td><td id="12"></td><td id="1"></td><td id="2"></td></tr>
-                    <tr><td id="10"></td><td class="commune_centre" colspan="2" rowspan="2"></td><td id="3"></td></tr>
-                    <tr><td id="9"></td><td id="4"></td></tr>
-                    <tr><td id="8"></td><td id="7"></td><td id="6"></td><td id="5"></td></tr>
-                </tbody>
-                </table>
-            </div>
             <button id="bouton_refresh" class="inactif"></button>
             <div id="refresh_infobulle"></div>
             <button id="bouton_export_csv" class="inactif" title="Exporter le tableau en CSV"></button>

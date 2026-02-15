@@ -393,6 +393,9 @@
                                                                     reset_panneau_map();
                                                                     requete_pifometre();
                                                                 }
+                                                                else if (from == 'sources') {
+                                                                    listing_fantoir();
+                                                                }
                                                                 $("#listeSuggestions").css('display','none');
                                                             }));
                     }
@@ -428,6 +431,9 @@
                                 reset_url_hash();
                                 reset_panneau_map();
                                 requete_pifometre();
+                            }
+                            else if (from == 'sources') {
+                                listing_fantoir();
                             }
                             $('#listeSuggestions').empty().css("display","none"); // Vider la liste existante
                         }

@@ -206,25 +206,6 @@
             $('#radio_prog_noms').prop("checked", true);
         }
 
-        $('#bouton_communes_voisines').click(function(){
-            $('#table_communes_voisines').css('visibility','visible');
-        })
-        $('#table_communes_voisines > .fermer').click(function(){
-            $('#table_communes_voisines').css('visibility','hidden');
-        })
-
-        $('#bouton_refresh').click(function(event){
-                                refresh();
-                                event.stopPropagation();
-                            })
-                            .mouseover(function(event){
-                                get_osm_state();
-                                refresh_infobulle();
-                                event.stopPropagation();
-                            })
-                            .mouseout(function(){
-                                $('#refresh_infobulle').css('visibility','hidden');
-                            })
         $('#bouton_localise_moi').click(function(){
                                 $('body').css('cursor','progress');
                                 $('#wait_ajax').empty()
@@ -1316,6 +1297,18 @@ function affiche_filtres_stats(){
             update_storage_visits(nom_commune,code_insee,'Pifomap',window.location.pathname,'insee',undefined,VERSION_MENU)
             update_menu_visits()
 
+            //----------------------------------------
+            //-------    ACTIVATION BOUTONS    ------
+            //----------------------------------------
+            $('#bouton_refresh').removeClass("inactif progress")
+            $('#bouton_communes_voisines').removeClass("inactif")
+            $('#bouton_communes_voisines').click(function(){
+                $('#table_communes_voisines').css('visibility','visible');
+            })
+            $('#table_communes_voisines > .fermer').click(function(){
+                $('#table_communes_voisines').css('visibility','hidden');
+            })
+
             $('#bouton_pifostats').removeClass('onglet_non_cliquable').addClass('onglet_actif');
             $('#bouton_pifoprogression').removeClass('onglet_actif');
             $('#pifostats').css('visibility','visible');
@@ -1329,6 +1322,18 @@ function affiche_filtres_stats(){
                     $('#pifostats').css('visibility','visible');
                 }
             })
+            $('#bouton_refresh').unbind('click').click(function(event){
+                                refresh();
+                                event.stopPropagation();
+                            })
+                            .mouseover(function(event){
+                                get_osm_state();
+                                refresh_infobulle();
+                                event.stopPropagation();
+                            })
+                            .mouseout(function(){
+                                $('#refresh_infobulle').css('visibility','hidden');
+                            })
 
             //PANNEAU LATERAL
             $('#onglet_filtres').removeClass('onglet_non_cliquable').addClass('onglet_actif');
@@ -1588,10 +1593,23 @@ function affiche_filtres_stats(){
         <div id="champ_recherche">
             <form action="javascript:reset_url_hash();reset_panneau_map();requete_pifometre()" autocomplete="off">
                 <input type="text" id="input_insee" placeholder="Nom de commune ou code Insee" oninput="autocomplete_commune(this.value,'pifomap')"/>
+                <div class="bouton" id="bouton_aleatoire" role="button" title="Une commune au pif"></div>
+                <div class="bouton" id="bouton_localise_moi" role="button" title="Charger la commune où je me trouve"></div>
                 <input type="submit" value="" title="Afficher la carte"/>
             </form>
-            <div class="bouton" id="bouton_localise_moi" role="button" title="Charger la commune où je me trouve"></div>
         </div>
+        <div class="bouton inactif" id="bouton_communes_voisines" role="button" title="Communes voisines"></div>
+    </div>
+    <div id="table_communes_voisines" class="pifometre">
+        <div class="fermer">X</div>
+        <table>
+        <tbody>
+            <tr><td id="11"></td><td id="12"></td><td id="1"></td><td id="2"></td></tr>
+            <tr><td id="10"></td><td class="commune_centre" colspan="2" rowspan="2"></td><td id="3"></td></tr>
+            <tr><td id="9"></td><td id="4"></td></tr>
+            <tr><td id="8"></td><td id="7"></td><td id="6"></td><td id="5"></td></tr>
+        </tbody>
+        </table>
     </div>
     <div id="listeSuggestions"></div>
 
@@ -1607,20 +1625,7 @@ function affiche_filtres_stats(){
                 <div id="bouton_pifoprogression"><p>Progression</p></div>
             </div>
 
-            <button id="bouton_aleatoire" title="Une commune au pif"></button>
-            <button id="bouton_communes_voisines" title="Communes voisines"></button>
-            <div id="table_communes_voisines">
-                <div class="fermer">X</div>
-                <table>
-                <tbody>
-                    <tr><td id="11"></td><td id="12"></td><td id="1"></td><td id="2"></td></tr>
-                    <tr><td id="10"></td><td class="commune_centre" colspan="2" rowspan="2"></td><td id="3"></td></tr>
-                    <tr><td id="9"></td><td id="4"></td></tr>
-                    <tr><td id="8"></td><td id="7"></td><td id="6"></td><td id="5"></td></tr>
-                </tbody>
-                </table>
-            </div>
-            <button id="bouton_refresh"></button>
+            <button id="bouton_refresh" class="inactif"></button>
             <div id="refresh_infobulle"></div>
             <div id="bouton_legende"><p>Légende</p></div>
 
