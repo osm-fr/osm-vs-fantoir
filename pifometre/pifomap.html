@@ -164,6 +164,9 @@
         if (code_insee){
             $('#input_insee').empty()
             $('#input_insee')[0].value = code_insee
+            if (window.location.hash == ''){
+                reset_url_hash()
+            }
             requete_pifometre()
         } else {
             map = new maplibregl.Map({
@@ -177,7 +180,6 @@
 
             map.on('styleimagemissing', (e) => {
                 const id = e.id; // id of the missing imag
-                console.log('manque : '+id)
             });
 
             map.on('load', async () => {
@@ -1276,10 +1278,9 @@ function affiche_filtres_stats(){
                     map_setup()
                 });
             }
-
-            if (window.location.hash.indexOf('reset') > -1){
+            if (window.location.search.indexOf('reset=reset') > -1){
+                history.replaceState("", "", window.location.pathname+"?"+window.location.search.replace(/\?/g,'').replace('&reset=reset',''))
                 map.fitBounds(bbox_diagonale.coordinates)
-                window.location.hash = window.location.hash.replace('reset','')
             }
 
             document.title = nom_commune+' - Pifomap'

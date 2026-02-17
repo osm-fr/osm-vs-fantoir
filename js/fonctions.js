@@ -623,7 +623,7 @@
         })
     }
     function reset_url_hash(){
-        history.replaceState("", "", window.location.pathname+"?"+window.location.search.replace(/\?/g,'')+'#reset')
+        history.replaceState("", "", window.location.pathname+"?"+window.location.search.replace(/\?/g,'')+'&reset=reset')
     }
     function affiche_ratio_map() {
         hash_value = ''
