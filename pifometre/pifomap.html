@@ -24,12 +24,12 @@
 <link rel="search" type="application/opensearchdescription+xml" title="Pifomètre BANO" href="opensearch.xml" />
 
 <script>
-    STYLEFILE = 'pifomap_260107'
+    STYLEFILE = 'pifomap_260320'
 
-    FILTRES_TYPE = [["voie",true],
-               ["lieudit",true]]
-    FILTRES_STATUT = [["rapproches",true],
-               ["non_rapproches",true]]
+    // FILTRES_TYPE = [["voie",true],
+    //            ["lieudit",true]]
+    // FILTRES_STATUT = [["rapproches",true],
+    //            ["non_rapproches",true]]
 
     EMPTY_GEOJSON = {'type': 'FeatureCollection',
                           'features': []}
@@ -94,6 +94,7 @@
     HOVER_LAYERS = new Set()
     RASTER_LAYERS = new Set()
     GEOJSON_SOURCES = new Set()
+    GEOJSON_QUALIF_NUMERO_SOURCES = new Set()
 
     var table = 'table_pifometre'
 
@@ -109,6 +110,9 @@
             src = map.getSource(map.getLayer(layer).source)
             if (src.type == 'geojson'){
                 GEOJSON_SOURCES.add(src.id)
+                if (src.id.indexOf('qualif_numero_') == 0){
+                    GEOJSON_QUALIF_NUMERO_SOURCES.add(src.id)
+                }
             } else if (src.type == 'raster'){
                 RASTER_LAYERS.add(layer)
             }
@@ -972,11 +976,283 @@ function affiche_filtres_stats(){
                                         ))
         }
         if (has_vrai_code_fantoir && avec_adresses_ban){
-            $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Qualifier les adresses sur Pifomètre'))))
-            $('#'+table).append($('<tr>'))
-            add_addr_inspector_link(table,code_insee,fantoir,'BAN')
+            $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2')
+                                                          .append($('<span class="gras">').text('Qualifier les adresses sur Pifomètre'))
+                                                          .click(function(){
+                                                            panneau_qualif_numero(code_insee,fantoir)
+                                                          })
+                                                          )
+            )
+            // $('#'+table).append($('<tr>'))
+            // add_addr_inspector_link(table,code_insee,fantoir,'BAN')
         }
     }
+    function add_statut_numero(id_ligne,numero,statut,insee,fantoir,ban_id){
+        $('#'+table+' tr:last').removeClass().addClass('statut'+statut).attr('numero',numero).attr('statut',statut)
+        $('#'+table+' tr:last').append($('<td>').append($(a_menus_labels[statut]).change(function() {
+            statut = $(this)[0].value;
+            $.ajax({
+                url: "statut_numero.py?insee="+insee+"&fantoir="+fantoir+"&statut="+statut+"&numero="+numero+"&source=BAN"
+            })
+            .done(function( data ) {
+                if(data == statut){
+                    $('tr#'+id_ligne).removeClass().addClass('statut'+statut).attr('statut',statut);
+                    update_url_mes_adresses_commentaire_delete(id_ligne,ban_id)
+
+                    //Afficher l'infobulle de confirmation
+                    if (statut != '0') {
+                        $('tr#'+id_ligne+' td:eq(1)').append($('<span class="enregistrement numeros rose">').text('✔ Enregistré'));
+                    }
+                    else {
+                        $('tr#'+id_ligne+' td:eq(1)').append($('<span class="enregistrement numeros bleu">').text('✔ Enregistré'));
+                    }
+                    setTimeout(function(){
+                        $('tr#'+id_ligne+' td:eq(1) span').css('opacity', '1');
+                        setTimeout(function(){
+                            $('tr#'+id_ligne+' td:eq(1) span').css('opacity', '0');
+                        }, 1500);
+                        setTimeout(function(){
+                            $('tr#'+id_ligne+' td:eq(1) span').remove();
+                        }, 2000);
+                    }, 50);
+
+                } else {
+                    alert("Souci lors de la mise à jour du statut. Le nouveau statut n'a pas été pris en compte")
+                }
+                refresh_numeros();
+            })
+        })))
+    }
+    function refresh_numeros(){
+        $('.map_numero').removeClass('anomalie');
+        for (i=1;i<a_menus_labels.length;i++){
+            $('.statut'+i).each(function(){
+                $('.map_numero.ligne'+$(this).attr('id')).addClass('anomalie')
+            })
+        }
+    }
+    function update_url_mes_adresses_commentaire_delete(num_ligne,ban_id){
+        current_statut = $('#table_inspect_adresse tr#'+num_ligne).attr('statut')
+        changesRequested = ''
+        // transfert du statut comme commentaire si différent de 'Ok'
+        if (current_statut != "0"){
+            json_args = JSON.stringify({"comment":labels_statut[current_statut]})
+            changesRequested = '&changesRequested='+json_args
+        }
+        $('#table_inspect_adresse tr#'+num_ligne+' a.remontee_suppr_numero').attr('href','https://signalement.adresse.data.gouv.fr/#/'+ban_id+'?sourceId=e32cd3e1-b19d-4a49-9aee-31a7929a8ead&type=LOCATION_TO_DELETE'+changesRequested)
+    }
+    function panneau_qualif_numero(code_insee,fantoir){
+        $.ajax({
+            url: "labels_statut_numero.py"
+        })
+        .done(function( data ) {
+            a_menus_labels = []
+            labels_statut = {}
+
+            for (c=0;c<data.length;c++){
+                labels_statut[data[c][0]] = data[c][1]
+            }
+            for (c=0;c<data.length;c++){
+                menu_labels = '<select>'
+                id_label = 0
+                for (i=0;i<data.length;i++){
+                    if (c!=i){
+                        menu_labels+='<option value='+data[i][0]+'>'+data[i][1]+'</option>'
+                    } else {
+                        menu_labels+='<option value='+data[i][0]+' selected>'+data[i][1]+'</option>'
+                        id_label = data[i][0]
+                    }
+                }
+                menu_labels+='</select>'
+                a_menus_labels[id_label] = menu_labels
+            }
+        })
+        active_numeros()
+        table = 'table_inspect_adresse'
+        $.ajax({
+            url: "requete_inspect_numeros.py?insee="+code_insee+"&fantoir="+fantoir
+        })
+        .done(function( data ) {
+                                let[nom_fantoir,
+                                    is_place,
+                                    numeros_a_proposer,
+                                    nom_commune,
+                                    nom_voie,
+                                    rapproche,
+                                    schema_point_uniquement] = data[0]
+                                data = data[1]
+                                min_lon = data[0][1] == undefined ? data[0][4]:data[0][1];
+                                max_lon = min_lon;
+                                min_lat = data[0][2] == undefined ? data[0][5]:data[0][2];
+                                max_lat = min_lat;
+
+                                // INFOS 2e COLONNE : Nom voie, type voie, commune
+                                $('#infos_commune_col2 h2').empty().append(nom_commune)
+                                $('#infos_commune_col2 h1').empty().append(nom_voie)
+
+                                if (is_place==true){
+                                   $('#infos_commune_col2 h1').append(' (lieu-dit)')
+                                } else {
+                                   $('#infos_commune_col2 h1').append(' (voie)')
+                                }
+
+                                if (numeros_a_proposer > 0){
+                                    add_josm_addr_link('table_adresses',code_insee,nom_commune,fantoir,nom_fantoir,numeros_a_proposer,true,is_place,schema_point_uniquement)
+                                } else {
+                                    $('#liens_voie').append($('<span>').addClass('adresses-integrees').text('✔'))
+                                                        .append($('<span>').text(' Adresses intégrées'))
+                                }
+                                $('#'+table).empty() .append($('<thead>')
+                                                                        .append($('<tr>')
+                                                                            .append($('<th>').append('Numéro'))
+                                                                            .append($('<th>').append("Statut de l'adresse BAN"))
+                                                                            .append($('<th id="colonne_signaler" title="Signaler un problème dans la BAN">').append('Signaler'))
+                                                                            .append($('<th>').append('Zoomer'))
+                                                                        )
+                                                                    )
+
+                                $('#'+table).append($('<tbody>'))
+
+                                qualif_numero_BAN_voie_non_rapprochee = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+                                qualif_numero_BAN_numero_non_rapproche = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+                                qualif_numero_BAN_numero_rapproche = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+                                qualif_numero_OSM_rapproche = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+                                qualif_numero_OSM_seul = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+
+                                for (l=0;l<data.length;l++){
+                                    let[numero,
+                                        lon_ban,
+                                        lat_ban,
+                                        statut,
+                                        lon_osm,
+                                        lat_osm,
+                                        ban_id] = data[l]
+
+                                    parite = Number.parseInt(numero) % 2 == 0 ? 'pair':'impair';
+                                    if (ban_id != undefined) {
+                                        ban_id_voie = ban_id.slice(0, ban_id.indexOf('_',6));
+                                        if (ban_id_voie.length == 10){
+                                            ban_id_voie = ban_id_voie.toUpperCase()
+                                        }
+                                    } else {
+                                        ban_id_voie = fantoir.slice(0,5)+'_'+fantoir.slice(5,9)
+                                    }
+
+                                    $('#'+table+' tbody:last').append($('<tr>').attr('id',l))
+
+                                    if (lon_ban != undefined && lon_osm != undefined){
+                                        $('#'+table+' tr:last').append($('<td>')
+                                                                        .append($('<span class="pastille-verte" title="Intégrée dans OSM">'))
+                                                                        .append($('<span>').text(numero)));
+                                        qualif_numero_BAN_numero_rapproche.features.push(get_geojson_point(lon_ban,lat_ban,{'numero':numero}))
+                                        qualif_numero_OSM_rapproche.features.push(get_geojson_point(lon_osm,lat_osm,{'numero':numero}))
+                                    } else if (lon_ban != undefined){
+                                        $('#'+table+' tr:last').append($('<td>')
+                                                                        .append($('<span class="pastille-orange" title="Pas encore intégrée dans OSM">'))
+                                                                        .append($('<span>').text(numero)));
+                                        if (rapproche){
+                                            qualif_numero_BAN_numero_non_rapproche.features.push(get_geojson_point(lon_ban,lat_ban,{'numero':numero}))
+                                        } else {
+                                            qualif_numero_BAN_voie_non_rapprochee.features.push(get_geojson_point(lon_ban,lat_ban,{'numero':numero}))
+                                        }
+                                    } else if (lon_osm != undefined){
+                                        $('#'+table+' tr:last').append($('<td>')
+                                                                        .append($('<span class="pastille-bleue" title="Trouvée dans OSM et inconnue de la BAN">'))
+                                                                        .append($('<span>').text(numero)));
+                                        qualif_numero_OSM_seul.features.push(get_geojson_point(lon_osm,lat_osm,{'numero':numero}))
+                                    }
+                                    if (lon_ban != undefined){
+                                        min_lon = Math.min(min_lon,lon_ban);
+                                        max_lon = Math.max(max_lon,lon_ban);
+                                        min_lat = Math.min(min_lat,lat_ban);
+                                        max_lat = Math.max(max_lat,lat_ban);
+                                    }
+                                    if (lon_osm != undefined){
+                                        min_lon = Math.min(min_lon,lon_osm);
+                                        max_lon = Math.max(max_lon,lon_osm);
+                                        min_lat = Math.min(min_lat,lat_osm);
+                                        max_lat = Math.max(max_lat,lat_osm);
+                                    }
+                                    //---COLONNE STATUT---
+                                    if (lon_ban != undefined){
+                                        add_statut_numero(l,numero,statut,code_insee,fantoir,ban_id)
+                                    } else {
+                                        $('#'+table+' tr:last').addClass('statut_vide').append($('<td>'))
+                                    }
+
+                                    //---COLONNE REMONTÉE DES SIGNALEMENTS---
+                                    if (lon_ban != undefined){
+                                        json_args = JSON.stringify({"comment":labels_statut[statut]})
+                                        $('#'+table+' tr:last').append($('<td class="remontee_ban">')
+                                                                    .append($('<a class="remontee_edit_numero" target="_blank" title="Signaler un problème dans la BAN : Numéro à modifier">')
+                                                                    .attr('href', 'https://signalement.adresse.data.gouv.fr/#/'+ban_id+'?sourceId=e32cd3e1-b19d-4a49-9aee-31a7929a8ead&type=LOCATION_TO_UPDATE')
+                                                                        .append($('<span class="remontee_edit_numero">')
+                                                                        )
+                                                                    )
+                                                                    .append($('<a class="remontee_suppr_numero" target="_blank" title="Signaler un problème dans la BAN : Numéro à supprimer">')
+                                                                        .append($('<span class="remontee_suppr_numero">')
+                                                                        )
+                                                                    )
+                                                                )
+                                        update_url_mes_adresses_commentaire_delete(l,ban_id)
+                                    }
+                                    else {
+                                        json_resp = {}
+                                        numero_int = parseInt(numero)
+                                        if (numero != numero_int){
+                                            json_resp['suffixe'] = numero.slice(numero_int.toString().length).trim()
+                                        }
+                                        json_resp['numero'] = numero_int
+                                        json_resp['positions'] = [{'point':{type:'Point',coordinates:[lon_osm,lat_osm]}}]
+                                        $('#'+table+' tr:last').append($('<td class="remontee_ban">')
+                                                                    .append($('<a class="remontee_ajout_numero" target="_blank" title="Signaler un problème dans la BAN : Numéro à ajouter">')
+                                                                    .attr('href', 'https://signalement.adresse.data.gouv.fr/#/'+ban_id_voie+'?sourceId=e32cd3e1-b19d-4a49-9aee-31a7929a8ead&type=LOCATION_TO_CREATE&changesRequested='+JSON.stringify(json_resp))
+                                                                        .append($('<span class="remontee_ajout_numero">')
+                                                                        )
+                                                                    )
+                                                                )
+                                    }
+
+                                    //LIENS SIGNALEMENTS AU-DESSUS DU TABLEAU
+                                    $('.remontee_edit_voie').attr('href', 'https://signalement.adresse.data.gouv.fr/#/'+ban_id_voie+'?sourceId=e32cd3e1-b19d-4a49-9aee-31a7929a8ead&type=LOCATION_TO_UPDATE')
+
+                                    //---COLONNE ZOOMER---
+                                    $('#'+table+' tr:last').append($('<td class="zoom">')
+                                                            .click(function(){
+                                                                map.flyTo({center: [lon_ban == undefined ? lon_osm:lon_ban,lat_ban == undefined ? lat_osm:lat_ban],zoom: 19});
+                                                            })
+                                                            )
+
+                                    $('#'+table+' tr:last').hover(function() {
+                                        $('.map_numero.ligne'+$(this).attr('id')).append($('<div class="map_numero_hover"></div>'))
+                                    },function() {
+                                            $('.map_numero_hover').remove()
+                                    });
+
+                                }
+
+                                map.getSource('qualif_numero_BAN_voie_non_rapprochee').setData(qualif_numero_BAN_voie_non_rapprochee)
+                                map.getSource('qualif_numero_BAN_numero_non_rapproche').setData(qualif_numero_BAN_numero_non_rapproche)
+                                map.getSource('qualif_numero_BAN_numero_rapproche').setData(qualif_numero_BAN_numero_rapproche)
+                                map.getSource('qualif_numero_OSM_rapproche').setData(qualif_numero_OSM_rapproche)
+                                map.getSource('qualif_numero_OSM_seul').setData(qualif_numero_OSM_seul)
+
+                                $('#'+table).trigger("resetToLoadState");
+
+                                //Sticky headers : le tableau scrolle dans son contenant
+                                $('#'+table).tablesorter({
+                                    widthFixed : true,
+                                    headerTemplate : '{content} {icon}', // Add icon for various themes
+                                    widgets: [ 'stickyHeaders', 'filter' ],
+                                    widgetOptions: {
+                                      stickyHeaders_attachTo : '#reponse'
+                                    },
+                                    sortList: [[0,0]]
+                                });
+                                map.fitBounds([min_lon,min_lat,max_lon,max_lat])
+                            })
+    }
+
     function rendu_bano(insee,nom_commune){
         min_lon = 180
         max_lon = -180
@@ -1145,6 +1421,11 @@ function affiche_filtres_stats(){
             prepare_TOC_fond()
             prepare_index();
 
+            fantoir = check_url_for_fantoir()
+            if (fantoir){
+                panneau_qualif_numero(code_insee,fantoir)
+            }
+
             $('body').css('cursor','default');
             $('#wait_ajax').css('visibility','hidden');
             $('#wait_ajax_mobile').css('visibility','hidden');
@@ -1185,7 +1466,7 @@ function affiche_filtres_stats(){
 
         // initialisation de l'affichage lors de la 1ere visite
         initialise_affichage()
-        applique_affichage()
+        // applique_affichage()
         prepare_TOC_fond()
     }
     function initialise_affichage(){
@@ -1210,7 +1491,8 @@ function affiche_filtres_stats(){
     function applique_affichage(){
         pifomap_filtres = JSON.parse(localStorage.PifomapFiltres)
         for (const x in pifomap_filtres) {
-            map.setLayoutProperty(x,'visibility',pifomap_filtres[x]?'visible':'none')
+            // map.setLayoutProperty(x,'visibility',pifomap_filtres[x]?'visible':'none')
+            console.log("affiche "+pifomap_filtres[x])
         }
     }
     function requete_pifometre(){
@@ -1498,10 +1780,6 @@ function affiche_filtres_stats(){
             $("#pifostats .barre_adresses .barre_adresses_osm") .stop(true, true)
                                                                 .delay(1000)
                                                                 .animate({width: Math.min(100, Math.round(pourcent_adresses_osm))+'%'}, 1000);
-            /*$('#lien_map_noms').attr('href','pifomap.html?ratio=N#map=10/'+lat_commune+'/'+lon_commune)
-            $('#lien_map_noms_avec_adresses').attr('href','pifomap.html?ratio=NA#map=10/'+lat_commune+'/'+lon_commune)
-            $('#lien_map_adresses').attr('href','pifomap.html?ratio=A#map=10/'+lat_commune+'/'+lon_commune)*/
-
         })
 
         update_search('insee',$('#input_insee')[0].value)
@@ -1525,31 +1803,31 @@ function affiche_filtres_stats(){
                             .append($('<span>').append(osm_state+' (UTC)'))
                             .css('visibility','visible');
     }
-    function update_filtres(){
-        for (let i = 0; i < FILTRES_TYPE.length; i++){
-            FILTRES_TYPE[i] = [FILTRES_TYPE[i][0],$('#pifofiltres.pifomap input#check_'+FILTRES_TYPE[i][0]).is(':checked')]
-        }
-        for (let i = 0; i < FILTRES_STATUT.length; i++){
-            FILTRES_STATUT[i] = [FILTRES_STATUT[i][0],$('#pifofiltres.pifomap input#check_'+FILTRES_STATUT[i][0]).is(':checked')]
-        }
-    }
-    function filtre_pifomap(){
-        for (let i = 0; i < FILTRES_STATUT.length; i++){
-            for (let j = 0; j < FILTRES_TYPE.length; j++){
-                if (FILTRES_STATUT[i][1] == true && FILTRES_TYPE[j][1] == true){
-                    map.setPaintProperty('points_nommes_'+FILTRES_STATUT[i][0]+'_'+FILTRES_TYPE[j][0], 'icon-opacity', 1);
-                    map.setPaintProperty('points_nommes_'+FILTRES_STATUT[i][0]+'_'+FILTRES_TYPE[j][0], 'text-opacity', 1);
-                } else {
-                    map.setPaintProperty('points_nommes_'+FILTRES_STATUT[i][0]+'_'+FILTRES_TYPE[j][0], 'icon-opacity', 0);
-                    map.setPaintProperty('points_nommes_'+FILTRES_STATUT[i][0]+'_'+FILTRES_TYPE[j][0], 'text-opacity', 0);
-                }
-            }
-        }
-    }
-    function filtre_pifomap_mobile(){
-        FILTRES_TYPE[1][1] = FILTRES_TYPE[1][1] == true ? false : true;
-        filtre_pifomap();
-    }
+    // function update_filtres(){
+    //     for (let i = 0; i < FILTRES_TYPE.length; i++){
+    //         FILTRES_TYPE[i] = [FILTRES_TYPE[i][0],$('#pifofiltres.pifomap input#check_'+FILTRES_TYPE[i][0]).is(':checked')]
+    //     }
+    //     for (let i = 0; i < FILTRES_STATUT.length; i++){
+    //         FILTRES_STATUT[i] = [FILTRES_STATUT[i][0],$('#pifofiltres.pifomap input#check_'+FILTRES_STATUT[i][0]).is(':checked')]
+    //     }
+    // }
+    // function filtre_pifomap(){
+    //     for (let i = 0; i < FILTRES_STATUT.length; i++){
+    //         for (let j = 0; j < FILTRES_TYPE.length; j++){
+    //             if (FILTRES_STATUT[i][1] == true && FILTRES_TYPE[j][1] == true){
+    //                 map.setPaintProperty('points_nommes_'+FILTRES_STATUT[i][0]+'_'+FILTRES_TYPE[j][0], 'icon-opacity', 1);
+    //                 map.setPaintProperty('points_nommes_'+FILTRES_STATUT[i][0]+'_'+FILTRES_TYPE[j][0], 'text-opacity', 1);
+    //             } else {
+    //                 map.setPaintProperty('points_nommes_'+FILTRES_STATUT[i][0]+'_'+FILTRES_TYPE[j][0], 'icon-opacity', 0);
+    //                 map.setPaintProperty('points_nommes_'+FILTRES_STATUT[i][0]+'_'+FILTRES_TYPE[j][0], 'text-opacity', 0);
+    //             }
+    //         }
+    //     }
+    // }
+    // function filtre_pifomap_mobile(){
+    //     FILTRES_TYPE[1][1] = FILTRES_TYPE[1][1] == true ? false : true;
+    //     filtre_pifomap();
+    // }
     function active_filtres(){
         $('#onglet_infos').removeClass('onglet_actif')
         $('#conteneur_infos').css('display','none');
@@ -1557,6 +1835,7 @@ function affiche_filtres_stats(){
         $('#conteneur_filtres').css('display','block');
         $('#onglet_index').removeClass('onglet_actif');
         $('#conteneur_index').css('display','none');
+        $('#conteneur_numeros').css('display','none');
     }
     function active_infos(){
         $('#onglet_infos').addClass('onglet_actif')
@@ -1565,7 +1844,46 @@ function affiche_filtres_stats(){
         $('#conteneur_filtres').css('display','none');
         $('#onglet_index').removeClass('onglet_actif');
         $('#conteneur_index').css('display','none');
+        $('#conteneur_numeros').css('display','none');
     }
+    function active_numeros(){
+        $('#conteneur_numeros').css('display','block');
+        $('#onglet_infos').removeClass('onglet_actif')
+        $('#conteneur_infos').css('display','none');
+        $('#onglet_filtres').removeClass('onglet_actif');
+        $('#conteneur_filtres').css('display','none');
+        $('#onglet_index').removeClass('onglet_actif');
+        $('#conteneur_index').css('display','none');
+        toggle_affichage_numeros('qualif_numeros')
+
+        // for (t of ["Adresses","Adresses BAN"]) {
+        //     layers = TOC_HIERARCHIE.get(t)[0]
+        //     for (l=0;l<layers.length;l++){
+        //         layer = TOC_GROUPES.get(layers[l])
+        //         for (c of layer[1]){
+        //             map.setLayoutProperty(c,'visibility','none')
+        //             console.log("masque "+c)
+        //         }
+        //     }
+        // }
+    }
+    function toggle_affichage_numeros(cible){
+        for (t of ["Adresses","Adresses BAN"]) {
+            layers = TOC_HIERARCHIE.get(t)[0]
+            for (l=0;l<layers.length;l++){
+                if (cible == 'vue_generale'){
+                    update_TOC_group(layers[l])
+                }
+                if (cible == 'qualif_numeros'){
+                    layer = TOC_GROUPES.get(layers[l])
+                    for (c of layer[1]){
+                        map.setLayoutProperty(c,'visibility','none')
+                    }
+                }
+            }
+        }
+    }
+
     function empty_layers(){
         for (const s of GEOJSON_SOURCES){
             map.getSource(s).setData(EMPTY_GEOJSON)
@@ -1575,11 +1893,27 @@ function affiche_filtres_stats(){
         $('#conteneur_index').css('display','none');
         $('#conteneur_infos').css('display','none');
         $('#conteneur_filtres').css('display','none');
+        $('#conteneur_numeros').css('display','none');
         $('#panneau_map #conteneur_infos h2').empty()
         $('#panneau_map #boutons').empty()
         $('#infos_numero').empty();
         $('#infos_voie_lieudit').empty();
         $('#pifomap_table_liens').empty();
+
+        // si retour depuis l'affichage de qualif des numeros
+        toggle_affichage_numeros('vue_generale')
+
+        // for (t of ["Adresses","Adresses BAN"]) {
+        //     layers = TOC_HIERARCHIE.get(t)[0]
+        //     for (l=0;l<layers.length;l++){
+        //         layer = TOC_GROUPES.get(layers[l])
+        //         // console.log(layers[l])
+        //         update_TOC_group(layers[l])
+        //     }
+        // }
+        for (const s of GEOJSON_QUALIF_NUMERO_SOURCES){
+            map.getSource(s).setData(EMPTY_GEOJSON)
+        }
     }
 </script>
 </head>
@@ -1731,6 +2065,9 @@ function affiche_filtres_stats(){
                 </div>
             </div>
             <div id="conteneur_index"></div>
+            <div id="conteneur_numeros">
+                <table id="table_inspect_adresse" class="avec_statuts"></table>
+            </div>
             <div id="conteneur_infos">
                 <div class="en_tete">
                     <h2>Aucun objet sélectionné sur la carte</h2>

@@ -76,6 +76,18 @@
         }
         return 0
     }
+    function check_url_for_fantoir(){
+        var res
+        pattern_fantoir = new RegExp('^[0-9][0-9abAB][0-9]{3}[0-9|a-z|A-Z]{4}$')
+        sp = new URLSearchParams(window.location.search)
+        if (sp.get('fantoir')){
+            if (pattern_fantoir.test(sp.get('fantoir'))){
+                return sp.get('fantoir')
+            }
+            return (sp.get('fantoir')+ 'n\'est pas un code FANTOIR valide\n\nAbandon')
+        }
+        return res
+    }
     function check_url_for_xyz(){
         if (window.location.hash){
             if (window.location.hash.includes('map=')){

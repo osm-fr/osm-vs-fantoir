@@ -139,6 +139,36 @@
                           "features": []
                 }
         },
+        "qualif_numero_BAN_voie_non_rapprochee" : {
+        "type": "geojson",
+        "data": {"type": "FeatureCollection",
+                          "features": []
+                }
+        },
+        "qualif_numero_BAN_numero_non_rapproche" : {
+        "type": "geojson",
+        "data": {"type": "FeatureCollection",
+                          "features": []
+                }
+        },
+        "qualif_numero_BAN_numero_rapproche" : {
+        "type": "geojson",
+        "data": {"type": "FeatureCollection",
+                          "features": []
+                }
+        },
+        "qualif_numero_OSM_rapproche" : {
+        "type": "geojson",
+        "data": {"type": "FeatureCollection",
+                          "features": []
+                }
+        },
+        "qualif_numero_OSM_seul" : {
+        "type": "geojson",
+        "data": {"type": "FeatureCollection",
+                          "features": []
+                }
+        },
         "hover_filaire": {
         "type": "geojson",
         "promoteId": "fantoir",
@@ -731,6 +761,146 @@
                 },
             "paint": {
                 "text-color": "royalblue",
+                "text-halo-color": "white",
+                "text-halo-width": 2
+            }
+        },
+        {
+            "id": "qualif_numero_BAN_voie_non_rapprochee",
+            "source": "qualif_numero_BAN_voie_non_rapprochee",
+            "type": "circle",
+            "minzoom" : 12,
+            "paint": {
+                "circle-radius":["interpolate",["linear"],["zoom"],12,1,19,5],
+                "circle-color": "red"
+            }
+        },
+        {
+            "id": "qualif_numero_BAN_numero_non_rapproche",
+            "source": "qualif_numero_BAN_numero_non_rapproche",
+            "type": "circle",
+            "minzoom" : 12,
+            "paint": {
+                "circle-radius":["interpolate",["linear"],["zoom"],12,1,19,5],
+                "circle-color": "orange"
+            }
+        },
+        {
+            "id": "qualif_numero_BAN_numero_rapproche",
+            "source": "qualif_numero_BAN_numero_rapproche",
+            "type": "circle",
+            "minzoom" : 12,
+            "paint": {
+                "circle-radius":["interpolate",["linear"],["zoom"],12,1,19,5],
+                "circle-color": "black"
+            }
+        },
+        {
+            "id": "qualif_numero_OSM_rapproche",
+            "source": "qualif_numero_OSM_rapproche",
+            "type": "circle",
+            "minzoom" : 12,
+            "paint": {
+                "circle-radius":["interpolate",["linear"],["zoom"],12,1,19,5],
+                "circle-color": "green"
+            }
+        },
+        {
+            "id": "qualif_numero_OSM_seul",
+            "source": "qualif_numero_OSM_seul",
+            "type": "circle",
+            "minzoom" : 12,
+            "paint": {
+                "circle-radius":["interpolate",["linear"],["zoom"],12,1,19,5],
+                "circle-color": "blue"
+            }
+        },
+        {
+            "id": "qualif_numero_BAN_voie_non_rapprochee_text",
+            "source": "qualif_numero_BAN_voie_non_rapprochee",
+            "type": "symbol",
+            "minzoom" : 17,
+            "layout": {
+                "text-field": ["get", "numero"],
+                "text-variable-anchor": ["bottom", "right"],
+                "text-radial-offset": 0.5,
+                "text-overlap":"cooperative",
+                "text-justify": "auto"
+                },
+            "paint": {
+                "text-color": "red",
+                "text-halo-color": "white",
+                "text-halo-width": 2
+            }
+        },
+        {
+            "id": "qualif_numero_BAN_numero_non_rapproche_text",
+            "source": "qualif_numero_BAN_numero_non_rapproche",
+            "type": "symbol",
+            "minzoom" : 17,
+            "layout": {
+                "text-field": ["get", "numero"],
+                "text-variable-anchor": ["bottom", "right"],
+                "text-radial-offset": 0.5,
+                "text-overlap":"cooperative",
+                "text-justify": "auto"
+                },
+            "paint": {
+                "text-color": "orange",
+                "text-halo-color": "white",
+                "text-halo-width": 2
+            }
+        },
+        {
+            "id": "qualif_numero_BAN_numero_rapproche_text",
+            "source": "qualif_numero_BAN_numero_rapproche",
+            "type": "symbol",
+            "minzoom" : 17,
+            "layout": {
+                "text-field": ["get", "numero"],
+                "text-variable-anchor": ["bottom", "right"],
+                "text-radial-offset": 0.5,
+                "text-overlap":"cooperative",
+                "text-justify": "auto"
+                },
+            "paint": {
+                "text-color": "black",
+                "text-halo-color": "white",
+                "text-halo-width": 2
+            }
+        },
+        {
+            "id": "qualif_numero_OSM_rapproche_text",
+            "source": "qualif_numero_OSM_rapproche",
+            "type": "symbol",
+            "minzoom" : 17,
+            "layout": {
+                "text-field": ["get", "numero"],
+                "text-variable-anchor": ["bottom", "right"],
+                "text-radial-offset": 0.5,
+                "text-overlap":"cooperative",
+                "text-justify": "auto"
+                },
+            "paint": {
+                "text-color": "green",
+                "text-halo-color": "white",
+                "text-halo-width": 2
+            }
+        },
+        {
+            "id": "qualif_numero_OSM_seul_text",
+            "source": "qualif_numero_OSM_seul",
+            "type": "symbol",
+            "minzoom" : 17,
+            "layout": {
+                "text-field": ["get", "numero"],
+                "text-variable-anchor": ["bottom", "right"],
+                "text-radial-offset": 0.5,
+                "text-overlap":"cooperative",
+                "text-justify": "auto"
+                },
+            "paint": {
+                "text-color": "blue",
                 "text-halo-color": "white",
                 "text-halo-width": 2
             }
