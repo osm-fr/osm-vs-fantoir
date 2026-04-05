@@ -7,7 +7,7 @@
     NB_SUGGESTIONS_MAX = 20;
 
     function is_valid_dept(d){
-        pattern_dept = new RegExp('^([01]|[3-8])([0-9])$|^2([aAbB]|[1-9])$|^9([0-5]|7[1-4]|76)$')
+        pattern_dept = new RegExp('^([01]|[3-8])([0-9])$|^2([aAbB]|[1-9])$|^9([0-5]|7[1-6]|87|88)$')
         res = false
         if (pattern_dept.test(d)){
             res = d
@@ -15,7 +15,7 @@
         return res
     }
     function get_dept_from_insee(code_insee){
-        if (code_insee.substr(0,2) == '97'){
+        if (code_insee.substr(0,2) == '97'||code_insee.substr(0,2) == '98'){
             return code_insee.substr(0,3)
         }
         return code_insee.substr(0,2)

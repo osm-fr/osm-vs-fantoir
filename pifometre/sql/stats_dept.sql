@@ -6,6 +6,7 @@ cog AS  (       SELECT com AS code_insee,
                 ON     (c.com = p.comparent)
                 WHERE  c.dep = '__dept__' AND
                        c.typecom != 'COMD' AND
+                       c.typecom != 'COMA' AND
                        p.comparent IS NULL
                 ORDER BY 1),
 r AS    (       SELECT  (nb_numeros_certifies::decimal * 100 / greatest(nb_numeros::decimal,1.0))::integer AS pct_certifie,
@@ -94,15 +95,15 @@ i AS (  SELECT  cog.code_insee, --Code INSEE
                 COALESCE(adrnon.adresses_non_rapprochees::integer,0), --Adresses sans voie rapprochée
                 COALESCE(((100-adrnon.adresses_non_rapprochees*100/adrBAN.adresses_BAN))::integer,100) --Pourcentage d'adresses avec voie rapprochée
         FROM    cog
-        LEFT OUTER JOIN r USING (code_insee)
-        LEFT OUTER JOIN v USING (code_insee)
-        LEFT OUTER JOIN vl USING (code_insee)
-        LEFT OUTER JOIN a USING (code_insee)
+        LEFT OUTER JOIN r      USING (code_insee)
+        LEFT OUTER JOIN v      USING (code_insee)
+        LEFT OUTER JOIN vl     USING (code_insee)
+        LEFT OUTER JOIN a      USING (code_insee)
         LEFT OUTER JOIN adrOSM USING (code_insee)
         LEFT OUTER JOIN adrBAN USING (code_insee)
         LEFT OUTER JOIN adrnon USING (code_insee)
-        LEFT OUTER JOIN    t USING (code_insee)
-        JOIN    f USING (code_insee))
+        LEFT OUTER JOIN t      USING (code_insee)
+        LEFT OUTER JOIN f      USING (code_insee))
 SELECT  i.*,
         CASE
             WHEN c = 0 THEN 0
