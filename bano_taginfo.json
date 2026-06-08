@@ -3,7 +3,7 @@
        "data_url": "https://bano.openstreetmap.fr/bano_taginfo.json",
        "project": {
            "name": "BANO project (Base d'Adresses Nationale Ouverte) - France",
-           "description": "Open Adresses Database for France",
+           "description": "Open Addresses Database for France",
            "project_url": "http://openstreetmap.fr/bano",
            "contact_name": "Vincent de Château-Thierry",
            "contact_email": "bano@openstreetmap.fr"
