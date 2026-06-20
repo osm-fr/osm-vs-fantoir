@@ -1,0 +1,86 @@
+postgres:
+  connection_string: postgresql://cadastre@localhost/bano
+  functions:
+    centroides_communes:
+      schema: public
+      function: centroides_communes
+      srid: 3857
+      geometry_column: geom
+      minzoom: 13
+      maxzoom: 13
+      geometry_type: POINT
+      properties:
+        code_insee: text
+        nom: text
+        class_pop: int4
+        layer: text
+        nb_adresses_osm: int4
+        nb_adresses_ban: int4
+        nb_noms_osm: int4
+        nb_noms_ban: int4
+        nb_noms_topo: int4
+    lieudit_cadastre:
+      schema: public
+      function: lieudit_cadastre
+      srid: 3857
+      geometry_column: geom
+      minzoom: 13
+      maxzoom: 13
+      geometry_type: POINT
+      properties:
+        fantoir: text
+        rapproche: boulean
+        layer: text
+    numeros_points_ban:
+      schema: public
+      function: numeros_points_ban
+      srid: 3857
+      geometry_column: geom
+      minzoom: 13
+      maxzoom: 13
+      geometry_type: POINT
+      properties:
+        numero: text
+        fantoir: text
+        commun: boulean
+        layer: text
+    numeros_points_osm:
+      schema: public
+      function: numeros_points_osm
+      srid: 3857
+      geometry_column: geom
+      minzoom: 13
+      maxzoom: 13
+      geometry_type: POINT
+      properties:
+        numero: text
+        fantoir: text
+        rapproche: boulean
+        commun: boulean
+        layer: text
+    place_osm:
+      schema: public
+      function: place_osm
+      srid: 3857
+      geometry_column: geom
+      minzoom: 13
+      maxzoom: 13
+      geometry_type: POINT
+      properties:
+        nom: text
+        fantoir: text
+        rapproche: boulean
+        layer: text
+    polygones_convexhull:
+      schema: public
+      function: polygones_convexhull
+      srid: 3857
+      geometry_column: geom
+      minzoom: 13
+      maxzoom: 13
+      geometry_type: GEOMETRY
+      properties:
+        fantoir: text
+        label_statut: varchar
+        layer: text
+        nom: text
