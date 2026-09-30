@@ -1046,7 +1046,7 @@ fieldset legend {
 	width:30%;
 	min-width: 300px;
 	top:90px;
-	height: 90px;
+	height: 80px;
 }
 #pifostats.pifodrome span {
 	font-weight: bold;
@@ -1310,6 +1310,7 @@ fieldset legend {
 	position: fixed;
 	right: 310px;
 	width: 266px;
+	top: 10px;
 }
 .pifodrome #bouton_pifostats, .pifodrome #bouton_pifofiltres {
 	width: 49%;
@@ -1599,60 +1600,71 @@ fieldset legend {
 }
 
 /*------------------------------------------------------*/
-/*------------------ PANNEAU LATÉRAL -------------------*/
+/*------------------ PANNEAUX LATÉRAUX -----------------*/
 /*------------------------------------------------------*/
 
 #panneau_map {
-	float: left;
-	margin:0;
-	width:16%;
-	height:calc(100% - 4px);
-	/*overflow-y: auto;*/
-	border-radius: 6px;
+	/*border-radius: 6px;
 	border:2px solid lightblue;
-	border-bottom: 2px solid lightblue;
+	border-bottom: 2px solid lightblue;*/
+	transition: width 0.3s ease-out;
 }
-/*--------- Onglets ---------*/
 #panneau_map .onglets {
 	height: 40px;
-}
-#panneau_map #onglet_index, #panneau_map #onglet_filtres, #panneau_map #onglet_infos {
-	cursor: pointer;
-	float: left;
-	width: 33%;
-	height: calc(100% - 2px);
-	background-color: wheat;
-	border-bottom: 2px sienna solid;
-}
-#panneau_map #onglet_index.actif, #panneau_map #onglet_filtres.actif, #panneau_map #onglet_infos.actif {
-	cursor: default;
-	background-color: burlywood;
-}
-#panneau_map #onglet_filtres {
-	background: url("../img/switch.png") no-repeat wheat right 6px bottom 6px;
-	background-size: 21px;
-	border-right: 1px solid;
-	border-bottom-left-radius: 5px;
-}
-#panneau_map #onglet_infos {
-	border-right: 1px solid;
-	background: url("../img/info.png") no-repeat wheat right 10px bottom 7px;
-	background-size: 23px;
-}
-#panneau_map #onglet_index {
-	border-bottom-right-radius: 5px;
-	background: url("../img/index_simple.png") no-repeat wheat right 10px bottom 4px;
-	background-size: 23px;
+	font-size: 0.9em;
 }
 #panneau_map  p {
 	text-align: center;
 	vertical-align:middle;
-	padding-right: 28px;
+	padding-right: 25px;
 	font-weight: bold;
-	margin: 0.6em 0;
+	margin: 0.1em 0;
 }
+#panneau_map #onglet_index.actif, #panneau_map #onglet_filtres.actif, #panneau_map #onglet_numeros.actif, #panneau_map #onglet_infos.actif {
+	cursor: default;
+	background-color: burlywood;
+}
+#panneau_map #onglet_index, #panneau_map #onglet_filtres, #panneau_map #onglet_numeros, #panneau_map #onglet_infos {
+	cursor: pointer;
+	float: left;
+	width: calc(50% - 0.5px);
+	height: calc(100% - 2px);
+	background-color: wheat;
+	background-size: 20px;
+	border-bottom: 2px sienna solid;
+}
+
+/*------------------------------------------------------*/
+/*--------------- PANNEAU LATÉRAL GAUCHE ---------------*/
+/*------------------------------------------------------*/
+
+#panneau_map.gauche {
+	float: left;
+	margin:0;
+	width:15%;
+	height:calc(100% - 4px);
+	/*overflow-y: auto;*/
+	border-right: solid lightblue 2px;
+	border-top: solid lightblue 2px;
+	border-bottom: none;
+	border-left: none;
+}
+
+/*--------- Onglets ---------*/
+
+#panneau_map.gauche #onglet_filtres {
+	background: url("../img/switch.png") no-repeat wheat right 3px bottom 6px;
+	border-right: 1px solid;
+}
+#panneau_map.gauche #onglet_index {
+	background: url("../img/index_simple.png") no-repeat wheat right 5px bottom 4px;
+}
+#panneau_map.droite #onglet_numeros {
+	background-size: 24px;
+}
+
 /*------------ 3 contenus du panneau -----------*/
-#conteneur_filtres, #conteneur_index {
+#conteneur_filtres, #conteneur_index, #conteneur_infos, #conteneur_numeros {
 	position: relative;
 	padding: 0 5px;
 	height: 95%;
@@ -1676,7 +1688,7 @@ fieldset legend {
 	clear: both;
 	margin-right: 5px;
 }
-#panneau_map .groupe_boutons_filtre, #panneau_map #groupe_boutons_fond { /*version Pifomap*/
+#panneau_map.gauche .groupe_boutons_filtre, #panneau_map.gauche #groupe_boutons_fond { /*version Pifomap*/
 }
 
 /*-------- Switch buttons filtres -------*/
@@ -1849,7 +1861,6 @@ fieldset legend {
 #panneau_map #conteneur_infos h2, #panneau_map h2 {
 	float: left;
 	margin: 10px 5px;
-	width: calc(100% - 70px);
 	font-size: 1.2em;
 	line-height: 1.2em;
 }
@@ -1895,8 +1906,40 @@ fieldset legend {
 	font-size: 0.9em;
 }
 
-#panneau_map .pastille-verte, #panneau_map .pastille-orange, #panneau_map .pastille-bleue {
+#panneau_map.gauche .pastille-verte, #panneau_map.gauche .pastille-orange, #panneau_map.gauche .pastille-bleue {
   margin: 2px 7px 0 0;
+}
+
+/*------------------------------------------------------*/
+/*--------------- PANNEAU LATÉRAL DROITE ---------------*/
+/*------------------------------------------------------*/
+
+#panneau_map.droite {
+	float: right;
+	margin:0;
+	width:15%;
+	height:calc(100% - 4px);
+	/*overflow-y: auto;*/
+	border-top:solid lightblue 2px;
+	border-left:solid lightblue 2px;
+	border-right: none;
+	border-bottom: none;
+}
+#panneau_map.droite.large {
+	width:30%;	
+	transition: width 0.3s ease-out;
+}
+/*--------- Onglets ---------*/
+
+#panneau_map #onglet_infos {
+	border-right: 1px solid;
+	background: url("../img/info.png") no-repeat wheat right 5px bottom 7px;
+}
+#panneau_map #onglet_numeros {
+	background: url("../img/plaque_no2.png") no-repeat wheat right 9px bottom 10px;
+}
+#panneau_map #onglet_numeros, #panneau_map #onglet_infos {
+	background-size: 24px;
 }
 
 /*----------------------------------------------------------------------*/
@@ -1904,10 +1947,22 @@ fieldset legend {
 /*----------------------------------------------------------------------*/
 
 #reponse #map_div {
+	clear: none;/*float: left;*/
+	margin:0 0 0 -3px;
+	width:calc(70% - 4px);
+	height:calc(100% - 5px);
+	border-top:2px solid lightblue;
+}
+#reponse #map_div.etroit {
+	width:calc(55% - 4px);
+	transition: width 0.3s ease-out;
+}
+/*------------ Pifodrome ------------*/
+#reponse #map_div.pifodrome {
 	float: left;
 	margin:0 0 0 -3px;
 	width:calc(84% - 5px);
-	height:calc(100% - 4px);
+	height:calc(100% - 5px);
 	border:2px solid lightblue;
 }
 
@@ -2229,9 +2284,21 @@ fieldset legend {
 	margin-top:0;
 }
 
-/*------------------------------------------------------*/
-/*--------------------- PAGE NUMEROS -------------------*/
-/*------------------------------------------------------*/
+/*---------------------------------------------------------*/
+/*---------- INSEPCTION DES NUMEROS d'ADRESSE -------------*/
+/*---------------------------------------------------------*/
+#table_inspect_adresse {
+	font-size: 0.9em;
+}
+#table_inspect_adresse th {
+	padding-right: 10px;
+}
+#table_inspect_adresse #colonne_numeros th {
+	padding-right: 15px;
+}
+#table_inspect_adresse td {
+	padding-left: 0.6em;
+}
 #remontees_ban {
 	float: left;
 	min-width: 400px;
@@ -2275,9 +2342,11 @@ fieldset legend {
 #colonne_signaler {
 	background: url("../img/ban_logo.png") no-repeat left 10px top 4px;
 	background-size: 17px;
-	padding-left: 33px;
+	padding-left: 30px;
 }
-
+#colonne_statut, #colonne_centrer {
+	background:none;
+}
 td.remontee_ban {
 	padding:3px 0 2px 0;
 	height: 30px;
@@ -2550,7 +2619,7 @@ table tr.static td {
 /*--------------------------*/
 
 /*Survol des lignes*/
-#panneau_map #liste_recherche tr:hover td {
+#panneau_map.gauche #liste_recherche tr:hover td {
 	cursor: pointer;
 	background-color: #FCFFB7;
 }
