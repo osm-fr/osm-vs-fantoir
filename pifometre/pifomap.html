@@ -24,7 +24,7 @@
 <link rel="search" type="application/opensearchdescription+xml" title="Pifomètre BANO" href="opensearch.xml" />
 
 <script>
-    STYLEFILE = 'pifomap_260320'
+    STYLEFILE = 'pifomap_260521'
 
     // FILTRES_TYPE = [["voie",true],
     //            ["lieudit",true]]
@@ -199,6 +199,10 @@
                 map.addImage('voie_bd_topo', im.data);
                 im = await map.loadImage('./img/voie_bd_commune.png')
                 map.addImage('voie_bd_commune', im.data);
+                im = await map.loadImage('./img/croix_bleue.png')
+                map.addImage('croix_bleu', im.data);
+                im = await map.loadImage('./img/plus_vert_2.png')
+                map.addImage('plus_vert', im.data);
 
                 dispatch_layers()
                 affiche_filtres_stats()
@@ -297,6 +301,14 @@
         return ({'type': 'Feature',
                         'properties': props,
                         'geometry': geom})
+    }
+    function get_geojson_straight_line(lon1,lat1,lon2,lat2,props){
+        return ({'type': 'Feature',
+                        'properties': props,
+                        'geometry': {
+                            'type': 'LineString',
+                            'coordinates': [[lon1,lat1],[lon2,lat2]]
+                        }})
     }
     function get_geojson_point(lon,lat,props){
         return ({'type': 'Feature',
@@ -708,7 +720,7 @@ function affiche_filtres_stats(){
             $('#liste_recherche td:last').click(function(){
                 centrage_sur_nom(key)
             }).mouseover(function(event){
-                surbrillance_voie_numeros(key,undefined)
+                surbrillance_voie_numeros(key,null)
             }).mouseout(function(event){
                 fin_surbrillance_voie_numeros()
             })
@@ -743,7 +755,7 @@ function affiche_filtres_stats(){
             HOVER_LAYERS.forEach(function(hover_layer){
                 layer = hover_layer.replace('hover_','')
                 if (map.getLayoutProperty(layer,'visibility') == undefined||map.getLayoutProperty(layer,'visibility') == 'visible'){
-                    if (fantoir != undefined && fantoir != ''){
+                    if (fantoir != null && fantoir != ''){
                         map.setFilter(hover_layer,["any",["==",["get", "fantoir"], fantoir],["==",["get", "nom"], nom]])
                     } else {
                         map.setFilter(hover_layer,["==",["get", "nom"], nom])
@@ -803,9 +815,9 @@ function affiche_filtres_stats(){
             $('#infos_numero').append($('<hr>'));
         }
         $('#infos_numero').on("mouseenter", function() {
-            nom = $('#panneau_map.gauche #conteneur_infos h2').attr('nom')
-            numero = $('#panneau_map.gauche #conteneur_infos h2').attr('numero')
-            surbrillance_voie_numeros(nom,undefined,numero)
+            nom = $('#panneau_map.droite #conteneur_infos h2').attr('nom')
+            numero = $('#panneau_map.droite #conteneur_infos h2').attr('numero')
+            surbrillance_voie_numeros(nom,null,numero)
         });
         $('#infos_numero').on("mouseleave", function() {
             fin_surbrillance_voie_numeros()
@@ -920,10 +932,10 @@ function affiche_filtres_stats(){
         }
 
         $('#infos_voie_lieudit').on("mouseenter", function() {
-            nom = $('#panneau_map.gauche #conteneur_infos h2').attr('nom')
-            fantoir = undefined
-            if ($('#panneau_map.gauche #conteneur_infos h2').attr('fantoir')){
-                fantoir = $('#panneau_map.gauche #conteneur_infos h2').attr('fantoir')
+            nom = $('#panneau_map.droite #conteneur_infos h2').attr('nom')
+            fantoir = null
+            if ($('#panneau_map.droite #conteneur_infos h2').attr('fantoir')){
+                fantoir = $('#panneau_map.droite #conteneur_infos h2').attr('fantoir')
             }
             surbrillance_voie_numeros(nom,fantoir)
         });
@@ -1115,8 +1127,10 @@ function affiche_filtres_stats(){
                                 qualif_numero_BAN_voie_non_rapprochee = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
                                 qualif_numero_BAN_numero_non_rapproche = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
                                 qualif_numero_BAN_numero_rapproche = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+                                qualif_ligne_numeros_rapproches = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
                                 qualif_numero_OSM_rapproche = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
                                 qualif_numero_OSM_seul = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
+                                qualif_numero_surbrillance = JSON.parse(JSON.stringify(EMPTY_GEOJSON))
 
                                 for (l=0;l<data.length;l++){
                                     let[numero,
@@ -1139,12 +1153,22 @@ function affiche_filtres_stats(){
 
                                     $('#'+table+' tbody:last').append($('<tr>').attr('id',l))
 
+                                    $('#'+table+' tbody:last tr#'+l).hover(function() {
+                                        map.setFilter('qualif_numero_surbrillance',["==",["get", "numero"],numero]);
+                                    },function() {
+                                        map.setFilter('qualif_numero_surbrillance',["==",["get", "numero"]," "]);
+                                    });
+
                                     if (lon_ban != undefined && lon_osm != undefined){
                                         $('#'+table+' tr:last').append($('<td>')
                                                                         .append($('<span class="pastille-verte" title="Intégrée dans OSM">'))
                                                                         .append($('<span>').text(numero)));
                                         qualif_numero_BAN_numero_rapproche.features.push(get_geojson_point(lon_ban,lat_ban,{'numero':numero}))
                                         qualif_numero_OSM_rapproche.features.push(get_geojson_point(lon_osm,lat_osm,{'numero':numero}))
+                                        qualif_ligne_numeros_rapproches.features.push(get_geojson_straight_line(lon_ban,lat_ban,lon_osm,lat_osm,{'numero':numero}))
+                                        qualif_numero_surbrillance.features.push(get_geojson_point(lon_osm,lat_osm,{'numero':numero}))
+                                        qualif_numero_surbrillance.features.push(get_geojson_point(lon_ban,lat_ban,{'numero':numero}))
+                                        zoom_center = [(lon_ban+lon_osm)/2,(lat_ban+lat_osm)/2]
                                     } else if (lon_ban != undefined){
                                         $('#'+table+' tr:last').append($('<td>')
                                                                         .append($('<span class="pastille-orange" title="Pas encore intégrée dans OSM">'))
@@ -1154,11 +1178,15 @@ function affiche_filtres_stats(){
                                         } else {
                                             qualif_numero_BAN_voie_non_rapprochee.features.push(get_geojson_point(lon_ban,lat_ban,{'numero':numero}))
                                         }
+                                        qualif_numero_surbrillance.features.push(get_geojson_point(lon_ban,lat_ban,{'numero':numero}))
+                                        zoom_center = [lon_ban,lat_ban]
                                     } else if (lon_osm != undefined){
                                         $('#'+table+' tr:last').append($('<td>')
                                                                         .append($('<span class="pastille-bleue" title="Trouvée dans OSM et inconnue de la BAN">'))
                                                                         .append($('<span>').text(numero)));
                                         qualif_numero_OSM_seul.features.push(get_geojson_point(lon_osm,lat_osm,{'numero':numero}))
+                                        qualif_numero_surbrillance.features.push(get_geojson_point(lon_osm,lat_osm,{'numero':numero}))
+                                        zoom_center = [lon_osm,lat_osm]
                                     }
                                     if (lon_ban != undefined){
                                         min_lon = Math.min(min_lon,lon_ban);
@@ -1219,6 +1247,7 @@ function affiche_filtres_stats(){
                                     $('#'+table+' tr:last').append($('<td class="zoom">')
                                                             .click(function(){
                                                                 map.flyTo({center: [lon_ban == undefined ? lon_osm:lon_ban,lat_ban == undefined ? lat_osm:lat_ban],zoom: 19});
+                                                                // map.flyTo({center: zoom_center,zoom: 19});
                                                             })
                                                             )
 
@@ -1235,6 +1264,7 @@ function affiche_filtres_stats(){
                                 map.getSource('qualif_numero_BAN_numero_rapproche').setData(qualif_numero_BAN_numero_rapproche)
                                 map.getSource('qualif_numero_OSM_rapproche').setData(qualif_numero_OSM_rapproche)
                                 map.getSource('qualif_numero_OSM_seul').setData(qualif_numero_OSM_seul)
+                                map.getSource('qualif_numero_surbrillance').setData(qualif_numero_surbrillance)
 
                                 $('#'+table).trigger("resetToLoadState");
 
@@ -1555,6 +1585,10 @@ function affiche_filtres_stats(){
                     map.addImage('voie_bd_topo', im.data);
                     im = await map.loadImage('./img/voie_bd_commune.png')
                     map.addImage('voie_bd_commune', im.data);
+                    im = await map.loadImage('./img/croix_bleue.png')
+                    map.addImage('croix_bleu', im.data);
+                    im = await map.loadImage('./img/plus_vert_2.png')
+                    map.addImage('plus_vert', im.data);
 
                     map_setup()
                 });
