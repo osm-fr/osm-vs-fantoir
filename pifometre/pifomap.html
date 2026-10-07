@@ -128,15 +128,15 @@
             $('#legende').css('visibility','hidden');
         })
 
-        //Sélection des onglets (stats / filtres / barres de progression)
+        //Sélection des onglets (stats / barres de progression)
 
         //Changement d'onglet
         // insee=check_url_for_insee()
 
         $('#bouton_pifoprogression').click(function(){
-            if (!$(this).hasClass('onglet_actif')) {
-                $(this).addClass('onglet_actif')
-                $('#bouton_pifostats').removeClass('onglet_actif');
+            if (!$(this).hasClass('actif')) {
+                $(this).addClass('actif')
+                $('#bouton_pifostats').removeClass('actif');
                 $('#pifostats').css('visibility','hidden');
                 $('#pifoprogression').css('visibility','visible');
             }
@@ -208,8 +208,8 @@
                 affiche_filtres_stats()
                 map_setup()
             });
-            $('#bouton_pifostats').addClass('onglet_non_cliquable');
-            $('#bouton_pifoprogression').addClass('onglet_actif');
+            $('#bouton_pifostats').addClass('desactive');
+            $('#bouton_pifoprogression').addClass('actif');
             $('#pifoprogression').css('visibility','visible');
             $('#pifostats').css('visibility','hidden');
             //Activer la progression des noms de voies intégrés par défaut
@@ -319,13 +319,14 @@
                         }})
     }
     function interactions_souris(couche_carto){
-        //-----------------------------------------------
-        //---------------- RAZ PANNEAU ------------------
-        //-----------------------------------------------
+        //---------------------------------------------------
+        //------- SI ON CLIQUE SUR RIEN : RAZ PANNEAU -------
+        //---------------------------------------------------
         if (couche_carto == 'simple-tiles'){
             map.on('click', (e) => {
                 if (typeof e.features == 'undefined'){
-                    reset_panneau_map()
+                    reset_panneau_map();
+                    $('#instructions').css('display','block');
                 }
             })
         }
@@ -411,7 +412,6 @@
         //--------------------------------
         //------- NOMS DE COMMUNES -------
         //--------------------------------
-
         if (couche_carto == 'noms_de_communes'){
             for (i=1;i<4;i++){
                 map.on('click', couche_carto+'_'+i, (e) => {
@@ -423,7 +423,6 @@
         //---------------------------------------------------------------
         //------- POINTS D'ADRESSE et NOMS DE VOIES OU LIEUX-DITS -------
         //---------------------------------------------------------------
-
         if (couche_carto.indexOf('BAN_point_transparent') == 0 ||
             couche_carto.indexOf('OSM_point') == 0 ||
             couche_carto == 'polygones' ||
@@ -469,7 +468,7 @@
                     ajout_liens_de_visu(lon,lat)
 
                     // SEPARATEUR
-                    $('#infos_voie_lieudit').append($('<hr>'));
+                    $('#infos_visu_edition').append($('<hr>'));
 
                     //LIENS D'EDITION
                     ajout_liens_d_edition(lon,lat,couche_carto,0,false)
@@ -510,28 +509,36 @@
                         //Mettre à jour le nom de la rue
                         if (nom_osm != null){
                             if (couche_carto.indexOf('BAN_point_transparent') == 0 || couche_carto.indexOf('OSM_point_') == 0) {
-                                $('#panneau_map.gauche #conteneur_infos h2').attr('texte_voie_a_copier',nom_osm[0][0]).text(numero+' '+nom_osm[0][0])
+                                $('.panneau_map #conteneur_infos h2').attr('texte_voie_a_copier',nom_osm[0][0]).text(numero+' '+nom_osm[0][0])
                             } else {
-                                $('#panneau_map.gauche #conteneur_infos h2').attr('texte_voie_a_copier',nom_osm[0][0]).text(nom_osm[0][0])
+                                $('.panneau_map #conteneur_infos h2').attr('texte_voie_a_copier',nom_osm[0][0]).text(nom_osm[0][0])
                             }
                         }
 
                         //Infos sur le numéro
                         ajout_infos_numero(couche_carto)
-
                         //Infos sur la voie ou le lieu-dit
                         ajout_infos_voie_lieudit(couche_carto)
-
-                        //LIENS DE VISU
+                        //Liens de visu (org)
                         ajout_liens_de_visu(lon,lat)
-
-                        // SEPARATEUR
-                        $('#infos_voie_lieudit').append($('<hr>'));
-
-                        //LIENS D'EDITION
+                        // Séparateur
+                        $('#infos_visu_edition').append($('<hr>'));
+                        //Liens d'édition
                         ajout_liens_d_edition(lon,lat,couche_carto,numeros_a_proposer,avec_adresses_ban)
-
+                
+                    //Changer le nom de l'onglet Numéros
+                    if (is_place) {
+                        $('.voie_ou_ld').text('ce lieu-dit');
+                    }
+                    else {
+                        $('.voie_ou_ld').text('cette voie');
+                    }
                 })
+
+                //Rendre cliquable l'onglet Numéros si c'est un lieu à vrai Fantoir
+                if (has_vrai_code_fantoir && avec_adresses_ban){
+                    $('#onglet_numeros').removeClass('desactive');
+                }
             });
         }
     }
@@ -544,17 +551,17 @@
             xmax = Math.max(xmax,xmaxf)
             ymin = Math.min(ymin,yminf)
             ymax = Math.max(ymax,ymaxf)
-            $('#panneau_map.droite #conteneur_infos h2').attr('fantoir',fantoir)
+            $('.panneau_map.droite #conteneur_infos h2').attr('fantoir',fantoir)
         } else {
-            $('#panneau_map.droite #conteneur_infos h2').removeAttr('fantoir')
+            $('.panneau_map.droite #conteneur_infos h2').removeAttr('fantoir')
         }
         if (numero){
-            $('#panneau_map.droite #conteneur_infos h2').attr('numero',numero)
+            $('.panneau_map.droite #conteneur_infos h2').attr('numero',numero)
         } else {
-            $('#panneau_map.droite #conteneur_infos h2').removeAttr('numero')
+            $('.panneau_map.droite #conteneur_infos h2').removeAttr('numero')
         }
         titre = numero != undefined ? numero+' '+nom:nom;
-        $('#panneau_map.droite #conteneur_infos h2').attr('texte_voie_a_copier',nom)
+        $('.panneau_map.droite #conteneur_infos h2').attr('texte_voie_a_copier',nom)
                             .attr('xmin',xmin)
                             .attr('xmax',xmax)
                             .attr('ymin',ymin)
@@ -563,13 +570,13 @@
                             .text(titre)
 
         //Bouton Copier le nom de la voie ou du lieu-dit
-        $('#panneau_map.droite #conteneur_infos .en_tete #boutons').append('<button id="copier_voie" class="pifomap" title="Copier le nom de la voie"></button>')
+        $('.panneau_map.droite #conteneur_infos .en_tete #boutons').append('<button id="copier_voie" class="pifomap" title="Copier le nom de la voie"></button>')
         $('#copier_voie').click(function(){
             //Copie le nom de la voie dans le presse-papier
             if (eval(localStorage.PreferencesCopierCleValeur)){
-                navigator.clipboard.writeText('name='+$('#panneau_map.droite #conteneur_infos h2').attr('texte_voie_a_copier'))
+                navigator.clipboard.writeText('name='+$('.panneau_map.droite #conteneur_infos h2').attr('texte_voie_a_copier'))
             }
-            else navigator.clipboard.writeText($('#panneau_map.droite #conteneur_infos h2').attr('texte_voie_a_copier'))
+            else navigator.clipboard.writeText($('.panneau_map.droite #conteneur_infos h2').attr('texte_voie_a_copier'))
             //Affiche le picto copie en vert
             $(this).addClass('ok')
             //Affiche le message de confirmation
@@ -588,13 +595,13 @@
         })
 
         //Bouton Centrer sur la voie ou le lieu-dit
-        $('#panneau_map.droite #conteneur_infos .en_tete #boutons').append($('<button id="centrer_voie_lieudit" title="Centrer la carte sur ce lieu"></button>'))
+        $('.panneau_map.droite #conteneur_infos .en_tete #boutons').append($('<button id="centrer_voie_lieudit" title="Centrer la carte sur ce lieu"></button>'))
 
         $('#centrer_voie_lieudit').click(function(){
-            xmin = $('#panneau_map.droite #conteneur_infos h2').attr('xmin')
-            xmax = $('#panneau_map.droite #conteneur_infos h2').attr('xmax')
-            ymin = $('#panneau_map.droite #conteneur_infos h2').attr('ymin')
-            ymax = $('#panneau_map.droite #conteneur_infos h2').attr('ymax')
+            xmin = $('.panneau_map.droite #conteneur_infos h2').attr('xmin')
+            xmax = $('.panneau_map.droite #conteneur_infos h2').attr('xmax')
+            ymin = $('.panneau_map.droite #conteneur_infos h2').attr('ymin')
+            ymax = $('.panneau_map.droite #conteneur_infos h2').attr('ymax')
 
             if ((xmin == xmax) && (ymin == ymax)){
                 map.flyTo({
@@ -609,14 +616,11 @@
     function affiche_filtres(){
         $('#conteneur_filtres').css('display','block');
     }
-function affiche_filtres_stats(){
+    function affiche_filtres_stats(){
         $('#conteneur_filtres .contenu.stats').css('display','block')
         $('#conteneur_filtres .contenu.filtres').css('display','none')
-
-        // TBC
-}
-
-
+            // TBC
+    }
     function prepare_TOC(){
         dispatch_layers()
 
@@ -812,11 +816,10 @@ function affiche_filtres_stats(){
                                             .append($('<span>').text('une voie'))
                                         );
             }
-            $('#infos_numero').append($('<hr>'));
         }
         $('#infos_numero').on("mouseenter", function() {
-            nom = $('#panneau_map.droite #conteneur_infos h2').attr('nom')
-            numero = $('#panneau_map.droite #conteneur_infos h2').attr('numero')
+            nom = $('.panneau_map.droite #conteneur_infos h2').attr('nom')
+            numero = $('.panneau_map.droite #conteneur_infos h2').attr('numero')
             surbrillance_voie_numeros(nom,null,numero)
         });
         $('#infos_numero').on("mouseleave", function() {
@@ -932,10 +935,10 @@ function affiche_filtres_stats(){
         }
 
         $('#infos_voie_lieudit').on("mouseenter", function() {
-            nom = $('#panneau_map.droite #conteneur_infos h2').attr('nom')
+            nom = $('.panneau_map.droite #conteneur_infos h2').attr('nom')
             fantoir = null
-            if ($('#panneau_map.droite #conteneur_infos h2').attr('fantoir')){
-                fantoir = $('#panneau_map.droite #conteneur_infos h2').attr('fantoir')
+            if ($('.panneau_map.droite #conteneur_infos h2').attr('fantoir')){
+                fantoir = $('.panneau_map.droite #conteneur_infos h2').attr('fantoir')
             }
             surbrillance_voie_numeros(nom,fantoir)
         });
@@ -944,9 +947,8 @@ function affiche_filtres_stats(){
         } );
     }
     function ajout_liens_de_visu(lon,lat){
-        $('#infos_voie_lieudit').append($('<hr>'));
-        $('#infos_voie_lieudit').append($('<h3>').text('Voir le lieu sur : '));
-        $('#infos_voie_lieudit').append($('<ul>')
+        $('#infos_visu_edition').append($('<h3>').text('Voir le lieu sur : '));
+        $('#infos_visu_edition').append($('<ul>')
                                     .append($('<li>')
                                         .append($('<a>')
                                             .attr('href',url_map_org_part1+'?mlat='+lat+'&mlon='+lon+'#map='+'18/'+lat+'/'+lon)
@@ -957,7 +959,7 @@ function affiche_filtres_stats(){
                                 );
     }
     function ajout_liens_d_edition(lon,lat,couche_carto,numeros_a_proposer,avec_adresses_ban){
-        $('#infos_voie_lieudit').append($('<h3>').text('Édition'));
+        $('#infos_visu_edition').append($('<h3>').text('Édition'));
 
         xmin  = lon-DELTA
         xmax  = lon+DELTA
@@ -965,6 +967,7 @@ function affiche_filtres_stats(){
         ymax  = lat+DELTA
 
         table = 'pifomap_table_liens'
+        $('#infos_visu_edition').append($('<table id="'+table+'">'));
         $('#'+table).append($('<tr>').append($('<td>').attr('colspan','2').append($('<span class="gras">').text('Éditer la zone sur'))))
         $('#'+table).append($('<tr>'))
         add_josm_link(table,xmin,xmax,ymin,ymax,code_insee,nom_commune)
@@ -1097,15 +1100,13 @@ function affiche_filtres_stats(){
                                 min_lat = data[0][2] == undefined ? data[0][5]:data[0][2];
                                 max_lat = min_lat;
 
-                                // INFOS 2e COLONNE : Nom voie, type voie, commune
-                                /*$('#infos_commune_col2 h2').empty().append(nom_commune)
-                                $('#infos_commune_col2 h1').empty().append(nom_voie)
+                                $('#conteneur_numeros h2').empty().append(nom_voie)
 
                                 if (is_place==true){
-                                   $('#infos_commune_col2 h1').append(' (lieu-dit)')
+                                   $('#conteneur_numeros h2').append(' (lieu-dit)')
                                 } else {
-                                   $('#infos_commune_col2 h1').append(' (voie)')
-                                }*/
+                                   $('#conteneur_numeros h2').append(' (voie)')
+                                }
 
                                 if (numeros_a_proposer > 0){
                                     add_josm_addr_link('table_adresses',code_insee,nom_commune,fantoir,nom_fantoir,numeros_a_proposer,true,is_place,schema_point_uniquement)
@@ -1113,6 +1114,7 @@ function affiche_filtres_stats(){
                                     $('#liens_voie').append($('<span>').addClass('adresses-integrees').text('✔'))
                                                         .append($('<span>').text(' Adresses intégrées'))
                                 }
+                                console.log('création table. Fantoir = '+fantoir);
                                 $('#'+table).empty() .append($('<thead>')
                                                                         .append($('<tr>')
                                                                             .append($('<th id="colonne_numeros">').append('Numéro'))
@@ -1616,8 +1618,8 @@ function affiche_filtres_stats(){
             //----------------------------------------
             //-------    ACTIVATION BOUTONS    ------
             //----------------------------------------
-            $('#bouton_refresh').removeClass("inactif progress")
-            $('#bouton_communes_voisines').removeClass("inactif")
+            $('#bouton_refresh').removeClass("desactive progress")
+            $('#bouton_communes_voisines').removeClass("desactive")
             $('#bouton_communes_voisines').click(function(){
                 $('#table_communes_voisines').css('visibility','visible');
             })
@@ -1625,15 +1627,15 @@ function affiche_filtres_stats(){
                 $('#table_communes_voisines').css('visibility','hidden');
             })
 
-            $('#bouton_pifostats').removeClass('onglet_non_cliquable').addClass('onglet_actif');
-            $('#bouton_pifoprogression').removeClass('onglet_actif');
+            $('#bouton_pifostats').removeClass('desactive').addClass('actif');
+            $('#bouton_pifoprogression').removeClass('actif');
             $('#pifostats').css('visibility','visible');
             $('#pifoprogression').css('visibility','hidden');
 
             $('#bouton_pifostats').click(function(){
-                if (!$(this).hasClass('onglet_actif')) {
-                    $(this).addClass('onglet_actif')
-                    $('#bouton_pifoprogression').removeClass('onglet_actif');
+                if (!$(this).hasClass('actif')) {
+                    $(this).addClass('actif')
+                    $('#bouton_pifoprogression').removeClass('actif');
                     $('#pifoprogression').css('visibility','hidden');
                     $('#pifostats').css('visibility','visible');
                 }
@@ -1652,10 +1654,8 @@ function affiche_filtres_stats(){
                             })
 
             //PANNEAU LATERAL
-            $('#onglet_filtres').removeClass('onglet_non_cliquable').addClass('onglet_actif');
-            $('#onglet_infos').removeClass('onglet_non_cliquable').removeClass('onglet_actif');
-            $('#onglet_numeros').removeClass('onglet_non_cliquable').removeClass('onglet_actif');
-            $('#onglet_index').removeClass('onglet_non_cliquable').removeClass('onglet_actif');
+            $('#onglet_filtres').removeClass('desactive').addClass('actif');
+            $('#onglet_index').removeClass('desactive').removeClass('actif');
             $('#conteneur_filtres').css('display','block');
             $('#conteneur_infos').css('display','none');
             $('#conteneur_numeros').css('display','none');
@@ -1663,17 +1663,17 @@ function affiche_filtres_stats(){
 
             //Panneau gauche
             $('#onglet_filtres').click(function(){
-                if (!$(this).hasClass('onglet_actif')) {
-                    $(this).addClass('onglet_actif')
-                    $('#onglet_index').removeClass('onglet_actif');
+                if (!$(this).hasClass('actif')) {
+                    $(this).addClass('actif')
+                    $('#onglet_index').removeClass('actif');
                     $('#conteneur_index').css('display','none');
                     $('#conteneur_filtres').css('display','block');
                 }
             })
             $('#onglet_index').click(function(){
-                if (!$(this).hasClass('onglet_actif')) {
-                    $(this).addClass('onglet_actif')
-                    $('#onglet_filtres').removeClass('onglet_actif');
+                if (!$(this).hasClass('actif')) {
+                    $(this).addClass('actif')
+                    $('#onglet_filtres').removeClass('actif');
                     $('#conteneur_filtres').css('display','none');
                     $('#conteneur_index').css('display','block');
                     // prepare_index();
@@ -1681,11 +1681,11 @@ function affiche_filtres_stats(){
             })
             //Panneau droite
             $('#onglet_infos').click(function(){
-                if (!$(this).hasClass('onglet_actif')) { active_infos(); }
+                if (!$(this).hasClass('desactive') && !$(this).hasClass('actif')) { active_infos(); }
             })
 
             $('#onglet_numeros').click(function(){
-                if (!$(this).hasClass('onglet_actif')) { active_numeros(); }
+                if (!$(this).hasClass('desactive') && !$(this).hasClass('actif')) { active_numeros(); }
             })
 
             update_csv_url()
@@ -1865,25 +1865,26 @@ function affiche_filtres_stats(){
     // }
     function active_filtres(){
         $('#map_div').removeClass('etroit');
-        $('#onglet_filtres').addClass('onglet_actif');
+        $('#onglet_filtres').addClass('actif');
         $('#conteneur_filtres').css('display','block');
-        $('#onglet_index').removeClass('onglet_actif');
+        $('#onglet_index').removeClass('actif');
         $('#conteneur_index').css('display','none');
     }
     function active_infos(){
-        $('#panneau_map.droite').removeClass('large');
+        $('.panneau_map.droite').removeClass('large');
         $('#map_div').removeClass('etroit');
-        $('#onglet_infos').addClass('onglet_actif');
+        $('#onglet_infos').removeClass('desactive').addClass('actif');
         $('#conteneur_infos').css('display','block');
-        $('#onglet_numeros').removeClass('onglet_actif')
+        $('.panneau_map hr').css('display','revert');
+        $('#onglet_numeros').removeClass('actif')
         $('#conteneur_numeros').css('display','none');
     }
     function active_numeros(){
-        $('#panneau_map.droite').addClass('large');
+        $('.panneau_map.droite').addClass('large');
         $('#map_div').addClass('etroit');
-        $('#onglet_numeros').addClass('onglet_actif')
+        $('#onglet_numeros').removeClass('desactive').addClass('actif')
         $('#conteneur_numeros').css('display','block');
-        $('#onglet_infos').removeClass('onglet_actif')
+        $('#onglet_infos').removeClass('actif')
         $('#conteneur_infos').css('display','none');
         toggle_affichage_numeros('qualif_numeros');
         panneau_qualif_numero(code_insee,fantoir);
@@ -1922,13 +1923,25 @@ function affiche_filtres_stats(){
         }
     }
     function reset_panneau_map(){
+        //Gauche
+        //Droite
+        $('.panneau_map hr').css('display','none');
+        //Droite - Infos
+        $('#onglet_infos').addClass('desactive').removeClass('actif');
         $('#conteneur_infos').css('display','none');
-        $('#conteneur_numeros').css('display','none');
-        $('#panneau_map #conteneur_infos h2').empty()
-        $('#panneau_map #boutons').empty()
+        $('.panneau_map #conteneur_infos h2').empty();
+        $('.panneau_map #boutons').empty();
+        $('#instructions').css('display','none');
         $('#infos_numero').empty();
         $('#infos_voie_lieudit').empty();
+        $('#infos_visu_edition').empty();
         $('#pifomap_table_liens').empty();
+        //Droite - Numéros
+        $('#onglet_numeros').addClass('desactive').removeClass('actif');
+        $('#conteneur_numeros #table_inspect_adresse').trigger("destroy");
+        $('#conteneur_numeros #table_inspect_adresse').empty();
+        console.log('empty. Fantoir = '+fantoir);
+        $('#conteneur_numeros').css('display','none');
 
         // si retour depuis l'affichage de qualif des numeros
         toggle_affichage_numeros('vue_generale')
@@ -1963,7 +1976,7 @@ function affiche_filtres_stats(){
                 <input type="submit" value="" title="Afficher la carte"/>
             </form>
         </div>
-        <div class="bouton inactif" id="bouton_communes_voisines" role="button" title="Communes voisines"></div>
+        <div class="bouton desactive" id="bouton_communes_voisines" role="button" title="Communes voisines"></div>
     </div>
     <div id="table_communes_voisines" class="pifometre">
         <div class="fermer">X</div>
@@ -1995,7 +2008,7 @@ function affiche_filtres_stats(){
                 <div id="bouton_pifoprogression"><p>Progression</p></div>
             </div>
 
-            <button id="bouton_refresh" class="inactif"></button>
+            <button id="bouton_refresh" class="desactive"></button>
             <div id="refresh_infobulle"></div>
             <div id="bouton_legende"><p>Légende</p></div>
 
@@ -2076,7 +2089,7 @@ function affiche_filtres_stats(){
 
     <div id="reponse" class="pifomap">
         <!------------------------ PAN GAUCHE ------------------------>
-        <div id="panneau_map" class="gauche">
+        <div class="panneau_map gauche">
             <div class="onglets">
                 <div id="onglet_filtres"><p>Filtres</p></div>
                 <div id="onglet_index"><p>Index</p></div>
@@ -2107,23 +2120,27 @@ function affiche_filtres_stats(){
             <div id="conteneur_index"></div>
         </div>
         <!------------------------ PAN DROITE ------------------------>
-        <div id="panneau_map" class="droite">
+        <div class="panneau_map droite">
             <div class="onglets">
-                <div id="onglet_infos"><p>Infos<br/>de l'objet cliqué</p></div>
-                <div id="onglet_numeros"><p>Adresses<br/>de cette voie</p></div>
+                <div id="onglet_infos" class="desactive"><p>Infos<br/>de l'objet cliqué</p></div>
+                <div id="onglet_numeros" class="desactive"><p>Adresses<br/>de <span class="voie_ou_ld">ce lieu</span></p></div>
             </div>
+            <h3 id="instructions">Aucun objet sélectionné sur la carte. Cliquez sur une voie, un point d'adresse...</h3>
             <div id="conteneur_infos">
                 <div class="en_tete">
-                    <h2>Aucun objet sélectionné sur la carte</h2>
-                    <div id="boutons"></div>
+                    <h2></h2>
+                    <div id="boutons"></div><hr>
                 </div>
                 <div class="contenu">
-                    <div id="infos_numero"></div>
-                    <div id="infos_voie_lieudit"></div>
-                    <table id="pifomap_table_liens"></table>
+                    <div id="infos_numero"></div><hr>
+                    <div id="infos_voie_lieudit"></div><hr>
+                    <div id="infos_visu_edition"></div>
                 </div>
             </div>
             <div id="conteneur_numeros">
+                <div class="en_tete">
+                    <h2></h2>
+                </div>
                 <table id="table_inspect_adresse" class="avec_statuts"></table>
             </div>
         </div>
