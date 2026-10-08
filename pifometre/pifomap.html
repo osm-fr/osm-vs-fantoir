@@ -483,21 +483,21 @@
                 })
                 .done(function( data ) {
                         [fantoir,
-                         date_creation,
-                         annule,
-                         nom_topo,
-                         nom_osm,
-                         nom_ban,
-                         source_nom_ban,
-                         nom_ancienne_commune,
-                         lon_voie,
-                         lat_voie,
-                         statut_voie,
-                         numeros_a_proposer,
-                         caractere_annul,
-                         categorie,
-                         avec_adresses_ban,
-                         schema_point_uniquement] = data[0]
+                        date_creation,
+                        annule,
+                        nom_topo,
+                        nom_osm,
+                        nom_ban,
+                        source_nom_ban,
+                        nom_ancienne_commune,
+                        lon_voie,
+                        lat_voie,
+                        statut_voie,
+                        numeros_a_proposer,
+                        caractere_annul,
+                        categorie,
+                        avec_adresses_ban,
+                        schema_point_uniquement] = data[0]
 
                         let [is_voie,
                         is_place,
@@ -526,19 +526,22 @@
                         //Liens d'édition
                         ajout_liens_d_edition(lon,lat,couche_carto,numeros_a_proposer,avec_adresses_ban)
                 
-                    //Changer le nom de l'onglet Numéros
-                    if (is_place) {
-                        $('.voie_ou_ld').text('ce lieu-dit');
-                    }
-                    else {
-                        $('.voie_ou_ld').text('cette voie');
-                    }
+                        //Changer le nom de l'onglet Numéros
+                        if (is_place) {
+                            $('.voie_ou_ld').text('ce lieu-dit');
+                        }
+                        else {
+                            $('.voie_ou_ld').text('cette voie');
+                        }
+                        //Rendre cliquable l'onglet Numéros si c'est un lieu à vrai Fantoir
+                        // charger le détail des numéros (sans l'afficher)
+                        if (has_vrai_code_fantoir && avec_adresses_ban){
+                            $('#onglet_numeros').removeClass('desactive');
+                            panneau_qualif_numero(code_insee,fantoir);
+                        }
+
                 })
 
-                //Rendre cliquable l'onglet Numéros si c'est un lieu à vrai Fantoir
-                if (has_vrai_code_fantoir && avec_adresses_ban){
-                    $('#onglet_numeros').removeClass('desactive');
-                }
             });
         }
     }
@@ -1268,6 +1271,8 @@
                                 map.getSource('qualif_numero_OSM_seul').setData(qualif_numero_OSM_seul)
                                 map.getSource('qualif_numero_surbrillance').setData(qualif_numero_surbrillance)
 
+                                toggle_affichage_numeros('vue_generale')
+
                                 $('#'+table).trigger("resetToLoadState");
 
                                 //Sticky headers : le tableau scrolle dans son contenant
@@ -1280,7 +1285,7 @@
                                     },
                                     sortList: [[0,0]]
                                 });
-                                map.fitBounds([min_lon,min_lat,max_lon,max_lat])
+                                // map.fitBounds([min_lon,min_lat,max_lon,max_lat])
                             })
     }
 
@@ -1453,9 +1458,9 @@
             prepare_index();
 
             fantoir = check_url_for_fantoir()
-            if (fantoir){
-                panneau_qualif_numero(code_insee,fantoir)
-            }
+            // if (fantoir){
+            //     panneau_qualif_numero(code_insee,fantoir)
+            // }
 
             $('body').css('cursor','default');
             $('#wait_ajax').css('visibility','hidden');
@@ -1878,6 +1883,7 @@
         $('.panneau_map hr').css('display','revert');
         $('#onglet_numeros').removeClass('actif')
         $('#conteneur_numeros').css('display','none');
+        toggle_affichage_numeros('vue_generale');
     }
     function active_numeros(){
         $('.panneau_map.droite').addClass('large');
@@ -1887,7 +1893,7 @@
         $('#onglet_infos').removeClass('actif')
         $('#conteneur_infos').css('display','none');
         toggle_affichage_numeros('qualif_numeros');
-        panneau_qualif_numero(code_insee,fantoir);
+        // panneau_qualif_numero(code_insee,fantoir);
 
         // for (t of ["Adresses","Adresses BAN"]) {
         //     layers = TOC_HIERARCHIE.get(t)[0]
@@ -1915,6 +1921,14 @@
                 }
             }
         }
+        // Couches qualif numeros
+        for (q of GEOJSON_QUALIF_NUMERO_SOURCES){
+            if (cible == 'qualif_numeros'){
+                map.setLayoutProperty(q,'visibility','visible')
+            } else {
+                map.setLayoutProperty(q,'visibility','none')
+            }
+        }
     }
 
     function empty_layers(){
@@ -1926,6 +1940,8 @@
         //Gauche
         //Droite
         $('.panneau_map hr').css('display','none');
+        $('.panneau_map.droite').removeClass('large');
+        $('#map_div').removeClass('etroit')
         //Droite - Infos
         $('#onglet_infos').addClass('desactive').removeClass('actif');
         $('#conteneur_infos').css('display','none');
