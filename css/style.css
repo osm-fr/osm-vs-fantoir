@@ -418,9 +418,9 @@ fieldset legend {
     position: fixed;
     top: 30px;
     width: 100%;
-    height: 24px;
+    height: 30px;
+    padding: 0 10px;
     box-sizing: initial;
-    padding: 6px 10px;
     background-color: #faff99;
     font-size: 0.9em;
     font-weight: bold;
@@ -430,10 +430,11 @@ fieldset legend {
 #barre-jaune span { /* "Commune : " */
 	float: left;
     margin-top: 2px;
+    line-height: 22px;
 }
 #champ_recherche {
 	float: left;
-	margin: 0 10px;
+	margin: 2px 10px;
 	height:24px;
 	background: white;
 	border:1px solid #777;
@@ -494,6 +495,7 @@ fieldset legend {
 	background-size: 24px;
 	width: 24px;
 	height: 24px;
+	margin: 2px 0;
 	border: 1px #64A02E solid; /*vert foncé*/
 	border-radius: 5px;
 }
@@ -729,7 +731,6 @@ fieldset legend {
 	border-bottom: 4px #3FA4C5 solid;
 	border-radius: 8px;
 }
-
 #wait_ajax.bas {
 	margin: 20px 2% 0 2%;
 }
@@ -739,7 +740,6 @@ fieldset legend {
 	font-weight: bold;
 	color:black;
 }
-
 #wait_ajax_mobile {
 	display: none;
 }
@@ -762,9 +762,8 @@ fieldset legend {
 	border-bottom: 2px #3FA4C5 solid;
 	border-radius: 6px;
 }
-
 #wait_ajax.pifomap {
-	right: 725px;
+	right: 800px;
 }
 
 #wait_ajax.pifometre span, #wait_ajax.pifomap span {
@@ -962,136 +961,6 @@ fieldset legend {
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
 
-/*------------------------------------------------------------------*/
-/*---------------       BLOCS PIFOSTATS COMMUNE      ---------------*/
-/*------------------------------------------------------------------*/
-
-#pifostats {
-	position:fixed;
-	width:40%;
-	height: 110px;
-	top:140px;
-	right:1%;
-	padding: 5px;
-	border:1px solid wheat;
-	border-bottom: 3px sienna solid;
-	border-radius: 8px;
-	line-height: 40px;
-	visibility: hidden;
-}
-#pifostats.pifometre, #pifostats.pifomap {
-	top: 70px;
-	height: 90px;
-	line-height: 35px;
-}
-
-#pifostats h3 {
-	text-align: left;
-	font-size: 0.8em;
-	line-height: 0.8em;
-	margin: 0.3em 5px;
-}
-
-#pifostats span {
-	font-size: 0.8em;
-}
-#pifostats.pifomap span {
-	font-size: 0.75em;
-}
-
-.barre_noms, .barre_noms_avec_adresses, .barre_adresses {
-	float: left;
-	margin: 6px 5px;
-	width: calc(100% - 10px);
-}
-
-.barre_noms_texte, .barre_noms_avec_adresses_texte, .barre_adresses_texte {
-	float: left;
-	width: 55%;
-	color: #444;
-	font-size: 0.75em;
-	line-height: 1em;
-}
-
-.barre_noms_tous, .barre_noms_avec_adresses_tous, .barre_adresses_tous { /*Barre orange du total, en fond*/
-	float: left;
-	width: 40%;
-	height: 8px;
-	background-color: #FFCC55; /* orange */
-	border-radius: 2px;
-}
-
-.barre_noms_osm, .barre_noms_avec_adresses_osm, .barre_adresses_osm { /*Barre verte du nombre calculé, par-dessus*/
-	position: relative;
-	top: 0px;
-	left: 0;
-	height: 8px;
-	width: 0%;
-	background-color: #00EAAA; /* vert */
-	border-radius: 4px;
-}
-
-.picto_france {
-	float: left;
-	display: inline-block;
-	width: 25px;
-	margin-top: -10px;
-	margin-left: 5px;
-}
-
-/*-------------------------------------*/
-/*--------    Sur Pifodrome    --------*/
-/*-------------------------------------*/
-#pifostats.pifodrome {
-	width:30%;
-	min-width: 300px;
-	top:90px;
-	height: 80px;
-}
-#pifostats.pifodrome span {
-	font-weight: bold;
-	font-size: unset;
-}
-#pifofiltres.pifodrome h3 {
-	font-size: 1em;
-	margin: 0.5em 0 5px 7px;
-}
-#pifostats p {
-	margin: 0.5em 0 0 10px;
-	font-size: 0.8em;
-	line-height: 1.1em;
-}
-
-/* Picto cheval pour qualifier avancement global */
-#stats_contenu.bien {
-	background: url("../img/cheval_endroit.png") no-repeat top 0 right 10px;
-}
-#stats_contenu.nul {
-	background: url("../img/cheval_envers.png") no-repeat top 0 right 10px;
-}
-#stats_contenu.stagne {
-	background: url("../img/cheval_arret.png") no-repeat top 0 right 10px;
-}
-#stats_contenu.bien, #stats_contenu.nul, #stats_contenu.stagne {
-	padding-right: 50px;
-	background-size: 50px;
-}
-/* Courbes qui montent et descendent pour avancement jour et semaine */
-#stats_contenu .baisse {
-	background: url("../img/ca_descend.png") no-repeat top 0 left 0;
-}
-#stats_contenu .monte {
-	background: url("../img/ca_monte.png") no-repeat top 0 left 0;
-}
-#stats_contenu .stagne {
-	background: url("../img/ca_stagne.png") no-repeat top 0 left 0;
-}
-#stats_contenu .monte, #stats_contenu .baisse, #stats_contenu .stagne {
-	padding-left: 30px;
-	vertical-align: middle;
-	height: 18px;
-	background-size: 25px;
-}
 
 /*------------------------------------------------------------------*/
 /*---------------          ALERTE TELECO JOSM        ---------------*/
@@ -1209,6 +1078,198 @@ fieldset legend {
 	cursor:pointer;
 }
 
+/*-----------------------------------------------------------------------*/
+/*------------- BLOCS STATS, PROGRESSION, FILTRES PIFODROME -------------*/
+/*-----------------------------------------------------------------------*/
+
+#pifostats, #pifoprogression, #pifofiltres {
+	position:fixed;
+	width:650px;
+	height:90px;
+	top:70px;
+	right:10px;
+	padding: 5px;
+	background-color: white;
+	border:1px solid wheat;
+	border-bottom: 3px sienna solid;
+	border-radius: 8px;
+	background: white;
+	z-index: 3;
+	visibility: hidden;
+}
+#pifofiltres h3, #pifoprogression h3 {
+	text-align: left;
+	margin: 0 0 5px 7px;
+}
+
+/*------------------------------------------*/
+/*------  STATS sur PIFOMETRE et MAP  ------*/
+/*------------------------------------------*/
+
+#pifostats.pifometre, #pifostats.pifomap {
+	top: 70px;
+	height: 90px;
+	line-height: 35px;
+}
+
+#pifostats h3 {
+	text-align: left;
+	font-size: 0.8em;
+	line-height: 0.8em;
+	margin: 0.3em 5px;
+}
+
+#pifostats span {
+	font-size: 0.8em;
+}
+#pifostats.pifomap span {
+	font-size: 0.75em;
+}
+
+.barre_noms, .barre_noms_avec_adresses, .barre_adresses {
+	float: left;
+	margin: 6px 5px;
+	width: calc(100% - 10px);
+}
+
+.barre_noms_texte, .barre_noms_avec_adresses_texte, .barre_adresses_texte {
+	float: left;
+	width: 55%;
+	color: #444;
+	font-size: 0.75em;
+	line-height: 1em;
+}
+
+.barre_noms_tous, .barre_noms_avec_adresses_tous, .barre_adresses_tous { /*Barre orange du total, en fond*/
+	float: left;
+	width: 40%;
+	height: 8px;
+	background-color: #FFCC55; /* orange */
+	border-radius: 2px;
+}
+
+.barre_noms_osm, .barre_noms_avec_adresses_osm, .barre_adresses_osm { /*Barre verte du nombre calculé, par-dessus*/
+	position: relative;
+	top: 0px;
+	left: 0;
+	height: 8px;
+	width: 0%;
+	background-color: #00EAAA; /* vert */
+	border-radius: 4px;
+}
+
+.picto_france {
+	float: left;
+	display: inline-block;
+	width: 25px;
+	margin-top: -10px;
+	margin-left: 5px;
+}
+
+/*---------------------------------------*/
+/*--------  STATS sur PIFODROME  --------*/
+/*---------------------------------------*/
+
+#pifostats.pifodrome span {
+	font-weight: bold;
+	font-size: unset;
+}
+#pifofiltres.pifodrome h3 {
+	font-size: 1em;
+	margin: 0.5em 0 5px 7px;
+}
+#pifostats p {
+	margin: 0.5em 0 0 10px;
+	font-size: 0.8em;
+	line-height: 1.1em;
+}
+
+/* Picto cheval pour qualifier avancement global */
+#stats_contenu.bien {
+	background: url("../img/cheval_endroit.png") no-repeat top 0 right 10px;
+}
+#stats_contenu.nul {
+	background: url("../img/cheval_envers.png") no-repeat top 0 right 10px;
+}
+#stats_contenu.stagne {
+	background: url("../img/cheval_arret.png") no-repeat top 0 right 10px;
+}
+#stats_contenu.bien, #stats_contenu.nul, #stats_contenu.stagne {
+	padding-right: 50px;
+	background-size: 50px;
+}
+/* Courbes qui montent et descendent pour avancement jour et semaine */
+#stats_contenu .baisse {
+	background: url("../img/ca_descend.png") no-repeat top 0 left 0;
+}
+#stats_contenu .monte {
+	background: url("../img/ca_monte.png") no-repeat top 0 left 0;
+}
+#stats_contenu .stagne {
+	background: url("../img/ca_stagne.png") no-repeat top 0 left 0;
+}
+#stats_contenu .monte, #stats_contenu .baisse, #stats_contenu .stagne {
+	padding-left: 30px;
+	vertical-align: middle;
+	height: 18px;
+	background-size: 25px;
+}
+
+#pifofiltres span {
+	font-size: 0.8em;
+}
+#pifofiltres.pifomap span, #pifofiltres.pifodrome span {
+	font-size: 0.75em;
+}
+/*-----Spécificités mobile-----*/
+#filtre_lieuxdits_mobile {
+	display: none;
+}
+
+#pifoprogression #france_points {
+	width: 60px;
+}
+#pifoprogression div {
+	float: left;
+}
+#pifoprogression div h3 {
+	text-align: left;
+}
+#pifoprogression div img {
+	margin: 15px 10px 0 10px;
+}
+#pifoprogression p {
+	margin: 0;
+	font-size: 0.75em;
+	line-height: 0.75em;
+}
+#pifoprogression label {
+	line-height: 1.6em;
+}
+
+/*-------------------------------------*/
+/*--------    Sur Pifodrome    --------*/
+/*-------------------------------------*/
+
+#bouton_theme_route_de {
+	cursor: pointer;
+	position: relative;
+	top: 0;
+	right: 10px;
+	background: url("../img/ampoule_off.png") no-repeat center;
+	background-size: 72px;
+	width: 72px;
+	height: 90px;
+	font-weight: bold;
+	color: #333;
+}
+
+#bouton_theme_route_de.actif {
+	background: url("../img/ampoule.png") no-repeat center;
+	background-size: 72px;
+}
+
+
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
 /*---------------                                                       ---------------*/
@@ -1250,12 +1311,12 @@ fieldset legend {
 /*-------------        Onglets - Boutons        -------------*/
 /*-----------------------------------------------------------*/
 
-.pifomap #onglets {
+#onglets {
 	position: fixed;
-	top: 10px;
-	right: 160px;
+	top: 40px;
+	right: 412px;
 	width: 260px;
-	height: 38px;
+	height: 35px;
 }
 .pifomap .actif { /*Boutons et onglets actifs, dont le contenu est affiché à l'écran, marron foncé*/
 	cursor: default !important;
@@ -1280,17 +1341,19 @@ fieldset legend {
 }
 #bouton_pifostats {
 	border-right: 1px solid darkgrey;
-	border-bottom-left-radius: 6px;
 	border-top-left-radius: 6px;
-	background: url("../img/stats2.png") no-repeat wheat right 12px bottom 5px;
-	background-size: 28px;
+	background: url("../img/stats2.png") no-repeat wheat right 12px bottom 6px;
+	background-size: 25px;
+}
+#bouton_pifostats.actif, #bouton_pifofiltres.actif { /*Sur Pifodrome*/
+	cursor: default;
+	background-color: burlywood !important;
 }
 #bouton_pifoprogression {
 	background: lightsalmon;
-	border-bottom-right-radius: 6px;
 	border-top-right-radius: 6px;
-	background: url("../img/france-fil.png") no-repeat wheat right 6px bottom 5px;
-	background-size: 26px;
+	background: url("../img/france-fil.png") no-repeat wheat right 6px bottom 8px;
+	background-size: 22px;
 }
 
 #bouton_pifostats p, #bouton_pifofiltres p, #bouton_pifoprogression p {
@@ -1298,7 +1361,7 @@ fieldset legend {
 	vertical-align:middle;
 	padding-right: 30px;
 	font-size:0.85em;
-	line-height: 0.85em;
+	line-height: 0.4em;
 	font-weight: bold;
 	color:black;
 }
@@ -1306,109 +1369,13 @@ fieldset legend {
 /*-------------------------------------*/
 /*--------    Sur Pifodrome    --------*/
 /*-------------------------------------*/
-#onglets.pifodrome {
-	position: fixed;
-	right: 310px;
-	width: 266px;
-	top: 10px;
-}
-.pifodrome #bouton_pifostats, .pifodrome #bouton_pifofiltres {
-	width: 49%;
-}
+
 .pifodrome #bouton_pifofiltres {
 	border-right: 1px solid darkgrey;
 	border-bottom-right-radius: 6px;
 	border-top-right-radius: 6px;
-	background: url("../img/cheval_jouet.png") no-repeat wheat right 12px bottom 5px;
-	background-size: 28px;
-}
-
-/*-------------------------------------------------------------*/
-/*---------     Bloc Pifofiltre ou Pifoprogression    ---------*/
-/*-------------------------------------------------------------*/
-
-#pifofiltres, #pifoprogression {
-	position:fixed;
-	width:40%;
-	height:90px;
-	top:70px;
-	right:1%;
-	padding: 5px;
-	background-color: white;
-	border:1px solid wheat;
-	border-bottom: 3px sienna solid;
-	border-radius: 8px;
-	line-height:1.5em;
-	visibility: hidden;
-}
-
-#pifofiltres h3, #pifoprogression h3 {
-	text-align: left;
-	margin: 0 0 5px 7px;
-}
-
-#pifofiltres span {
-	font-size: 0.8em;
-}
-#pifofiltres.pifomap span, #pifofiltres.pifodrome span {
-	font-size: 0.75em;
-}
-/*-----Spécificités mobile-----*/
-#filtre_lieuxdits_mobile {
-	display: none;
-}
-
-#pifoprogression #france_points {
-	width: 60px;
-}
-
-#pifoprogression div {
-	float: left;
-}
-
-#pifoprogression div h3 {
-	text-align: left;
-	margin: 6px 0;
-}
-
-#pifoprogression div img {
-	margin: 15px 10px 0 10px;
-}
-
-#pifoprogression p {
-	margin: 0;
-	font-size: 0.75em;
-	line-height: 0.75em;
-}
-#pifoprogression label {
-	line-height: 1.6em;
-}
-
-/*-------------------------------------*/
-/*--------    Sur Pifodrome    --------*/
-/*-------------------------------------*/
-#pifofiltres.pifodrome {
-	width:30%;
-	min-width: 300px;
-	font-size: 0.8em;
-}
-
-#bouton_theme_route_de {
-	cursor: pointer;
-	position: relative;
-	top: 0;
-	right: 10px;
-	background: url("../img/ampoule_off.png") no-repeat center;
-	background-size: 72px;
-	width: 72px;
-	height: 90px;
-	font-weight: bold;
-	color: #333;
-}
-
-#bouton_theme_route_de.actif {
-	background: url("../img/ampoule.png") no-repeat center;
-	background-size: 72px;
+	background: url("../img/cheval_jouet.png") no-repeat wheat right 12px bottom 6px;
+	background-size: 26px;
 }
 
 /*-------------------------------------------------------------------------------------*/
@@ -1602,16 +1569,27 @@ fieldset legend {
 /*------------------------------------------------------*/
 /*------------------ PANNEAUX LATÉRAUX -----------------*/
 /*------------------------------------------------------*/
-
 .panneau_map {
 	transition: width 0.3s ease-out;
 }
 .panneau_map hr {
 	margin: 0 5px;
 }
-.panneau_map .onglets {
-	height: 40px;
-	font-size: 0.9em;
+.panneau_map h3 {
+	clear: both;
+	text-align: left;
+	font-size: 1.1em;
+	line-height: 1.2em;
+}
+.panneau_map h4 {
+	clear: both;
+	text-align: left;
+	font-size: 1em;
+	line-height: 1em;
+	margin: 0.8em 0 0.6em 0;
+}
+.panneau_map ul {
+	padding-left: 1em;
 }
 .panneau_map  p {
 	text-align: center;
@@ -1619,6 +1597,11 @@ fieldset legend {
 	padding-right: 25px;
 	font-weight: bold;
 	margin: 0.1em 0;
+}
+/*-------- Onglets --------*/
+.panneau_map .onglets {
+	height: 40px;
+	font-size: 0.9em;
 }
 .panneau_map #onglet_index.actif, .panneau_map #onglet_filtres.actif, .panneau_map #onglet_numeros.actif, .panneau_map #onglet_infos.actif {
 	cursor: default;
@@ -1633,7 +1616,7 @@ fieldset legend {
 	background-size: 20px;
 	border-bottom: 2px sienna solid;
 }
-/*------------ 3 contenus du panneau -----------*/
+/*-------- Contenu --------*/
 #conteneur_filtres, #conteneur_index, #conteneur_infos, #conteneur_numeros {
 	position: relative;
 	height: 95%;
@@ -1643,7 +1626,6 @@ fieldset legend {
 /*------------------------------------------------------*/
 /*--------------- PANNEAU LATÉRAL GAUCHE ---------------*/
 /*------------------------------------------------------*/
-
 .panneau_map.gauche {
 	float: left;
 	margin:0;
@@ -1657,19 +1639,21 @@ fieldset legend {
 }
 
 /*--------- Onglets ---------*/
-
-.panneau_map.gauche #onglet_filtres {
+#onglet_filtres {
 	background: url("../img/switch.png") no-repeat wheat right 3px bottom 6px;
 	border-right: 1px solid;
 }
-.panneau_map.gauche #onglet_index {
+#onglet_index {
 	background: url("../img/index_simple.png") no-repeat wheat right 5px bottom 4px;
 }
-.panneau_map.droite #onglet_numeros {
-	background-size: 24px;
+#onglet_filtres, #onglet_index {
+	line-height: 2.5em;
 }
 
 /*---------- Filtres de la carte --------*/
+#conteneur_filtres {
+	padding: 5px;
+}
 #conteneur_filtres .famille_filtres {
 	padding: 3px 10px 5px 10px;
 	background-color: #ECF5F9;
@@ -1694,7 +1678,6 @@ fieldset legend {
 	width: auto;
 	display: inline-block;
 }
-
 .switch input {
   position: absolute;
   opacity: 0;
@@ -1842,11 +1825,11 @@ fieldset legend {
 }
 
 /*------ Index voies et lieux-dits ------*/
-#conteneur_index {
-
-}
 #conteneur_index.vide{
 	height: unset;
+}
+#conteneur_index .pastille-verte, #conteneur_index .pastille-orange, #conteneur_index .pastille-bleue {
+  margin: 2px 7px 0 0;
 }
 
 /*------ Infos objets de la carte ------*/
@@ -1882,30 +1865,8 @@ fieldset legend {
 	border-radius: 5px;
 }
 
-.panneau_map h3 {
-	clear: both;
-	text-align: left;
-	font-size: 1.1em;
-	line-height: 1.2em;
-}
-.panneau_map h4 {
-	clear: both;
-	text-align: left;
-	font-size: 1em;
-	line-height: 1em;
-	margin: 0.8em 0 0.6em 0;
-}
-
-.panneau_map ul {
-	padding-left: 1em;
-}
-
 .panneau_map .contenu {
 	font-size: 0.9em;
-}
-
-.panneau_map.gauche .pastille-verte, .panneau_map.gauche .pastille-orange, .panneau_map.gauche .pastille-bleue {
-  margin: 2px 7px 0 0;
 }
 
 /*------------------------------------------------------*/
@@ -1933,11 +1894,17 @@ fieldset legend {
 	border-right: 1px solid;
 	background: url("../img/info.png") no-repeat wheat right 5px bottom 7px;
 }
+.panneau_map #onglet_infos.desactive {
+	background: url("../img/info_gris.png") no-repeat wheat right 5px bottom 7px;
+}
 .panneau_map #onglet_numeros {
 	background: url("../img/plaque_no.png") no-repeat wheat right 9px bottom 10px;
 }
+.panneau_map #onglet_numeros.desactive {
+	background: url("../img/plaque_no_gris.png") no-repeat wheat right 9px bottom 10px;
+}
 .panneau_map #onglet_numeros, .panneau_map #onglet_infos {
-	background-size: 24px;
+	background-size: 22px !important;
 }
 /*--------- Contenu ---------*/
 #infos_numero, #infos_voie_lieudit, #infos_visu_edition {
@@ -2036,13 +2003,12 @@ fieldset legend {
 /*---------------                       BANDEAU                         ---------------*/
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
-
 #bandeau{
 	position:fixed;
 	top:60px;
 	padding-top:0;
 	width:100%;
-	height: 200px;
+	height: 140px;
 }
 #bandeau.haut{
 	top:30px;
@@ -2398,7 +2364,7 @@ span.remontee_ajout_numero {
 }
 #reponse.pifomap, #reponse.voies_a_cheval{
 	margin-top:200px;
-	height:calc(100vh - 200px);
+	height:calc(100vh - 202px);
 }
 #reponse.page_numeros{
 	float: left;
