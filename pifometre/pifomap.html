@@ -162,7 +162,7 @@
             $('#alerte_josm').css('visibility','hidden');
         })
 
-        let [a_menus_labels,STATUS_FANTOIR] = get_labels_statut_fantoir()
+        let [a_menus_labels_voies,STATUS_FANTOIR,a_menus_labels_numeros,labels_statut_numeros] = get_labels_statut()
 
         code_insee = check_url_for_insee()
         if (code_insee){
@@ -448,105 +448,122 @@
                 reset_panneau_map()
                 active_infos();
 
-                ajout_infos_titre(couche_carto)
+                ajout_infos_titre(couche_carto,numero,nom)
 
                 // Adresses rattachées à une voie OSM seule (liste bleue)
                 if (!fantoir){
-                    //Infos sur le numéro
-                    if (numero){
-                        ajout_infos_numero(couche_carto)
-                    }
-
-                    //Infos sur la voie ou le lieu-dit
-                    is_place = nature == 'lieudit'
-                    nom_topo = null
-                    nom_ban = nom
-                    has_vrai_code_fantoir = false
-                    ajout_infos_voie_lieudit(couche_carto)
-
-                    //LIENS DE VISU
-                    ajout_liens_de_visu(lon,lat)
-
-                    // SEPARATEUR
-                    $('#infos_visu_edition').append($('<hr>'));
-
-                    //LIENS D'EDITION
-                    ajout_liens_d_edition(lon,lat,couche_carto,0,false)
-
-                    return 0
+                    infos_sans_fantoir(couche_carto,numero,nature,nom,lon,lat)
+                } else {
+                    code_insee = fantoir.substring(0,5)
+                    infos_avec_fantoir(couche_carto,code_insee,fantoir,false)
                 }
-
-                code_insee = fantoir.substring(0,5)
-
-                $.ajax({
-                    url: "requete_pifometre_voies.py?insee="+code_insee+'&fantoir='+fantoir
-                })
-                .done(function( data ) {
-                        [fantoir,
-                        date_creation,
-                        annule,
-                        nom_topo,
-                        nom_osm,
-                        nom_ban,
-                        source_nom_ban,
-                        nom_ancienne_commune,
-                        lon_voie,
-                        lat_voie,
-                        statut_voie,
-                        numeros_a_proposer,
-                        caractere_annul,
-                        categorie,
-                        avec_adresses_ban,
-                        schema_point_uniquement] = data[0]
-
-                        let [is_voie,
-                        is_place,
-                        is_osm_hors_fantoir,
-                        has_vrai_code_fantoir,
-                        fantoir_affiche,
-                        fantoir_dans_relation] = parse_pifometre(categorie,caractere_annul,fantoir)
-
-                        //Mettre à jour le nom de la rue
-                        if (nom_osm != null){
-                            if (couche_carto.indexOf('BAN_point_transparent') == 0 || couche_carto.indexOf('OSM_point_') == 0) {
-                                $('.panneau_map #conteneur_infos h2').attr('texte_voie_a_copier',nom_osm[0][0]).text(numero+' '+nom_osm[0][0])
-                            } else {
-                                $('.panneau_map #conteneur_infos h2').attr('texte_voie_a_copier',nom_osm[0][0]).text(nom_osm[0][0])
-                            }
-                        }
-
-                        //Infos sur le numéro
-                        ajout_infos_numero(couche_carto)
-                        //Infos sur la voie ou le lieu-dit
-                        ajout_infos_voie_lieudit(couche_carto)
-                        //Liens de visu (org)
-                        ajout_liens_de_visu(lon,lat)
-                        // Séparateur
-                        $('#infos_visu_edition').append($('<hr>'));
-                        //Liens d'édition
-                        ajout_liens_d_edition(lon,lat,couche_carto,numeros_a_proposer,avec_adresses_ban)
-                
-                        //Changer le nom de l'onglet Numéros
-                        if (is_place) {
-                            $('.voie_ou_ld').text('ce lieu-dit');
-                        }
-                        else {
-                            $('.voie_ou_ld').text('cette voie');
-                        }
-                        //Rendre cliquable l'onglet Numéros si c'est un lieu à vrai Fantoir
-                        // charger le détail des numéros (sans l'afficher)
-                        if (has_vrai_code_fantoir && avec_adresses_ban){
-                            $('#onglet_numeros').removeClass('desactive');
-                            panneau_qualif_numero(code_insee,fantoir);
-                        }
-
-                })
-
-            });
+            })
         }
     }
+    function infos_sans_fantoir(couche_carto,numero,nature,nom,lon,lat){
+        //Infos sur le numéro si non vide
+        if (numero){
+            ajout_infos_numero(couche_carto)
+        }
 
-    function ajout_infos_titre(couche_carto){
+        //Infos sur la voie ou le lieu-dit
+        is_place = nature == 'lieudit'
+        nom_topo = null
+        nom_ban = nom
+        has_vrai_code_fantoir = false
+        ajout_infos_voie_lieudit(couche_carto)
+
+        //LIENS DE VISU
+        ajout_liens_de_visu(lon,lat)
+
+        // SEPARATEUR
+        $('#infos_visu_edition').append($('<hr>'));
+
+        //LIENS D'EDITION
+        ajout_liens_d_edition(lon,lat,couche_carto,0,false)
+
+        return 0
+    }
+
+    function infos_avec_fantoir(couche_carto,code_insee,fantoir,premier_affichage){
+        $.ajax({
+            url: "requete_pifometre_voies.py?insee="+code_insee+'&fantoir='+fantoir
+        })
+        .done(function( data ) {
+                [fantoir,
+                date_creation,
+                annule,
+                nom_topo,
+                nom_osm,
+                nom_ban,
+                source_nom_ban,
+                nom_ancienne_commune,
+                lon_voie,
+                lat_voie,
+                statut_voie,
+                numeros_a_proposer,
+                caractere_annul,
+                categorie,
+                avec_adresses_ban,
+                schema_point_uniquement] = data[0]
+
+                let [is_voie,
+                is_place,
+                is_osm_hors_fantoir,
+                has_vrai_code_fantoir,
+                fantoir_affiche,
+                fantoir_dans_relation] = parse_pifometre(categorie,caractere_annul,fantoir)
+
+                if (premier_affichage){
+                    active_infos()
+                    ajout_infos_titre('points_nommes',null,nom_osm ? nom_osm:nom_ban)
+                }
+
+                //Mettre à jour le nom de la rue
+                if (nom_osm != null){
+                    if (couche_carto.indexOf('BAN_point_transparent') == 0 || couche_carto.indexOf('OSM_point_') == 0) {
+                        $('.panneau_map #conteneur_infos h2').attr('texte_voie_a_copier',nom_osm[0][0]).text(numero+' '+nom_osm[0][0])
+                    } else {
+                        $('.panneau_map #conteneur_infos h2').attr('texte_voie_a_copier',nom_osm[0][0]).text(nom_osm[0][0])
+                    }
+                }
+
+                //Infos sur le numéro
+                if (numero){
+                    ajout_infos_numero(couche_carto)
+                }
+                //Infos sur la voie ou le lieu-dit
+                ajout_infos_voie_lieudit(couche_carto)
+                //Liens de visu (org)
+                ajout_liens_de_visu(lon,lat)
+                // Séparateur
+                $('#infos_visu_edition').append($('<hr>'));
+                //Liens d'édition
+                ajout_liens_d_edition(lon,lat,couche_carto,numeros_a_proposer,avec_adresses_ban)
+
+                //Changer le nom de l'onglet Numéros
+                if (is_place) {
+                    $('.voie_ou_ld').text('ce lieu-dit');
+                }
+                else {
+                    $('.voie_ou_ld').text('cette voie');
+                }
+
+                if (premier_affichage){
+                    centrage_sur_nom(fantoir)
+                }
+                //Rendre cliquable l'onglet Numéros si c'est un lieu à vrai Fantoir
+                // charger le détail des numéros (sans l'afficher)
+                if (has_vrai_code_fantoir && avec_adresses_ban){
+                    $('#onglet_numeros').removeClass('desactive');
+                    panneau_qualif_numero(code_insee,fantoir);
+                    $('#onglet_numeros').attr('deja_vu','non');
+                    $('#onglet_numeros').attr('fantoir',fantoir);
+                }
+        })
+    }
+
+    function ajout_infos_titre(couche_carto,numero,nom){
         let [xmin,ymin,xmax,ymax] = emprises.get(nom)
         if (fantoir){
             let [xminf,yminf,xmaxf,ymaxf] = emprises.get(fantoir)
@@ -742,6 +759,7 @@
     }
 
     function centrage_sur_nom(nom){
+        console.log('centrage sur ' + nom)
         let [xmin,ymin,xmax,ymax] = emprises.get(nom)
         if ((xmin == xmax) && (ymin == ymax)){
             map.flyTo({
@@ -1006,7 +1024,7 @@
     }
     function add_statut_numero(id_ligne,numero,statut,insee,fantoir,ban_id){
         $('#'+table+' tr:last').removeClass().addClass('statut'+statut).attr('numero',numero).attr('statut',statut)
-        $('#'+table+' tr:last').append($('<td>').append($(a_menus_labels[statut]).change(function() {
+        $('#'+table+' tr:last').append($('<td>').append($(a_menus_labels_numeros[statut]).change(function() {
             statut = $(this)[0].value;
             $.ajax({
                 url: "statut_numero.py?insee="+insee+"&fantoir="+fantoir+"&statut="+statut+"&numero="+numero+"&source=BAN"
@@ -1042,7 +1060,7 @@
     }
     function refresh_numeros(){
         $('.map_numero').removeClass('anomalie');
-        for (i=1;i<a_menus_labels.length;i++){
+        for (i=1;i<a_menus_labels_numeros.length;i++){
             $('.statut'+i).each(function(){
                 $('.map_numero.ligne'+$(this).attr('id')).addClass('anomalie')
             })
@@ -1053,38 +1071,12 @@
         changesRequested = ''
         // transfert du statut comme commentaire si différent de 'Ok'
         if (current_statut != "0"){
-            json_args = JSON.stringify({"comment":labels_statut[current_statut]})
+            json_args = JSON.stringify({"comment":labels_statut_numeros[current_statut]})
             changesRequested = '&changesRequested='+json_args
         }
         $('#table_inspect_adresse tr#'+num_ligne+' a.remontee_suppr_numero').attr('href','https://signalement.adresse.data.gouv.fr/#/'+ban_id+'?sourceId=e32cd3e1-b19d-4a49-9aee-31a7929a8ead&type=LOCATION_TO_DELETE'+changesRequested)
     }
     function panneau_qualif_numero(code_insee,fantoir){
-        $.ajax({
-            url: "labels_statut_numero.py"
-        })
-        .done(function( data ) {
-            a_menus_labels = []
-            labels_statut = {}
-
-            for (c=0;c<data.length;c++){
-                labels_statut[data[c][0]] = data[c][1]
-            }
-            for (c=0;c<data.length;c++){
-                menu_labels = '<select>'
-                id_label = 0
-                for (i=0;i<data.length;i++){
-                    if (c!=i){
-                        menu_labels+='<option value='+data[i][0]+'>'+data[i][1]+'</option>'
-                    } else {
-                        menu_labels+='<option value='+data[i][0]+' selected>'+data[i][1]+'</option>'
-                        id_label = data[i][0]
-                    }
-                }
-                menu_labels+='</select>'
-                a_menus_labels[id_label] = menu_labels
-            }
-        })
-        //active_numeros()
         table = 'table_inspect_adresse'
         $.ajax({
             url: "requete_inspect_numeros.py?insee="+code_insee+"&fantoir="+fantoir
@@ -1214,7 +1206,7 @@
 
                                     //---COLONNE REMONTÉE DES SIGNALEMENTS---
                                     if (lon_ban != undefined){
-                                        json_args = JSON.stringify({"comment":labels_statut[statut]})
+                                        json_args = JSON.stringify({"comment":labels_statut_numeros[statut]})
                                         $('#'+table+' tr:last').append($('<td class="remontee_ban">')
                                                                     .append($('<a class="remontee_edit_numero" target="_blank" title="Signaler un problème dans la BAN : Numéro à modifier">')
                                                                     .attr('href', 'https://signalement.adresse.data.gouv.fr/#/'+ban_id+'?sourceId=e32cd3e1-b19d-4a49-9aee-31a7929a8ead&type=LOCATION_TO_UPDATE')
@@ -1285,7 +1277,17 @@
                                     },
                                     sortList: [[0,0]]
                                 });
-                                // map.fitBounds([min_lon,min_lat,max_lon,max_lat])
+
+                                // Pour compenser map_div réduite (de 70 à 55%)
+                                // + débord de quelques % dans toutes les dimensions
+                                max_lon = min_lon + (max_lon - min_lon)*(70/55)
+                                buff_lon = (max_lon - min_lon) / 20
+                                buff_lat = (max_lat - min_lat) / 20
+
+                                $('#onglet_numeros').attr('xmin',min_lon - buff_lon)
+                                                    .attr('ymin',min_lat - buff_lat)
+                                                    .attr('xmax',max_lon + buff_lon)
+                                                    .attr('ymax',max_lat + buff_lat);
                             })
     }
 
@@ -1458,9 +1460,10 @@
             prepare_index();
 
             fantoir = check_url_for_fantoir()
-            // if (fantoir){
-            //     panneau_qualif_numero(code_insee,fantoir)
-            // }
+            if (fantoir){
+                reset_panneau_map();
+                infos_avec_fantoir('points_nommes',code_insee,fantoir,true)
+            }
 
             $('body').css('cursor','default');
             $('#wait_ajax').css('visibility','hidden');
@@ -1539,7 +1542,7 @@
             url: "requete_pifometre_commune.py?insee="+$('#input_insee')[0].value
         })
         .done(function(pifodata){
-            let [nom_commune,
+             [nom_commune,
                  lon_commune,
                  lat_commune,
                  communes_voisines,
@@ -1893,18 +1896,15 @@
         $('#onglet_infos').removeClass('actif')
         $('#conteneur_infos').css('display','none');
         toggle_affichage_numeros('qualif_numeros');
-        // panneau_qualif_numero(code_insee,fantoir);
+        if ($('#onglet_numeros').attr('deja_vu') == 'non'){
+            map.fitBounds([$('#onglet_numeros').attr('xmin'),
+                           $('#onglet_numeros').attr('ymin'),
+                           $('#onglet_numeros').attr('xmax'),
+                           $('#onglet_numeros').attr('ymax')])
+            $('#onglet_numeros').attr('deja_vu','oui')
+        }
 
-        // for (t of ["Adresses","Adresses BAN"]) {
-        //     layers = TOC_HIERARCHIE.get(t)[0]
-        //     for (l=0;l<layers.length;l++){
-        //         layer = TOC_GROUPES.get(layers[l])
-        //         for (c of layer[1]){
-        //             map.setLayoutProperty(c,'visibility','none')
-        //             console.log("masque "+c)
-        //         }
-        //     }
-        // }
+
     }
     function toggle_affichage_numeros(cible){
         for (t of ["Adresses","Adresses BAN"]) {
@@ -1956,20 +1956,11 @@
         $('#onglet_numeros').addClass('desactive').removeClass('actif');
         $('#conteneur_numeros #table_inspect_adresse').trigger("destroy");
         $('#conteneur_numeros #table_inspect_adresse').empty();
-        console.log('empty. Fantoir = '+fantoir);
         $('#conteneur_numeros').css('display','none');
 
         // si retour depuis l'affichage de qualif des numeros
         toggle_affichage_numeros('vue_generale')
 
-        // for (t of ["Adresses","Adresses BAN"]) {
-        //     layers = TOC_HIERARCHIE.get(t)[0]
-        //     for (l=0;l<layers.length;l++){
-        //         layer = TOC_GROUPES.get(layers[l])
-        //         // console.log(layers[l])
-        //         update_TOC_group(layers[l])
-        //     }
-        // }
         for (const s of GEOJSON_QUALIF_NUMERO_SOURCES){
             map.getSource(s).setData(EMPTY_GEOJSON)
         }

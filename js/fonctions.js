@@ -84,7 +84,7 @@
             if (pattern_fantoir.test(sp.get('fantoir'))){
                 return sp.get('fantoir')
             }
-            return (sp.get('fantoir')+ 'n\'est pas un code FANTOIR valide\n\nAbandon')
+            // return (sp.get('fantoir')+ 'n\'est pas un code FANTOIR valide\n\nAbandon')
         }
         return res
     }
@@ -297,6 +297,54 @@
             }
         })
         return [a_menus_labels,STATUS_FANTOIR]
+    }
+    function get_labels_statut(){
+        STATUS_FANTOIR = []
+        a_menus_labels_voies = []
+        a_menus_labels_numeros = []
+        labels_statut_numeros = {}
+        $.ajax({
+            url: "labels_statut.py",
+            async: false
+        })
+        .done(function( data ) {
+            [data_voies,data_numeros] = data;
+            for (c=0;c<data_voies.length;c++){
+                menu_labels = '<select>'
+                id_label = 0
+                for (i=0;i<data_voies.length;i++){
+                    if (c!=i){
+                        menu_labels+='<option value='+data_voies[i][0]+'>'+data_voies[i][1]+'</option>'
+                    } else {
+                        menu_labels+='<option value='+data_voies[i][0]+' selected>'+data_voies[i][1]+'</option>'
+                        id_label = data_voies[i][0]
+                    }
+                }
+                STATUS_FANTOIR.push('statut'+c)
+                menu_labels+='</select>'
+                a_menus_labels_voies[id_label] = menu_labels
+            }
+
+            for (c=0;c<data_numeros.length;c++){
+                labels_statut_numeros[data_numeros[c][0]] = data_numeros[c][1]
+            }
+            for (c=0;c<data_numeros.length;c++){
+                menu_labels = '<select>'
+                id_label = 0
+                for (i=0;i<data_numeros.length;i++){
+                    if (c!=i){
+                        menu_labels+='<option value='+data_numeros[i][0]+'>'+data_numeros[i][1]+'</option>'
+                    } else {
+                        menu_labels+='<option value='+data_numeros[i][0]+' selected>'+data_numeros[i][1]+'</option>'
+                        id_label = data_numeros[i][0]
+                    }
+                }
+                menu_labels+='</select>'
+                a_menus_labels_numeros[id_label] = menu_labels
+            }
+
+        })
+        return [a_menus_labels_voies,STATUS_FANTOIR,a_menus_labels_numeros,labels_statut_numeros]
     }
     function add_statut_fantoir(table,id_ligne,fantoir,id_statut){
         $('#'+table+' tr:last').removeClass(STATUS_FANTOIR).addClass('statut'+id_statut)
