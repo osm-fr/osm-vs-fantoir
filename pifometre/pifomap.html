@@ -516,7 +516,7 @@
 
                 if (premier_affichage){
                     active_infos()
-                    ajout_infos_titre('points_nommes',null,nom_osm ? nom_osm:nom_ban)
+                    ajout_infos_titre('points_nommes',null,nom_osm ? nom_osm[0][0]:nom_ban)
                 }
 
                 //Mettre à jour le nom de la rue
@@ -557,7 +557,13 @@
                 if (has_vrai_code_fantoir && avec_adresses_ban){
                     $('#onglet_numeros').removeClass('desactive');
                     panneau_qualif_numero(code_insee,fantoir);
-                    $('#onglet_numeros').attr('deja_vu','non');
+                    if (check_url_for_qualif_numeros()){
+                        $('#onglet_numeros').attr('deja_vu','oui');
+                        active_numeros()
+                    } else {
+                        toggle_affichage_numeros('vue_generale')
+                        $('#onglet_numeros').attr('deja_vu','non');
+                    }
                     $('#onglet_numeros').attr('fantoir',fantoir);
                 }
         })
@@ -759,7 +765,6 @@
     }
 
     function centrage_sur_nom(nom){
-        console.log('centrage sur ' + nom)
         let [xmin,ymin,xmax,ymax] = emprises.get(nom)
         if ((xmin == xmax) && (ymin == ymax)){
             map.flyTo({
@@ -1109,7 +1114,6 @@
                                     $('#liens_voie').append($('<span>').addClass('adresses-integrees').text('✔'))
                                                         .append($('<span>').text(' Adresses intégrées'))
                                 }
-                                console.log('création table. Fantoir = '+fantoir);
                                 $('#'+table).empty() .append($('<thead>')
                                                                         .append($('<tr>')
                                                                             .append($('<th id="colonne_numeros">').append('Numéro'))
@@ -1263,7 +1267,7 @@
                                 map.getSource('qualif_numero_OSM_seul').setData(qualif_numero_OSM_seul)
                                 map.getSource('qualif_numero_surbrillance').setData(qualif_numero_surbrillance)
 
-                                toggle_affichage_numeros('vue_generale')
+                                // toggle_affichage_numeros('vue_generale')
 
                                 $('#'+table).trigger("resetToLoadState");
 
@@ -1826,6 +1830,7 @@
         })
 
         update_search('insee',$('#input_insee')[0].value)
+        remove_fake_fantoir_from_url()
         $('body').css('cursor','default');
     };
     function update_csv_url(){

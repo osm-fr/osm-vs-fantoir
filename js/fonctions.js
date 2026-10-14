@@ -88,6 +88,13 @@
         }
         return res
     }
+    function check_url_for_qualif_numeros(){
+        sp = new URLSearchParams(window.location.search)
+        if (sp.get('onglet_qualif')){
+            return true
+        }
+        return false
+    }
     function check_url_for_xyz(){
         if (window.location.hash){
             if (window.location.hash.includes('map=')){
@@ -219,7 +226,8 @@
     }
     function add_addr_inspector_link(table,code_insee,fantoir,source){
         $('#'+table+' tr:last').append($('<td>').addClass('zone-clic-adresses')
-                                        .append($('<a>').attr('href',"numeros.html?insee="+code_insee+'&fantoir='+fantoir+'&source='+source+'&tab=0').attr('target',"blank")
+                                        // .append($('<a>').attr('href',"numeros.html?insee="+code_insee+'&fantoir='+fantoir+'&source='+source+'&tab=0').attr('target',"blank")
+                                        .append($('<a>').attr('href',"pifomap.html?insee="+code_insee+'&fantoir='+fantoir+'&onglet_qualif=yes').attr('target',"blank")
                                         .text('Qualifier')
                                         )
                                         .on('mouseup', function(){
@@ -722,7 +730,9 @@
         }
         history.replaceState("", "", window.location.pathname+before_key+key+'='+value+after_key_str+window.location.hash)
     }
-
+    function remove_fake_fantoir_from_url(){
+        sp = new URLSearchParams(window.location.search)
+    }
     function affiche_ratio_numeros(){
         map.setLayoutProperty('point_de_communes','visibility','visible')
         map.setPaintProperty('point_de_communes','circle-color',["interpolate",["linear"],["/", ["*",["get", "nb_adresses_osm"],100],["get", "nb_adresses_ban"]],0,"red",25,"orange",50,"yellow",75,"green"])
