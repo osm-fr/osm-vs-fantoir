@@ -80,20 +80,23 @@
         var res
         pattern_fantoir = new RegExp('^[0-9][0-9abAB][0-9]{3}[0-9|a-z|A-Z]{4}$')
         sp = new URLSearchParams(window.location.search)
-        if (sp.get('fantoir')){
+        if (sp.has('fantoir')){
             if (pattern_fantoir.test(sp.get('fantoir'))){
                 return sp.get('fantoir')
             }
-            // return (sp.get('fantoir')+ 'n\'est pas un code FANTOIR valide\n\nAbandon')
         }
         return res
     }
     function check_url_for_qualif_numeros(){
         sp = new URLSearchParams(window.location.search)
-        if (sp.get('onglet_qualif')){
-            return true
-        }
-        return false
+        return sp.has('onglet_qualif')
+    }
+    function is_pseudo_fantoir(fantoir){
+        return fantoir.charAt(5)+fantoir.charAt(8) == 'bz'
+    }
+    function is_valid_fantoir(fantoir){
+        pattern_fantoir = new RegExp('^[0-9][0-9abAB][0-9]{3}[0-9|a-z|A-Z]{4}$')
+        return pattern_fantoir.test(fantoir)
     }
     function check_url_for_xyz(){
         if (window.location.hash){
@@ -730,8 +733,31 @@
         }
         history.replaceState("", "", window.location.pathname+before_key+key+'='+value+after_key_str+window.location.hash)
     }
+    function update_url_remove_search_param(param){
+        sp = new URLSearchParams(window.location.search)
+        sp.delete(param)
+        history.replaceState("", "", window.location.pathname+'?'+sp.toString()+window.location.hash)
+    }
+    function update_url_add_search_param(param,value){
+        sp = new URLSearchParams(window.location.search)
+        sp.set(param,value)
+        history.replaceState("", "", window.location.pathname+'?'+sp.toString()+window.location.hash)
+    }
+    function update_url_with_fantoir(fantoir){
+        sp = new URLSearchParams(window.location.search)
+        if (!is_pseudo_fantoir(fantoir)){
+            sp.set('fantoir',fantoir)
+            history.replaceState("", "", window.location.pathname+'?'+sp.toString()+window.location.hash)
+        }
+    }
     function remove_fake_fantoir_from_url(){
         sp = new URLSearchParams(window.location.search)
+        if (sp.has('fantoir')){
+            if (is_pseudo_fantoir(sp.get('fantoir'))){
+                sp.delete('fantoir')
+                history.replaceState("", "", window.location.pathname+'?'+sp.toString()+window.location.hash)
+            }
+        }
     }
     function affiche_ratio_numeros(){
         map.setLayoutProperty('point_de_communes','visibility','visible')

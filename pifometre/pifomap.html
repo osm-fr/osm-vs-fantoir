@@ -327,6 +327,8 @@
                 if (typeof e.features == 'undefined'){
                     reset_panneau_map();
                     $('#instructions').css('display','block');
+                    update_url_remove_search_param('fantoir')
+                    update_url_remove_search_param('onglet_qualif')
                 }
             })
         }
@@ -446,7 +448,7 @@
                 lat = e.lngLat.lat
 
                 reset_panneau_map()
-                active_infos();
+                active_infos(fantoir);
 
                 ajout_infos_titre(couche_carto,numero,nom)
 
@@ -515,7 +517,7 @@
                 fantoir_dans_relation] = parse_pifometre(categorie,caractere_annul,fantoir)
 
                 if (premier_affichage){
-                    active_infos()
+                    active_infos(fantoir)
                     ajout_infos_titre('points_nommes',null,nom_osm ? nom_osm[0][0]:nom_ban)
                 }
 
@@ -1693,7 +1695,10 @@
             })
             //Panneau droite
             $('#onglet_infos').click(function(){
-                if (!$(this).hasClass('desactive') && !$(this).hasClass('actif')) { active_infos(); }
+                if (!$(this).hasClass('desactive') && !$(this).hasClass('actif')) {
+                    active_infos($(this).attr('fantoir'));
+                    update_url_remove_search_param('onglet_qualif')
+                }
             })
 
             $('#onglet_numeros').click(function(){
@@ -1830,7 +1835,6 @@
         })
 
         update_search('insee',$('#input_insee')[0].value)
-        remove_fake_fantoir_from_url()
         $('body').css('cursor','default');
     };
     function update_csv_url(){
@@ -1883,15 +1887,22 @@
         $('#onglet_index').removeClass('actif');
         $('#conteneur_index').css('display','none');
     }
-    function active_infos(){
+    function active_infos(fantoir){
         $('.panneau_map.droite').removeClass('large');
         $('#map_div').removeClass('etroit');
         $('#onglet_infos').removeClass('desactive').addClass('actif');
+        $('#onglet_infos').attr('fantoir',fantoir);
         $('#conteneur_infos').css('display','block');
         $('.panneau_map hr').css('display','revert');
         $('#onglet_numeros').removeClass('actif')
         $('#conteneur_numeros').css('display','none');
         toggle_affichage_numeros('vue_generale');
+        remove_fake_fantoir_from_url() // pour l'arrivée sur l'onglet depuis Pifometre
+        if (is_valid_fantoir(fantoir) && !is_pseudo_fantoir(fantoir)){
+            update_url_add_search_param('fantoir',fantoir)
+        } else {
+            update_url_remove_search_param('fantoir')
+        }
     }
     function active_numeros(){
         $('.panneau_map.droite').addClass('large');
@@ -1908,8 +1919,7 @@
                            $('#onglet_numeros').attr('ymax')])
             $('#onglet_numeros').attr('deja_vu','oui')
         }
-
-
+        update_url_add_search_param('onglet_qualif','yes')
     }
     function toggle_affichage_numeros(cible){
         for (t of ["Adresses","Adresses BAN"]) {
@@ -1948,7 +1958,7 @@
         $('.panneau_map.droite').removeClass('large');
         $('#map_div').removeClass('etroit')
         //Droite - Infos
-        $('#onglet_infos').addClass('desactive').removeClass('actif');
+        $('#onglet_infos').addClass('desactive').removeClass('actif').removeAttr('fantoir');
         $('#conteneur_infos').css('display','none');
         $('.panneau_map #conteneur_infos h2').empty();
         $('.panneau_map #boutons').empty();
