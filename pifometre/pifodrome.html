@@ -114,23 +114,23 @@
         update_menu_visits()
 
         //Initialiser les onglets
-        $('#bouton_pifostats').addClass('onglet_actif');
+        $('#bouton_pifostats').addClass('actif');
         $('#pifostats').css('visibility','visible');
         $('#pifofiltres').css('visibility','hidden');
 
         //Changement d'onglet
         $('#bouton_pifofiltres').click(function(){
-            if (!$(this).hasClass('onglet_actif')) { 
-                $(this).addClass('onglet_actif')
-                $('#bouton_pifostats').removeClass('onglet_actif');
+            if (!$(this).hasClass('actif')) { 
+                $(this).addClass('actif')
+                $('#bouton_pifostats').removeClass('actif');
                 $('#pifostats').css('visibility','hidden');
                 $('#pifofiltres').css('visibility','visible');              
             }
         })
         $('#bouton_pifostats').click(function(){
-            if (!$(this).hasClass('onglet_actif')) {
-                $(this).addClass('onglet_actif')
-                $('#bouton_pifofiltres').removeClass('onglet_actif');
+            if (!$(this).hasClass('actif')) {
+                $(this).addClass('actif')
+                $('#bouton_pifofiltres').removeClass('actif');
                 $('#pifofiltres').css('visibility','hidden');
                 $('#pifostats').css('visibility','visible');
             }

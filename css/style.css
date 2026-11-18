@@ -1094,7 +1094,6 @@ fieldset legend {
 	border-bottom: 3px sienna solid;
 	border-radius: 8px;
 	background: white;
-	z-index: 3;
 	visibility: hidden;
 }
 #pifofiltres h3, #pifoprogression h3 {
@@ -1851,18 +1850,24 @@ fieldset legend {
 .panneau_map #boutons button {
 	margin: 0 20px;
 }
-#copier_voie.pifomap, #centrer_voie_lieudit {
+#copier_voie.pifomap, #centrer_voie_lieudit, #cadrer_adresses {
 	margin: 0 3px;
 }
-#centrer_voie_lieudit {
+#centrer_voie_lieudit, #cadrer_adresses {
 	cursor: pointer;
 	vertical-align: middle;
 	width: 25px;
 	height: 25px;
-	background: url("../img/centrer.png") whitesmoke no-repeat center;
-	background-size: 17px;
 	border-bottom: 2px lightgrey solid;
 	border-radius: 5px;
+}
+#centrer_voie_lieudit{
+	background: url("../img/centrer.png") whitesmoke no-repeat center;
+	background-size: 17px;
+}
+#cadrer_adresses {
+	background: url("../img/cadrer_nos.png") whitesmoke no-repeat center;
+	background-size: 17px;
 }
 
 .panneau_map .contenu {

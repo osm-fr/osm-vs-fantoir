@@ -1,9 +1,9 @@
-@media only screen and (max-width: 1700px) {
+@media only screen and (max-width: 1750px) {
     #descriptif, #infos_commune_col2 {margin:0 10px;}
+    #wait_ajax.pifomap {width:15%; right: 700px;}
     #boutons-filtres.pifo {font-size: 0.7em;}
     #boutons-filtres ul {padding: 0;}
     .tablesorter-default {font-size: 0.9em;}
-    .barre_noms_tous, .barre_noms_avec_adresses_tous, .barre_adresses_tous {width:35%;}
     #pifostats.pifodrome h3 {font-size: 0.8em}
     #stats_contenu .monte, #stats_contenu .baisse, #stats_contenu .stagne {padding-left: 30px; background-size: 20px;}
     #pifostats.pifodrome p {font-size: 0.75em;  margin: 0.4em 0 0 10px;}
@@ -24,6 +24,7 @@
     #alerte_commune, #wait_ajax.pifo {
         font-size: 0.9em;
     }
+    #wait_ajax.pifomap {right: 680px;}
     #descriptif h1 {font-size: 1.35em;}
     #infos_commune_col1 {font-size: 0.9em;}
     #infos_commune_col2 {max-width: 340px;}
@@ -49,13 +50,16 @@
 @media only screen and (max-width: 1330px) {
     h1 {font-size: 1.5em;}
     #boutons-filtres.pifo {margin-left: 1%;}
-    #alerte_commune, #wait_ajax.pifo {
+    #alerte_commune, #wait_ajax {
         width: 30%;
         font-size: 0.85em;
         line-height:30px;
     }
+    #wait_ajax.pifomap {right: 620px;}
     .zone-boutons-filtres{width: 75%;}
     #pifofiltres {line-height: 1.1em;}
+    #pifostats, #pifoprogression, #pifofiltres {width: 590px;}
+    #onglets {right: 352px;}
 }
 
 @media only screen and (max-width: 1200px) {
@@ -74,6 +78,9 @@
         width: 92%;
         margin: 2%
     }
+    .panneau_map .onglets {font-size: 0.85em}
+    .panneau_map #onglet_numeros {background-size: 20px !important; background-position: right 5px bottom 9px !important;}
+    .panneau_map p {padding-right: 20px}
 }
 
 @media only screen and (max-width: 1120px) {
@@ -97,6 +104,9 @@
         width: 20px;
         border-radius: 3px;
     }
+    .panneau_map .onglets p {visibility: hidden;}
+    .panneau_map #onglet_infos {background-size: 22px !important; background-position: right 25px bottom 8px !important;}
+    .panneau_map #onglet_numeros {background-size: 22px !important; background-position: right 30px bottom 10px !important;}
 }
 
 @media only screen and (max-width: 1070px) {
