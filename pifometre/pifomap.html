@@ -639,6 +639,12 @@
                 map.fitBounds([xmin,ymin,xmax,ymax])
             }
         })
+
+        //Bouton Cadrer sur les adresses de la rue / du lieu-dit
+        $('.panneau_map.droite #conteneur_infos .en_tete #boutons').append($('<button id="cadrer_adresses" title="Cadrer la carte sur les adresses de ce lieu"></button>'))
+
+        $('#cadrer_adresses').click(function(){
+        })
     }
 
     function affiche_filtres(){
@@ -2144,7 +2150,7 @@
         <!------------------------ PAN DROITE ------------------------>
         <div class="panneau_map droite">
             <div class="onglets">
-                <div id="onglet_infos" class="desactive"><p>Infos<br/>de l'objet cliqué</p></div>
+                <div id="onglet_infos" class="desactive"><p>Infos<br/>de l'objet</p></div>
                 <div id="onglet_numeros" class="desactive"><p>Adresses<br/>de <span class="voie_ou_ld">ce lieu</span></p></div>
             </div>
             <h3 id="instructions">Aucun objet sélectionné sur la carte. Cliquez sur une voie, un point d'adresse...</h3>
