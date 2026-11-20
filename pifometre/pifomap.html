@@ -640,11 +640,33 @@
             }
         })
 
-        //Bouton Cadrer sur les adresses de la rue / du lieu-dit
-        $('.panneau_map.droite #conteneur_infos .en_tete #boutons').append($('<button id="cadrer_adresses" title="Cadrer la carte sur les adresses de ce lieu"></button>'))
+        //Bouton Cadrer sur les adresses de la rue / du lieu-dit si on a des adresses
+        if (emprises_numeros.has(nom)){
+            $('.panneau_map.droite #conteneur_infos .en_tete #boutons').append($('<button id="cadrer_adresses" title="Cadrer la carte sur les adresses de ce lieu"></button>'))
+            let [xmin,ymin,xmax,ymax] = emprises_numeros.get(nom)
+            buff_lon = (xmax - xmin) / 20
+            buff_lat = (ymax - ymin) / 20
 
-        $('#cadrer_adresses').click(function(){
-        })
+            $('#cadrer_adresses').attr('xmin',xmin - buff_lon)
+                                .attr('ymin',ymin - buff_lat)
+                                .attr('xmax',xmax + buff_lon)
+                                .attr('ymax',ymax + buff_lat);
+
+            $('#cadrer_adresses').click(function(){
+                xmin = $('#cadrer_adresses').attr('xmin')
+                xmax = $('#cadrer_adresses').attr('xmax')
+                ymin = $('#cadrer_adresses').attr('ymin')
+                ymax = $('#cadrer_adresses').attr('ymax')
+
+                if ((xmin == xmax) && (ymin == ymax)){
+                    map.flyTo({
+                        center:[xmin,ymin],
+                        zoom:17});
+                } else {
+                    map.fitBounds([xmin,ymin,xmax,ymax])
+                }
+            })
+        }
     }
 
     function affiche_filtres(){
@@ -1290,9 +1312,11 @@
                                     sortList: [[0,0]]
                                 });
 
+
                                 // Pour compenser map_div réduite (de 70 à 55%)
                                 // + débord de quelques % dans toutes les dimensions
                                 max_lon = min_lon + (max_lon - min_lon)*(70/55)
+
                                 buff_lon = (max_lon - min_lon) / 20
                                 buff_lat = (max_lat - min_lat) / 20
 
@@ -1321,9 +1345,11 @@
                 polydata,
                 point_numero_data,
                 point_nomme_data,
-                raw_emprises] = data
+                raw_emprises,
+                addr_emprises] = data
 
             emprises = new Map(Object.entries(raw_emprises));
+            emprises_numeros = new Map(Object.entries(addr_emprises));
             contenu_index = new Map()
 
             res = JSON.parse(JSON.stringify(EMPTY_GEOJSON))

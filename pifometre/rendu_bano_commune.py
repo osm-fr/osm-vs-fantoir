@@ -7,7 +7,6 @@ import os.path
 import sys
 import json
 
-# import db
 from sql import sql_get_data
 
 def combine_emprises(emprise,x,y,xmax = False, ymax = False):
@@ -16,11 +15,17 @@ def combine_emprises(emprise,x,y,xmax = False, ymax = False):
     else:
         return [min(emprise[0],x),min(emprise[1],y),max(emprise[2],xmax),max(emprise[3],ymax)]
 
+def lower_precision(emprises):
+    for e in emprises:
+        emprises[e] = [round(emprises[e][0],5),round(emprises[e][1],5),round(emprises[e][2],5),round(emprises[e][3],5)]
+    return emprises
+
 params = cgi.FieldStorage()
 insee = params['insee'].value
 # insee = '50411'
 
 emprises = {}
+emprises_numeros = {}
 
 poly_data = sql_get_data('rendu_bano_polygones',{'code_insee':insee})
 jpoly_data = [[d[0],d[1],d[2],json.loads(d[3])] for d in poly_data]
@@ -37,13 +42,18 @@ for nom,fantoir,num,x,y,statut,*args in point_adresses_data:
     if nom :
         if not nom in emprises:
             emprises[nom] = [x,y,x,y]
+            emprises_numeros[nom] = [x,y,x,y]
         else:
             emprises[nom] = combine_emprises(emprises[nom],x,y)
+            emprises_numeros[nom] = combine_emprises(emprises[nom],x,y)
     if fantoir:
         if not fantoir in emprises:
             emprises[fantoir] = [x,y,x,y]
+            emprises_numeros[fantoir] = [x,y,x,y]
         else:
             emprises[fantoir] = combine_emprises(emprises[nom],x,y)
+            emprises_numeros[fantoir] = combine_emprises(emprises[nom],x,y)
+
 for nom,fantoir,x,y,statut,*args in point_nommes_data:
     if nom :
         if not nom in emprises:
@@ -66,8 +76,9 @@ for nom,fantoir,within,source,jsongeom,xmin,ymin,xmax,ymax in filaire_data:
             emprises[fantoir] = [xmin,ymin,xmax,ymax]
         else:
             emprises[fantoir] = combine_emprises(emprises[nom],xmin,ymin,xmax,ymax)
-for e in emprises:
-    emprises[e] = [round(emprises[e][0],5),round(emprises[e][1],5),round(emprises[e][2],5),round(emprises[e][3],5)]
+
+emprises = lower_precision(emprises)
+emprises_numeros = lower_precision(emprises_numeros)
 
 print("Content-Type: application/json\n")
-print(json.JSONEncoder().encode([jpolycommune_data,jfilaire_data,jpoly_data,point_adresses_data,point_nommes_data,emprises]))
+print(json.JSONEncoder().encode([jpolycommune_data,jfilaire_data,jpoly_data,point_adresses_data,point_nommes_data,emprises,emprises_numeros]))
