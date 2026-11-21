@@ -1622,6 +1622,50 @@ fieldset legend {
 	overflow-y: auto;
 }
 
+#conteneur_numeros .en_tete {
+	display: flex;
+	justify-content:left;
+}
+#conteneur_numeros hr {
+	margin: 5px;
+}
+.legende h2 {
+	margin-bottom: 5px !important;
+}
+.legende p {
+	text-align: left;
+	margin-left: 10px;
+}
+.legende ul {
+	margin: 0 0 5px 0 !important;
+}
+.legende {
+	font-size: 0.9em;
+}
+.legende_adresses_cercle {
+	width: 12px;
+	height: 12px;
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+	border: 3px solid;
+}
+#conteneur_numeros .legende span {
+	display: inline-block;
+}
+.legende_adresses_cercle.rouge {
+	border-color: red;
+}
+.legende_adresses_cercle.orange {
+	width: 8px;
+	height: 8px;
+	border: 5px solid #FFA500;
+}
+.legende_adresses_cercle.vert {
+	border-color: #008000;
+}
+
 /*------------------------------------------------------*/
 /*--------------- PANNEAU LATÉRAL GAUCHE ---------------*/
 /*------------------------------------------------------*/
@@ -2261,7 +2305,7 @@ fieldset legend {
 }
 
 /*---------------------------------------------------------*/
-/*---------- INSEPCTION DES NUMEROS d'ADRESSE -------------*/
+/*---------- INSPECTION DES NUMEROS d'ADRESSE -------------*/
 /*---------------------------------------------------------*/
 #table_inspect_adresse {
 	font-size: 0.9em;
@@ -2275,11 +2319,13 @@ fieldset legend {
 #table_inspect_adresse td {
 	padding-left: 0.6em;
 }
-#remontees_ban {
-	float: left;
-	min-width: 400px;
-	max-width: 40%;
-	margin: 1% 0 0 2%;
+#table_inspect_adresse tr:hover td {
+	background-color: #FCFFB7;
+}
+#encadre_remontee_ban {
+	min-width: 150px;
+	max-width: 320px;
+	margin: 5px 0 0 5px;
 	padding: 2px;
 	background: url("../img/ban_logo.png") no-repeat #FCFFC4 left 6px top 6px;
 	background-size: 20px;
@@ -2287,18 +2333,18 @@ fieldset legend {
 	border-bottom: 1px solid #EFA500;
 	font-size: 0.8em;
 }
-#remontees_ban h3{
-	margin: 10px 0 0 30px;
+#encadre_remontee_ban h3{
+	margin: 10px 0 5px 30px;
 	font-size: 1em;
 	line-height: 1em;
 }
 .remontee_edit_voie  {
 	display: inline-block;
-	margin: 5px 0 0 30px;
+	margin: 5px 2px 0 5px;
 	padding-left: 35px;
-	height: 3em;
+	height: 2.6em;
 	background: url("../img/remontee-edit-30.png") no-repeat left 0px top 4px;
-	background-size: 30px;
+	background-size: 25px;
 }
 .remontee_edit_voie > span {
 	font-weight: bold;
@@ -2329,7 +2375,7 @@ td.remontee_ban {
 }
 
 span.remontee_edit_numero, span.remontee_suppr_numero, span.remontee_ajout_numero {
-	padding: 0px 15px 0px 25px;
+	padding: 0px 10px 0px 25px;
 	margin: 0;
 	border-radius: 5px;
 	font-weight: bold;
@@ -2439,7 +2485,7 @@ table tr.static td {
   height: 15px;
   width: 15px;
   display: inline-block;
-  margin: 2px 10px 0 10px;
+  margin: 2px 5px 0 5px;
 }
 .pastille-verte {border-radius: 50%;}
 .pastille-bleue, .pastille-grise {border-radius: 30%;}
@@ -2493,7 +2539,7 @@ table tr.static td {
 .zoom {
 	cursor: pointer;
 	background: url("../img/cible.png") no-repeat left 50% top 50%;
-	background-size: 20px;
+	background-size: 18px;
 }
 
 /*---------------------------------------------------------------*/
