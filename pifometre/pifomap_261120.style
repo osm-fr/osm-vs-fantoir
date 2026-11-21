@@ -781,7 +781,7 @@
             "maxzoom": 20,
             "paint": {
                 "circle-radius": 20,
-                "circle-color": "red"
+                "circle-color": "yellow"
             }
         },
         {
@@ -790,8 +790,10 @@
             "type": "circle",
             "minzoom" : 12,
             "paint": {
-                "circle-radius":["interpolate",["linear"],["zoom"],12,1,19,5],
-                "circle-color": "red"
+                "circle-radius":["interpolate",["linear"],["zoom"],12,1,19,10],
+                "circle-color": "white",
+                "circle-stroke-color": "red",
+                "circle-stroke-width": 3
             }
         },
         {
@@ -800,13 +802,15 @@
             "type": "circle",
             "minzoom" : 12,
             "paint": {
-                "circle-radius":["interpolate",["linear"],["zoom"],12,1,19,5],
-                "circle-color": "orange"
+                "circle-radius":["interpolate",["linear"],["zoom"],12,1,19,8],
+                "circle-color": "white",
+                "circle-stroke-color": "orange",
+                "circle-stroke-width": 7
             }
         },
         {
-            "id": "qualif_numero_OSM_rapproche",
-            "source": "qualif_numero_OSM_rapproche",
+            "id": "qualif_numero_BAN_numero_rapproche",
+            "source": "qualif_numero_BAN_numero_rapproche",
             "type": "circle",
             "minzoom" : 12,
             "paint": {
@@ -817,8 +821,8 @@
             }
         },
         {
-            "id": "qualif_numero_BAN_numero_rapproche",
-            "source": "qualif_numero_BAN_numero_rapproche",
+            "id": "qualif_numero_OSM_rapproche",
+            "source": "qualif_numero_OSM_rapproche",
             "type": "symbol",
             "minzoom" : 12,
             "layout": {
@@ -875,9 +879,9 @@
                 "text-overlap":"always"
                 },
             "paint": {
-                "text-color": "purple",
+                "text-color": "orangered",
                 "text-halo-color": "white",
-                "text-halo-width": 2
+                "text-halo-width": 3
             }
         },
         {
