@@ -201,7 +201,7 @@
                 map.addImage('voie_bd_commune', im.data);
                 im = await map.loadImage('./img/croix_bleue.png')
                 map.addImage('croix_bleu', im.data);
-                im = await map.loadImage('./img/plus_vert_2.png')
+                im = await map.loadImage('./img/croix_verte.png')
                 map.addImage('plus_vert', im.data);
 
                 dispatch_layers()
@@ -1129,13 +1129,15 @@
                                 max_lon = min_lon;
                                 min_lat = data[0][2] == undefined ? data[0][5]:data[0][2];
                                 max_lat = min_lat;
+                                
+                                $('#conteneur_numeros .remontee_edit_voie a').attr('href', 'https://signalement.adresse.data.gouv.fr/#/95219_1002?sourceId=e32cd3e1-b19d-4a49-9aee-31a7929a8ead&type=LOCATION_TO_UPDATE')                                    
 
-                                $('#conteneur_numeros h2').empty().append(nom_voie)
+                                $('#conteneur_numeros .en_tete h2').empty().append(nom_voie)                           
 
                                 if (is_place==true){
-                                   $('#conteneur_numeros h2').append(' (lieu-dit)')
+                                   $('#conteneur_numeros .en_tete h2').append(' (lieu-dit)')
                                 } else {
-                                   $('#conteneur_numeros h2').append(' (voie)')
+                                   $('#conteneur_numeros .en_tete h2').append(' (voie)')
                                 }
 
                                 if (numeros_a_proposer > 0){
@@ -1146,7 +1148,7 @@
                                 }
                                 $('#'+table).empty() .append($('<thead>')
                                                                         .append($('<tr>')
-                                                                            .append($('<th id="colonne_numeros">').append('Numéro'))
+                                                                            .append($('<th id="colonne_numeros">').append('Num.'))
                                                                             .append($('<th id="colonne_statut">').append("Statut de l'adresse BAN"))
                                                                             .append($('<th id="colonne_signaler" title="Signaler un problème dans la BAN">').append('Signaler'))
                                                                             .append($('<th id="colonne_centrer">').append('Centrer'))
@@ -1635,7 +1637,7 @@
                     map.addImage('voie_bd_commune', im.data);
                     im = await map.loadImage('./img/croix_bleue.png')
                     map.addImage('croix_bleu', im.data);
-                    im = await map.loadImage('./img/plus_vert_2.png')
+                    im = await map.loadImage('./img/croix_verte.png')
                     map.addImage('plus_vert', im.data);
 
                     map_setup()
@@ -2192,8 +2194,27 @@
                 </div>
             </div>
             <div id="conteneur_numeros">
+                <div class="legende">
+                    <h2>Légende</h2>
+                    <p><strong>Croix</strong> : adresses issues d'OSM</p>
+                    <ul>
+                        <li><img class="picto" src="../pifometre/img/croix_bleue.png"/>connues seulement d'OSM</li>
+                        <li><img class="picto" src="../pifometre/img/croix_verte.png"/>trouvées aussi dans la BAN</li>
+                    </ul>
+                    <p><strong>Cercle</strong> : adresses issues de la BAN</p>
+                    <ul>
+                        <li><span class="legende_adresses_cercle rouge"></span> absentes d'OSM, dans une voie non intégrée</li>
+                        <li><span class="legende_adresses_cercle orange"/></span> absentes d'OSM, dans une voie intégrée</li>
+                        <li><span class="legende_adresses_cercle vert"/></span> trouvées aussi dans OSM</li>
+                    </ul>
+                </div>
+                <hr>
                 <div class="en_tete">
                     <h2></h2>
+                    <div id="encadre_remontee_ban">
+                        <h3>Signaler un problème dans la Base Adresse Nationale</h3>
+                        <a class="remontee_edit_voie" target="_blank" title="Signaler un problème dans la BAN : Voie à modifier"><span>Voie à modifier</span></a>
+                    </div>
                 </div>
                 <table id="table_inspect_adresse" class="avec_statuts"></table>
             </div>
