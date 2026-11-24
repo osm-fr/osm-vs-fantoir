@@ -92,7 +92,7 @@
     </div>
 
     <div id="reponse" class="voies_a_cheval">
-        <div id="panneau_map" class="gauche">
+        <div class="panneau_map gauche pifodrome">
             <h2></h2> <!-- Nom voie -->
             <div id="contenu">
                 <div class="infos_ville 1"></div>
@@ -199,7 +199,7 @@
             add_context_menu()
         }
         function reset_panneau_map(){
-            $('#panneau_map h2').empty()
+            $('.panneau_map h2').empty()
             $('.infos_ville').empty();
             $('#pifomap_table_liens').empty();
         }
@@ -245,34 +245,34 @@
                     ymin = bounds._sw.lat
                     ymax = bounds._ne.lat
 
-                    $('#panneau_map h2').text(nom)
+                    $('.panneau_map h2').text(nom)
 
-                    $('#panneau_map div.infos_ville.1') .append($('<h3>').text('Commune où commence la voie :'))
+                    $('.panneau_map div.infos_ville.1') .append($('<h3>').text('Commune où commence la voie :'))
                                                         .append($('<span>').text(nom_commune_debut+' ('))
                                                         .append($('<a>').attr('href', 'index.html?insee='+code_insee_debut).text('Pifomètre'))
                                                         .append($('<span>').text(' / '))
                                                         .append($('<a>').attr('href', 'pifomap.html?insee='+code_insee_debut+'#map='+'15/'+lat+'/'+lon).text('Pifomap'))
                                                         .append($('<span>').text(')'))
                                                         .append($('<hr>'))
-                    $('#panneau_map div.infos_ville.1') .on("mouseenter", function() {
+                    $('.panneau_map div.infos_ville.1') .on("mouseenter", function() {
                         map.setFilter('point_debut_surbrillance',["all",["==",["get", "code_insee_debut"],code_insee_debut],["==",["get","nom_osm"],nom]]);
                     } );
 
-                    $('#panneau_map div.infos_ville.1') .on("mouseleave", function() {
+                    $('.panneau_map div.infos_ville.1') .on("mouseleave", function() {
                         map.setFilter('point_debut_surbrillance',["==",["get", "code_insee_debut"], " "]);
                     } );
                                                                 
-                    $('#panneau_map div.infos_ville.2') .append($('<h3>').text('Commune où finit la voie :'))
+                    $('.panneau_map div.infos_ville.2') .append($('<h3>').text('Commune où finit la voie :'))
                                                         .append($('<span>').text(nom_commune_fin+' ('))
                                                         .append($('<a>').attr('href', 'index.html?insee='+code_insee_fin).text('Pifomètre'))
                                                         .append($('<span>').text(' / '))
                                                         .append($('<a>').attr('href', 'pifomap.html?insee='+code_insee_fin+'#map='+'15/'+lat+'/'+lon).text('Pifomap'))
                                                         .append($('<span>').text(')'))
                                                         .append($('<hr>'))
-                    $('#panneau_map div.infos_ville.2') .on("mouseenter", function() {
+                    $('.panneau_map div.infos_ville.2') .on("mouseenter", function() {
                         map.setFilter('point_fin_surbrillance',["all",["==",["get", "code_insee_fin"],code_insee_fin],["==",["get","nom_osm"],nom]]);
                     } );
-                    $('#panneau_map div.infos_ville.2') .on("mouseleave", function() {
+                    $('.panneau_map div.infos_ville.2') .on("mouseleave", function() {
                         map.setFilter('point_fin_surbrillance',["==",["get", "code_insee_fin"], " "]);
                     } );
 
