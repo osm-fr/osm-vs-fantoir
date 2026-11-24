@@ -1680,6 +1680,15 @@ fieldset legend {
 	border-bottom: none;
 	border-left: none;
 }
+.panneau_map.pifodrome {
+	padding: 10px;
+}
+.panneau_map.pifodrome hr {
+	margin: 10px 0;
+}
+.panneau_map.pifodrome h3 {
+	font-size: 1em;
+}
 
 /*--------- Onglets ---------*/
 #onglet_filtres {
@@ -2498,7 +2507,7 @@ table tr.static td {
 	-moz-transform: rotate(45deg); /* Firefox */
 	-webkit-transform: rotate(45deg); /* Safari et Chrome */
 	-o-transform: rotate(45deg); /* Opera */
-	margin: 3px 10px 0 10px;
+	margin: 2px 5px 0 5px;
 }
 .pastille-verte {background-color: #00A779;}
 .pastille-orange {background-color: #EFA500;}
